@@ -1,0 +1,189 @@
+<div class="modal fade" id="guild-doc-purpose-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Scopo gilda</h4>
+                <h6 class="text-center text-muted">Visione e linea narrativa della gilda.</h6>
+                <hr class="my-4" />
+                <div name="guild_purpose" class="small lh-base"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="guild-doc-statute-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Statuto gilda</h4>
+                <h6 class="text-center text-muted">Regole interne, ruoli e governance.</h6>
+                <hr class="my-4" />
+                <div name="guild_statute" class="small lh-base"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="guild-doc-objectives-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Obiettivi gilda</h4>
+                <h6 class="text-center text-muted">Traguardi comuni e direzione operativa.</h6>
+                <hr class="my-4" />
+                <div name="guild_objectives" class="small lh-base"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="guild-announcement-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Nuovo annuncio</h4>
+                <h6 class="text-center text-muted">Pubblica un annuncio nella bacheca di gilda.</h6>
+                <hr class="my-4" />
+
+                <div id="guild-announcements-form">
+                    <div class="mb-2">
+                        <input id="guild-announcement-title" type="text" class="form-control form-control-sm" placeholder="Titolo annuncio">
+                    </div>
+                    <div class="mb-2">
+                        <textarea id="guild-announcement-body" class="form-control summernote" rows="4" placeholder="Testo annuncio"></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label small">Metti in evidenza</label>
+                        <input type="hidden" id="guild-announcement-pin" name="guild-announcement-pin" value="0">
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button id="guild-announcement-submit" class="btn btn-sm btn-primary" type="button">Pubblica annuncio</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="guild-event-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Nuova riunione</h4>
+                <h6 class="text-center text-muted">Programma una riunione per i membri della gilda.</h6>
+                <hr class="my-4" />
+
+                <div id="guild-events-form">
+                    <div class="mb-2">
+                        <input id="guild-event-title" type="text" class="form-control form-control-sm" placeholder="Titolo evento">
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label small">Inizio</label>
+                            <input id="guild-event-start" type="datetime-local" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small">Fine (opzionale)</label>
+                            <input id="guild-event-end" type="datetime-local" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="mt-2">
+                        <textarea id="guild-event-body" class="form-control summernote" rows="4" placeholder="Dettagli evento"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button id="guild-event-submit" class="btn btn-sm btn-primary" type="button">Crea evento</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="guild-requirement-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Requisito gilda</h4>
+                <h6 class="text-center text-muted">Crea o modifica un requisito di accesso.</h6>
+                <hr class="my-4" />
+
+                <input type="hidden" id="guild-requirement-id">
+                <div class="mb-2">
+                    <label class="form-label small">Tipo requisito</label>
+                    <select id="guild-requirement-type" class="form-select form-select-sm">
+                        <option value="min_fame">Fama minima</option>
+                        <option value="min_socialstatus_id">Stato sociale richiesto</option>
+                        <option value="job_id">Lavoro richiesto</option>
+                        <option value="no_job">Nessun lavoro attivo</option>
+                    </select>
+                </div>
+                <div class="mb-2" id="guild-requirement-value-wrap">
+                    <label class="form-label small">Valore</label>
+                    <input id="guild-requirement-value" type="hidden" value="">
+                    <input id="guild-requirement-value-fame" type="number" class="form-control form-control-sm d-none" min="0" step="1" placeholder="Inserisci fama minima">
+                    <select id="guild-requirement-value-social" class="form-select form-select-sm d-none">
+                        <option value="">Seleziona stato sociale...</option>
+                    </select>
+                    <select id="guild-requirement-value-job" class="form-select form-select-sm d-none">
+                        <option value="">Seleziona lavoro...</option>
+                    </select>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label small">Etichetta (consigliata)</label>
+                    <input id="guild-requirement-label" type="text" class="form-control form-control-sm" placeholder="Es. Fama minima 50">
+                </div>
+                <div class="d-flex justify-content-between mt-3">
+                    <button id="guild-requirement-delete" class="btn btn-sm btn-outline-danger d-none" type="button">Elimina</button>
+                    <button id="guild-requirement-save" class="btn btn-sm btn-primary" type="button">Salva requisito</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="guild-member-actions-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Gestione membro</h4>
+                <h6 class="text-center text-muted">Gestisci ruolo o espulsione in base ai permessi.</h6>
+                <hr class="my-4" />
+
+                <div class="small mb-2" id="guild-member-actions-name">-</div>
+                <input type="hidden" id="guild-member-actions-target-id">
+                <div id="guild-member-actions-role-wrap" class="mb-2 d-none">
+                    <label class="form-label small">Ruolo</label>
+                    <select id="guild-member-actions-role" class="form-select form-select-sm"></select>
+                </div>
+                <div class="small text-muted" id="guild-member-actions-hint"></div>
+                <div class="d-flex justify-content-between gap-2 mt-3">
+                    <button id="guild-member-actions-kick" class="btn btn-sm btn-outline-danger d-none" type="button">Espelli</button>
+                    <button id="guild-member-actions-kick-request" class="btn btn-sm btn-outline-warning d-none" type="button">Richiedi espulsione</button>
+                    <button id="guild-member-actions-save" class="btn btn-sm btn-primary d-none" type="button">Salva ruolo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

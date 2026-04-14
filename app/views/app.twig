@@ -1,0 +1,214 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<section class="container-fluid">
+    <div class="container">
+        <section class="card mb-4">
+            <div class="card-body p-4">
+                <div class="row g-3 align-items-center">
+                    <div class="col-12 col-lg-8">
+                        <h1 class="h3 mb-2">Bentornato, {{ character_name|default('') }}</h1>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="d-flex flex-wrap gap-2 justify-content-lg-end">
+                            <a class="btn btn-primary" href="/game/profile">Scheda personaggio</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="mb-4">
+            <h2 class="h5 mb-3">Azioni rapide</h2>
+            <div class="row g-3">
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="/game/forum" class="card h-100 text-decoration-none">
+                        <div class="card-body text-center">
+                            <div class="d-flex justify-content-center mb-2">
+                                <span class="badge text-bg-primary d-none" data-role="forum-unread-badge">0</span>
+                            </div>
+                            <div class="mb-2"><span class="bi bi-chat-left-quote h4"></span></div>
+                            <div class="small">Forum</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="#" class="card h-100 text-decoration-none" data-action="open-inbox" data-requires-auth>
+                        <div class="card-body text-center">
+                            <div class="d-flex justify-content-center mb-2">
+                                <span class="badge text-bg-primary d-none" data-feed-badge="messages">0</span>
+                            </div>
+                            <div class="mb-2"><span class="bi bi-envelope h4"></span></div>
+                            <div class="small">Messaggi</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="#" class="card h-100 text-decoration-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasQuests" aria-controls="offcanvasQuests">
+                        <div class="card-body text-center">
+                            <div class="mb-2"><span class="bi bi-journal-text h4"></span></div>
+                            <div class="small">Quest</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="#" class="card h-100 text-decoration-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSystemEvents" aria-controls="offcanvasSystemEvents">
+                        <div class="card-body text-center">
+                            <div class="mb-2"><span class="bi bi-calendar-event h4"></span></div>
+                            <div class="small">Eventi</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="/game/maps" class="card h-100 text-decoration-none">
+                        <div class="card-body text-center">
+                            <div class="mb-2"><span class="bi bi-map h4"></span></div>
+                            <div class="small">Mappa</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-4 col-xl-2">
+                    <a href="/game/shop" class="card h-100 text-decoration-none">
+                        <div class="card-body text-center">
+                            <div class="mb-2"><span class="bi bi-shop h4"></span></div>
+                            <div class="small">Negozio</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section class="row g-4">
+            <div class="col-12 col-xl-7">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="h6 mb-0">Attivita recenti</h3>
+                        <a href="#" class="small text-decoration-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNarrativeEvents" aria-controls="offcanvasNarrativeEvents">Vedi tutto</a>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        {% set source_labels = {
+                            'conflict': 'Conflitto',
+                            'faction': 'Fazione',
+                            'system_event': 'Evento',
+                            'quest': 'Quest',
+                            'lifecycle': 'Ciclo vita',
+                            'manual': 'Manuale',
+                            'system': 'Sistema'
+                        } %}
+                        {% set source_icons = {
+                            'conflict': '/assets/imgs/defaults-images/icons/last-activity-conflict.png',
+                            'faction': '/assets/imgs/defaults-images/icons/last-activity-faction.png',
+                            'system_event': '/assets/imgs/defaults-images/icons/last-activity-event.png',
+                            'quest': '/assets/imgs/defaults-images/icons/last-activity-quest.png',
+                            'lifecycle': '/assets/imgs/defaults-images/icons/last-activity-lifecycle.png',
+                            'manual': '/assets/imgs/defaults-images/icons/last-activity-manual.png',
+                            'system': '/assets/imgs/defaults-images/icons/last-activity-event.png'
+                        } %}
+                        {% if recent_events|default([])|length > 0 %}
+                            {% for event in recent_events|slice(0, 8) %}
+                                {% set event_source = event.source_system|default('manual') %}
+                                {% set event_label = source_labels[event_source]|default(event_source|default('Evento')) %}
+                                {% set event_icon = source_icons[event_source]|default('/assets/imgs/defaults-images/icons/last-activity-event.png') %}
+                                {% set event_description = (event.description|default('')|striptags)|trim %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div class="d-flex align-items-start gap-2">
+                                            <img src="{{ event_icon }}" alt="{{ event_label }}" class="app-recent-activity-icon rounded-2 mt-1" loading="lazy" decoding="async">
+                                            <div>
+                                                <strong>{{ event_label }}</strong>
+                                                <div class="text-muted small">
+                                                    {{ event.title|default('Evento') }}
+                                                    {% if event_description != '' %}
+                                                        - {{ event_description|slice(0, 110) }}{% if event_description|length > 110 %}...{% endif %}
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="small text-muted text-end w-25">
+                                            {% if event.created_at is not empty %}{{ event.created_at|date('d/m H:i') }}{% else %}-{% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="list-group-item">
+                                <div class="d-flex align-items-start gap-3 py-1">
+                                    <span class="bi bi-journal-x h5 text-muted mb-0 mt-1"></span>
+                                    <div>
+                                        <div class="fw-semibold">Attivita recenti vuote</div>
+                                        <div class="text-muted small">
+                                            Non ci sono ancora eventi da mostrare.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-xl-5">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="h6 mb-0">Notifiche utili</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                PM non letti
+                                <span class="badge text-bg-primary">{{ notifications.pm_unread|default(0) }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Inviti location in sospeso
+                                <span class="badge text-bg-warning">{{ notifications.pending_invites|default(0) }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Notifiche non lette
+                                <span class="badge text-bg-info">{{ notifications.unread_total|default(0) }}</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Conferme da gestire
+                                <span class="badge text-bg-danger">{{ notifications.pending_actions|default(0) }}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="h6 mb-0">Posizione personaggio</h3>
+                    </div>
+                    <div class="card-body">
+                        {% set session_state = session_position.state|default('maps') %}
+                        {% set session_resume = session_position.resume_url|default('/game/maps') %}
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="badge text-bg-secondary">{{ session_position.state_label|default('Alle mappe') }}</span>
+                            {% if session_state == 'location' %}
+                                <span class="badge text-bg-success">In chat</span>
+                            {% endif %}
+                        </div>
+                        <div class="small mb-3">
+                            {% if session_state == 'location' %}
+                                <div><strong>{{ session_position.location_name|default('Location') }}</strong></div>
+                                <div class="text-muted">{{ session_position.map_name|default('Mappa') }}</div>
+                            {% elseif session_state == 'map' %}
+                                <div><strong>{{ session_position.map_name|default('Mappa') }}</strong></div>
+                                <div class="text-muted">Nessuna location attiva</div>
+                            {% else %}
+                                <div class="text-muted">Il personaggio e alle mappe.</div>
+                            {% endif %}
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="/game/maps" class="btn btn-primary btn-sm">Apri mappe</a>
+                            {% if session_resume != '/game/maps' %}
+                                <a href="{{ session_resume }}" class="btn btn-outline-secondary btn-sm">Riprendi posizione</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
+{% endblock %}
+

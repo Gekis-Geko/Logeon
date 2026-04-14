@@ -1,0 +1,156 @@
+<div class="modal fade" id="admin-items-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Oggetto</h4>
+                <hr class="my-4" />
+
+                <form id="admin-items-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    {# Informazioni di base #}
+                    <div class="col-12">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Categoria</label>
+                        <select class="form-select" name="category_id">
+                            <option value="">— nessuna —</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Rarità</label>
+                        <select class="form-select" name="rarity_id">
+                            <option value="">— comune —</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione <span class="text-muted small">(opzionale)</span></label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Icona / Immagine</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="icon" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="item_icon" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="item_icon">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="item_icon">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="item_icon">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12"><hr class="my-1"></div>
+
+                    {# Proprietà numeriche #}
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Valore / Prezzo</label>
+                        <input type="number" class="form-control" name="value" min="0" value="0">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Peso</label>
+                        <input type="number" class="form-control" name="weight" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Cooldown <span class="text-muted small">(sec)</span></label>
+                        <input type="number" class="form-control" name="cooldown" min="0" value="0">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" name="type">
+                            <option value="">— nessuno —</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12"><hr class="my-1"></div>
+
+                    {# Comportamento #}
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Stackable</label>
+                        <select class="form-select" name="is_stackable" id="admin-items-modal-stackable">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3" id="admin-items-modal-max-stack-wrap">
+                        <label class="form-label">Stack massimo</label>
+                        <input type="number" class="form-control" name="max_stack" min="1" value="50">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Usabile</label>
+                        <select class="form-select" name="usable">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Consumabile</label>
+                        <select class="form-select" name="consumable">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Commerciabile</label>
+                        <select class="form-select" name="tradable">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Rilasciabile</label>
+                        <select class="form-select" name="droppable">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Distruggibile</label>
+                        <select class="form-select" name="destroyable">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12"><hr class="my-1"></div>
+
+                    {# Equipaggiamento #}
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Equipaggiabile</label>
+                        <select class="form-select" name="is_equippable" id="admin-items-modal-equippable">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8 d-none" id="admin-items-modal-equip-slot-wrap">
+                        <label class="form-label">Slot equipaggiamento</label>
+                        <select class="form-select" name="equip_slot">
+                            <option value="">— nessuno —</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-items-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-items-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

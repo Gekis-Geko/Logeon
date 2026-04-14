@@ -1,0 +1,37 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <header class="mt-3">
+        <h4 class="display-6">Forum</h4>
+        <h6>Gestione forum e sezioni di discussione</h6>
+    </header>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-forums-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-action="admin-forums-create">
+            <i class="bi bi-plus-lg me-1"></i>Nuovo forum
+        </button>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form id="admin-forums-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label for="admin-forums-filter-name" class="form-label mb-1">Nome</label>
+                <input id="admin-forums-filter-name" name="name" type="text" class="form-control" maxlength="100" placeholder="Cerca nome...">
+            </div>
+            <div class="col-auto">
+                <label for="admin-forums-filter-type" class="form-label mb-1">Tipo</label>
+                <select id="admin-forums-filter-type" name="type" class="form-select">
+                    <option value="">Tutti</option>
+                </select>
+            </div>
+            <div class="d-flex gap-2 col-auto">
+                <a class="btn btn-sm btn-outline-secondary" href="/admin/forums">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="grid-admin-forums"></div>
+{% include 'admin/modals/forums.twig' %}

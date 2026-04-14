@@ -1,0 +1,178 @@
+<div class="modal fade" id="admin-locations-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Luogo</h4>
+                <h6 class="text-center text-muted">Configura proprieta, accesso e collocazione nella mappa.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-locations-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="120" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stato</label>
+                        <select class="form-select" name="status">
+                            <option value="open">Aperto</option>
+                            <option value="closed">Chiuso</option>
+                            <option value="locked">Bloccato</option>
+                            <option value="private">Privato</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Descrizione breve</label>
+                        <input type="text" class="form-control" name="short_description" maxlength="255">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="col-12 position-relative">
+                        <label class="form-label">Mappa (opzionale)</label>
+                        <input type="text"
+                               class="form-control"
+                               name="map_label"
+                               maxlength="120"
+                               autocomplete="off"
+                               placeholder="Cerca mappa e seleziona...">
+                        <input type="hidden" name="map_id" value="">
+                        <div class="list-group mt-1 position-absolute w-100" style="z-index:100;display:none" data-role="admin-locations-map-suggestions"></div>
+                    </div>
+
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Posizione X sulla mappa <span class="text-muted small">(0–100)</span></label>
+                        <input type="number" class="form-control" name="map_x" min="0" max="100" step="0.01" placeholder="es. 45.5">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Posizione Y sulla mappa <span class="text-muted small">(0–100)</span></label>
+                        <input type="number" class="form-control" name="map_y" min="0" max="100" step="0.01" placeholder="es. 32.0">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Max ospiti</label>
+                        <input type="number" class="form-control" name="max_guests" min="0" placeholder="Illimitato">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Costo accesso</label>
+                        <input type="number" class="form-control" name="cost" min="0" value="0">
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Immagine</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="image" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="location_image" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="location_image">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="location_image">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="location_image">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Icona</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="icon" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="location_icon" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="location_icon">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="location_icon">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="location_icon">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12"><hr class="my-1"></div>
+
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">E una casa</label>
+                        <select class="form-select" name="is_house">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">E una chat</label>
+                        <select class="form-select" name="is_chat">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Tipo di chat</label>
+                        <select class="form-select" name="chat_type">
+                            <option value="">— Nessuno —</option>
+                            <option value="standard">Standard</option>
+                            <option value="free">Libera</option>
+                            <option value="roleplay">Solo roleplay</option>
+                            <option value="moderated">Moderata</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">E privata</label>
+                        <select class="form-select" name="is_private">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Politica di accesso</label>
+                        <select class="form-select" name="access_policy">
+                            <option value="open">Aperta</option>
+                            <option value="guild">Solo gilda</option>
+                            <option value="invite">Solo invitati</option>
+                            <option value="owner">Solo proprietario</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Fama minima richiesta</label>
+                        <input type="number" class="form-control" name="min_fame" min="0" value="0">
+                    </div>
+                </form>
+
+                <div class="mt-3">
+                    <label class="form-label small fw-semibold">Tag narrativi</label>
+                    <div id="admin-locations-tags-container" class="d-flex flex-wrap gap-2 border rounded p-2">
+                        <span class="text-muted small">Caricamento tag...</span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-locations-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-locations-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,379 @@
+{% extends theme_shell('public', 'layouts/layout.twig') %}
+
+{% block content %}
+{% set metrics = landing_metrics|default({}) %}
+{% set system = system_state|default({}) %}
+{% set homeNews = home_news_feed|default([]) %}
+{% set homeSystemEvents = home_system_events_feed|default([]) %}
+{% set googleAuth = google_auth|default({}) %}
+
+<main>
+    <section class="home-hero d-flex align-items-center">
+        <div class="container">
+            <div class="home-hero__panel text-center mx-auto p-4 p-lg-5 rounded border shadow-sm">
+                <div class="mb-4">
+                    <img src="{{ APP.brand_logo_icon }}" alt="{{ APP.name }}" height="56" class="d-inline-block me-2">
+                    <img src="{{ APP.brand_logo_wordmark }}" alt="{{ APP.name }}" height="46" class="d-inline-block">
+                </div>
+                <p class="lead mb-3">Motore open-source per giochi di ruolo via browser play-by-chat.</p>
+                <p class="mb-4 text-muted">
+                    Questa installazione include il core applicativo e l'infrastruttura tecnica necessaria per avviare e personalizzare il tuo progetto.
+                </p>
+                <p class="mb-0">
+                    Per ulteriori informazioni consulta la <a href="#" data-action="open-license-modal"><i class="bi bi-file-earmark-text"></i> Licenza</a>.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="mb-3 text-center">
+                <h2 class="display-6 mb-2">Cosa include questa installazione</h2>
+                <p class="text-muted mb-0">Una base operativa completa, pronta per essere personalizzata senza toccare il core.</p>
+            </div>
+            <div class="row g-3 g-lg-4 mt-1">
+                <div class="col-12 col-lg-4">
+                    <article class="card h-100">
+                        <img src="{{ CONFIG['dirs']['imgs'] }}/index/gameplay_core.png" alt="Gameplay Core" class="card-img-top">
+                        <div class="card-body">
+                            <h4>Core di Gioco</h4>
+                            <p class="text-muted">Le funzionalità fondamentali per avviare subito una community PbC con flussi coerenti tra gioco e amministrazione.</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Account, autenticazione e ruoli base</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Personaggi, profili e presenza in gioco</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Mappe, location, chat e sussurri</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Forum, messaggistica e notifiche</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <article class="card h-100">
+                        <img src="{{ CONFIG['dirs']['imgs'] }}/index/game_modules.png" alt="Moduli di gioco" class="card-img-top">
+                        <div class="card-body">
+                            <h4>Dominio Narrativo Core</h4>
+                            <p class="text-muted">Strumenti già inclusi per governare ritmo, progressione e contenuti narrativi senza plugin obbligatori.</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Quest con step, chiusura e storico</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Eventi di sistema e partecipazioni</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Attività recenti, tag narrativi e feed</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Zaino, equipaggiamento e economia</li>
+                        </ul>
+                    </article>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <article class="card h-100">
+                        <img src="{{ CONFIG['dirs']['imgs'] }}/index/technical_structure.png" alt="Struttura tecnica" class="card-img-top">
+                        <div class="card-body">
+                            <h4>Architettura</h4>
+                            <p class="text-muted">Controllo completo del progetto con un backend guidato, uniforme e pronto all'estensione modulare.</p>
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Architettura MVC</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> API JSON interne e CRUD guidati</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Permessi, moderazione e audit</li>
+                            <li class="list-group-item"><i class="bi bi-chevron-double-right"></i> Moduli con attivazione controllata</li>
+                        </ul>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-secondary">
+        <div class="container">
+            <div class="text-center mb-3">
+                <h2 class="display-6 mb-2">Attivita della settimana</h2>
+                <p class="text-muted mb-0">Il sistema è attivo e pronto ad accogliere nuove sessioni.</p>
+            </div>
+            <div class="row g-3 g-lg-4 mt-1">
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <article class="card h-100 bg-light">
+                        <div class="card-body">
+                            <p class="text-uppercase small text-muted fw-semibold mb-2">Utenti online</p>
+                            <p class="display-6 fw-bold mb-2">{{ metrics.online_users|default(0) }}</p>
+                            <p class="text-muted small mb-0">Il sistema e attivo e in attesa di partecipanti.</p>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <article class="card h-100 bg-dark">
+                        <div class="card-body">
+                            <p class="text-uppercase small text-muted fw-semibold mb-2">Quest completate</p>
+                            <p class="display-6 fw-bold mb-2">{{ metrics.quests_week|default(0) }}</p>
+                            <p class="text-muted small mb-0">Le statistiche cresceranno con le prime sessioni.</p>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <article class="card h-100 bg-dark">
+                        <div class="card-body">
+                            <p class="text-uppercase small text-muted fw-semibold mb-2">Thread forum</p>
+                            <p class="display-6 fw-bold mb-2">{{ metrics.forum_threads_week|default(0) }}</p>
+                            <p class="text-muted small mb-0">Lo storico settimanale verra aggiornato automaticamente.</p>
+                        </div>
+                    </article>
+                </div>
+                <div class="col-12 col-sm-6 col-xl-3">
+                    <article class="card h-100 bg-dark">
+                        <div class="card-body">
+                            <p class="text-uppercase small text-muted fw-semibold mb-2">Eventi attivi</p>
+                            <p class="display-6 fw-bold mb-2">{{ metrics.active_events|default(0) }}</p>
+                            <p class="text-muted small mb-0">Crea eventi per avviare il ritmo narrativo del gioco.</p>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-3">
+                <h2 class="display-6 mb-2">Feed in homepage</h2>
+                <p class="text-muted mb-0">News pubblicate e eventi di sistema selezionati dal pannello admin.</p>
+            </div>
+            <div class="row g-3 g-lg-4 mt-1">
+                <div class="col-12 col-lg-6">
+                    <article class="card h-100">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">News</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if homeNews is not empty %}
+                                <div class="list-group list-group-flush">
+                                    {% for news in homeNews %}
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                                <div>
+                                                    <h4 class="h6 mb-1">{{ news.title|default('News') }}</h4>
+                                                    {% if news.excerpt is not empty %}
+                                                        <p class="small text-muted mb-0">{{ news.excerpt|striptags|slice(0, 150) }}{% if news.excerpt|striptags|length > 150 %}...{% endif %}</p>
+                                                    {% endif %}
+                                                    <button
+                                                        class="btn btn-sm btn-outline-primary mt-2"
+                                                        type="button"
+                                                        data-action="home-feed-open-detail"
+                                                        data-feed-type="news"
+                                                        data-feed-id="{{ news.id|default(loop.index) }}"
+                                                        data-feed-title="{{ news.title|default('News')|e('html_attr') }}"
+                                                    >
+                                                        Approfondisci
+                                                    </button>
+                                                </div>
+                                                <span class="badge text-bg-secondary">{{ news.date_publish|date('d/m/Y') }}</span>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="p-3 text-muted small">Nessuna news pubblicata al momento.</div>
+                            {% endif %}
+                        </div>
+                    </article>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <article class="card h-100">
+                        <div class="card-header">
+                            <h3 class="h5 mb-0">Eventi di sistema</h3>
+                        </div>
+                        <div class="card-body p-0">
+                            {% if homeSystemEvents is not empty %}
+                                <div class="list-group list-group-flush">
+                                    {% for event in homeSystemEvents %}
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-start gap-2">
+                                                <div>
+                                                    <h4 class="h6 mb-1">{{ event.title|default('Evento di sistema') }}</h4>
+                                                    {% if event.description is not empty %}
+                                                        <p class="small text-muted mb-0">{{ event.description|slice(0, 140) }}{% if event.description|length > 140 %}...{% endif %}</p>
+                                                    {% endif %}
+                                                    <button
+                                                        class="btn btn-sm btn-outline-primary mt-2"
+                                                        type="button"
+                                                        data-action="home-feed-open-detail"
+                                                        data-feed-type="system-event"
+                                                        data-feed-id="{{ event.id|default(loop.index) }}"
+                                                        data-feed-title="{{ event.title|default('Evento di sistema')|e('html_attr') }}"
+                                                    >
+                                                        Approfondisci
+                                                    </button>
+                                                </div>
+                                                <span class="badge {{ event.status == 'active' ? 'text-bg-success' : 'text-bg-warning' }}">
+                                                    {{ event.status == 'active' ? 'Attivo' : 'Programmato' }}
+                                                </span>
+                                            </div>
+                                            <div class="small text-muted mt-1">
+                                                {% if event.starts_at is not empty %}
+                                                    Inizio: {{ event.starts_at|date('d/m/Y H:i') }}
+                                                {% else %}
+                                                    Data creazione: {{ event.date_created|date('d/m/Y H:i') }}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <div class="p-3 text-muted small">Nessun evento di sistema visibile nel feed homepage.</div>
+                            {% endif %}
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-none">
+            {% for news in homeNews %}
+                {% set newsTemplateId = 'home-feed-template-news-' ~ (news.id|default(loop.index)) %}
+                <template id="{{ newsTemplateId }}">
+                    <div class="small text-muted mb-2">News &bull; {{ news.date_publish|date('d/m/Y H:i') }}</div>
+                    {% if news.image is not empty %}
+                        <img src="{{ news.image }}" alt="{{ news.title|default('News') }}" class="img-fluid rounded border mb-3">
+                    {% endif %}
+                    {% if news.body is not empty %}
+                        <div class="small">{{ news.body|raw }}</div>
+                    {% elseif news.excerpt is not empty %}
+                        <div class="small">{{ news.excerpt|raw }}</div>
+                    {% else %}
+                        <p class="small text-muted mb-0">Nessun dettaglio disponibile.</p>
+                    {% endif %}
+                </template>
+            {% endfor %}
+            {% for event in homeSystemEvents %}
+                {% set eventTemplateId = 'home-feed-template-system-event-' ~ (event.id|default(loop.index)) %}
+                <template id="{{ eventTemplateId }}">
+                    <div class="small text-muted mb-2">
+                        Stato: <b>{{ event.status == 'active' ? 'Attivo' : 'Programmato' }}</b>
+                        &bull;
+                        {% if event.starts_at is not empty %}
+                            Inizio: {{ event.starts_at|date('d/m/Y H:i') }}
+                        {% else %}
+                            Creazione: {{ event.date_created|date('d/m/Y H:i') }}
+                        {% endif %}
+                    </div>
+                    {% if event.description is not empty %}
+                        <p class="small mb-2">{{ event.description|striptags }}</p>
+                    {% else %}
+                        <p class="small text-muted mb-2">Nessuna descrizione disponibile.</p>
+                    {% endif %}
+                    <div class="small text-muted">
+                        {% if event.ends_at is not empty %}
+                            Fine evento: {{ event.ends_at|date('d/m/Y H:i') }}
+                        {% else %}
+                            Nessuna data di fine impostata.
+                        {% endif %}
+                    </div>
+                </template>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-12 col-lg-7">
+                    <div class="card card-body h-100">
+                        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                            <h2 class="h4 mb-0">Stato del sistema</h2>
+                            <span class="badge text-bg-success">Operativo</span>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <div class="small text-muted">Versione installata</div>
+                                <div class="fw-semibold">{{ system.version|default('v0.0.1') }}</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="small text-muted">Data installazione</div>
+                                <div class="fw-semibold">
+                                    {% if system.installed_at is not empty %}
+                                        {{ system.installed_at|date('d/m/Y H:i') }}
+                                    {% else %}
+                                        N/D
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="small text-muted">Utenti online</div>
+                                <div class="fw-semibold">{{ metrics.online_users|default(0) }}</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="small text-muted">Eventi attivi</div>
+                                <div class="fw-semibold">{{ metrics.active_events|default(0) }}</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="small text-muted">News nel feed</div>
+                                <div class="fw-semibold">{{ homeNews|length }}</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="small text-muted">Eventi nel feed</div>
+                                <div class="fw-semibold">{{ homeSystemEvents|length }}</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="small text-muted">Aggiornamenti</div>
+                                <div class="fw-semibold">{{ system.updates|default('Nessuna informazione disponibile') }}</div>
+                            </div>
+                            <div class="col-12">
+                                <div class="small text-muted">Baseline tecnica</div>
+                                <div class="fw-semibold">{{ system.baseline|default('Baseline consolidata') }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-5">
+                    <div class="card card-body h-100">
+                        <h2 class="h4 mb-3">Da dove iniziare</h2>
+                        <div class="list-group">
+                            <div class="list-group-item d-flex justify-content-between align-items-start gap-3">
+                                <div>
+                                    <div class="fw-semibold">1. Definisci l'ambientazione</div>
+                                    <div class="small text-muted">Imposta lore e contesto base del progetto.</div>
+                                </div>
+                                <a class="btn btn-sm btn-outline-primary flex-shrink-0" href="/storyboard">Apri</a>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-start gap-3">
+                                <div>
+                                    <div class="fw-semibold">2. Pubblica il regolamento</div>
+                                    <div class="small text-muted">Rendi chiare regole, limiti e flusso di gioco.</div>
+                                </div>
+                                <a class="btn btn-sm btn-outline-primary flex-shrink-0" href="/rules">Apri</a>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-start gap-3">
+                                <div>
+                                    <div class="fw-semibold">3. Scrivi la guida iniziale</div>
+                                    <div class="small text-muted">Aiuta i nuovi giocatori a entrare subito in sessione.</div>
+                                </div>
+                                <a class="btn btn-sm btn-outline-primary flex-shrink-0" href="/how-to-play">Apri</a>
+                            </div>
+                            <div class="list-group-item d-flex justify-content-between align-items-start gap-3">
+                                <div>
+                                    <div class="fw-semibold">4. Accedi e configura il gioco</div>
+                                    <div class="small text-muted">Entra nel pannello e completa setup operativo.</div>
+                                </div>
+                                <button class="btn btn-sm btn-primary flex-shrink-0" type="button" data-action="open-signin-modal">Accedi</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+{% include 'sys/modals/license.twig' %}
+{% include 'sys/modals/home-feed-detail.twig' %}
+
+<div id="cookie-banner" class="d-none" role="dialog" aria-label="Informativa cookie">
+    <div class="container d-flex align-items-center justify-content-between gap-3 flex-wrap py-1">
+        <div class="d-flex align-items-center justify-content-between gap-3">
+            <img src="/assets/imgs/defaults-images/icons/cookies-policy.png" style="max-height: 36px;">
+            <p class="mb-0 small text-muted">Questo sito utilizza cookie tecnici necessari al funzionamento. Continuando la navigazione acconsenti all'utilizzo dei cookie.</p>
+        </div>
+        <button type="button" class="btn btn-sm btn-primary flex-shrink-0" data-action="cookie-accept">Accetta</button>
+    </div>
+</div>
+<script id="google-auth-context" type="application/json">{{ googleAuth|json_encode|raw }}</script>
+{% endblock %}
+

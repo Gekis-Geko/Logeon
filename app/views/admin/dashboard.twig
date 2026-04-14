@@ -1,0 +1,355 @@
+{% extends 'admin/layouts/layout.twig' %}
+
+{% block content %}
+{% set current_page = admin_page|default('dashboard')|lower %}
+<section class="col-lg-9 col-xl-10 my-2">
+    <div class="admin-content px-2" data-admin-page="{{ current_page }}">
+        {% if current_page == 'dashboard' %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <header class="mt-3">
+                    <h4 class="display-6">Panoramica</h4>
+                    <h6>Analizza i dati che arrivano dalla piattaforma</h6>
+                </header>
+                <div class="d-flex align-items-center gap-2">
+                    <label for="admin-dashboard-period" class="small text-muted mb-0">Periodo</label>
+                    <select id="admin-dashboard-period" class="form-select form-select-sm" style="width:auto;">
+                        <option value="7d">7 giorni</option>
+                        <option value="30d" selected>30 giorni</option>
+                        <option value="90d">90 giorni</option>
+                    </select>
+                    <button id="admin-dashboard-refresh" class="btn btn-sm btn-outline-primary" type="button">
+                        <span class="bi bi-arrow-clockwise me-1"></span>Aggiorna
+                    </button>
+                </div>
+            </div>
+            <hr class="w-75 ms-2" />
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-xl-4 g-3 mb-3">
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted small mb-1">Utenti</h6>
+                            <div class="h4 mb-0" data-admin-kpi="users_total">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted small mb-1">Personaggi</h6>
+                            <div class="h4 mb-0" data-admin-kpi="characters_total">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted small mb-1">Utenti (<span data-admin-period-label>30 giorni</span>)</h6>
+                            <div class="h4 mb-0" data-admin-kpi="users_new_period">-</div>
+                            <div class="small mt-1 admin-compare admin-compare-flat" data-admin-compare="users_new_period">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted small mb-1">PG (<span data-admin-period-label>30 giorni</span>)</h6>
+                            <div class="h4 mb-0" data-admin-kpi="characters_new_period">-</div>
+                            <div class="small mt-1 admin-compare admin-compare-flat" data-admin-compare="characters_new_period">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted small mb-1">Messaggi location (<span data-admin-period-label>30 giorni</span>)</h6>
+                            <div class="h4 mb-0" data-admin-kpi="location_messages_period">-</div>
+                            <div class="small mt-1 admin-compare admin-compare-flat" data-admin-compare="location_messages_period">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted small mb-1">DM (<span data-admin-period-label>30 giorni</span>)</h6>
+                            <div class="h4 mb-0" data-admin-kpi="dm_messages_period">-</div>
+                            <div class="small mt-1 admin-compare admin-compare-flat" data-admin-compare="dm_messages_period">-</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="text-muted small mb-1">Thread forum (<span data-admin-period-label>30 giorni</span>)</h6>
+                            <div class="h4 mb-0" data-admin-kpi="forum_threads_period">-</div>
+                            <div class="small mt-1 admin-compare admin-compare-flat" data-admin-compare="forum_threads_period">-</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-12 col-xl-8">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="mb-2">Attivita ultimi <span data-admin-period-label>30 giorni</span></h6>
+                            <div class="small text-muted mb-2">Luoghi, DM, Forum</div>
+                            <div id="admin-dashboard-activity-chart" class="admin-chart-wrap"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="mb-2">Disponibilita personaggi</h6>
+                            <div id="admin-dashboard-availability" class="d-grid gap-2">
+                                <div class="d-flex justify-content-between"><span>Libero</span><b data-admin-kpi="availability_free">0</b></div>
+                                <div class="d-flex justify-content-between"><span>Occupato</span><b data-admin-kpi="availability_busy">0</b></div>
+                                <div class="d-flex justify-content-between"><span>Non al PC</span><b data-admin-kpi="availability_away">0</b></div>
+                                <div class="d-flex justify-content-between"><span>Altro</span><b data-admin-kpi="availability_other">0</b></div>
+                            </div>
+                            <hr class="my-3">
+                            <h6 class="mb-2">Top location (<span data-admin-period-label-short>30g</span>)</h6>
+                            <div id="admin-dashboard-top-locations" class="small text-muted">Caricamento...</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-8">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="mb-2">Nuove registrazioni (<span data-admin-period-label>30 giorni</span>)</h6>
+                            <div class="small text-muted mb-2">Utenti e personaggi</div>
+                            <div id="admin-dashboard-registration-chart" class="admin-chart-wrap"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-xl-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h6 class="mb-2">Log recenti</h6>
+                            <div id="admin-dashboard-recent-logs" class="small text-muted">Caricamento...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% elseif current_page == 'users' %}
+            {% include 'admin/pages/users.twig' %}
+        {% elseif current_page == 'characters' %}
+            {% include 'admin/pages/characters.twig' %}
+        {% elseif current_page == 'blacklist' %}
+            {% include 'admin/pages/blacklist.twig' %}
+        {% elseif current_page == 'maps' %}
+            {% include 'admin/pages/maps.twig' %}
+        {% elseif current_page == 'currencies' %}
+            {% include 'admin/pages/currencies.twig' %}
+        {% elseif current_page == 'shops' %}
+            {% include 'admin/pages/shops.twig' %}
+        {% elseif current_page == 'character-attributes' %}
+            {% include 'admin/pages/character-attributes.twig' %}
+        {% elseif current_page == 'conflicts' %}
+            {% include 'admin/pages/conflicts.twig' %}
+        {% elseif current_page == 'narrative-events' %}
+            {% include 'admin/pages/narrative-events.twig' %}
+        {% elseif current_page == 'narrative-states' %}
+            {% include 'admin/pages/narrative-states.twig' %}
+        {% elseif current_page == 'quests' %}
+            {% include 'admin/pages/quests.twig' %}
+        {% elseif current_page == 'system-events' %}
+            {% include 'admin/pages/system-events.twig' %}
+        {% elseif current_page == 'character-lifecycle' %}
+            {% include 'admin/pages/character-lifecycle.twig' %}
+        {% elseif current_page == 'factions' %}
+            {% include 'admin/pages/factions.twig' %}
+        {% elseif current_page in ['weather', 'weather-overview'] %}
+            {% include 'admin/pages/weather-overview.twig' %}
+        {% elseif current_page == 'weather-catalogs' %}
+            {% include 'admin/pages/weather-catalogs.twig' %}
+        {% elseif current_page == 'weather-profiles' %}
+            {% include 'admin/pages/weather-profiles.twig' %}
+        {% elseif current_page == 'weather-overrides' %}
+            {% include 'admin/pages/weather-overrides.twig' %}
+        {% elseif current_page == 'character-requests' %}
+            {% include 'admin/pages/character-requests.twig' %}
+        {% elseif current_page == 'locations' %}
+            {% include 'admin/pages/locations.twig' %}
+        {% elseif current_page == 'inventory-shop' %}
+            {% include 'admin/pages/shop-inventory.twig' %}
+        {% elseif current_page == 'jobs' %}
+            {% include 'admin/pages/jobs.twig' %}
+        {% elseif current_page == 'jobs-tasks' %}
+            {% include 'admin/pages/jobs-tasks.twig' %}
+        {% elseif current_page == 'jobs-levels' %}
+            {% include 'admin/pages/jobs-levels.twig' %}
+        {% elseif current_page == 'social-status' %}
+            {% include 'admin/pages/social-status.twig' %}
+        {% elseif current_page == 'guilds' %}
+            {% include 'admin/pages/guilds.twig' %}
+        {% elseif current_page == 'guild-alignments' %}
+            {% include 'admin/pages/guild-alignments.twig' %}
+        {% elseif current_page == 'guilds-reqs' %}
+            {% include 'admin/pages/guilds-reqs.twig' %}
+        {% elseif current_page in ['guilds-locations', 'guild-locations'] %}
+            {% include 'admin/pages/guilds-locations.twig' %}
+        {% elseif current_page == 'guilds-events' %}
+            {% include 'admin/pages/guilds-events.twig' %}
+        {% elseif current_page == 'news' %}
+            {% include 'admin/pages/news.twig' %}
+        {% elseif current_page == 'forums' %}
+            {% include 'admin/pages/forums.twig' %}
+        {% elseif current_page == 'forums-types' %}
+            {% include 'admin/pages/forums-types.twig' %}
+        {% elseif current_page == 'storyboards' %}
+            {% include 'admin/pages/storyboards.twig' %}
+        {% elseif current_page == 'rules' %}
+            {% include 'admin/pages/rules.twig' %}
+        {% elseif current_page == 'how-to-play' %}
+            {% include 'admin/pages/how-to-play.twig' %}
+        {% elseif current_page == 'items' %}
+            {% include 'admin/pages/items.twig' %}
+        {% elseif current_page == 'items-categories' %}
+            {% include 'admin/pages/items-categories.twig' %}
+        {% elseif current_page == 'items-rarities' %}
+            {% include 'admin/pages/items-rarities.twig' %}
+        {% elseif current_page == 'equipment-slots' %}
+            {% include 'admin/pages/equipment-slots.twig' %}
+        {% elseif current_page == 'item-equipment-rules' %}
+            {% include 'admin/pages/item-equipment-rules.twig' %}
+        {% elseif current_page == 'settings' %}
+            {% include 'admin/pages/settings.twig' %}
+        {% elseif current_page == 'archetypes' %}
+            {% include 'admin/pages/archetypes.twig' %}
+        {% elseif current_page == 'narrative-tags' %}
+            {% include 'admin/pages/narrative-tags.twig' %}
+        {% elseif current_page == 'narrative-delegation' %}
+            {% include 'admin/pages/narrative-delegation.twig' %}
+        {% elseif current_page == 'narrative-delegation-grants' %}
+            {% include 'admin/pages/narrative-delegation-grants.twig' %}
+        {% elseif current_page == 'narrative-npcs' %}
+            {% include 'admin/pages/narrative-npcs.twig' %}
+        {% elseif current_page == 'message-reports' %}
+            {% include 'admin/pages/message-reports.twig' %}
+        {% elseif current_page == 'logs-conflicts' %}
+            {% include 'admin/pages/logs-conflicts.twig' %}
+        {% elseif current_page == 'logs-currency' %}
+            {% include 'admin/pages/logs-currency.twig' %}
+        {% elseif current_page == 'logs-experience' %}
+            {% include 'admin/pages/logs-experience.twig' %}
+        {% elseif current_page == 'logs-fame' %}
+            {% include 'admin/pages/logs-fame.twig' %}
+        {% elseif current_page == 'logs-guild' %}
+            {% include 'admin/pages/logs-guild.twig' %}
+        {% elseif current_page == 'logs-job' %}
+            {% include 'admin/pages/logs-job.twig' %}
+        {% elseif current_page == 'logs-location-access' %}
+            {% include 'admin/pages/logs-location-access.twig' %}
+        {% elseif current_page == 'logs-sys' %}
+            {% include 'admin/pages/logs-sys.twig' %}
+        {% elseif current_page == 'logs-narrative' %}
+            {% include 'admin/pages/logs-narrative.twig' %}
+        {% elseif current_page == 'themes' %}
+            {% include 'admin/pages/themes.twig' %}
+        {% elseif current_page == 'modules' %}
+            <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+                <header>
+                    <h4 class="display-6 mb-1">Moduli</h4>
+                    <h6 class="mb-0">Gestione moduli first-party con stato runtime, dipendenze e compatibilità core.</h6>
+                </header>
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-modules-reload">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-modules-audit">
+                        <i class="bi bi-shield-check me-1"></i>Audit
+                    </button>
+                </div>
+            </div>
+            <div class="card card-body mb-3">
+                <form class="row g-2 align-items-end" autocomplete="off" novalidate data-role="admin-modules-filters">
+                    <div class="col-auto">
+                        <label for="admin-modules-filter-query" class="form-label mb-1">Ricerca</label>
+                        <input
+                            id="admin-modules-filter-query"
+                            type="search"
+                            class="form-control form-control-sm"
+                            data-role="admin-modules-filter-query"
+                            placeholder="ID, nome, vendor..."
+                        />
+                    </div>
+                    <div class="col-auto">
+                        <label for="admin-modules-filter-status" class="form-label mb-1">Stato</label>
+                        <select id="admin-modules-filter-status" class="form-select form-select-sm" data-role="admin-modules-filter-status">
+                            <option value="all" selected>Tutti</option>
+                            <option value="active">Attivi</option>
+                            <option value="inactive">Inattivi</option>
+                            <option value="detected">Rilevati</option>
+                            <option value="issues">Con criticità</option>
+                        </select>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-modules-reset-filters">
+                            Reset
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="row g-2 mb-3" data-role="admin-modules-summary">
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="card h-100">
+                        <div class="card-body py-2">
+                            <div class="small text-muted">Attivi</div>
+                            <div class="h5 mb-0" data-role="modules-summary-active">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="card h-100">
+                        <div class="card-body py-2">
+                            <div class="small text-muted">Inattivi</div>
+                            <div class="h5 mb-0" data-role="modules-summary-inactive">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="card h-100">
+                        <div class="card-body py-2">
+                            <div class="small text-muted">Rilevati</div>
+                            <div class="h5 mb-0" data-role="modules-summary-detected">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-md-3 col-xl-2">
+                    <div class="card h-100">
+                        <div class="card-body py-2">
+                            <div class="small text-muted">Criticita</div>
+                            <div class="h5 mb-0 text-warning" data-role="modules-summary-issues">0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-secondary py-2 small">
+                Attivazione guidata: prima attiva i moduli dipendenza, poi il modulo target.
+                Per disinstallare un modulo, mettilo prima in stato inattivo.
+            </div>
+
+            <div id="grid-admin-modules"></div>
+        {% else %}
+            {% set module_page_slot = module_slot('admin.dashboard.' ~ current_page) %}
+            {% if module_page_slot is not empty %}
+                {{ module_page_slot }}
+            {% else %}
+                <header class="mt-3 mb-3">
+                    <h4 class="display-6">{{ current_page|replace({'-': ' '})|title }}</h4>
+                    <h6>Sezione pronta nella navigazione. Contenuti dettagliati in implementazione.</h6>
+                </header>
+                <div class="alert alert-info mb-0">
+                    Questa sezione al momento usa il nuovo shell di admin e route dedicata. I pannelli CRUD arrivano nel prossimo step.
+                </div>
+            {% endif %}
+        {% endif %}
+    </div>
+</section>
+
+{{ module_slot('admin.modals') }}
+{% endblock %}
+

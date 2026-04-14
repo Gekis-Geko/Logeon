@@ -1,0 +1,54 @@
+{% set is_superuser_admin = (session('user_is_superuser') == 1 or (session('user_is_superuser') is null and session('user_is_administrator') == 1)) %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <header class="mt-3">
+        <h4 class="display-6">Personaggi</h4>
+        <h6>Gestione, consultazione e moderazione rapida dei personaggi registrati</h6>
+    </header>
+</div>
+
+<div class="card card-body mb-3">
+    <form id="admin-characters-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+        <div class="col-auto">
+            <label for="admin-characters-filter-name" class="form-label mb-1">Ricerca nome</label>
+            <input id="admin-characters-filter-name"
+                    name="name"
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Nome o cognome">
+        </div>
+        {% if is_superuser_admin %}
+        <div class="col-auto">
+            <label for="admin-characters-filter-email" class="form-label mb-1">Email proprietario</label>
+            <input id="admin-characters-filter-email"
+                    name="email"
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Email account">
+        </div>
+        {% endif %}
+        <div class="col-auto">
+            <label for="admin-characters-filter-visibility" class="form-label mb-1">Visibilità</label>
+            <select id="admin-characters-filter-visibility" name="visibility" class="form-select form-select-sm">
+                <option value="all">Tutti</option>
+                <option value="visible">Visibili</option>
+                <option value="hidden">Invisibili</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label for="admin-characters-filter-online" class="form-label mb-1">Stato</label>
+            <select id="admin-characters-filter-online" name="online" class="form-select form-select-sm">
+                <option value="all">Tutti</option>
+                <option value="online">Online</option>
+                <option value="offline">Offline</option>
+            </select>
+        </div>
+        <div class="d-flex gap-2 col-auto">
+            <a class="btn btn-sm btn-outline-secondary" href="/admin/characters">Reset</a>
+        </div>
+    </form>
+</div>
+
+<div id="grid-admin-characters"
+     data-current-user-is-superuser="{{ is_superuser_admin ? 1 : 0 }}"></div>
+{% include 'admin/modals/characters.twig' %}

@@ -1,0 +1,48 @@
+<div class="modal fade" id="create-character-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Crea il personaggio</h4>
+                <h6 class="text-center text-muted">Crea il personaggio per utilizzare le funzionalita di <em>Logeon</em></h6>
+
+                <hr class="my-4" />
+
+                <div class="d-grid gap-2 col-10 mx-auto my-4">
+                    <form id="create-character-modal-form">
+                        <div class="form-floating my-3">
+                            <input name="name" class="form-control" placeholder="Il nome del personaggio" maxlength="25" required>
+                            <label>Il nome del personaggio <i class="text-danger">*</i></label>
+                        </div>
+                        <div class="form-floating my-3">
+                            <input name="surname" class="form-control" placeholder="Il cognome del personaggio" maxlength="30">
+                            <label>Il cognome del personaggio</label>
+                        </div>
+                        <div class="form-group my-4">
+                            <label>Il genere del personaggio <i class="text-danger">*</i></label>
+                            <div class="text-center mt-3">
+                                <input name="gender" placeholder="Il genere del personaggio" required>
+                            </div>
+                        </div>
+                        <div class="form-group" id="archetype-field" style="display:none;">
+                            <label data-archetype-label>Archetipo <span class="archetype-required-star text-danger" style="display:none;">*</span></label>
+                            <select name="archetype_id" class="form-select">
+                                <option value="">Seleziona un archetipo</option>
+                            </select>
+                            <div class="form-text mt-1" data-archetype-selection-hint></div>
+                            <div class="form-text mt-2 d-none" data-archetype-description></div>
+                        </div>
+                        <div class="d-grid gap-2 col-6 mx-auto my-5">
+                            <button type="submit" class="btn btn-lg btn-primary btn-block btn-round">CREA</button>
+                        </div>
+                    </form>
+
+                    <button type="button" class="btn btn-sm btn-link" data-action="create-character-modal-back"><span class="bi bi-arrow-left"></span> indietro</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

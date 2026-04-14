@@ -1,0 +1,110 @@
+<div class="modal fade" id="admin-narrative-tags-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tag narrativo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="admin-narrative-tags-form" autocomplete="off">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Slug <span class="text-danger">*</span></label>
+                        <input type="text" name="slug" class="form-control" placeholder="es. political" required>
+                        <div class="form-text">Identificatore unico: solo lettere minuscole, numeri e trattini.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Label <span class="text-danger">*</span></label>
+                        <input type="text" name="label" class="form-control" placeholder="es. Politico" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Categoria</label>
+                        <select name="category" class="form-select">
+                            <option value="">Nessuna</option>
+                            <option value="tono">Tono</option>
+                            <option value="contesto">Contesto</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Descrizione</label>
+                        <input type="text" name="description" class="form-control" placeholder="Breve descrizione opzionale" maxlength="255">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Stato</label>
+                        <input type="hidden" name="is_active" value="1">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-sm btn-outline-danger d-none" data-action="admin-narrative-tag-delete">
+                    <i class="bi bi-trash me-1"></i>Elimina
+                </button>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-action="admin-narrative-tag-save">
+                        <i class="bi bi-check2 me-1"></i>Salva
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-narrative-tags-assignments-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Assegnazioni tag alle entità</h4>
+                <h6 class="text-center text-muted">Collega i tag narrativi alle entità di gioco in modo guidato.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-narrative-tags-assignment-form" autocomplete="off">
+                    <div class="row g-2">
+                        <div class="col-12 col-md-3">
+                            <label class="form-label">Tipo entità</label>
+                            <select name="entity_type" class="form-select form-select-sm">
+                                <option value="quest_definition">Quest</option>
+                                <option value="narrative_event">Attività recenti</option>
+                                <option value="system_event">Eventi</option>
+                                <option value="scene">Scene</option>
+                                <option value="faction">Fazioni</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label">Entità</label>
+                            <input type="hidden" name="entity_id" value="0">
+                            <input type="text" name="entity_label" class="form-control form-control-sm" placeholder="Cerca entità..." data-role="admin-narrative-tags-entity-input">
+                            <div class="list-group mt-1 d-none" data-role="admin-narrative-tags-entity-suggestions"></div>
+                        </div>
+                        <div class="col-12 col-md-3 d-flex align-items-end gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary w-100" data-action="admin-narrative-tags-entity-load">
+                                Carica assegnazioni
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Tag associati</label>
+                            <input type="text" class="form-control form-control-sm mb-2" placeholder="Filtra tag..." data-role="admin-narrative-tags-filter-tags">
+                            <div class="border rounded p-2" style="max-height: 260px; overflow: auto;" data-role="admin-narrative-tags-checkboxes">
+                                <div class="small text-muted">Caricamento tag...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center mt-3">
+                        <div class="small text-muted" data-role="admin-narrative-tags-assign-status">Seleziona una entità per modificare i tag.</div>
+                        <button type="button" class="btn btn-sm btn-primary" data-action="admin-narrative-tags-entity-save">
+                            <i class="bi bi-check2 me-1"></i>Salva assegnazioni
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

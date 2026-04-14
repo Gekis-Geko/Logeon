@@ -1,0 +1,106 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Meteo e Clima - Cataloghi</h4>
+        <h6 class="mb-0">Tipi meteo, stagioni e zone climatiche.</h6>
+    </header>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <a href="/admin/weather-overview" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Panoramica
+        </a>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-reload-all">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+        <h5 class="mb-0">Tipi meteo</h5>
+        <div class="d-flex gap-1">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-types-reload"><i class="bi bi-arrow-clockwise"></i></button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-weather-types-create"><i class="bi bi-plus-lg"></i></button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form class="row g-2 align-items-end mb-3" data-role="admin-weather-types-filters" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-types-filter-query">Ricerca</label>
+                <input id="admin-weather-types-filter-query" type="search" class="form-control form-control-sm" data-role="admin-weather-types-filter-query" data-weather-filter-target="weather-types" placeholder="Nome, slug, gruppo..." />
+            </div>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-types-filter-state">Stato</label>
+                <select id="admin-weather-types-filter-state" class="form-select form-select-sm" data-role="admin-weather-types-filter-state" data-weather-filter-target="weather-types">
+                    <option value="all" selected>Tutti</option>
+                    <option value="1">Attivi</option>
+                    <option value="0">Inattivi</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-weather-types-reset-filters">Reset</button>
+            </div>
+        </form>
+        <div id="grid-admin-weather-types"></div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+        <h5 class="mb-0">Stagioni</h5>
+        <div class="d-flex gap-1">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-seasons-reload"><i class="bi bi-arrow-clockwise"></i></button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-weather-seasons-create"><i class="bi bi-plus-lg"></i></button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form class="row g-2 align-items-end mb-3" data-role="admin-weather-seasons-filters" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-seasons-filter-query">Ricerca</label>
+                <input id="admin-weather-seasons-filter-query" type="search" class="form-control form-control-sm" data-role="admin-weather-seasons-filter-query" data-weather-filter-target="weather-seasons" placeholder="Nome, slug, descrizione..." />
+            </div>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-seasons-filter-state">Stato</label>
+                <select id="admin-weather-seasons-filter-state" class="form-select form-select-sm" data-role="admin-weather-seasons-filter-state" data-weather-filter-target="weather-seasons">
+                    <option value="all" selected>Tutti</option>
+                    <option value="1">Attive</option>
+                    <option value="0">Inattive</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-weather-seasons-reset-filters">Reset</button>
+            </div>
+        </form>
+        <div id="grid-admin-weather-seasons"></div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+        <h5 class="mb-0">Zone climatiche</h5>
+        <div class="d-flex gap-1">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-zones-reload"><i class="bi bi-arrow-clockwise"></i></button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-weather-zones-create"><i class="bi bi-plus-lg"></i></button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form class="row g-2 align-items-end mb-3" data-role="admin-weather-zones-filters" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-zones-filter-query">Ricerca</label>
+                <input id="admin-weather-zones-filter-query" type="search" class="form-control form-control-sm" data-role="admin-weather-zones-filter-query" data-weather-filter-target="weather-zones" placeholder="Nome, slug, descrizione..." />
+            </div>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-zones-filter-state">Stato</label>
+                <select id="admin-weather-zones-filter-state" class="form-select form-select-sm" data-role="admin-weather-zones-filter-state" data-weather-filter-target="weather-zones">
+                    <option value="all" selected>Tutte</option>
+                    <option value="1">Attive</option>
+                    <option value="0">Inattive</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-weather-zones-reset-filters">Reset</button>
+            </div>
+        </form>
+        <div id="grid-admin-weather-zones"></div>
+    </div>
+</div>
+
+{% include 'admin/modals/weather.twig' %}

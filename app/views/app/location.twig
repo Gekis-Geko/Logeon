@@ -1,0 +1,238 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+{% set is_staff = session('user_is_administrator') == 1 or session('user_is_moderator') == 1 or session('user_is_master') == 1 %}
+<section id="location-page" class="row ui-page">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-12">
+                <div class="card mb-2">
+                    <div class="card-body py-2 d-flex flex-wrap justify-content-between align-items-center gap-2">
+                        <div>
+                            <h5 class="mb-1">
+                                {{ location_name|default('Luogo') }}
+                                {% if map_name|default('')|trim is not empty %}
+                                <small class="text-muted ms-1">[{{ map_name }}]</small>
+                                {% endif %}
+                            </h5>
+                        </div>
+                        <div class="d-flex flex-wrap gap-2">
+                            <a class="btn btn-sm btn-outline-secondary" href="/game/maps/{{ map_id }}"><i class="bi bi-arrow-left-short"></i> Torna alla mappa</a>
+                            <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#location-description-modal">Descrizione</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div id="location-chat-column" class="col-12 col-xl-9 d-flex flex-column">
+                <div id="location-chat-card" class="card flex-grow-1 d-flex flex-column mb-1">
+                    <div class="card-body p-0 d-flex flex-column">
+                        <div id="chat_display" style="overflow: auto;">
+                            <div id="chat_messages"></div>
+                            <div id="chat_empty" class="alert alert-info d-none mx-2 mt-2 text-center">Nessun messaggio in chat.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="chat_action_character" class="card" data-requires-auth>
+                    <div class="card-body p-2">
+                        <div class="row g-2">
+                            <div class="col-12 col-md-3">
+                                <input type="text" name="tag_position" class="form-control" placeholder="[Posizione/Tag]">
+                                <div class="d-flex justify-content-between align-items-center gap-2 mt-2">
+                                    <button class="btn btn-success w-100" type="button" data-action="location-roll" data-requires-auth>Dado</button>
+                                    <button class="btn btn-primary w-100" type="button" data-chat-send data-requires-auth>Invia</button>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-9">
+                                <div class="position-relative">
+                                    <div class="list-group chat-command-suggest d-none"></div>
+                                    <textarea name="chat_body" class="form-control" placeholder="Scrivi l'azione per muovere il tuo personaggio ..." maxlength="1300" rows="4"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" name="location_id" value="{{ location_id }}">
+                        <input type="hidden" name="character_id" value="{{ session('character_id') }}">
+                    </div>
+                </div>
+            </div>
+
+            <div id="chat-utils" class="col-12 col-xl-3">
+                <div id="location-quick-tools" class="card text-bg-dark mb-2 shadow " data-bs-theme="dark">
+                    <div class="card-body">
+                        <div class="d-flex flex-wrap gap-2">
+                            <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#location-utils-modal">
+                                <span><i class="bi bi-person-rolodex me-1"></i> Pannello utilita</span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#location-scene-launcher-modal" data-requires-auth>
+                                <span><i class="bi bi-magic me-1"></i> Azioni scena</span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary d-flex justify-content-between align-items-center" type="button" data-bs-toggle="modal" data-bs-target="#location-drops-modal">
+                                <span><i class="bi bi-box-seam me-1"></i> Oggetti a terra</span>
+                                <span id="location-drops-count-badge" class="badge text-bg-danger d-none">0</span>
+                            </button>
+                            <button class="btn btn-sm btn-outline-primary d-flex justify-content-between align-items-center" type="button" data-whispers-hub-open data-requires-auth>
+                                <span><i class="bi bi-chat-dots me-1"></i> Sussurri</span>
+                                <span class="badge text-bg-danger d-none" data-role="whispers-unread-badge" data-hide-when-zero="1">0</span>
+                            </button>
+                            {% if show_jobs_board|default(false) %}
+                            <a class="btn btn-sm btn-outline-primary" href="/game/jobs/location/{{ location_id }}">
+                                <span><i class="bi bi-briefcase me-1"></i> Bacheca lavori</span>
+                            </a>
+                            {% endif %}
+                            {% if is_staff %}
+                            <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#location-weather-modal" data-requires-staff>
+                                <span><i class="bi bi-cloud-sun me-1"></i> Controllo clima</span>
+                            </button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="location-conflicts-panel" class="card mb-2">
+                    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                        <span>Conflitti scena</span>
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#location-conflicts-modal">
+                            Apri
+                        </button>
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="small text-muted mb-2" id="location-conflicts-panel-meta">Caricamento conflitti...</div>
+                        <div id="location-conflicts-panel-empty" class="small text-muted">Nessun conflitto attivo o proposta in attesa.</div>
+                        <div id="location-conflicts-panel-list" class="list-group list-group-flush d-none"></div>
+                    </div>
+                </div>
+
+                <div id="location-quick-vitals" class="card mb-3">
+                    <div class="card-header py-2">
+                        Stato personaggio
+                    </div>
+                    <div class="card-body p-2">
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="small fw-semibold"><i class="bi bi-heart-pulse me-1"></i> Salute/Vita</span>
+                                <span class="small">
+                                    <b id="location-profile-hp-current">0</b> / <b id="location-profile-hp-max">0</b>
+                                </span>
+                            </div>
+                            <div class="progress" role="progressbar" aria-label="Salute personaggio" aria-valuemin="0" aria-valuemax="100">
+                                <div id="location-profile-hp-bar" class="progress-bar bg-danger" role="progressbar" style="width:0%" aria-valuenow="0"></div>
+                            </div>
+                            <div class="small text-muted mt-1 d-flex justify-content-between align-items-center">
+                                <span>Integrita: <span id="location-profile-hp-percent">N/D</span></span>
+                                <span class="badge text-bg-secondary" id="location-profile-hp-state">Sconosciuto</span>
+                            </div>
+                            <span id="location-profile-hp-label" class="d-none">N/D</span>
+                        </div>
+
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="small fw-semibold"><i class="bi bi-stars me-1"></i> Esperienza</span>
+                                <span class="small">
+                                    <b id="location-profile-exp-current">0</b> / <b id="location-profile-exp-max">100</b>
+                                </span>
+                            </div>
+                            <div class="progress" role="progressbar" aria-label="Esperienza personaggio" aria-valuemin="0" aria-valuemax="100">
+                                <div id="location-profile-exp-bar" class="progress-bar bg-primary" role="progressbar" style="width:0%" aria-valuenow="0"></div>
+                            </div>
+                            <div class="small text-muted mt-1 d-flex justify-content-between">
+                                <span>Progresso livello: <span id="location-profile-exp-percent">N/D</span></span>
+                                <span>Totale exp: <span id="location-profile-exp-total">0</span></span>
+                            </div>
+                            <span id="location-profile-exp-label" class="d-none">N/D</span>
+                        </div>
+
+                        <div id="location-profile-attributes-summary" class="mt-2 d-none">
+                            <hr class="my-2">
+                            <div class="small fw-semibold mb-1"><i class="bi bi-sliders me-1"></i> Attributi</div>
+                            <div class="small d-grid gap-1" id="location-profile-attributes-list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="location-scenes-panel" class="card mb-2 d-none" data-bs-theme="dark">
+                    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-calendar-event me-1"></i> Scena in corso</span>
+                        <span class="badge text-bg-danger" style="font-size:.65rem;">ATTIVA</span>
+                    </div>
+                    <div id="location-scenes-list" class="card-body p-2"></div>
+                </div>
+
+                <div id="location-npcs-panel" class="card mb-2 d-none">
+                    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-person-badge me-1"></i> PNG Narrativi</span>
+                        <button type="button" class="btn btn-xs btn-link p-0 text-secondary" data-action="location-npcs-toggle" aria-expanded="false">
+                            <i class="bi bi-chevron-down" id="location-npcs-toggle-icon"></i>
+                        </button>
+                    </div>
+                    <div id="location-npcs-list" class="card-body p-2 d-none">
+                        <div class="text-muted small mb-2" style="font-size:.72rem;">
+                            <i class="bi bi-chat-left-dots me-1"></i>Usa <code>/png @NomePNG testo</code> per parlare come un PNG.
+                        </div>
+                    </div>
+                </div>
+
+                <div id="location-mod-status-wrap" class="card mb-3 d-none">
+                    <div class="card-header py-2">
+                        Note del Master
+                    </div>
+                    <div class="card-body p-2">
+                        <p id="location-mod-status-text" class="small mb-0"></p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include 'app/modals/location/utils.twig' %}
+{% include 'app/modals/location/scene-launcher.twig' %}
+{% include 'app/modals/location/drops.twig' %}
+{% include 'app/modals/location/conflicts.twig' %}
+{% if is_staff %}
+{% include 'app/modals/location/weather.twig' %}
+{% endif %}
+{% include 'app/modals/location/whispers-hub.twig' %}
+{% include 'app/modals/location/description.twig' %}
+{% include 'app/modals/location/report-message.twig' %}
+
+<template name="template_location_message_other">
+    <div class="row mx-3 mt-2 mb-4 p-3 rounded shadow text-bg-light chat-message">
+        <div class="col-1">
+            <img class="chat-avatar rounded img-fluid shadow" alt="">
+        </div>
+        <div class="col-11">
+            <div class="d-flex justify-content-between align-items-center my-1">
+                <h6 class="chat-meta"></h6>
+                <button type="button" class="btn btn-sm btn-outline-danger ms-5 chat-report" style="--bs-btn-padding-y: .15rem; --bs-btn-padding-x: .35rem; --bs-btn-font-size: .75rem;"><i class="bi bi-flag" data-bs-toggle="tooltip" data-bs-title="Segnala giocatore"></i> Segnala</button>
+            </div>
+            <div class="chat-body"></div>
+        </div>
+    </div>
+</template>
+
+<template name="template_location_message_me">
+    <div class="row me-3 ms-5 mt-2 mb-4 p-3 rounded shadow-sm text-bg-dark me chat-message">
+        <div class="col-11">
+            <div class="d-flex justify-content-end align-items-center my-1">
+                <h6 class="chat-meta text-end"></h6>
+            </div>
+            <div class="chat-body ms-5"></div>
+        </div>
+        <div class="col-1">
+            <img class="chat-avatar rounded img-fluid shadow" alt="">
+        </div>
+    </div>
+</template>
+
+<template name="template_location_message_system">
+    <div class="row mx-3 mt-2 mb-4 p-3 rounded shadow text-bg-secondary chat-message text-center">
+        <div class="col-12 chat-body"></div>
+    </div>
+</template>
+
+{% endblock %}
+

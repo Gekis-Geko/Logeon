@@ -1,0 +1,34 @@
+{% set system = system_state|default({}) %}
+
+<footer class="py-4 border-top bg-secondary">
+    <div class="container">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-start gap-3 mb-3">
+            <div class="text-muted small">
+                <img src="{{ APP.brand_logo_icon }}" alt="{{ APP.name }}" height="36" class="d-inline-block mb-1">
+                <div>&copy; {{ "now"|date("Y") }} {{ APP.name }}. Tutti i diritti riservati.</div>
+                <div class="mt-1">Progetto creato utilizzando <strong>Logeon - Engine PbC</strong> {{ system.version|default('v0.0.1') }}</div>
+            </div>
+            <nav class="d-flex flex-wrap justify-content-lg-end gap-3">
+                <a class="text-decoration-none text-muted" href="/rules"><span class="bi bi-ui-checks me-2"></span> Regolamento</a>
+                <a class="text-decoration-none text-muted" href="/storyboard"><span class="bi bi-globe-europe-africa me-2"></span> Ambientazione</a>
+                <a class="text-decoration-none text-muted" href="/how-to-play"><span class="bi bi-book me-2"></span> Come giocare</a>
+            </nav>
+        </div>
+        <div class="border-top pt-3 d-flex flex-column flex-sm-row flex-wrap gap-2 gap-sm-4">
+            <span class="text-muted small">
+                <span class="fw-semibold">Web Master:</span>
+                {{ APP.wm_name|default('-') }}{% if APP.wm_email is not empty %} &bull; <a href="mailto:{{ APP.wm_email }}" class="text-muted">{{ APP.wm_email }}</a>{% endif %}
+            </span>
+            <span class="text-muted small">
+                <span class="fw-semibold">Responsabile dati:</span>
+                {{ APP.dba_name|default('-') }}{% if APP.dba_email is not empty %} &bull; <a href="mailto:{{ APP.dba_email }}" class="text-muted">{{ APP.dba_email }}</a>{% endif %}
+            </span>
+            <span class="text-muted small">
+                <span class="fw-semibold">Supporto:</span>
+                {{ APP.support_name|default('-') }}{% if APP.support_email is not empty %} &bull; <a href="mailto:{{ APP.support_email }}" class="text-muted">{{ APP.support_email }}</a>{% endif %}
+            </span>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

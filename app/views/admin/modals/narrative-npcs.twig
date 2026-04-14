@@ -1,0 +1,87 @@
+<div class="modal fade" id="admin-npcs-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="admin-npcs-modal-title">PNG</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+                <div id="admin-npcs-modal-alert" class="alert d-none mb-3"></div>
+
+                <form id="admin-npcs-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="255" required>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stato</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Attivo</option>
+                            <option value="0">Inattivo</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Immagine</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="image" maxlength="512" placeholder="https://…">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="npc_image" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="npc_image">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="npc_image">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="npc_image">Annulla</button>
+                            </div>
+                            <img data-img-preview src="" alt="" class="mt-2 rounded img-thumbnail" style="max-height:80px;display:none;">
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo gruppo</label>
+                        <select class="form-select" name="group_type" id="admin-npcs-group-type">
+                            <option value="none">Nessuno</option>
+                            <option value="guild">Gilda</option>
+                            <option value="faction">Fazione</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-3" id="admin-npcs-group-id-wrap">
+                        <label class="form-label">Gruppo</label>
+                        <select class="form-select" name="group_id" id="admin-npcs-group-id" disabled>
+                            <option value="0">— seleziona tipo gruppo —</option>
+                        </select>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger me-auto d-none" data-action="admin-npcs-delete">
+                    <i class="bi bi-trash me-1"></i>Elimina
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" data-action="admin-npcs-save">
+                    <i class="bi bi-check-lg me-1"></i>Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

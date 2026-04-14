@@ -1,0 +1,118 @@
+<div class="modal fade" id="admin-maps-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Mappa</h4>
+                <h6 class="text-center text-muted">Configura anteprima e modalita visualizzazione dei luoghi.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-maps-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" maxlength="255" required>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Posizione</label>
+                        <input type="number" class="form-control" name="position" min="1" step="1">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Modalita</label>
+                        <select class="form-select" name="render_mode">
+                            <option value="grid">Griglia</option>
+                            <option value="visual">Visuale</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Mappa iniziale</label>
+                        <select class="form-select" name="initial">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Mobile</label>
+                        <select class="form-select" name="mobile">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Immagine mappa</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="image" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="map_image" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="map_image">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="map_image">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="map_image">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Icona</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="icon" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="map_icon" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="map_icon">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="map_icon">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="map_icon">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Area meteo <span class="text-muted small">(slug zona)</span></label>
+                        <input type="text" class="form-control" name="meteo" maxlength="255" placeholder="es. forest, mountain, coastal">
+                        <div class="form-text">Slug della zona meteo associata a questa mappa.</div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Stato mappa</label>
+                        <select class="form-select" name="status">
+                            <option value="">— Nessuno —</option>
+                            <option value="active">Attiva</option>
+                            <option value="inactive">Inattiva</option>
+                            <option value="maintenance">Manutenzione</option>
+                            <option value="offline">Offline</option>
+                            <option value="hidden">Nascosta</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger" data-action="admin-maps-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-maps-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

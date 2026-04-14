@@ -1,0 +1,126 @@
+<div class="modal fade" id="faction-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+
+                <h4 class="display-6 text-center mt-3 mb-1" id="faction-detail-name"></h4>
+                <p class="text-center text-muted small mb-0" id="faction-detail-type"></p>
+                <p class="text-center mb-3" id="faction-detail-badges"></p>
+                <hr class="my-3" />
+                <p id="faction-detail-description" class="mb-3"></p>
+
+                {# Membership status #}
+                <div id="faction-detail-membership" class="d-none mb-3">
+                    <div class="alert alert-info small mb-2">
+                        <i class="bi bi-person-check me-1"></i>
+                        Sei membro con ruolo: <strong id="faction-detail-role"></strong>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-action="faction-leave">
+                        <i class="bi bi-box-arrow-left me-1"></i>Abbandona fazione
+                    </button>
+                </div>
+
+                {# Join request button (for non-members, when allow_join_requests=1) #}
+                <div id="faction-join-request-wrap" class="d-none mb-3">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="faction-join-request">
+                        <i class="bi bi-envelope-plus me-1"></i>Richiedi adesione
+                    </button>
+                </div>
+
+                {# Leader panel #}
+                <div id="faction-leader-panel" class="d-none">
+                    <hr class="my-3" />
+                    <h6 class="fw-bold mb-2"><i class="bi bi-star me-1"></i>Pannello leader</h6>
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <div class="card">
+                                <div class="card-header small fw-bold">
+                                    Richieste di adesione
+                                    <span class="badge text-bg-primary ms-1" id="faction-pending-count">0</span>
+                                </div>
+                                <div class="card-body p-2">
+                                    <div id="faction-pending-requests-loading" class="text-muted small text-center py-2 d-none">Caricamento…</div>
+                                    <div id="faction-pending-requests-empty"   class="text-muted small text-center py-2">Nessuna richiesta in attesa.</div>
+                                    <div id="faction-pending-requests-list"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="card">
+                                <div class="card-header small fw-bold">Invita personaggio</div>
+                                <div class="card-body p-2">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control form-control-sm" id="faction-invite-name" placeholder="Cerca personaggio…" autocomplete="off">
+                                        <input type="hidden" id="faction-invite-character-id" value="">
+                                    </div>
+                                    <div class="list-group mt-1 d-none" id="faction-invite-suggestions"></div>
+                                    <button type="button" class="btn btn-sm btn-primary mt-2 w-100" data-action="faction-leader-invite">
+                                        <i class="bi bi-person-plus me-1"></i>Invita
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header small fw-bold">Proponi relazione con altra fazione</div>
+                                <div class="card-body p-2">
+                                    <div class="row g-2">
+                                        <div class="col-12 col-sm-5">
+                                            <select class="form-select form-select-sm" id="faction-relation-target">
+                                                <option value="">Seleziona fazione…</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-sm-4">
+                                            <select class="form-select form-select-sm" id="faction-relation-type">
+                                                <option value="ally">Alleata</option>
+                                                <option value="neutral" selected>Neutrale</option>
+                                                <option value="rival">Rivale</option>
+                                                <option value="enemy">Nemica</option>
+                                                <option value="vassal">Vassalla</option>
+                                                <option value="overlord">Signora</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-12 col-sm-3">
+                                            <button type="button" class="btn btn-sm btn-outline-primary w-100" data-action="faction-leader-propose-relation">
+                                                Proponi
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {# Tabs: members + relations #}
+                <hr class="my-3" />
+                <ul class="nav nav-tabs mb-3" id="faction-detail-tabs">
+                    <li class="nav-item">
+                        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#faction-tab-members">Membri</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#faction-tab-relations">Relazioni</button>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="faction-tab-members">
+                        <div id="faction-members-loading" class="text-muted small text-center py-2">Caricamento…</div>
+                        <div id="faction-members-empty"   class="text-muted small text-center py-2 d-none">Nessun membro visibile.</div>
+                        <div id="faction-members-list"></div>
+                    </div>
+                    <div class="tab-pane fade" id="faction-tab-relations">
+                        <div id="faction-relations-loading" class="text-muted small text-center py-2">Caricamento…</div>
+                        <div id="faction-relations-empty"   class="text-muted small text-center py-2 d-none">Nessuna relazione pubblica.</div>
+                        <div id="faction-relations-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

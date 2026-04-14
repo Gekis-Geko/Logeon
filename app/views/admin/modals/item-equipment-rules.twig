@@ -1,0 +1,111 @@
+<div class="modal fade" id="admin-item-equipment-rules-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Regola equipaggiamento</h4>
+                <hr class="my-4" />
+
+                <form id="admin-item-equipment-rules-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12">
+                        <label class="form-label">Oggetto <span class="text-danger">*</span></label>
+                        <select class="form-select" name="item_id" required>
+                            <option value="">Seleziona oggetto...</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Slot equipaggiamento <span class="text-danger">*</span></label>
+                        <select class="form-select" name="slot_id" required>
+                            <option value="">Seleziona slot...</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Priorita</label>
+                        <input type="number" class="form-control" name="priority" min="0" value="10">
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Impugnatura</label>
+                        <select class="form-select" name="is_two_handed">
+                            <option value="0">Una mano</option>
+                            <option value="1">Due mani</option>
+                        </select>
+                        <div class="form-text">Le armi a due mani bloccano l'equipaggiamento di altre armi nello stesso gruppo.</div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Richiede munizioni</label>
+                        <select class="form-select" name="requires_ammo">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8 d-none" data-role="ammo-item-wrap">
+                        <label class="form-label">Tipo munizione</label>
+                        <select class="form-select" name="ammo_item_id">
+                            <option value="">Seleziona munizione...</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4 d-none" data-role="ammo-per-use-wrap">
+                        <label class="form-label">Consumo per uso</label>
+                        <input type="number" class="form-control" name="ammo_per_use" min="1" value="1">
+                    </div>
+                    <div class="col-12 col-md-4 d-none" data-role="ammo-magazine-wrap">
+                        <label class="form-label">Capacita caricatore</label>
+                        <input type="number" class="form-control" name="ammo_magazine_size" min="0" value="0">
+                        <div class="form-text">0 = consumo diretto munizioni ad ogni uso (senza ricarica).</div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <hr class="my-2">
+                        <h6 class="mb-0">Qualita e manutenzione</h6>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Qualita attiva</label>
+                        <select class="form-select" name="durability_enabled">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4" data-role="durability-max-wrap">
+                        <label class="form-label">Qualita massima</label>
+                        <input type="number" class="form-control" name="durability_max" min="1" value="100">
+                    </div>
+                    <div class="col-12 col-md-4" data-role="durability-loss-use-wrap">
+                        <label class="form-label">Usura per uso</label>
+                        <input type="number" class="form-control" name="durability_loss_on_use" min="0" value="1">
+                    </div>
+                    <div class="col-12 col-md-4" data-role="durability-loss-equip-wrap">
+                        <label class="form-label">Usura per equip</label>
+                        <input type="number" class="form-control" name="durability_loss_on_equip" min="0" value="1">
+                        <div class="form-text">Applicata quando l'oggetto viene equipaggiato/spostato.</div>
+                    </div>
+
+                    <div class="col-12 mt-2">
+                        <hr class="my-2">
+                        <h6 class="mb-0">Inceppamento (solo armi da distanza)</h6>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Inceppamento attivo</label>
+                        <select class="form-select" name="jam_enabled">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4 d-none" data-role="jam-chance-wrap">
+                        <label class="form-label">Probabilita inceppamento (%)</label>
+                        <input type="number" class="form-control" name="jam_chance_percent" min="0" max="100" value="5">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-item-equipment-rules-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-item-equipment-rules-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

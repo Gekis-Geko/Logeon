@@ -1,0 +1,50 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Attributi personaggio</h4>
+        <h6 class="mb-0">Sistema core per attributi primari, secondari e narrativi con regole derivate guidate.</h6>
+    </header>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-character-attributes-open-settings-modal">
+            <i class="bi bi-gear me-1"></i>Impostazioni
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-character-attributes-open-recompute-modal">
+            <i class="bi bi-calculator me-1"></i>Ricalcolo
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-character-attributes-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-action="admin-character-attribute-create">
+            <i class="bi bi-plus-lg me-1"></i>Nuovo attributo
+        </button>
+    </div>
+</div>
+
+<div class="card card-body mb-3">
+    <div class="row g-2 align-items-end">
+        <div class="col-auto">
+            <label for="admin-character-attributes-filter-group" class="form-label mb-1">Gruppo</label>
+            <select id="admin-character-attributes-filter-group" class="form-select form-select-sm">
+                <option value="all" selected>Tutti</option>
+                <option value="primary">Primari</option>
+                <option value="secondary">Secondari</option>
+                <option value="narrative">Narrativi</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label for="admin-character-attributes-filter-active" class="form-label mb-1">Stato</label>
+            <select id="admin-character-attributes-filter-active" class="form-select form-select-sm">
+                <option value="all" selected>Tutti</option>
+                <option value="1">Attivi</option>
+                <option value="0">Inattivi</option>
+            </select>
+        </div>
+        <div class="col-auto d-flex gap-2 justify-content-end">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-character-attributes-filter-clear">Reset</button>
+        </div>
+    </div>
+</div>
+
+<div id="grid-admin-character-attributes"></div>
+
+{% include 'admin/modals/character-attributes.twig' %}
+

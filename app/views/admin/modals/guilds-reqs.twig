@@ -1,0 +1,57 @@
+<div class="modal fade" id="admin-guild-reqs-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Requisito gilda</h4>
+                <hr class="my-4" />
+
+                <form id="admin-guild-reqs-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12">
+                        <label class="form-label">Gilda</label>
+                        <select class="form-select" name="guild_id" id="admin-guild-reqs-modal-guild">
+                            <option value="">— seleziona gilda —</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" name="type" id="admin-guild-reqs-modal-type">
+                            <option value="">— seleziona tipo —</option>
+                            <option value="min_fame">Fama minima</option>
+                            <option value="min_socialstatus_id">Stato sociale minimo</option>
+                            <option value="job_id">Lavoro richiesto</option>
+                            <option value="no_job">Senza lavoro attivo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6" id="admin-guild-reqs-value-wrap">
+                        <label class="form-label" id="admin-guild-reqs-value-label">Valore</label>
+
+                        <input type="number" class="form-control d-none" name="value_number" id="admin-guild-reqs-value-number" min="0" placeholder="Es. 500">
+
+                        <select class="form-select d-none" name="value_socialstatus" id="admin-guild-reqs-value-socialstatus">
+                            <option value="">— seleziona stato sociale —</option>
+                        </select>
+
+                        <select class="form-select d-none" name="value_job" id="admin-guild-reqs-value-job">
+                            <option value="">— seleziona lavoro —</option>
+                        </select>
+
+                        <div class="text-muted small d-none" id="admin-guild-reqs-value-nojob">Nessun valore richiesto per questo tipo.</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Etichetta <span class="text-muted small">(opzionale)</span></label>
+                        <input type="text" class="form-control" name="label" maxlength="120" placeholder="Descrizione visibile al giocatore...">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-guild-reqs-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-guild-reqs-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+{% include 'layouts/header.twig' %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4 p-md-5 text-center">
+                    <div class="display-6 fw-bold mb-2">
+                        {{ error_title|default('Errore') }}
+                    </div>
+                    <div class="text-muted mb-3">
+                        Codice: {{ status_code|default(400) }}
+                    </div>
+                    <p class="lead mb-4">
+                        {{ error_message|default('Si e verificato un errore.') }}
+                    </p>
+                    <div class="d-flex flex-wrap gap-2 justify-content-center">
+                        <a href="/" class="btn btn-primary">Home</a>
+                        <a href="/game" class="btn btn-outline-secondary">Piattaforma</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'layouts/footer.twig' %}

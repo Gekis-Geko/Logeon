@@ -1,0 +1,89 @@
+<div class="modal fade" id="admin-equipment-slots-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Slot equipaggiamento</h4>
+                <hr class="my-4" />
+
+                <form id="admin-equipment-slots-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Chiave slot <span class="text-danger">*</span></label>
+                        <select class="form-select" name="key" required>
+                            <option value="">Seleziona chiave...</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Gruppo slot</label>
+                        <select class="form-select" name="group_key">
+                            <option value="">Seleziona gruppo...</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Massimo equipaggiabili</label>
+                        <input type="number" class="form-control" name="max_equipped" min="1" value="1">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Ordine</label>
+                        <input type="number" class="form-control" name="sort_order" min="0" value="0">
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Stato</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Attivo</option>
+                            <option value="0">Inattivo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Immagine icona</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="icon" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="equipment_slot_icon" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="equipment_slot_icon">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="equipment_slot_icon">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="equipment_slot_icon">Annulla</button>
+                            </div>
+                            <img data-img-preview src="" alt="" class="img-fluid rounded border mt-2" style="max-height: 96px; display: none;">
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="3" maxlength="255"></textarea>
+                    </div>
+
+                    <div class="col-12 small text-muted d-none" data-role="equipment-slot-core-hint">
+                        Slot core: puoi attivarlo/disattivarlo, ma non puo essere eliminato o rinominato.
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-equipment-slots-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-equipment-slots-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,109 @@
+<div class="modal fade" id="admin-message-reports-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-flag me-2 text-danger"></i>Dettaglio segnalazione <span class="text-muted fw-normal" data-field="id"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-subtitle text-muted mb-2">Segnalazione</h6>
+                                <dl class="row mb-0 small">
+                                    <dt class="col-5">Stato</dt>       <dd class="col-7" data-field="status_badge">—</dd>
+                                    <dt class="col-5">Priorità</dt>    <dd class="col-7" data-field="priority_badge">—</dd>
+                                    <dt class="col-5">Motivo</dt>      <dd class="col-7" data-field="reason_label">—</dd>
+                                    <dt class="col-5">Ricevuta il</dt> <dd class="col-7" data-field="created_at">—</dd>
+                                    <dt class="col-5">Luogo</dt>       <dd class="col-7" data-field="location_name">—</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h6 class="card-subtitle text-muted mb-2">Persone coinvolte</h6>
+                                <dl class="row mb-0 small">
+                                    <dt class="col-5">Segnalatore</dt>   <dd class="col-7" data-field="reporter_name">—</dd>
+                                    <dt class="col-5">Segnalato</dt>     <dd class="col-7" data-field="reported_name">—</dd>
+                                    <dt class="col-5">Assegnato a</dt>   <dd class="col-7" data-field="assigned_username">—</dd>
+                                    <dt class="col-5">Revisore</dt>      <dd class="col-7" data-field="reviewed_username">—</dd>
+                                    <dt class="col-5">Revisionato il</dt><dd class="col-7" data-field="reviewed_at">—</dd>
+                                </dl>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-subtitle text-muted mb-2">Snapshot messaggio segnalato</h6>
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge text-bg-secondary small" data-field="snapshot_type_badge">—</span>
+                        </div>
+                        <blockquote class="blockquote mb-0 small fst-italic border-start ps-3" data-field="message_snapshot_text">—</blockquote>
+                    </div>
+                </div>
+
+                <div class="card mb-3" id="admin-mr-reason-text-wrap">
+                    <div class="card-body">
+                        <h6 class="card-subtitle text-muted mb-2">Descrizione del segnalatore</h6>
+                        <p class="mb-0 small" data-field="reason_text">—</p>
+                    </div>
+                </div>
+
+                <div class="card mb-3" id="admin-mr-review-note-wrap">
+                    <div class="card-body">
+                        <h6 class="card-subtitle text-muted mb-2">Nota staff esistente</h6>
+                        <p class="mb-0 small" data-field="review_note">—</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <div id="admin-mr-closed-notice" class="alert alert-secondary d-none py-2 small mb-3">
+                    <i class="bi bi-lock me-1"></i>Segnalazione chiusa — non è possibile aggiornarne lo stato.
+                </div>
+
+                <div id="admin-mr-actions-wrap">
+                    <h6 class="fw-semibold mb-3">Azioni staff</h6>
+                    <div class="row g-2 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label small">Cambia stato</label>
+                            <select id="admin-mr-new-status" class="form-select form-select-sm">
+                                <option value="">Seleziona...</option>
+                                <option value="in_review">In revisione</option>
+                                <option value="resolved">Chiudi come confermata</option>
+                                <option value="dismissed">Chiudi come non fondata</option>
+                                <option value="archived">Archivia</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small">Codice esito (opzionale)</label>
+                            <input type="text" id="admin-mr-resolution-code" class="form-control form-control-sm" placeholder="es. warning_issued">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small">Nota staff (opzionale)</label>
+                            <textarea id="admin-mr-review-note" class="form-control form-control-sm" rows="2" maxlength="2000" placeholder="Note interne..."></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-mr-take-charge" id="admin-mr-take-charge-btn">
+                    <i class="bi bi-person-check me-1"></i>Prendi in carico
+                </button>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-action="admin-mr-update-status" id="admin-mr-update-status-btn">
+                        <i class="bi bi-check2 me-1"></i>Aggiorna stato
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

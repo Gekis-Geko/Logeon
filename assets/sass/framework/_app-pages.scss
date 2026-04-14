@@ -1,0 +1,386 @@
+.app-recent-activity-icon {
+    width: 72px;
+    height: 72px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+// Shared equip-slot styles — used in #equips-page and #location-utils-modal
+%equip-slot-host {
+    position: relative;
+    min-height: 130px;
+    padding: 0 !important;
+    overflow: hidden;
+    border-radius: 10px;
+    border-color: var(--swd-border) !important;
+}
+
+%equip-slots-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.7rem;
+    padding: 0.35rem;
+}
+
+#equips-page [data-equip-slot],
+#location-utils-modal [data-equip-slot] {
+    @extend %equip-slot-host;
+}
+
+#equips-page .equip-slots-grid,
+#location-utils-modal .equip-slots-grid {
+    @extend %equip-slots-grid-layout;
+}
+
+#equips-page .equip-slots-grid > [data-equip-slot],
+#location-utils-modal .equip-slots-grid > [data-equip-slot] {
+    width: auto !important;
+    max-width: none;
+    margin: 0;
+}
+
+#equips-page .equip-slot-box,
+#location-utils-modal .equip-slot-box {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 130px;
+}
+
+#equips-page .equip-slot-image,
+#location-utils-modal .equip-slot-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#equips-page .equip-slot-label,
+#location-utils-modal .equip-slot-label {
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    z-index: 3;
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--lf-text-primary);
+    background: rgba(15, 20, 32, 0.92);
+    border: 1px solid var(--swd-border);
+    border-radius: 8px;
+    padding: 0.16rem 0.42rem;
+}
+
+#equips-page .equip-slot-name,
+#location-utils-modal .equip-slot-name {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 2;
+    color: var(--lf-text-primary);
+    font-size: 0.78rem;
+    line-height: 1.25;
+    padding: 0.65rem 0.5rem 0.55rem;
+    background: rgba(11, 13, 18, 0.92);
+    text-shadow: none;
+}
+
+#equips-page .equip-slot-remove,
+#location-utils-modal .equip-slot-remove {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -46%);
+    z-index: 4;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--swd-transition-fast), transform var(--swd-transition-fast);
+}
+
+#equips-page [data-equip-slot]:hover .equip-slot-remove,
+#equips-page [data-equip-slot]:focus-within .equip-slot-remove,
+#location-utils-modal [data-equip-slot]:hover .equip-slot-remove,
+#location-utils-modal [data-equip-slot]:focus-within .equip-slot-remove {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+    pointer-events: auto;
+}
+
+#equips-page .equip-slot-empty,
+#location-utils-modal .equip-slot-empty {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--lf-text-secondary);
+    font-size: 0.86rem;
+    font-weight: 600;
+    background: var(--swd-surface-alt);
+}
+
+#equips-page .equip-list-actions {
+    width: auto;
+    white-space: nowrap;
+    text-align: right;
+    vertical-align: middle;
+}
+
+#equips-page .equip-list-action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: auto !important;
+    width: auto !important;
+}
+
+#bag-page .equip-action-btn,
+#equips-page .equip-action-btn {
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* Hard reset for equip list buttons to avoid legacy/block stretching rules */
+#equips-page [data-equip-list] > tr > td {
+    display: table-cell !important;
+    vertical-align: middle !important;
+}
+
+#equips-page [data-equip-list] [data-action="equip"] {
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 0.25rem 0.5rem !important;
+    line-height: 1.5 !important;
+}
+
+#settings-page .accordion-item,
+#profile-edit-page .accordion-item {
+    overflow: hidden;
+    background: var(--lf-surface);
+    border: 1px solid var(--lf-border);
+}
+
+#settings-page .accordion-button,
+#profile-edit-page .accordion-button {
+    font-weight: 700;
+    color: var(--lf-text-primary);
+    background: var(--lf-surface-alt);
+}
+
+#settings-page .accordion-button::after,
+#profile-edit-page .accordion-button::after {
+    filter: invert(1) grayscale(1) brightness(1.35);
+}
+
+#settings-page .accordion-button:not(.collapsed),
+#profile-edit-page .accordion-button:not(.collapsed) {
+    color: var(--lf-text-primary);
+    background: rgba(139, 92, 246, 0.12);
+}
+
+#settings-page .accordion-button:focus,
+#profile-edit-page .accordion-button:focus {
+    box-shadow: 0 0 0 0.15rem rgba(139, 92, 246, 0.28);
+}
+
+#settings-page .accordion-body,
+#profile-edit-page .accordion-body {
+    background: var(--lf-surface);
+    color: var(--lf-text-primary);
+}
+
+/* Settings accordion: single joined stack (rounded only first/last item) */
+#settings-page .accordion-item {
+    border-radius: 0;
+}
+
+#settings-page .accordion-item:not(:first-of-type) {
+    border-top: 0;
+}
+
+#settings-page .accordion-item:first-of-type {
+    border-top-left-radius: var(--swd-radius);
+    border-top-right-radius: var(--swd-radius);
+}
+
+#settings-page .accordion-item:last-of-type {
+    border-bottom-left-radius: var(--swd-radius);
+    border-bottom-right-radius: var(--swd-radius);
+}
+
+#settings-page .accordion-button {
+    border-radius: 0;
+}
+
+#settings-page .accordion-item:first-of-type .accordion-button {
+    border-top-left-radius: var(--swd-radius);
+    border-top-right-radius: var(--swd-radius);
+}
+
+#settings-page .accordion-item:last-of-type .accordion-button.collapsed {
+    border-bottom-left-radius: var(--swd-radius);
+    border-bottom-right-radius: var(--swd-radius);
+}
+
+#locations-page #map-visual {
+    border: 1px solid var(--swd-border);
+}
+
+#locations-page #map-visual .position-relative {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+#locations-page #map-visual-image {
+    display: block;
+}
+
+#locations-page #map-visual-pins {
+    pointer-events: none;
+}
+
+#locations-page #map-visual-pins .lf-map-node {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    text-decoration: none;
+    color: inherit;
+    outline: 0;
+}
+
+#locations-page #map-visual-pins .lf-map-node__dot {
+    position: relative;
+    width: 2.15rem;
+    height: 2.15rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid rgba(139, 92, 246, 0.72);
+    background: rgba(139, 92, 246, 0.52);
+    color: var(--lf-text-primary);
+    box-shadow: 0 0 0 1px rgba(8, 10, 14, 0.6);
+    font-size: 0.95rem;
+}
+
+#locations-page #map-visual-pins .lf-map-node__dot::after {
+    content: '';
+    position: absolute;
+    inset: -0.4rem;
+    border-radius: 999px;
+    border: 1px solid rgba(139, 92, 246, 0.78);
+    opacity: 0.9;
+    animation: lf-map-node-pulse 1.9s ease-out infinite;
+}
+
+#locations-page #map-visual-pins .lf-map-node__dot.is-active {
+    background: rgba(34, 197, 94, 0.48);
+    border-color: rgba(34, 197, 94, 0.74);
+}
+
+#locations-page #map-visual-pins .lf-map-node__dot.is-active::after {
+    border-color: rgba(34, 197, 94, 0.84);
+}
+
+#locations-page #map-visual-pins .lf-map-node__dot.is-full {
+    background: rgba(245, 158, 11, 0.5);
+    border-color: rgba(245, 158, 11, 0.8);
+}
+
+#locations-page #map-visual-pins .lf-map-node__dot.is-full::after {
+    border-color: rgba(245, 158, 11, 0.88);
+}
+
+#locations-page #map-visual-pins .lf-map-node__dot.is-locked {
+    background: rgba(71, 85, 105, 0.62);
+    border-color: rgba(148, 163, 184, 0.72);
+    color: var(--lf-text-primary);
+}
+
+#locations-page #map-visual-pins .lf-map-node__dot.is-locked::after {
+    border-color: rgba(148, 163, 184, 0.76);
+}
+
+#locations-page #map-visual-pins .lf-map-node__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    max-width: min(26vw, 18rem);
+    padding: 0.22rem 0.5rem;
+    border: 1px solid rgba(126, 138, 166, 0.62);
+    border-radius: 999px;
+    background: rgba(11, 13, 18, 0.95);
+    color: var(--lf-text-primary);
+    line-height: 1.2;
+}
+
+#locations-page #map-visual-pins .lf-map-node__name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+#locations-page #map-visual-pins .lf-map-node__meta {
+    font-size: 0.72rem;
+    color: var(--lf-text-primary);
+    opacity: 0.86;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+#locations-page #map-visual-pins .lf-map-node--generated .lf-map-node__label {
+    border-style: dashed;
+}
+
+#locations-page #map-visual-pins .lf-map-node:focus-visible .lf-map-node__dot,
+#locations-page #map-visual-pins .lf-map-node:hover .lf-map-node__dot {
+    box-shadow: 0 0 0 0.18rem rgba(139, 92, 246, 0.34);
+}
+
+@media (max-width: 992px) {
+    .app-recent-activity-icon {
+        width: 56px;
+        height: 56px;
+    }
+
+    #locations-page #map-visual-pins .lf-map-node {
+        gap: 0.3rem;
+    }
+
+    #locations-page #map-visual-pins .lf-map-node__dot {
+        width: 1.9rem;
+        height: 1.9rem;
+        font-size: 0.86rem;
+    }
+
+    #locations-page #map-visual-pins .lf-map-node__label {
+        max-width: min(46vw, 12rem);
+        padding: 0.16rem 0.42rem;
+    }
+
+    #locations-page #map-visual-pins .lf-map-node__name {
+        font-size: 0.74rem;
+    }
+}
+
+@keyframes lf-map-node-pulse {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.78;
+    }
+    70% {
+        transform: scale(1.16);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1.16);
+        opacity: 0;
+    }
+}

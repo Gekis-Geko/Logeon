@@ -1,0 +1,28 @@
+<div class="modal fade" id="select-character-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Seleziona personaggio</h4>
+                <h6 class="text-center text-muted">Scegli il personaggio con cui entrare nel gioco.</h6>
+
+                <hr class="my-4" />
+
+                <div class="d-grid gap-2 col-10 mx-auto my-4">
+                    <form id="select-character-modal-form">
+                        <div class="form-group my-3">
+                            <label class="mb-2">Personaggi disponibili <i class="text-danger">*</i></label>
+                            <div id="select-character-modal-list" class="list-group mb-3"></div>
+                            <input type="hidden" name="character_id" value="">
+                        </div>
+                        <div class="d-grid gap-2 col-6 mx-auto my-5">
+                            <button type="submit" class="btn btn-lg btn-primary btn-block btn-round">Entra</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

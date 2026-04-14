@@ -1,0 +1,54 @@
+<div data-admin-page="jobs">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <header class="mt-3">
+            <h4 class="display-6">Lavori</h4>
+            <h6>Gestione lavori disponibili e relative proprietà</h6>
+        </header>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-jobs-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-jobs-create">
+                <i class="bi bi-plus-lg me-1"></i>Nuovo lavoro
+            </button>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form id="admin-jobs-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+                <div class="col-auto">
+                    <label for="admin-jobs-filter-name" class="form-label mb-1">Nome</label>
+                    <input id="admin-jobs-filter-name" name="name" type="text" class="form-control" maxlength="100" placeholder="Nome lavoro">
+                </div>
+                <div class="position-relative col-auto">
+                    <label for="admin-jobs-filter-location-label" class="form-label mb-1">Luogo</label>
+                    <input id="admin-jobs-filter-location-label"
+                           name="location_label"
+                           type="text"
+                           class="form-control"
+                           maxlength="120"
+                           placeholder="Cerca luogo..."
+                           autocomplete="off">
+                    <input type="hidden" name="location_id" value="">
+                    <div class="list-group mt-1 position-absolute w-100" style="z-index:100;display:none" data-role="admin-jobs-filter-location-suggestions"></div>
+                </div>
+                <div class="col-auto">
+                    <label for="admin-jobs-filter-is-active" class="form-label mb-1">Stato</label>
+                    <select id="admin-jobs-filter-is-active" name="is_active" class="form-select">
+                        <option value="" selected>Tutti</option>
+                        <option value="1">Attivi</option>
+                        <option value="0">Inattivi</option>
+                    </select>
+                </div>
+                <div class="d-flex gap-2 col-auto">
+                    <a class="btn btn-sm btn-outline-secondary" href="/admin/jobs">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="grid-admin-jobs"></div>
+
+    {% include 'admin/modals/jobs.twig' %}
+</div>

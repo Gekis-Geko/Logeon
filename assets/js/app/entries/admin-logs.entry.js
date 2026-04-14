@@ -1,0 +1,9 @@
+import '../features/admin/LogsConflicts.js';
+import '../features/admin/LogsCurrency.js';
+import '../features/admin/LogsExperience.js';
+import '../features/admin/LogsFame.js';
+import '../features/admin/LogsGuild.js';
+import '../features/admin/LogsJob.js';
+import '../features/admin/LogsLocationAccess.js';
+import '../features/admin/LogsSys.js';
+import '../features/admin/LogsNarrative.js';

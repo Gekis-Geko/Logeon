@@ -1,0 +1,49 @@
+<div class="modal fade" id="admin-jobs-levels-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Livello</h4>
+                <h6 class="text-center text-muted">Configura livello, titolo e soglia punti.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-jobs-levels-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12">
+                        <label class="form-label">Lavoro <span class="text-danger">*</span></label>
+                        <select class="form-select" name="job_id">
+                            <option value="">— Seleziona —</option>
+                        </select>
+                    </div>
+
+                    <div class="col-6">
+                        <label class="form-label">Numero livello <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="level" min="1" value="1">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Punti minimi</label>
+                        <input type="number" class="form-control" name="min_points" min="0" value="0">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Titolo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="title" maxlength="100" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Bonus paga (%)</label>
+                        <input type="number" class="form-control" name="pay_bonus_percent" min="0" value="0">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-jobs-levels-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-jobs-levels-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

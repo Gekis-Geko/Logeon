@@ -1,0 +1,54 @@
+<div class="modal fade" id="admin-narrative-event-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Dettaglio attivita</h4>
+                <h6 class="text-center text-muted">Informazioni complete e riferimenti collegati all'evento selezionato.</h6>
+                <hr class="my-4" />
+
+                <div class="small text-muted" id="admin-narrative-event-detail-modal-empty">Nessun dettaglio disponibile.</div>
+                <div id="admin-narrative-event-detail-modal-body" class="d-none"></div>
+                <div id="admin-narrative-event-tags-wrap" class="d-none mt-3">
+                    <label class="form-label small fw-semibold">Tag narrativi</label>
+                    <div id="admin-narrative-event-tags-container" class="d-flex flex-wrap gap-2 border rounded p-2 mb-2">
+                        <span class="text-muted small">Caricamento tag...</span>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-narrative-event-tags-save">
+                        <i class="bi bi-floppy me-1"></i>Salva tag
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-narrative-event-visibility-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-2">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h5 class="text-center mt-1 mb-2">Visibilita attivita</h5>
+                <hr class="my-3" />
+
+                <input type="hidden" id="admin-narrative-event-visibility-id" value="0">
+                <label class="form-label" for="admin-narrative-event-visibility-value">Seleziona visibilita</label>
+                <select class="form-select" id="admin-narrative-event-visibility-value">
+                    <option value="public">Pubblica</option>
+                    <option value="private">Privata</option>
+                    <option value="staff_only">Solo staff</option>
+                    <option value="hidden">Nascosta</option>
+                </select>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary btn-sm" data-action="admin-narrative-event-visibility-save">Conferma</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

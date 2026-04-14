@@ -1,0 +1,42 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Segnalazioni messaggi</h4>
+        <h6 class="mb-0">Gestione delle segnalazioni inviate dai giocatori sulla chat dei luoghi.</h6>
+    </header>
+    <div class="d-flex align-items-center gap-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-message-reports-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+</div>
+<div class="card card-body mb-3">
+    <form id="admin-message-reports-filters" class="row g-2 align-items-end admin-filters-form">
+        <div class="col-auto">
+            <label for="admin-message-reports-filter-status" class="form-label mb-1">Stato</label>
+            <select id="admin-message-reports-filter-status" name="status" class="form-select form-select-sm">
+                <option value="">Tutti gli stati</option>
+                <option value="open">Aperta</option>
+                <option value="in_review">In revisione</option>
+                <option value="resolved">Risolta</option>
+                <option value="dismissed">Non fondata</option>
+                <option value="archived">Archiviata</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label for="admin-message-reports-filter-priority" class="form-label mb-1">Priorità</label>
+            <select id="admin-message-reports-filter-priority" name="priority" class="form-select form-select-sm">
+                <option value="">Tutte le priorità</option>
+                <option value="low">Bassa</option>
+                <option value="medium">Media</option>
+                <option value="high">Alta</option>
+            </select>
+        </div>
+        <div class="d-flex gap-2 col-auto">
+            <a class="btn btn-sm btn-outline-secondary" href="/admin/message-reports">Reset</a>
+        </div>
+    </form>
+</div>
+
+<div id="grid-admin-message-reports"></div>
+
+{% include 'admin/modals/message-reports.twig' %}

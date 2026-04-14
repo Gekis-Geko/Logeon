@@ -1,0 +1,169 @@
+<div class="modal fade" id="admin-guilds-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Gilda</h4>
+                <hr class="my-4" />
+
+                <form id="admin-guilds-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" maxlength="120" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Allineamento</label>
+                        <select class="form-select" name="alignment_id" id="admin-guilds-modal-alignment">
+                            <option value="">— nessuno —</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Visibile</label>
+                        <select class="form-select" name="is_visible">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Immagine <span class="text-muted small">(banner/copertina)</span></label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="image" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="guild_image" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="guild_image">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="guild_image">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="guild_image">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Icona <span class="text-muted small">(32×32, mostrata nel profilo)</span></label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <div class="d-flex align-items-center gap-2">
+                                    <input type="text" class="form-control" name="icon" maxlength="255" placeholder="https://...">
+                                    <img data-role="admin-guilds-icon-preview" data-img-preview src="" alt="" width="28" height="28" style="object-fit:contain;display:none;flex-shrink:0;">
+                                </div>
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="guild_icon" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="guild_icon">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="guild_icon">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="guild_icon">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Sito web</label>
+                        <input type="text" class="form-control" name="website_url" maxlength="255" placeholder="https://...">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-guilds-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-guilds-save">Salva</button>
+                </div>
+
+                <hr class="my-4" />
+
+                <div class="d-none" data-role="admin-guilds-roles-section">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="mb-0">Ruoli</h6>
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-guilds-role-new">
+                            <i class="bi bi-plus-lg me-1"></i>Aggiungi ruolo
+                        </button>
+                    </div>
+
+                    <div class="d-none" data-role="admin-guilds-role-form-wrap">
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title mb-3" data-role="admin-guilds-role-form-title">Nuovo ruolo</h6>
+                                <form id="admin-guilds-role-form" class="row g-2">
+                                    <input type="hidden" name="role_id" value="">
+                                    <input type="hidden" name="role_guild_id" value="">
+                                    <div class="col-12 col-md-5">
+                                        <label class="form-label form-label-sm">Nome</label>
+                                        <input type="text" class="form-control form-control-sm" name="role_name" maxlength="80" required>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label class="form-label form-label-sm">Stipendio mensile</label>
+                                        <input type="number" class="form-control form-control-sm" name="role_monthly_salary" min="0" value="0">
+                                    </div>
+                                    <div class="col-6 col-md-4">
+                                        <label class="form-label form-label-sm">URL immagine</label>
+                                        <input type="text" class="form-control form-control-sm" name="role_image" maxlength="255" placeholder="https://...">
+                                    </div>
+                                    <div class="col-4 col-md-2">
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" name="role_is_leader" id="admin-guilds-role-is-leader" value="1">
+                                            <label class="form-check-label form-label-sm" for="admin-guilds-role-is-leader">Leader</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-2">
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" name="role_is_officer" id="admin-guilds-role-is-officer" value="1">
+                                            <label class="form-check-label form-label-sm" for="admin-guilds-role-is-officer">Officer</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 col-md-2">
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" name="role_is_default" id="admin-guilds-role-is-default" value="1">
+                                            <label class="form-check-label form-label-sm" for="admin-guilds-role-is-default">Default</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex gap-2 justify-content-end">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-guilds-role-form-cancel">Annulla</button>
+                                        <button type="button" class="btn btn-sm btn-primary" data-action="admin-guilds-role-save">Salva ruolo</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table table-sm align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th class="text-center" style="width:110px">Stipendio</th>
+                                    <th class="text-center" style="width:70px">Leader</th>
+                                    <th class="text-center" style="width:70px">Officer</th>
+                                    <th class="text-center" style="width:70px">Default</th>
+                                    <th class="text-center" style="width:80px"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-guilds-roles-tbody">
+                                <tr data-role="admin-guilds-roles-empty">
+                                    <td colspan="6" class="text-muted text-center">Nessun ruolo.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

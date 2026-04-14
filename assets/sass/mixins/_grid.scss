@@ -1,0 +1,52 @@
+@mixin make-container($gutter: $grid-gutter-width) {
+    width: 100%;
+    padding-right: $gutter * .5;
+    padding-left: $gutter * .5;
+    margin-right: auto;
+    margin-left: auto;
+}
+  
+@mixin make-row($gutter: $grid-gutter-width) {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -$gutter * .5;
+    margin-left: -$gutter * .5;
+}
+
+@mixin make-container-max-widths($max-widths: $container-max-widths, $breakpoints: $grid-breakpoints) {
+    @each $breakpoint, $container-max-width in $max-widths {
+        @include media-breakpoint-up($breakpoint, $breakpoints) {
+            max-width: $container-max-width;
+        }
+    }
+}
+
+@mixin make-col-ready($gutter: $grid-gutter-width) {
+    position: relative;
+    width: 100%;
+    padding-right: $gutter * .5;
+    padding-left: $gutter * .5;
+}
+
+@mixin make-col($size, $columns: $grid-columns) {
+    flex: 0 0 percentage(divide($size, $columns));
+    max-width: percentage(divide($size, $columns));
+}
+
+@mixin make-col-auto() {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
+}
+
+@mixin make-col-offset($size, $columns: $grid-columns) {
+    $num: divide($size, $columns);
+    margin-left: if($num == 0, 0, percentage($num));
+}
+
+@mixin row-cols($count) {
+    > * {
+        flex: 0 0 divide(100%, $count);
+        max-width: divide(100%, $count);
+    }
+}

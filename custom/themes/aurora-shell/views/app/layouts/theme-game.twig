@@ -1,0 +1,133 @@
+{% extends 'app/layouts/layout.twig' %}
+
+{% block game_primary_navigation %}
+    <div class="aurora-game-nav">
+        {% include 'app/layouts/navbar.twig' %}
+    </div>
+{% endblock %}
+
+{% block game_page_content %}
+    <section class="aurora-game-shell">
+        <div class="row">
+            <aside class="col-12 col-lg-4 col-xl-3">
+                <div class="aurora-aside-stack">
+                    <section class="aurora-character-widget card shadow-sm border-0" data-aurora-character-widget>
+                        <header class="aurora-character-widget__head">
+                            <span class="text-uppercase small">Scheda rapida</span>
+                        </header>
+                        <div class="aurora-character-widget__body p-3">
+                            <div class="d-flex align-items-center gap-3">
+                                <img
+                                    class="aurora-character-widget__avatar"
+                                    src="/assets/imgs/defaults-images/default-profile.png"
+                                    alt="Avatar personaggio"
+                                    data-aurora-character-avatar>
+                                <div class="min-w-0">
+                                    <div class="aurora-character-widget__name text-truncate" data-aurora-character-name>Personaggio</div>
+                                    <div class="small text-muted" data-aurora-character-subtitle>Caricamento profilo...</div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span>Salute</span>
+                                    <strong data-aurora-character-health-label>0 / 100</strong>
+                                </div>
+                                <div class="progress aurora-character-widget__progress" role="progressbar" aria-label="Salute">
+                                    <div
+                                        class="progress-bar bg-danger"
+                                        data-aurora-character-health-bar
+                                        style="width: 0%;"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                        aria-valuenow="0"></div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3">
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span>Esperienza</span>
+                                    <strong data-aurora-character-exp-label>0 / 100</strong>
+                                </div>
+                                <div class="progress aurora-character-widget__progress" role="progressbar" aria-label="Esperienza">
+                                    <div
+                                        class="progress-bar bg-info"
+                                        data-aurora-character-exp-bar
+                                        style="width: 0%;"
+                                        aria-valuemin="0"
+                                        aria-valuemax="100"
+                                        aria-valuenow="0"></div>
+                                </div>
+                                <div class="small text-muted mt-1">
+                                    Totale: <span data-aurora-character-exp-total>0</span>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-3">
+                                <a class="btn btn-sm btn-outline-light" href="/game/bag">
+                                    <i class="bi bi-backpack2 me-1"></i> Inventario
+                                </a>
+                                <a class="btn btn-sm btn-outline-light" href="/game/equips">
+                                    <i class="bi bi-luggage me-1"></i> Equipaggiamento
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                    <section class="aurora-radar card shadow-sm border-0" data-aurora-radar>
+                        <header class="aurora-radar__head d-flex justify-content-between align-items-center">
+                            <span class="text-uppercase small">Narrative Radar</span>
+                            <span class="badge text-bg-info" data-aurora-session-role>Giocatore</span>
+                        </header>
+                        <div class="aurora-radar__body p-2">
+                            <div class="aurora-radar__row">
+                                <span><i class="bi bi-clock-history"></i> Ora</span>
+                                <strong data-aurora-clock>--:--:--</strong>
+                            </div>
+                            <div class="aurora-radar__row">
+                                <span><i class="bi bi-calendar2-week"></i> Stagione</span>
+                                <strong data-aurora-season>N/D</strong>
+                            </div>
+                            <div class="aurora-radar__row">
+                                <span><i class="bi bi-moon-stars"></i> Fase lunare</span>
+                                <strong data-aurora-moon>N/D</strong>
+                            </div>
+                            <div class="aurora-radar__row">
+                                <span><i class="bi bi-bell"></i> Notifiche</span>
+                                <span class="badge text-bg-warning" data-aurora-badge-notifications>0</span>
+                            </div>
+                            <div class="aurora-radar__row">
+                                <span><i class="bi bi-journal-text"></i> Quest</span>
+                                <span class="badge text-bg-info" data-aurora-badge-quests>0</span>
+                            </div>
+                            <div class="aurora-radar__row">
+                                <span><i class="bi bi-calendar-event"></i> Eventi</span>
+                                <span class="badge text-bg-danger" data-aurora-badge-events>0</span>
+                            </div>
+                            <div class="aurora-radar__row">
+                                <span><i class="bi bi-activity"></i> Attivita</span>
+                                <span class="badge text-bg-primary" data-aurora-badge-activities>0</span>
+                            </div>
+                        </div>
+                        <footer class="aurora-radar__footer p-2">
+                            <div class="d-grid gap-2">
+                                <button class="btn btn-sm btn-outline-info" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
+                                    Apri notifiche
+                                </button>
+                                <div class="btn-group">
+                                    <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasQuests" aria-controls="offcanvasQuests">Quest</button>
+                                    <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSystemEvents" aria-controls="offcanvasSystemEvents">Eventi</button>
+                                    <button class="btn btn-sm btn-outline-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNarrativeEvents" aria-controls="offcanvasNarrativeEvents">Attivita</button>
+                                </div>
+                            </div>
+                        </footer>
+                    </section>
+                </div>
+            </aside>
+            <div class="col-12 col-lg-8 col-xl-9">
+                <section class="aurora-game-content">
+                    {% block content %}{% endblock %}
+                </section>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,0 +1,70 @@
+<div class="modal fade" id="admin-ndg-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="admin-ndg-modal-title">Permesso narrativo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div id="admin-ndg-modal-alert" class="alert d-none mb-3" role="alert"></div>
+                <form id="admin-ndg-form" autocomplete="off" novalidate>
+                    <input type="hidden" name="id" value="">
+
+                    <div class="row g-3">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Tipo destinatario <span class="text-danger">*</span></label>
+                            <select name="grantee_type" class="form-select" id="admin-ndg-grantee-type" required>
+                                <option value="guild_role">Ruolo di gilda</option>
+                                <option value="faction_role">Ruolo di fazione</option>
+                                <option value="user_role">Ruolo utente</option>
+                            </select>
+                            <div class="form-text">Chi riceve questo permesso.</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Riferimento ruolo <span class="text-danger">*</span></label>
+                            <input type="text" name="grantee_ref" class="form-control" id="admin-ndg-grantee-ref"
+                                   list="admin-ndg-grantee-ref-hints" placeholder="leader, officer…" required>
+                            <datalist id="admin-ndg-grantee-ref-hints"></datalist>
+                            <div class="form-text" id="admin-ndg-grantee-ref-hint">
+                                Ruolo simbolico: <code>leader</code>, <code>officer</code>…
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Azione narrativa <span class="text-danger">*</span></label>
+                            <select name="capability" class="form-select" id="admin-ndg-capability" required>
+                                <option value="">Caricamento…</option>
+                            </select>
+                            <div class="form-text">Azione narrativa da delegare.</div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label class="form-label fw-semibold">Livello impatto max</label>
+                            <select name="max_impact_level" class="form-select">
+                                <option value="0">0 — Impatto zero</option>
+                                <option value="1">1 — Impatto limitato</option>
+                                <option value="2">2 — Impatto alto</option>
+                            </select>
+                            <div class="form-text">Limite massimo per questo permesso specifico.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Restrizione scope <span class="text-muted small">(opzionale)</span></label>
+                            <input type="text" name="scope_restriction" class="form-control"
+                                   placeholder="guild, faction, local… lascia vuoto per nessuna restrizione" maxlength="60">
+                            <div class="form-text">Limita il grant a uno scope specifico. Vuoto = nessuna restrizione.</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-sm btn-outline-danger d-none" data-action="admin-ndg-delete">
+                    <i class="bi bi-trash me-1"></i>Elimina
+                </button>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-action="admin-ndg-save">
+                        <i class="bi bi-check2 me-1"></i>Salva
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

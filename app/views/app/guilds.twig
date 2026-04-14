@@ -1,0 +1,77 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<main class="container">
+    <section id="guilds-page" class="row g-3 ui-page pb-3">
+        <header class="col-12 ui-page-header">
+            <h4 class="display-6 mt-3">Gilde e corporazioni</h4>
+            <h6>Consulta le gilde attive, confronta requisiti e invia la candidatura alla fazione piu adatta al tuo personaggio.</h6>
+        </header>
+        <hr class="w-75 ms-2" />
+
+        <aside class="col-12 col-xl-4">
+            <article class="card mb-3">
+                <div class="card-header">
+                    <h6 class="mb-0">Regole rapide</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Verifica i requisiti sociali prima della candidatura.</li>
+                        <li class="list-group-item">Le gilde riservate richiedono invito o approvazione manuale.</li>
+                        <li class="list-group-item">L'appartenenza primaria influisce su salario e privilegi.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="card-header">
+                    <h6 class="mb-0">Suggerimento</h6>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted mb-0">Apri i dettagli di una gilda per controllare annunci, eventi e log prima di inviare la richiesta.</p>
+                </div>
+            </article>
+        </aside>
+
+        <section class="col-12 col-xl-8">
+            <article class="card h-100">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Elenco gilde</h6>
+                    
+                </div>
+                <div class="card-body">
+                    <div id="guilds-list" class="row g-3"></div>
+                </div>
+            </article>
+        </section>
+    </section>
+</main>
+
+<template name="template_guilds_list">
+    <article class="col-12">
+        <div class="card h-100">
+            <div class="row g-0">
+                <div class="col-12 col-md-4">
+                    <img class="img-fluid h-100 w-100 rounded-start" style="object-fit: cover; min-height: 170px;" name="image" alt="">
+                </div>
+                <div class="col-12 col-md-8">
+                    <div class="card-body d-flex flex-column h-100">
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                            <h5 class="card-title mb-0" name="name"></h5>
+                            <span class="badge text-bg-dark d-none" name="badge"></span>
+                        </div>
+                        <div class="small text-muted mb-1" name="alignment"></div>
+                        <div class="small mb-3" name="members"></div>
+                        <div class="mt-auto text-end">
+                            <a href="#" class="btn btn-sm btn-outline-primary" name="open">Apri gilda</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </article>
+</template>
+
+{% endblock %}
+
+

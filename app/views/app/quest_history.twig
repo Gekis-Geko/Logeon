@@ -1,0 +1,64 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<section class="container py-4 ui-page" id="quests-history-page" data-game-page="quests-history" data-character-id="{{ character_id|default('') }}">
+    <header class="mb-3">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+            <div>
+                <h4 class="display-6 mb-1">Archivio quest</h4>
+                <h6 class="mb-0 text-muted">Cronologia completa delle quest concluse con esito e ricompense visibili.</h6>
+            </div>
+        </div>
+    </header>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row g-2">
+                <div class="col-12 col-md-3">
+                    <label class="form-label mb-1">Stato</label>
+                    <select id="quests-history-filter-status" class="form-select">
+                        <option value="">Chiuse (tutte)</option>
+                        <option value="completed">Completate</option>
+                        <option value="failed">Fallite</option>
+                        <option value="cancelled">Annullate</option>
+                        <option value="expired">Scadute</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label mb-1">Dal</label>
+                    <input id="quests-history-filter-from" type="date" class="form-control">
+                </div>
+                <div class="col-12 col-md-2">
+                    <label class="form-label mb-1">Al</label>
+                    <input id="quests-history-filter-to" type="date" class="form-control">
+                </div>
+                <div class="col-12 col-md-3">
+                    <label class="form-label mb-1">Ricerca</label>
+                    <input id="quests-history-filter-search" type="search" class="form-control" placeholder="Titolo quest...">
+                </div>
+                <div class="col-12 col-md-2 d-flex align-items-end justify-content-end">
+                    <button type="button" class="btn btn-outline-primary w-100" data-action="quests-history-reload">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div id="quests-history-loading" class="small text-muted py-2 d-none">Caricamento...</div>
+            <div id="quests-history-empty" class="small text-muted py-2 d-none">Nessuna quest nello storico per i filtri selezionati.</div>
+            <div id="quests-history-list" class="list-group list-group-flush"></div>
+            <div class="d-flex justify-content-end mt-3">
+                <button type="button" class="btn btn-sm btn-outline-secondary d-none" id="quests-history-more" data-action="quests-history-more">
+                    Mostra altre
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% include 'app/modals/quest_history/quest_history.twig' %}
+{% endblock %}
+

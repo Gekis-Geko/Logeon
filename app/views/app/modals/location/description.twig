@@ -1,0 +1,27 @@
+<div class="modal fade" id="location-description-modal" tabindex="-1" aria-labelledby="location-description-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="location-description-modal-label">{{ location_name|default('Luogo') }}</h4>
+                <h6 class="text-center text-muted">Descrizione e stato del luogo corrente.</h6>
+                <hr class="my-4" />
+
+                {% if location_description|default('')|trim is not empty %}
+                <div style="white-space: pre-wrap;">{{ location_description }}</div>
+                {% else %}
+                <p class="text-muted mb-0">Nessuna descrizione disponibile per questo luogo.</p>
+                {% endif %}
+                {% if location_status|default('')|trim is not empty %}
+                <hr>
+                <div class="small text-muted mb-1">Stato</div>
+                <div style="white-space: pre-wrap;">{{ location_status }}</div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+

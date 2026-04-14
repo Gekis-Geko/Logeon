@@ -1,0 +1,49 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Tag narrativi</h4>
+        <h6 class="mb-0">Catalogo canonico dei tag per classificare quest, eventi, scene e fazioni.</h6>
+    </header>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-narrative-tags-open-assignments">
+            <i class="bi bi-tags me-1"></i>Assegnazioni
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-action="admin-narrative-tags-create">
+            <i class="bi bi-plus-lg me-1"></i>Nuovo tag
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-narrative-tags-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+</div>
+
+<div class="card card-body mb-3">
+    <form id="admin-narrative-tags-filters" class="row g-2 align-items-end">
+        <div class="col-auto">
+            <label for="admin-narrative-tags-search" class="form-label mb-1">Cerca terminologia</label>
+            <input type="text" id="admin-narrative-tags-search" name="search" class="form-control form-control-sm" placeholder="Cerca slug, label..." autocomplete="off">
+        </div>
+        <div class="col-auto">
+            <label for="admin-narrative-tags-filter-category" class="form-label mb-1">Categoria</label>
+            <select id="admin-narrative-tags-filter-category" name="category" class="form-select form-select-sm">
+                <option value="">Tutte le categorie</option>
+                <option value="tono">Tono</option>
+                <option value="contesto">Contesto</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label for="admin-narrative-tags-filter-active" class="form-label mb-1">Stato</label>
+            <select id="admin-narrative-tags-filter-active" name="is_active" class="form-select form-select-sm">
+                <option value="">Tutti gli stati</option>
+                <option value="1">Attivi</option>
+                <option value="0">Inattivi</option>
+            </select>
+        </div>
+        <div class="d-flex gap-2 col-auto">
+            <a class="btn btn-sm btn-outline-secondary" href="/admin/narrative-tags">Reset</a>
+        </div>
+    </form>
+</div>
+
+<div id="grid-admin-narrative-tags"></div>
+
+{% include 'admin/modals/narrative-tags.twig' %}

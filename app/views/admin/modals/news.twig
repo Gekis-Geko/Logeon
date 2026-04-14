@@ -1,0 +1,81 @@
+<div class="modal fade" id="admin-news-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Gestione novità</h4>
+                <h6 class="text-center text-muted">Crea o modifica una novità pubblicata nel gioco.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-news-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12">
+                        <label class="form-label">Titolo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="title" maxlength="255" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Estratto <span class="text-muted small">(breve descrizione)</span></label>
+                        <textarea class="form-control" name="excerpt" rows="2"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Contenuto <span class="text-muted small">(HTML supportato)</span></label>
+                        <textarea class="form-control" name="body" rows="10"></textarea>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Tipo</label>
+                        <input type="text" class="form-control" name="type" maxlength="60" placeholder="Es. news, aggiornamento, evento…">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Immagine</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="image" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="news_image" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="news_image">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="news_image">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="news_image">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Data pubblicazione</label>
+                        <input type="datetime-local" class="form-control" name="date_published">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Pubblicata</label>
+                        <select class="form-select" name="is_published">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">In evidenza</label>
+                        <select class="form-select" name="is_pinned">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-news-delete">Elimina</button>
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-news-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

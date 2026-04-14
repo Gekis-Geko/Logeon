@@ -1,0 +1,245 @@
+{% set is_staff_nav = (session('user_is_administrator') == 1 or session('user_is_moderator') == 1 or session('user_is_master') == 1) %}
+{% set archetypes_enabled_nav = archetypes_enabled() %}
+{% set profile_dropdown_module_entries = module_menu_entries('game', 'profile_dropdown', {'is_staff': is_staff_nav}) %}
+{% set profile_offcanvas_module_entries = module_menu_entries('game', 'profile_offcanvas', {'is_staff': is_staff_nav}) %}
+<div class="row mb-2 ui-app-navbar-row">
+    <nav class="navbar navbar-expand-xl bg-light" id="appNavbar">
+        <div class="container-fluid">
+            <div class="navbar-toggler border-0">
+                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMobileMenu" aria-controls="offcanvasMobileMenuLabel">
+                    <span class="bi bi-three-dots-vertical"></span>
+                </button>
+                <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbarLabel">
+                    <span class="bi bi-person"></span>
+                </button>
+                <a class="btn btn-secondary" type="button" href="/game/maps">
+                    <span class="bi bi-map"></span>
+                </a>
+            </div>
+            <div class="navbar-toggler border-0" data-weather-widget="navbar-mobile">
+                <button class="btn btn-secondary" type="button" id="weatherNavbarPopoverBtn">
+                    <span class="bi bi-cloud-moon"></span>
+                </button>
+            </div>
+            <div class="navbar-toggler border-0">
+                <div class="btn-group" data-ref="notifications" data-requires-auth>
+                    <a class="btn btn-secondary" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
+                        <span class="position-relative d-inline-block">
+                            <i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-title="Notifiche"></i>
+                            <span class="position-absolute mt-1 start-100 translate-middle badge rounded-pill bg-warning text-dark d-none" data-feed-badge="notifications">0</span>
+                        </span>
+                    </a>
+                </div>
+                <div class="btn-group">
+                    <div class="dropdown" data-ref="availability">
+                        <a class="btn btn-secondary dropdown-toggle" href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="bi bi-circle-fill text-success" name="availability_self_indicator" data-bs-toggle="tooltip" data-bs-title="Disponibile"></span>
+                        </a>
+                        <ul class="dropdown-menu p-1">
+                            <div class="small text-muted text-uppercase mb-2">Disponibilita</div>
+                            <div>
+                                <input type="hidden" name="availability_navbar" id="availability-navbar-mobile" value="">
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+                <a class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOnline" aria-controls="offcanvasOnlineLabel">
+                    <span class="bi bi-people" data-bs-toggle="tooltip" data-bs-title="Personaggi online"></span>
+                </a>
+                {% if is_staff_nav %}
+                <a class="btn btn-secondary" type="button" href="/admin">
+                    <span class="bi bi-shield-lock" data-bs-toggle="tooltip" data-bs-title="Admin"></span>
+                </a>
+                {% endif %}
+                <a class="btn btn-secondary text-danger" href="#" data-action="auth-signout" data-requires-auth>
+                    <span class="bi bi-door-open" data-bs-toggle="tooltip" data-bs-title="Esci dal gioco"></span>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="appNavbarContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item me-2" data-ref="home">
+                        <a class="nav-link" href="/game">
+                            <img src="{{ APP.brand_logo_icon }}" alt="{{ APP.name }}" width="28" height="28">
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown me-3" data-ref="profile">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="bi bi-person" data-bs-toggle="tooltip" data-bs-title="Personaggio"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/game/profile" data-ref="profile"><i class="bi bi-person-vcard"></i> Scheda personaggio</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/game/bag" data-ref="profile"><i class="bi bi-backpack2"></i> Inventario</a></li>
+                            <li><a class="dropdown-item" href="/game/equips" data-ref="profile"><i class="bi bi-luggage"></i> Equipaggiamento</a></li>
+                            {% for menu_entry in profile_dropdown_module_entries %}
+                            <li>
+                                <a class="dropdown-item{% if menu_entry.class is not empty %} {{ menu_entry.class }}{% endif %}" href="{{ menu_entry.href }}"{% if menu_entry.target is not empty %} target="{{ menu_entry.target|e('html_attr') }}"{% endif %}{% if menu_entry.rel is not empty %} rel="{{ menu_entry.rel|e('html_attr') }}"{% endif %}>
+                                    {% if menu_entry.icon is not empty %}<i class="{{ menu_entry.icon|e('html_attr') }} me-1"></i>{% endif %}{{ menu_entry.label }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/game/profile/edit"><i class="bi bi-person-gear"></i> Modifica</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item me-4" data-ref="maps">
+                        <a class="nav-link" href="/game/maps">
+                            <span class="bi bi-map" data-bs-toggle="tooltip" data-bs-title="Mappa"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-2" data-ref="forum">
+                        <a class="nav-link" href="/game/forum">
+                            <span class="bi bi-chat-left-quote" data-bs-toggle="tooltip" data-bs-title="Forum"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-2" data-ref="messages">
+                        <a class="nav-link" href="#" data-action="open-inbox" data-requires-auth>
+                            <span class="position-relative d-inline-block">
+                                <span class="bi bi-envelope" data-bs-toggle="tooltip" data-bs-title="Messaggi"></span>
+                                <span class="position-absolute mt-1 start-100 translate-middle badge rounded-pill bg-danger d-none" data-feed-badge="messages">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item me-4" data-ref="news">
+                        <a class="nav-link" href="#" data-action="open-news">
+                            <span class="position-relative d-inline-block">
+                                <span class="bi bi-megaphone" data-bs-toggle="tooltip" data-bs-title="News"></span>
+                                <span class="position-absolute mt-1 start-100 translate-middle badge rounded-pill bg-warning text-dark d-none" data-feed-badge="news">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown ms-2" data-ref="organizations">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="bi bi-diagram-3" data-bs-toggle="tooltip" data-bs-title="Organizzazioni"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/game/jobs" data-ref="organizations"><span class="bi bi-briefcase me-2"></span> Lavori</a></li>
+                            <li><a class="dropdown-item" href="/game/guilds" data-ref="organizations"><span class="bi bi-buildings me-2"></span> Gilde</a></li>
+                            <li><a class="dropdown-item" href="/game/factions" data-ref="organizations"><span class="bi bi-shield-shaded me-2"></span> Fazioni</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item ms-2" data-ref="shop">
+                        <a class="nav-link" href="/game/shop">
+                            <span class="bi bi-shop" data-bs-toggle="tooltip" data-bs-title="Negozio"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2 me-4" data-ref="bank">
+                        <a class="nav-link" href="/game/bank">
+                            <span class="bi bi-bank2" data-bs-toggle="tooltip" data-bs-title="Banca"></span>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2" data-ref="quests">
+                        <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasQuests" aria-controls="offcanvasQuests">
+                            <span class="position-relative d-inline-block">
+                                <span class="bi bi-journal-text" data-bs-toggle="tooltip" data-bs-title="Quest"></span>
+                                <span class="position-absolute mt-1 start-100 translate-middle badge rounded-pill bg-info text-dark d-none" data-feed-badge="quests">0</span>
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item ms-2" data-ref="system-events">
+                        <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSystemEvents" aria-controls="offcanvasSystemEvents">
+                            <span class="position-relative d-inline-block">
+                                <span class="bi bi-calendar2-week" data-bs-toggle="tooltip" data-bs-title="Eventi"></span>
+                                <span class="position-absolute mt-1 start-100 translate-middle badge rounded-pill bg-danger d-none" data-feed-badge="system-events">0</span>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <div id="location-weather" class="navbar-nav mx-auto flex-row align-items-center" data-weather-widget="navbar">
+                    <div class="nav-item me-2">
+                        <div class="icon p-weather"></div>
+                    </div>
+                    <div class="nav-item mx-2">
+                        <span class="navbar-text text-bg-secondary px-2 rounded shadow p-weather-season"></span>
+                    </div>
+                    <div class="nav-item mx-2">
+                        <span class="navbar-text text-bg-dark px-2 rounded shadow p-moonphases"></span>
+                    </div>
+                    <div class="nav-item mx-2">
+                        <span class="bi bi-thermometer-half navbar-text"></span>
+                        <span class="navbar-text p-weather-degrees"></span>
+                    </div>
+                    <div class="nav-item mx-2">
+                        <span class="badge text-bg-warning d-none p-weather-override">Override</span>
+                    </div>
+                </div>
+                <div class="navbar-nav ms-auto">
+                    <div class="nav-item me-2" data-ref="narrative-events">
+                        <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNarrativeEvents" aria-controls="offcanvasNarrativeEvents">
+                            <span class="position-relative d-inline-block">
+                                <span class="bi bi-calendar-event" data-bs-toggle="tooltip" data-bs-title="Attivita recenti"></span>
+                                <span class="position-absolute mt-1 start-100 translate-middle badge rounded-pill bg-primary d-none" data-feed-badge="narrative-events">0</span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="nav-item me-2" data-ref="notifications" data-requires-auth>
+                        <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
+                            <span class="position-relative d-inline-block">
+                                <i class="bi bi-bell" data-bs-toggle="tooltip" data-bs-title="Notifiche"></i>
+                                <span class="position-absolute mt-1 start-100 translate-middle badge rounded-pill bg-warning text-dark d-none" data-feed-badge="notifications">0</span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="nav-item me-4" data-ref="onlines">
+                        <a class="nav-link" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasOnline" aria-controls="offcanvasOnlineLabel">
+                            <span class="bi bi-people" data-bs-toggle="tooltip" data-bs-title="Personaggi online"></span>
+                        </a>
+                    </div>
+                    <div class="nav-item dropdown me-2" data-ref="anagrafica">
+                        <a class="nav-link dropdown-toggle" href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="bi bi-info-lg" data-bs-toggle="tooltip" data-bs-title="Informazioni"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="#" data-action="open-rules"><i class="bi bi-ui-checks"></i> Regolamento</a></li>
+                            <li><a class="dropdown-item" href="#" data-action="open-storyboards"><i class="bi bi-globe-europe-africa"></i> Ambientazione</a></li>
+                            <li><a class="dropdown-item" href="#" data-action="open-how-to-play"><i class="bi bi-book"></i> Come giocare</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/game/anagrafica"><i class="bi bi-person-lines-fill"></i> Anagrafica</a></li>
+                            {% if archetypes_enabled_nav %}
+                            <li><a class="dropdown-item" href="/game/archetypes"><i class="bi bi-person-badge"></i> Archetipi</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    <div class="nav-item dropdown me-2" data-ref="availability">
+                        <a class="nav-link dropdown-toggle" href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="bi bi-circle-fill text-success" name="availability_self_indicator" data-bs-toggle="tooltip" data-bs-title="Disponibile"></span>
+                        </a>
+                        <ul class="dropdown-menu p-1">
+                            <div class="small text-muted text-uppercase mb-2">Disponibilita</div>
+                            <div>
+                                <input type="hidden" name="availability_navbar" id="availability-navbar" value="">
+                            </div>
+                        </ul>
+                    </div>
+                    {% if is_staff_nav %}
+                    <div class="nav-item ms-2">
+                        <a class="nav-link" href="/admin">
+                            <span class="bi bi-shield-lock" data-bs-toggle="tooltip" data-bs-title="Admin"></span>
+                        </a>
+                    </div>
+                    {% endif %}
+                    <div class="nav-item ms-2">
+                        <a class="nav-link" href="/game/settings">
+                            <span class="bi bi-gear" data-bs-toggle="tooltip" data-bs-title="Impostazioni"></span>
+                        </a>
+                    </div>
+                    <button class="btn btn-light mx-3 text-danger" type="button" data-action="auth-signout" data-requires-auth>
+                        <span class="bi bi-door-open" data-bs-toggle="tooltip" data-bs-title="Esci"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+{% include 'app/offcanvas/navbar.twig' %}
+
+{% include 'app/modals/notifications/notifications.twig' %}
+{% include 'app/modals/quests/quests.twig' %}
+{% include 'app/modals/narrative-events/narrative-events.twig' %}
+{% include 'app/modals/system-events/system-events.twig' %}
+{% include 'app/modals/news/news.twig' %}
+{% include 'app/modals/docs/rules.twig' %}
+{% include 'app/modals/docs/storyboards.twig' %}
+{% include 'app/modals/docs/how_to_play.twig' %}
+{% include 'app/modals/mail/inbox.twig' %}

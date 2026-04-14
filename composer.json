@@ -1,0 +1,20 @@
+{
+  "require": {
+    "twig/twig": "^3.0"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.0",
+    "phpstan/phpstan": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Core\\": "core/",
+      "App\\": "app/"
+    }
+  },
+  "scripts": {
+    "lint:php": "@php scripts/php/lint-php.php",
+    "psr:check": "@php scripts/php/run-php-cs-fixer.php --dry-run --diff",
+    "psr:fix": "@php scripts/php/run-php-cs-fixer.php"
+  }
+}

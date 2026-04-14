@@ -1,0 +1,105 @@
+<div class="modal fade" id="location-conflicts-modal" tabindex="-1" aria-labelledby="location-conflicts-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="location-conflicts-modal-label">Hub conflitti</h4>
+                <h6 class="text-center text-muted">Gestione proposte e avanzamento dei conflitti nella location corrente.</h6>
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="location-conflicts-refresh">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna feed
+                    </button>
+                </div>
+                <div id="location-conflicts-modal-alerts" class="d-none mb-2"></div>
+
+                <div>
+                    <div id="location-conflicts-pane-main">
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-4">
+                                <div class="card h-100">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Proponi conflitto</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="mb-2">
+                                            <label class="form-label">Personaggio target (opzionale)</label>
+                                            <input type="text" class="form-control form-control-sm" id="location-conflict-proposal-target-name" placeholder="Cerca personaggio..." autocomplete="off">
+                                            <input type="hidden" id="location-conflict-proposal-target-id">
+                                            <div class="list-group mt-1 d-none" id="location-conflict-proposal-suggestions"></div>
+                                            <div class="form-text">Suggeriti i personaggi online nella location corrente. Lo staff puo inviare anche senza target specifico.</div>
+                                        </div>
+                                        <div class="mb-2">
+                                            <label class="form-label">Sintesi narrativa</label>
+                                            <textarea class="form-control form-control-sm" id="location-conflict-proposal-summary" rows="4" placeholder="Descrivi in breve il contesto narrativo del conflitto..."></textarea>
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="button" class="btn btn-sm btn-primary" data-action="location-conflict-proposal-submit">
+                                                Invia proposta
+                                            </button>
+                                        </div>
+                                        <hr>
+                                        <div class="small text-muted">
+                                            Comando rapido: <code>/conflict @Nome testo</code> (oppure senza target, se consentito).
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-8">
+                                <div class="row g-3">
+                                    <div class="col-12 col-xl-6">
+                                        <div class="card h-100">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-0">Proposte in attesa</h6>
+                                                <span class="badge text-bg-warning" id="location-conflicts-modal-proposals-count">0</span>
+                                            </div>
+                                            <div class="card-body p-2">
+                                                <div class="list-group list-group-flush" id="location-conflicts-modal-proposals"></div>
+                                                <div class="small text-muted d-none" id="location-conflicts-modal-proposals-empty">Nessuna proposta in attesa.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-xl-6">
+                                        <div class="card h-100">
+                                            <div class="card-header d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-0">Conflitti attivi</h6>
+                                                <span class="badge text-bg-primary" id="location-conflicts-modal-active-count">0</span>
+                                            </div>
+                                            <div class="card-body p-2">
+                                                <div class="list-group list-group-flush" id="location-conflicts-modal-active"></div>
+                                                <div class="small text-muted d-none" id="location-conflicts-modal-active-empty">Nessun conflitto attivo.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h6 class="mb-0">Dettaglio conflitto</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="small text-muted" id="location-conflicts-modal-detail-empty">Seleziona un conflitto dall elenco per vedere partecipanti e ultime azioni.</div>
+                                                <div id="location-conflicts-modal-detail" class="d-none"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ module_slot('game.location.conflicts.combat_pane')|raw }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+

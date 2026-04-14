@@ -1,0 +1,62 @@
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasSystemEvents" aria-labelledby="offcanvasSystemEventsLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasSystemEventsLabel">
+            <i class="bi bi-calendar2-week me-2"></i>Eventi
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Chiudi"></button>
+    </div>
+    <div class="offcanvas-body p-0 d-flex flex-column">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 py-2 border-bottom">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <select id="system-events-status-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutti gli stati</option>
+                    <option value="scheduled">Programmato</option>
+                    <option value="active">Attivo</option>
+                    <option value="completed">Completato</option>
+                </select>
+                <select id="system-events-type-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutti i tipi</option>
+                    <option value="general">Generale</option>
+                    <option value="seasonal">Stagionale</option>
+                    <option value="story">Narrativo</option>
+                </select>
+                <select id="system-events-scope-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutti gli scope</option>
+                    <option value="global">Globale</option>
+                    <option value="map">Mappa</option>
+                    <option value="location">Luogo</option>
+                    <option value="faction">Fazione</option>
+                    <option value="character">Personaggio</option>
+                </select>
+                <select id="system-events-tag-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutti i tag</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="system-events-reload" aria-label="Aggiorna">
+                <i class="bi bi-arrow-clockwise"></i>
+            </button>
+        </div>
+
+        <div id="system-events-loading" class="text-center py-4 text-muted small d-none">
+            Caricamento...
+        </div>
+        <div id="system-events-empty" class="text-center py-4 text-muted small d-none">
+            Nessun evento disponibile.
+        </div>
+        <div id="system-events-list" class="list-group list-group-flush flex-grow-1 overflow-auto"></div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="system-event-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div id="system-event-detail-modal-body"></div>
+            </div>
+        </div>
+    </div>
+</div>

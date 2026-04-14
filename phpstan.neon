@@ -1,0 +1,29 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 4
+    paths:
+        - app/Services
+        - app/controllers
+        - core
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    excludePaths:
+        - app/views
+        - app/routes
+        - vendor
+        - node_modules
+        - assets
+        - scripts
+        - tmp
+        # Terze parti bundled — non analizzate
+        - core/plugins
+    # Ignora errori attesi su codice legacy non ancora tipizzato
+    ignoreErrors:
+        # Models.php legacy — classe base non tipizzata intenzionalmente
+        - '#Call to an undefined method Core\\Models#'
+    # Tratta i parametri di tipo misto come warning, non blocchi
+    reportUnmatchedIgnoredErrors: false
+    # Non analizzare file con errori di sintassi gravi
+    inferPrivatePropertyTypeFromConstructor: true

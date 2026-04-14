@@ -1,0 +1,59 @@
+<div data-admin-page="conflicts">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Conflitti</h4>
+        <h6 class="mb-0">Registro conflitti PbC, risoluzione narrativa/random e chiusura formale.</h6>
+    </header>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-conflicts-open-settings-modal">
+            <i class="bi bi-gear me-1"></i>Configurazione
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-conflicts-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-action="admin-conflicts-open-modal">
+            <i class="bi bi-plus-lg me-1"></i>Apri conflitto
+        </button>
+    </div>
+</div>
+
+<div class="card card-body mb-3">
+    <div class="row g-2 align-items-end">
+        <div class="col-auto">
+            <label class="form-label mb-1">Stato conflitto</label>
+            <select id="admin-conflicts-filter-status" class="form-select form-select-sm">
+                <option value="">Tutti</option>
+                <option value="proposal">Proposta</option>
+                <option value="open">Aperto</option>
+                <option value="active">Attivo</option>
+                <option value="awaiting_resolution">In attesa risoluzione</option>
+                <option value="resolved">Risolto</option>
+                <option value="closed">Chiuso</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label mb-1">Luogo</label>
+            <input type="text" id="admin-conflicts-filter-location-name" class="form-control form-control-sm" placeholder="Cerca luogo..." autocomplete="off">
+            <input type="hidden" id="admin-conflicts-filter-location-id" value="">
+            <div class="list-group mt-1 d-none" id="admin-conflicts-filter-location-suggestions"></div>
+        </div>
+        <div class="col-auto">
+            <label class="form-label mb-1">Origine</label>
+            <select id="admin-conflicts-filter-origin" class="form-select form-select-sm">
+                <option value="">Tutte</option>
+                <option value="chat">Chat</option>
+                <option value="admin">Admin</option>
+                <option value="system">Sistema</option>
+            </select>
+        </div>
+        <div class="col-auto d-flex gap-2 justify-content-end">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-conflicts-filter-clear">Reset</button>
+        </div>
+    </div>
+</div>
+
+<div id="grid-admin-conflicts"></div>
+
+{% include 'admin/modals/conflicts.twig' %}
+</div>
+

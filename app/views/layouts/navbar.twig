@@ -1,0 +1,42 @@
+<nav class="navbar sticky-top navbar-expand-xl bg-light" id="homeNavbar">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+            <img src="{{ APP.brand_logo_icon }}" alt="{{ APP.name }}" height="36" class="d-inline-block">
+            <img src="{{ APP.brand_logo_wordmark }}" alt="{{ APP.name }}" height="28" class="">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainAsideCanvas" aria-controls="mainAsideCanvas" aria-label="Apri menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="homeNavbarContent">
+            <ul class="navbar-nav text-center ml-5">
+                <li class="nav-item mx-xl-2 my-2 my-xl-0" data-ref="rules">
+                    <a class="nav-link" href="/rules">
+                        <span class="bi bi-ui-checks me-2"></span> Regolamento
+                    </a>
+                </li>
+                <li class="nav-item mx-xl-2 my-2 my-xl-0" data-ref="storyboard">
+                    <a class="nav-link" href="/storyboard">
+                        <span class="bi bi-globe-europe-africa me-2"></span> Ambientazione
+                    </a>
+                </li>
+                <li class="nav-item mx-xl-2 my-2 my-xl-0" data-ref="how-to-play">
+                    <a class="nav-link" href="/how-to-play">
+                        <span class="bi bi-book me-2"></span> Come giocare
+                    </a>
+                </li>
+            </ul>
+            <div class="navbar-nav text-center ml-auto">
+                <button class="btn btn-light" type="button" data-action="open-signin-modal">
+                    <i class="bi bi-door-open"></i> Accedi
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+{% include 'layouts/offcanvas.twig' %}
+{% include 'sys/modals/signin.twig' %}
+{% include 'sys/modals/forgot_password.twig' %}
+{% include 'sys/modals/signup.twig' %}
+{% include 'sys/modals/create_character.twig' %}
+{% include 'sys/modals/select_character.twig' %}

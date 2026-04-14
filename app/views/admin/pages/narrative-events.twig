@@ -1,0 +1,63 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <header class="mt-3">
+        <h4 class="display-6 mb-1">Attivita recenti</h4>
+        <h6 class="mb-0">Registro automatico degli eventi canonici generati dal sistema e dalle funzionalita di gioco.</h6>
+    </header>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-narrative-events-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i> Aggiorna
+        </button>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form id="admin-narrative-events-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label for="admin-narrative-events-filter-type" class="form-label mb-1">Tipo</label>
+                <select id="admin-narrative-events-filter-type" class="form-select form-select-sm">
+                    <option value="">Tutti i tipi</option>
+                    <option value="combat_outcome">Esito combattimento</option>
+                    <option value="conflict_resolved">Conflitto risolto</option>
+                    <option value="character_action">Azione personaggio</option>
+                    <option value="lifecycle_transition">Transizione ciclo vita</option>
+                    <option value="quest_update">Aggiornamento quest</option>
+                    <option value="system_event_lifecycle">Ciclo evento di sistema</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="admin-narrative-events-filter-scope" class="form-label mb-1">Scope</label>
+                <select id="admin-narrative-events-filter-scope" class="form-select form-select-sm">
+                    <option value="">Tutti gli scope</option>
+                    <option value="local">Locale</option>
+                    <option value="regional">Regionale</option>
+                    <option value="global">Globale</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="admin-narrative-events-filter-visibility" class="form-label mb-1">Visibilita</label>
+                <select id="admin-narrative-events-filter-visibility" class="form-select form-select-sm">
+                    <option value="">Tutte le visib.</option>
+                    <option value="public">Pubblica</option>
+                    <option value="private">Privata</option>
+                    <option value="staff_only">Solo staff</option>
+                    <option value="hidden">Nascosta</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="admin-narrative-events-filter-tag" class="form-label mb-1">Tag</label>
+                <select id="admin-narrative-events-filter-tag" class="form-select form-select-sm">
+                    <option value="">Tutti i tag</option>
+                </select>
+            </div>
+            <div class="d-flex gap-2 col-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-narrative-events-filters-reset">Reset</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="grid-admin-narrative-events"></div>
+
+{% include 'admin/modals/narrative-events.twig' %}
+

@@ -1,0 +1,46 @@
+<div class="modal fade" id="admin-guild-locations-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Luogo gilda</h4>
+                <hr class="my-4" />
+
+                <form id="admin-guild-locations-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12">
+                        <label class="form-label">Gilda</label>
+                        <select class="form-select" name="guild_id" id="admin-guild-locations-modal-guild">
+                            <option value="">— seleziona gilda —</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Ruolo</label>
+                        <select class="form-select" name="role_id" id="admin-guild-locations-modal-role">
+                            <option value="">— seleziona prima la gilda —</option>
+                        </select>
+                        <div class="form-text d-none" data-role="admin-guild-locations-roles-loading">Caricamento ruoli...</div>
+                    </div>
+                    <div class="col-12 position-relative">
+                        <label class="form-label">Luogo</label>
+                        <input type="text"
+                               class="form-control"
+                               name="location_label"
+                               maxlength="120"
+                               autocomplete="off"
+                               placeholder="Cerca luogo e seleziona...">
+                        <input type="hidden" name="location_id" value="">
+                        <div class="list-group mt-1 d-none" data-role="admin-guild-locations-modal-location-suggestions"></div>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-guild-locations-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-guild-locations-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

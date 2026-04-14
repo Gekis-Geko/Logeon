@@ -1,0 +1,89 @@
+<div class="offcanvas offcanvas-end text-bg-dark" data-bs-backdrop="static" tabindex="-1" id="offcanvasOnline" aria-labelledby="offcanvasNavbarLabel" data-bs-theme="dark">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasOnlineLabel">
+            <span class="bi bi-people-fill"></span>
+            <span name="tot_onlines">0</span> utenti in linea
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="d-flex justify-content-between align-items-center">
+            <a href="/game/onlines">
+                Lista completa <span class="bi bi-arrow-right-short"></span>
+            </a>
+            {% if session('user_is_administrator') == 1 or session('user_is_moderator') == 1 or session('user_is_master') == 1 %}
+            <div class="d-flex align-items-center gap-2">
+                <input type="hidden" id="staff-visibility-switch" name="staff_visibility_switch" value="1">
+            </div>
+            {% endif %}
+        </div>
+
+        <hr/>
+
+        <div class="m-3">
+            <h6 class="py-3">
+                <span class="bi bi-geo-alt" name="inlocation_icon"></span>
+                <span name="inlocation_title">Nel mio luogo</span>
+            </h6>
+            <div name="list_inlocation" class="list-group list-group-flush ui-offcanvas-list">
+                <div class="list-group-item d-flex w-100 justify-content-center align-items-center">      
+                    <span class="spinner-border spinner-border-sm mx-4" role="status" aria-hidden="true"></span> Creo la lista ...
+                </div>
+            </div>
+        </div>
+
+        <hr class="w-75 mx-auto" />
+
+        <div class="m-3">
+            <h6 class="py-3">
+                <span class="bi bi-box-arrow-right"></span>
+                Appena entrati
+            </h6>
+            <div name="list_loggedin" class="list-group list-group-flush ui-offcanvas-list">
+                <div class="list-group-item d-flex w-100 justify-content-center align-items-center">      
+                    <span class="spinner-border spinner-border-sm mx-4" role="status" aria-hidden="true"></span> Creo la lista ...
+                </div>
+            </div>
+        </div>
+
+        <hr class="w-50 mx-auto" />
+        
+        <div class="m-3">
+            <h6 class="py-3">
+                <span class="bi bi-box-arrow-left"></span>
+                Appena usciti
+            </h6>
+            <div name="list_loggedout" class="list-group list-group-flush ui-offcanvas-list">
+                <div class="list-group-item d-flex w-100 justify-content-center align-items-center">      
+                    <span class="spinner-border spinner-border-sm mx-4" role="status" aria-hidden="true"></span> Creo la lista ...
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+ 
+<template name="item_list_online">
+    <div class="list-group-item d-flex w-100 justify-content-between align-items-center">
+        <div>
+            <h6 class="mb-0">
+                <span class="bi bi-circle-fill" name="availability" data-bs-toggle="tooltip" data-bs-title=""></span>
+                <span name="name"></span>
+                <span class="bi bi-eye-slash-fill text-warning d-none" name="invisible_icon" data-bs-toggle="tooltip" data-bs-title="Invisibile"></span>
+                <span class="bi" name="gender" data-bs-toggle="tooltip" data-bs-title=""></span>
+            </h6>
+            <small class="text-muted d-none" name="item_location">
+                <span class="bi bi-geo-alt-fill me-1"></span><span name="item_location_label"></span>
+            </small>
+        </div>
+        <div class="d-flex justify-content-center">
+            <a href="#" name="profile_link" class="btn btn-sm btn-light" data-bs-toggle="tooltip" data-bs-title="Visualizza profilo">
+                <span class="bi bi-person-badge"></span>
+            </a>
+            <a href="#" name="message_link" class="btn btn-sm btn-light" data-bs-toggle="tooltip" data-bs-title="Invia messaggio">
+                <span class="bi bi-envelope-paper"></span>
+            </a>
+        </div>
+    </div>
+</template>
+

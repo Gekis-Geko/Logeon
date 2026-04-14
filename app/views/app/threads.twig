@@ -1,0 +1,32 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+	<div id="threads-page" class="row ui-page" data-forum-id="{{ forum_id|e('html_attr') }}">
+		<header class="mt-3">
+			<nav class="breadcrumb">
+				<a href="/game/forum" class="breadcrumb-item">Forum</a>
+				<span class="breadcrumb-item active" name="forum_title"></span>
+			</nav>
+			<h4><span name="forum_title"></span><small class="badge text-bg-light border ms-4"><span name="forum_type"></span></small></h4>
+			<h6 name="forum_description"></h6>
+			<hr class="w-75 ms-2" />
+			<div class="text-end">
+				<button type="button" class="btn btn-outline-primary" data-action="thread-open-create" data-requires-auth>
+					<i class="fas fa-fw fa-plus"></i>
+					Crea nuovo thread
+				</button>
+			</div>
+		</header>
+
+		<article class="mt-4 mb-3 col-md-12">
+			<div id="grid-threads"></div>
+		</article>
+	</div>
+</div>
+
+{% include 'app/modals/forum/thread-edit.twig' with { forum_id: forum_id, character_id: session('character_id') } %}
+
+{% endblock %}
+
+

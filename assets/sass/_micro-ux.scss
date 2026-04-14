@@ -1,0 +1,389 @@
+/* Micro-UX refinements */
+
+.ui-page .list-group-item:hover {
+    background: var(--lf-surface-alt);
+}
+
+.ui-page .btn-group .btn.active,
+.ui-page .radio-group .btn-group .btn.active,
+.ui-page .check-group .btn-group .btn.active {
+    box-shadow: inset 0 -2px 0 rgba(139, 92, 246, .28);
+}
+
+.ui-page .btn[disabled],
+.ui-page .btn.disabled,
+.modal .btn[disabled],
+.modal .btn.disabled {
+    opacity: .62;
+}
+
+.ui-page .radio-group .btn-group,
+.ui-page .check-group .btn-group,
+.modal .radio-group .btn-group,
+.modal .check-group .btn-group {
+    gap: 0.25rem;
+    flex-wrap: wrap;
+}
+
+.ui-page .radio-group .btn,
+.ui-page .check-group .btn,
+.modal .radio-group .btn,
+.modal .check-group .btn {
+    border-radius: 10px !important;
+    border: 1px solid var(--swd-border-strong);
+}
+
+.ui-page .table > :not(caption) > * > * {
+    padding-top: .58rem;
+    padding-bottom: .58rem;
+    vertical-align: middle;
+}
+
+.ui-page .table thead th {
+    background: var(--lf-surface-alt);
+    color: var(--lf-text-primary);
+    font-weight: 700;
+    border-bottom-color: var(--lf-border);
+}
+
+.ui-page .table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: rgba(255, 255, 255, .015);
+}
+
+.ui-page .table-hover > tbody > tr:hover > * {
+    --bs-table-accent-bg: rgba(139, 92, 246, .09);
+}
+
+.ui-page .input-group > .btn {
+    min-width: 76px;
+}
+
+.ui-page .badge {
+    letter-spacing: .015em;
+}
+
+.modal .modal-header {
+    border-bottom-color: var(--lf-border);
+}
+
+.modal .modal-footer {
+    border-top-color: var(--lf-border);
+}
+
+.modal .btn-close {
+    opacity: .75;
+}
+
+.modal .btn-close:hover {
+    opacity: 1;
+}
+
+.alert.alert-info,
+.alert.alert-warning,
+.alert.alert-danger,
+.alert.alert-success {
+    border-radius: 12px;
+    border-width: 1px;
+}
+
+.alert.alert-info {
+    background: rgba(56, 189, 248, 0.16);
+    border-color: rgba(56, 189, 248, 0.38);
+    color: #bfeeff;
+}
+
+.alert.alert-warning {
+    background: rgba(245, 158, 11, 0.16);
+    border-color: rgba(245, 158, 11, 0.38);
+    color: #ffe3ad;
+}
+
+.alert.alert-danger {
+    background: rgba(239, 68, 68, 0.16);
+    border-color: rgba(239, 68, 68, 0.38);
+    color: #ffd0d0;
+}
+
+.alert.alert-success {
+    background: rgba(34, 197, 94, 0.16);
+    border-color: rgba(34, 197, 94, 0.38);
+    color: #c6ffd9;
+}
+
+.ui-page .accordion-item,
+.ui-page .accordion-button {
+    transition: background-color var(--swd-transition-fast), border-color var(--swd-transition-fast), color var(--swd-transition-fast);
+}
+
+.ui-page .accordion-button:not(.collapsed) {
+    box-shadow: inset 0 -1px 0 rgba(139, 92, 246, .32);
+}
+
+#shop-page .card-footer .btn,
+#bag-page .btn,
+#equips-page .btn {
+    white-space: nowrap;
+}
+
+#shop-page .card-title,
+#bag-page .card-title,
+#maps-page .card-title {
+    line-height: 1.25;
+}
+
+#profile-page [name="guilds_list"] a {
+    font-weight: 600;
+}
+
+#profile-page [name="wallets_list"] > div {
+    padding: 2px 0;
+}
+
+#location-page #chat_display {
+    scrollbar-gutter: stable;
+}
+
+#chat_empty,
+#profile-events-empty {
+    border-radius: 12px;
+}
+
+.mail-empty,
+.dm-empty {
+    transition: border-color var(--swd-transition-fast), background-color var(--swd-transition-fast);
+}
+
+/* Shop: clarity on controls, balances, and product cards */
+#shop-page #shop-balance > * {
+    padding: 0.35rem 0.55rem;
+    border-radius: 10px;
+    border: 1px solid var(--swd-border);
+    background: var(--lf-surface-alt);
+}
+
+#shop-page #shop-category-tabs .nav-link {
+    min-width: 84px;
+    text-align: center;
+}
+
+#shop-page #shop-items .card {
+    overflow: hidden;
+}
+
+#shop-page #shop-items .card-img-top {
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    background: var(--lf-surface-alt);
+}
+
+#shop-page #shop-items .card-title {
+    font-size: 1.04rem;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+#shop-page #shop-items .card-text {
+    min-height: 2.7rem;
+    line-height: 1.4;
+}
+
+#shop-page #shop-items .card-footer {
+    border-top-color: var(--swd-border);
+    background: var(--lf-surface-alt);
+}
+
+#shop-page #shop-items .card-footer [name="stock"] {
+    font-weight: 600;
+}
+
+#shop-page #shop-items .card-footer [name="afford"] {
+    font-weight: 600;
+}
+
+#location-page [name="chat_body"] {
+    min-height: 94px;
+    resize: vertical;
+    line-height: 1.45;
+}
+
+#location-page #chat_messages {
+    padding: 0.25rem 0.25rem 0.75rem;
+}
+
+#location-page .chat-message {
+    border: 1px solid var(--swd-border);
+    backdrop-filter: none;
+}
+
+#location-page .chat-message .chat-meta {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--lf-text-secondary);
+}
+
+#location-page .chat-message .chat-body {
+    white-space: pre-wrap;
+    line-height: 1.55;
+}
+
+#location-page .chat-message .chat-avatar {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+}
+
+#location-page .chat-command-suggest {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    z-index: 1045;
+    max-height: 220px;
+    overflow-y: auto;
+    border: 1px solid var(--swd-border);
+    border-radius: 10px;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, .18);
+}
+
+#location-page #location-whispers .form-control,
+#location-page #location-whispers .btn,
+#location-page #location-drops .list-group-item {
+    border-radius: 10px;
+}
+
+#location-page #whisper_messages {
+    max-height: 180px;
+    overflow: auto;
+    border: 1px solid var(--swd-border);
+    border-radius: 10px;
+    padding: 0.35rem;
+}
+
+#location-page #whisper_messages .list-group-item {
+    border-color: var(--swd-border);
+    background: var(--lf-surface-alt);
+}
+
+/* Settings: hierarchy and danger zone readability */
+#settings-page .accordion-body > .row > [class*="col-"] > .border {
+    border-color: var(--swd-border) !important;
+    border-radius: 12px !important;
+    background: var(--lf-surface-alt);
+}
+
+#settings-page [data-delete-status],
+#settings-page [data-name-request-status] {
+    line-height: 1.4;
+}
+
+#settings-page #settings-delete-confirm + .radio-group .btn-group .btn {
+    min-width: 110px;
+}
+
+#settings-page [data-delete-request]:disabled {
+    cursor: not-allowed;
+}
+
+#settings-page .border-danger {
+    box-shadow: inset 0 0 0 1px rgba(220, 53, 69, 0.25);
+}
+
+#settings-page .form-text {
+    line-height: 1.35;
+}
+
+/* Semantic badge readability on dark */
+.badge.bg-warning,
+.badge.badge-warning {
+    color: #2a1c03 !important;
+}
+
+.badge.bg-info,
+.badge.badge-info,
+.badge.bg-success,
+.badge.badge-success,
+.badge.bg-danger,
+.badge.badge-danger {
+    color: #0b0d12 !important;
+}
+
+// ── SwitchGroup component ──────────────────────────────────────────────────
+
+.switch-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+}
+
+.switch-group__label {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: var(--lf-text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+}
+
+.switch-group__label.is-active {
+    color: var(--lf-text-primary);
+}
+
+.switch-group__toggle {
+    appearance: none;
+    position: relative;
+    width: 3.25rem;
+    height: 1.95rem;
+    border-radius: 999px;
+    border: 1px solid var(--swd-border-strong);
+    background: var(--lf-surface-alt);
+    padding: 0;
+    margin: 0;
+    transition:
+        background-color var(--swd-transition-fast),
+        border-color var(--swd-transition-fast),
+        box-shadow var(--swd-transition-fast);
+}
+
+.switch-group__toggle .switch-group__thumb {
+    position: absolute;
+    top: 50%;
+    left: 0.22rem;
+    width: 1.45rem;
+    height: 1.45rem;
+    border-radius: 50%;
+    background: var(--lf-text-primary);
+    transform: translate(0, -50%);
+    transition:
+        transform var(--swd-transition-fast),
+        background-color var(--swd-transition-fast);
+}
+
+.switch-group__toggle.is-on {
+    background: rgba(139, 92, 246, 0.35);
+    border-color: var(--lf-primary);
+}
+
+.switch-group__toggle.is-on .switch-group__thumb {
+    transform: translate(1.35rem, -50%);
+}
+
+.switch-group__toggle:focus-visible,
+.switch-group__label:focus-visible {
+    outline: none;
+    box-shadow: var(--swd-focus-ring);
+    border-radius: 999px;
+}
+
+.switch-group.is-disabled {
+    opacity: 0.65;
+}
+
+.switch-group.is-disabled .switch-group__toggle,
+.switch-group.is-disabled .switch-group__label {
+    cursor: not-allowed;
+}

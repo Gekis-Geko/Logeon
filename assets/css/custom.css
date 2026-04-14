@@ -1,0 +1,13 @@
+/*
+ * custom.css — Logeon user customizations
+ *
+ * This file is intentionally empty.
+ * Add your own color overrides, layout tweaks, and branding here.
+ * It is loaded after style.css so any rule you write here takes precedence.
+ *
+ * Example — override the primary accent color:
+ *
+ *   :root {
+ *     --lf-accent: #e83e8c;
+ *   }
+ */

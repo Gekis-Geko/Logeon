@@ -1,0 +1,14 @@
+#forum-page .list-group-item,
+#onlines-page .list-group-item,
+#thread-page .answer {
+    border-color: var(--swd-border);
+}
+
+#thread-page [name="thread_body"] {
+    line-height: 1.65;
+}
+
+#thread-page #thread_answer {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}

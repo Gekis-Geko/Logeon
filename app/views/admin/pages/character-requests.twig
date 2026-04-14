@@ -1,0 +1,50 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Richieste personaggio</h4>
+        <h6 class="mb-0">Gestisci le richieste di cambio nome e presta-volto inviate dai giocatori.</h6>
+    </header>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <select class="form-select form-select-sm" id="char-requests-status-filter" style="width:auto;">
+            <option value="pending" selected>In attesa</option>
+            <option value="approved">Approvate</option>
+            <option value="rejected">Rifiutate</option>
+            <option value="all">Tutte</option>
+        </select>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="char-requests-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+</div>
+
+<ul class="nav nav-tabs mb-3" id="char-requests-tabs">
+    <li class="nav-item">
+        <button class="nav-link active" data-action="char-requests-tab" data-tab="name">
+            Cambio nome <span class="badge text-bg-warning ms-1" id="char-requests-name-badge"></span>
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-action="char-requests-tab" data-tab="loanface">
+            Cambio presta-volto <span class="badge text-bg-warning ms-1" id="char-requests-loanface-badge"></span>
+        </button>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link" data-action="char-requests-tab" data-tab="identity">
+            Identità fisica <span class="badge text-bg-warning ms-1" id="char-requests-identity-badge"></span>
+        </button>
+    </li>
+</ul>
+
+<div id="char-requests-name-panel">
+    <div id="grid-char-name-requests"></div>
+</div>
+
+<div id="char-requests-loanface-panel" style="display:none;">
+    <div id="grid-char-loanface-requests"></div>
+</div>
+
+<div id="char-requests-identity-panel" style="display:none;">
+    <div id="grid-char-identity-requests"></div>
+</div>
+
+{% include 'admin/modals/character-requests.twig' %}
+

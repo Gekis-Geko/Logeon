@@ -1,0 +1,124 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<main class="container">
+    <section id="bank-page" class="row ui-page pb-3">
+        <header>
+            <h4 class="display-6">Servizi bancari</h4>
+            <h6>Gestisci il saldo in banca, versa dal contante o invia bonifici ad altri personaggi.</h6>
+        </header>
+        <hr class="w-75 ms-2" />
+
+        <div class="row align-items-stretch">
+            <div class="col-12 col-xl-4">
+                <div class="card h-100">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Il tuo conto</h6>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="bank-refresh">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex flex-column gap-3">
+                            <div class="border rounded p-2">
+                                <div class="small text-muted">Contanti</div>
+                                <div class="fs-5 fw-semibold" id="bank-cash-balance">-</div>
+                            </div>
+                            <div class="border rounded p-2">
+                                <div class="small text-muted">Saldo banca</div>
+                                <div class="fs-5 fw-semibold" id="bank-account-balance">-</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-xl-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Operazioni</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-6">
+                                <form id="bank-deposit-form" class="card h-100 border border-primary-subtle">
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-2">Versamento</h6>
+                                        <p class="small text-muted mb-2">Sposta contanti dal personaggio al conto bancario.</p>
+                                        <label for="bank-deposit-amount" class="form-label">Importo</label>
+                                        <input id="bank-deposit-amount" type="number" min="1" step="1" class="form-control" placeholder="Es. 500">
+                                    </div>
+                                    <div class="card-footer d-flex gap-2">
+                                        <button type="submit" class="btn btn-primary btn-sm flex-grow-1">Versa</button>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" data-action="bank-fill-deposit-all">Tutto</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <form id="bank-withdraw-form" class="card h-100 border border-info-subtle">
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-2">Prelievo</h6>
+                                        <p class="small text-muted mb-2">Sposta saldo dal conto bancario ai contanti del personaggio.</p>
+                                        <label for="bank-withdraw-amount" class="form-label">Importo</label>
+                                        <input id="bank-withdraw-amount" type="number" min="1" step="1" class="form-control" placeholder="Es. 200">
+                                    </div>
+                                    <div class="card-footer d-flex gap-2">
+                                        <button type="submit" class="btn btn-info btn-sm flex-grow-1">Preleva</button>
+                                        <button type="button" class="btn btn-outline-secondary btn-sm" data-action="bank-fill-withdraw-all">Tutto</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="col-12">
+                                <form id="bank-transfer-form" class="card border border-warning-subtle">
+                                    <div class="card-body">
+                                        <h6 class="card-title mb-2">Bonifico</h6>
+                                        <p class="small text-muted mb-3">Invia saldo bancario a un altro personaggio cercandolo per nome.</p>
+                                        <div class="row g-2 align-items-end">
+                                            <div class="col-12 col-lg-5 position-relative">
+                                                <label for="bank-transfer-target-name" class="form-label">Destinatario</label>
+                                                <input id="bank-transfer-target-name" type="text" class="form-control" autocomplete="off" placeholder="Cerca personaggio...">
+                                                <input id="bank-transfer-target-id" type="hidden" value="">
+                                                <div id="bank-transfer-suggestions" class="list-group position-absolute w-100 shadow-sm d-none" style="z-index: 1020; max-height: 220px; overflow-y: auto;"></div>
+                                            </div>
+                                            <div class="col-12 col-lg-3">
+                                                <label for="bank-transfer-amount" class="form-label">Importo</label>
+                                                <input id="bank-transfer-amount" type="number" min="1" step="1" class="form-control" placeholder="Es. 100">
+                                            </div>
+                                            <div class="col-12 col-lg-4">
+                                                <label for="bank-transfer-note" class="form-label">Nota (opzionale)</label>
+                                                <input id="bank-transfer-note" type="text" maxlength="240" class="form-control" placeholder="Causale del bonifico">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer d-flex justify-content-end">
+                                        <button type="submit" class="btn btn-warning btn-sm">
+                                            <i class="bi bi-send me-1"></i>Invia bonifico
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mt-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Movimenti recenti</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="bank-movements-loading" class="small text-muted p-3 d-none">Caricamento...</div>
+                        <div id="bank-movements-empty" class="small text-muted p-3 d-none">Nessun movimento disponibile.</div>
+                        <div id="bank-movements-list" class="list-group list-group-flush"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+

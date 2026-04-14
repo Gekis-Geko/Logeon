@@ -1,0 +1,161 @@
+:root {
+    --aurora-game-bg: #0b1224;
+    --aurora-game-surface: #0f1b33;
+    --aurora-game-surface-2: #102347;
+    --aurora-game-ink: #dce8f7;
+    --aurora-game-muted: #9fb3cd;
+    --aurora-game-accent: #22d3ee;
+    --aurora-game-accent-2: #f59e0b;
+    --aurora-game-border: rgba(34, 211, 238, 0.22);
+}
+
+body {
+    background:
+        radial-gradient(900px 400px at 100% 0%, rgba(34, 211, 238, 0.16), transparent 60%),
+        radial-gradient(900px 400px at 0% 100%, rgba(245, 158, 11, 0.1), transparent 60%),
+        linear-gradient(180deg, #071021 0%, var(--aurora-game-bg) 100%);
+}
+
+.aurora-game-nav #appNavbar {
+    background: linear-gradient(90deg, rgba(8, 18, 36, 0.96) 0%, rgba(12, 33, 67, 0.95) 100%) !important;
+    border-bottom: 1px solid var(--aurora-game-border);
+}
+
+.aurora-game-nav #appNavbar .nav-link,
+.aurora-game-nav #appNavbar .btn,
+.aurora-game-nav #appNavbar .navbar-text {
+    color: var(--aurora-game-ink) !important;
+}
+
+.aurora-game-nav #appNavbar .nav-link:hover,
+.aurora-game-nav #appNavbar .nav-link:focus {
+    color: var(--aurora-game-accent) !important;
+}
+
+.aurora-aside-stack {
+    position: sticky;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+}
+
+.aurora-game-shell .aurora-character-widget {
+    background: linear-gradient(180deg, var(--aurora-game-surface) 0%, #0a1731 100%);
+    border: 1px solid var(--aurora-game-border) !important;
+    color: var(--aurora-game-ink);
+}
+
+.aurora-game-shell .aurora-radar {
+    background: linear-gradient(180deg, #0d2142 0%, #0b1a36 100%);
+    border: 1px solid var(--aurora-game-border) !important;
+    color: var(--aurora-game-ink);
+}
+
+.aurora-character-widget__head {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--aurora-game-border);
+    color: var(--aurora-game-accent);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.aurora-character-widget__avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 0.75rem;
+    border: 1px solid var(--aurora-game-border);
+    object-fit: cover;
+    object-position: center;
+    background: #081226;
+}
+
+.aurora-character-widget__name {
+    color: var(--aurora-game-ink);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.aurora-character-widget .small.text-muted {
+    color: #90a6c4 !important;
+}
+
+.aurora-character-widget__progress {
+    height: 0.6rem;
+    background: rgba(8, 18, 38, 0.85);
+    border: 1px solid rgba(34, 211, 238, 0.2);
+}
+
+.aurora-character-widget .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.35);
+    color: var(--aurora-game-ink);
+}
+
+.aurora-character-widget .btn-outline-light:hover,
+.aurora-character-widget .btn-outline-light:focus {
+    color: #03101f;
+    background: var(--aurora-game-accent);
+    border-color: var(--aurora-game-accent);
+}
+
+.aurora-game-content {
+    background: linear-gradient(180deg, rgba(15, 27, 51, 0.9) 0%, rgba(10, 23, 49, 0.88) 100%);
+    border: 1px solid var(--aurora-game-border);
+    border-radius: 0.9rem;
+    min-height: 60vh;
+    padding: 1rem;
+}
+
+.aurora-game-content .card {
+    background: var(--aurora-game-surface-2);
+    border-color: var(--aurora-game-border);
+    color: var(--aurora-game-ink);
+}
+
+.aurora-game-content .card .text-muted,
+.aurora-game-content .small.text-muted {
+    color: #90a6c4 !important;
+}
+
+.aurora-radar__head {
+    padding: 0.9rem 1rem;
+    border-bottom: 1px solid var(--aurora-game-border);
+    color: var(--aurora-game-accent-2);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.aurora-radar__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.35rem;
+    border-bottom: 1px dashed rgba(34, 211, 238, 0.2);
+    color: var(--aurora-game-muted);
+    font-size: 0.92rem;
+}
+
+.aurora-radar__row:last-child {
+    border-bottom: 0;
+}
+
+.aurora-radar__row strong {
+    color: var(--aurora-game-ink);
+    font-weight: 700;
+}
+
+.aurora-radar__row .bi {
+    color: var(--aurora-game-accent);
+    margin-right: 0.35rem;
+}
+
+.aurora-radar__footer .btn-group .btn {
+    border-color: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 991.98px) {
+    .aurora-aside-stack {
+        position: static;
+        top: auto;
+    }
+}

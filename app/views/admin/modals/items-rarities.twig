@@ -1,0 +1,52 @@
+<div class="modal fade" id="admin-items-rarities-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Rarità oggetto</h4>
+                <hr class="my-4" />
+
+                <form id="admin-items-rarities-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Codice <span class="text-danger">*</span> <span class="text-muted small">(es. common, rare)</span></label>
+                        <input type="text" class="form-control" name="code" maxlength="50" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Colore</label>
+                        <div class="input-group">
+                            <input type="color" class="form-control form-control-color" name="color_hex_picker" value="#6c757d" title="Scegli colore">
+                            <input type="text" class="form-control" name="color_hex" maxlength="7" placeholder="#6c757d">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Ordine</label>
+                        <input type="number" class="form-control" name="sort_order" min="0" value="0">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stato</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Attivo</option>
+                            <option value="0">Disattivo</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione <span class="text-muted small">(opzionale)</span></label>
+                        <input type="text" class="form-control" name="description" maxlength="255">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-items-rarities-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-items-rarities-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

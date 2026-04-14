@@ -1,0 +1,53 @@
+<div class="modal fade" id="admin-shops-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Negozio</h4>
+                <h6 class="text-center text-muted">Configura disponibilita e collegamento opzionale alla location.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-shops-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" name="type">
+                            <option value="global">Globale</option>
+                            <option value="location">Luogo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Attivo</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 position-relative">
+                        <label class="form-label">Luogo (opzionale)</label>
+                        <input type="text"
+                               class="form-control"
+                               name="location_label"
+                               maxlength="120"
+                               autocomplete="off"
+                               placeholder="Cerca luogo e seleziona...">
+                        <input type="hidden" name="location_id" value="">
+                        <div class="list-group mt-1 d-none" data-role="admin-shops-location-suggestions"></div>
+                        <div class="form-text">Per negozio globale lascia vuoto il campo location.</div>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-shops-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-shops-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

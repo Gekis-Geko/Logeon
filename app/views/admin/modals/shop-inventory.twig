@@ -1,0 +1,95 @@
+<div class="modal fade" id="admin-shop-inventory-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Voce inventario</h4>
+                <h6 class="text-center text-muted">Configura l'oggetto, il prezzo e i limiti di acquisto.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-shop-inventory-form" class="row g-3" autocomplete="off">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12 position-relative">
+                        <label class="form-label">Negozio</label>
+                        <input type="text"
+                               class="form-control"
+                               name="shop_label"
+                               maxlength="120"
+                               autocomplete="off"
+                               placeholder="Cerca negozio e seleziona...">
+                        <input type="hidden" name="shop_id" value="">
+                        <div class="list-group mt-1 d-none" data-role="admin-shop-inventory-shop-suggestions"></div>
+                    </div>
+
+                    <div class="col-12 position-relative">
+                        <label class="form-label">Oggetto</label>
+                        <input type="text"
+                               class="form-control"
+                               name="item_label"
+                               maxlength="120"
+                               autocomplete="off"
+                               placeholder="Cerca oggetto e seleziona...">
+                        <input type="hidden" name="item_id" value="">
+                        <div class="list-group mt-1 d-none" data-role="admin-shop-inventory-item-suggestions"></div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Valuta</label>
+                        <select class="form-select" name="currency_id">
+                            <option value="">Seleziona valuta...</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Prezzo</label>
+                        <input type="number" class="form-control" name="price" min="0" value="0">
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stock <span class="text-muted small">(vuoto = illimitato)</span></label>
+                        <input type="number" class="form-control" name="stock" min="0" placeholder="Illimitato">
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Limite per personaggio <span class="text-muted small">(vuoto = nessuno)</span></label>
+                        <input type="number" class="form-control" name="per_character_limit" min="1" placeholder="Nessun limite">
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Limite giornaliero <span class="text-muted small">(vuoto = nessuno)</span></label>
+                        <input type="number" class="form-control" name="per_day_limit" min="1" placeholder="Nessun limite">
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">In promo</label>
+                        <select class="form-select" name="is_promo">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-4" data-role="admin-shop-inventory-promo-discount-group">
+                        <label class="form-label">Sconto promo (%)</label>
+                        <input type="number" class="form-control" name="promo_discount" min="0" max="100" value="0">
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attivo</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-shop-inventory-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-shop-inventory-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasNarrativeEvents" aria-labelledby="offcanvasNarrativeEventsLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNarrativeEventsLabel">
+            <i class="bi bi-calendar-event me-2"></i>Attivita recenti
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Chiudi"></button>
+    </div>
+    <div class="offcanvas-body p-0 d-flex flex-column">
+        <div class="d-flex justify-content-between align-items-center px-3 py-2 border-bottom gap-2">
+            <div class="d-flex align-items-center gap-2 flex-wrap">
+                <select id="narrative-events-type-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutte le origini</option>
+                    <option value="conflict">Conflitti</option>
+                    <option value="faction">Fazione</option>
+                    <option value="system_event">Eventi</option>
+                    <option value="quest">Quest</option>
+                    <option value="lifecycle">Ciclo vita</option>
+                    <option value="manual">Manuale</option>
+                </select>
+                <select id="narrative-events-tag-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutti i tag</option>
+                </select>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button type="button" id="narrative-events-create-btn" class="btn btn-sm btn-outline-primary d-none" data-action="narrative-events-create">
+                    <i class="bi bi-plus-lg"></i> Crea
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="narrative-events-reload">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="narrative-events-loading" class="text-center py-4 text-muted small d-none">
+            Caricamento...
+        </div>
+        <div id="narrative-events-empty" class="text-center py-4 text-muted small d-none">
+            Nessuna attivita recente disponibile.
+        </div>
+        <div id="narrative-events-active-scenes" class="border-bottom d-none"></div>
+        <div id="narrative-events-list" class="list-group list-group-flush flex-grow-1 overflow-auto"></div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalCreateNarrativeEvent" tabindex="-1" aria-labelledby="modalCreateNarrativeEventLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCreateNarrativeEventLabel">
+                    <i class="bi bi-calendar-plus me-2"></i>Crea Evento Regionale / Globale
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <div id="narrative-event-create-alert" class="alert alert-danger d-none"></div>
+                <div class="mb-3">
+                    <label class="form-label" for="narrative-event-create-title">Titolo <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="narrative-event-create-title" maxlength="255" placeholder="Nome dell'evento">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="narrative-event-create-description">Descrizione</label>
+                    <textarea class="form-control" id="narrative-event-create-description" rows="4" maxlength="2000" placeholder="Descrivi brevemente l'evento..."></textarea>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <label class="form-label" for="narrative-event-create-scope">Portata</label>
+                        <select class="form-select" id="narrative-event-create-scope">
+                            <option value="regional" selected>Regionale</option>
+                            <option value="global">Globale</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-6">
+                        <label class="form-label" for="narrative-event-create-impact">Livello di impatto</label>
+                        <select class="form-select" id="narrative-event-create-impact">
+                            <option value="0">Nessuno</option>
+                            <option value="1">Limitato</option>
+                            <option value="2" class="d-none" id="narrative-event-create-impact-high">Alto (solo staff)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mt-3" id="narrative-event-create-location-wrap">
+                    <label class="form-label" for="narrative-event-create-location">Location di riferimento <span class="text-muted small">(necessaria per scope regionale)</span></label>
+                    <input type="text" class="form-control" id="narrative-event-create-location" list="narrative-event-locations-datalist" autocomplete="off" placeholder="Cerca per nome...">
+                    <datalist id="narrative-event-locations-datalist"></datalist>
+                    <input type="hidden" id="narrative-event-create-location-id">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" id="narrative-event-create-submit">
+                    <span class="spinner-border spinner-border-sm d-none me-1" id="narrative-event-create-spinner"></span>
+                    Crea Evento
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+/*
+ * Legacy framework stylesheet split into focused partials.
+ * Keep imports ordered from global foundations to page-level overrides.
+ */
+
+@use "framework/base";
+@use "framework/dice";
+@use "framework/mail";
+@use "framework/weather";
+
+@use "framework/tokens";
+@use "framework/core-ui";
+@use "framework/nav";
+@use "framework/app-pages";
+@use "framework/forum-pages";
+@use "framework/public-pages";
+@use "framework/guild-jobs";
+@use "framework/offcanvas";
+@use "framework/news-modal";

@@ -1,0 +1,33 @@
+<div class="modal fade"
+     id="thread-move-modal"
+     tabindex="-1"
+     role="dialog"
+     aria-labelledby="thread-move-modal-label"
+     aria-hidden="true"
+     data-requires-auth>
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-between align-items-center my-3 mx-4">
+                    <h5 class="modal-title mb-0" id="thread-move-modal-label">Sposta discussione</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+
+                <hr class="my-3" />
+
+                <div class="px-4 pb-4">
+                    <p class="text-muted mb-3">Seleziona la sezione di destinazione per questa discussione.</p>
+                    <div class="mb-4">
+                        <label class="form-label">Sezione forum</label>
+                        <select class="form-select" id="thread-move-forum-select">
+                            <option value="">— caricamento in corso... —</option>
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="button" class="btn btn-primary" data-action="thread-move-send">Sposta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,17 @@
+{% extends 'layouts/layout.twig' %}
+
+{% block public_primary_navigation %}
+    <div class="aurora-public-nav">
+        {% include 'layouts/navbar.twig' %}
+    </div>
+{% endblock %}
+
+{% block public_page_content %}
+    <section class="aurora-public-shell py-4 py-lg-5">
+        <div class="container">
+            <div class="aurora-public-surface rounded-4 shadow-sm overflow-hidden">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

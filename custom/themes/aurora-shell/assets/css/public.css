@@ -1,0 +1,36 @@
+:root {
+    --aurora-bg-0: #0f172a;
+    --aurora-bg-1: #13213e;
+    --aurora-surface: #f8fafc;
+    --aurora-accent: #14b8a6;
+    --aurora-accent-2: #f59e0b;
+    --aurora-ink: #0f172a;
+}
+
+body {
+    background:
+        radial-gradient(1000px 500px at 0% 0%, rgba(20, 184, 166, 0.22), transparent 60%),
+        radial-gradient(1000px 500px at 100% 0%, rgba(245, 158, 11, 0.18), transparent 55%),
+        linear-gradient(180deg, var(--aurora-bg-0) 0%, var(--aurora-bg-1) 55%, #0b1224 100%);
+}
+
+.aurora-public-nav .navbar {
+    background: rgba(9, 18, 37, 0.86) !important;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(20, 184, 166, 0.25);
+}
+
+.aurora-public-nav .navbar .nav-link,
+.aurora-public-nav .navbar .btn {
+    color: #e5edf7 !important;
+}
+
+.aurora-public-nav .navbar .nav-link:hover,
+.aurora-public-nav .navbar .nav-link:focus {
+    color: var(--aurora-accent) !important;
+}
+
+.aurora-public-shell .aurora-public-surface {
+    background: linear-gradient(180deg, rgba(248, 250, 252, 0.98) 0%, #f1f5f9 100%);
+    border: 1px solid rgba(20, 184, 166, 0.2);
+}

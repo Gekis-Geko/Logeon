@@ -1,0 +1,31 @@
+{% include 'layouts/header.twig' %}
+<link rel="stylesheet" href="/assets/css/admin.css">
+
+<section class="container-fluid p-0" id="admin-page">
+    <section class="row m-0">
+        {% include 'admin/layouts/aside.twig' %}
+
+        {% block content %}{% endblock %}
+    </section>
+</section>
+
+{% set pilot_bundle_mode = APP.frontend.pilot_bundle_mode|default('manual') %}
+{% set pilot_bundle_enabled = APP.frontend.pilot_bundle_enabled|default(false) %}
+{% if pilot_bundle_mode == 'on' %}
+    {% set pilot_bundle_enabled = true %}
+{% elseif pilot_bundle_mode == 'off' %}
+    {% set pilot_bundle_enabled = false %}
+{% elseif pilot_bundle_mode == 'auto' %}
+    {% set pilot_bundle_enabled = (CONFIG.debug|default(true) ? false : true) %}
+{% endif %}
+{% set pilot_bundle_version = APP.frontend.pilot_bundle_version|default('20260403') %}
+<script type="text/javascript" src="/assets/js/dist/admin-core.bundle.js?v={{ pilot_bundle_version }}"></script>
+<script type="text/javascript">
+    window.__APP_USE_PAGE_BUNDLES = {{ pilot_bundle_enabled ? 'true' : 'false' }};
+</script>
+{{ module_assets('admin')|raw }}
+
+{% include 'sys/dialogs/general_confirm.twig' %}
+{% include 'sys/dialogs/general_dialog.twig' %}
+{% include 'sys/dialogs/location_invite.twig' %}
+{% include 'sys/toasts/default_toast.twig' %}

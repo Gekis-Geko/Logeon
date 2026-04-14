@@ -1,0 +1,14 @@
+import '../features/admin/Currencies.js';
+import '../features/admin/Shops.js';
+import '../features/admin/ShopInventory.js';
+import '../features/admin/Forums.js';
+import '../features/admin/ForumTypes.js';
+import '../features/admin/Storyboards.js';
+import '../features/admin/Rules.js';
+import '../features/admin/HowToPlay.js';
+import '../features/admin/Items.js';
+import '../features/admin/ItemsCategories.js';
+import '../features/admin/ItemsRarities.js';
+import '../features/admin/EquipmentSlots.js';
+import '../features/admin/ItemEquipmentRules.js';
+import '../features/admin/News.js';

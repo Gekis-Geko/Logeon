@@ -1,0 +1,26 @@
+{% include 'layouts/header.twig' %}
+{% block public_shell %}
+    {% block public_primary_navigation %}
+        {% include 'layouts/navbar.twig' %}
+    {% endblock %}
+    {% set pilot_bundle_version = APP.frontend.pilot_bundle_version|default('20260403') %}
+    <script type="text/javascript" src="/assets/js/dist/public-core.bundle.js?v={{ pilot_bundle_version }}"></script>
+    {% block public_page_content %}
+        <section class="container-fluid">
+            <section class="row">
+                <section class="col-12 px-0">
+                    {% block content %}{% endblock %}
+                </section>
+            </section>
+        </section>
+    {% endblock %}
+{% endblock %}
+{% block public_tail_assets %}
+    {{ theme_assets('public_js')|raw }}
+{% endblock %}
+
+{% include 'layouts/footer.twig' %}
+
+{% include 'sys/dialogs/general_confirm.twig' %}
+{% include 'sys/dialogs/general_dialog.twig' %}
+{% include 'sys/toasts/default_toast.twig' %}

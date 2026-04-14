@@ -1,0 +1,140 @@
+:root {
+    @each $color, $value in $colors {
+        --#{$color}: #{$value};
+    }
+  
+    @each $color, $value in $theme-colors {
+        --#{$color}: #{$value};
+    }
+  
+    @each $bp, $value in $grid-breakpoints {
+        --breakpoint-#{$bp}: #{$value};
+    }
+  
+    --font-family-sans-serif: #{inspect($font-family-sans-serif)};
+    --font-family-monospace: #{inspect($font-family-monospace)};
+
+    --lf-bg: #0B0D12;
+    --lf-surface: #121827;
+    --lf-surface-alt: #0F1420;
+    --lf-border: #263046;
+    --lf-text-primary: #EAF0FF;
+    --lf-text-secondary: #A9B4CC;
+    --lf-muted: #7E8AA6;
+
+    --lf-primary: #8B5CF6;
+    --lf-primary-hover: #7C3AED;
+    --lf-secondary: #121827;
+    --lf-accent-magenta: #D946EF;
+    --lf-accent-warm: #F97316;
+    --lf-accent-warm-hover: #EA580C;
+
+    --lf-success: #22C55E;
+    --lf-warning: #F59E0B;
+    --lf-danger: #EF4444;
+    --lf-info: #38BDF8;
+
+    --bs-primary: var(--lf-primary);
+    --bs-secondary: var(--lf-secondary);
+    --bs-success: var(--lf-success);
+    --bs-info: var(--lf-info);
+    --bs-warning: var(--lf-warning);
+    --bs-danger: var(--lf-danger);
+    --bs-light: var(--lf-surface-alt);
+    --bs-dark: var(--lf-bg);
+
+    --bs-body-bg: var(--lf-bg);
+    --bs-body-color: var(--lf-text-primary);
+    --bs-secondary-color: var(--lf-text-secondary);
+    --bs-tertiary-color: var(--lf-muted);
+    --bs-border-color: var(--lf-border);
+    --bs-link-color: var(--lf-primary);
+    --bs-link-hover-color: var(--lf-primary-hover);
+    --bs-focus-ring-color: rgba(139, 92, 246, .28);
+    --bs-focus-ring-width: .15rem;
+    --bs-focus-ring-opacity: 1;
+    --bs-border-radius: .25rem;
+
+    --bs-card-bg: var(--lf-surface);
+    --bs-card-color: var(--lf-text-primary);
+    --bs-card-border-color: var(--lf-border);
+    --bs-dropdown-bg: var(--lf-surface);
+    --bs-dropdown-color: var(--lf-text-primary);
+    --bs-dropdown-link-color: var(--lf-text-primary);
+    --bs-dropdown-link-hover-bg: rgba(139, 92, 246, .14);
+    --bs-dropdown-border-color: var(--lf-border);
+    --bs-modal-bg: var(--lf-surface);
+    --bs-modal-color: var(--lf-text-primary);
+    --bs-modal-border-color: var(--lf-border);
+    --bs-offcanvas-bg: var(--lf-surface);
+    --bs-offcanvas-color: var(--lf-text-primary);
+    --bs-offcanvas-border-color: var(--lf-border);
+    --bs-navbar-color: var(--lf-text-secondary);
+    --bs-navbar-hover-color: var(--lf-text-primary);
+    --bs-navbar-active-color: var(--lf-text-primary);
+    --bs-table-bg: var(--lf-surface);
+    --bs-table-color: var(--lf-text-primary);
+    --bs-table-border-color: var(--lf-border);
+    --bs-table-striped-bg: rgba(255, 255, 255, .025);
+    --bs-table-hover-bg: rgba(255, 255, 255, .04);
+    --bs-form-control-bg: var(--lf-surface-alt);
+    --bs-form-control-color: var(--lf-text-primary);
+    --bs-form-control-border-color: var(--lf-border);
+    --bs-form-control-focus-bg: var(--lf-surface-alt);
+    --bs-form-control-focus-color: var(--lf-text-primary);
+    --bs-form-control-focus-border-color: var(--lf-primary);
+    --bs-form-control-placeholder-color: var(--lf-muted);
+    --bs-btn-focus-box-shadow: 0 0 0 .15rem rgba(139, 92, 246, .28);
+    --lf-form-select-indicator: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23EAF0FF' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M4 6l4 4 4-4'/%3e%3c/svg%3e");
+    --lf-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23EAF0FF' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 2l12 12M14 2L2 14'/%3e%3c/svg%3e");
+    --lf-input-system-icon-filter: invert(1) grayscale(100%) brightness(190%);
+
+    --swd-bg: var(--lf-bg);
+    --swd-surface: var(--lf-surface);
+    --swd-surface-soft: var(--lf-surface-alt);
+    --swd-surface-alt: var(--lf-surface-alt);
+    --swd-border: var(--lf-border);
+    --swd-border-strong: var(--lf-border);
+    --swd-text: var(--lf-text-primary);
+    --swd-muted: var(--lf-muted);
+    --swd-accent: var(--lf-primary);
+    --swd-accent-soft: rgba(139, 92, 246, 0.14);
+    --swd-focus-ring: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+    --swd-transition-fast: 0.16s ease-in-out;
+}
+
+[data-bs-theme="light"] {
+    --lf-form-select-indicator: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%231F2937' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M4 6l4 4 4-4'/%3e%3c/svg%3e");
+    --lf-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%231F2937' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 2l12 12M14 2L2 14'/%3e%3c/svg%3e");
+    --lf-input-system-icon-filter: none;
+}
+
+[data-bs-theme="dark"] {
+    color-scheme: dark;
+    --lf-bg: #0B0D12;
+    --lf-surface: #121827;
+    --lf-surface-alt: #0F1420;
+    --lf-border: #263046;
+    --lf-text-primary: #EAF0FF;
+    --lf-text-secondary: #A9B4CC;
+    --lf-muted: #7E8AA6;
+    --lf-primary: #8B5CF6;
+    --lf-primary-hover: #7C3AED;
+    --lf-secondary: #121827;
+    --lf-accent-magenta: #D946EF;
+    --lf-accent-warm: #F97316;
+    --lf-accent-warm-hover: #EA580C;
+    --lf-success: #22C55E;
+    --lf-warning: #F59E0B;
+    --lf-danger: #EF4444;
+    --lf-info: #38BDF8;
+    --bs-body-bg: var(--lf-bg);
+    --bs-body-color: var(--lf-text-primary);
+    --bs-border-color: var(--lf-border);
+    --bs-link-color: var(--lf-primary);
+    --bs-link-hover-color: var(--lf-primary-hover);
+    --lf-form-select-indicator: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23EAF0FF' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M4 6l4 4 4-4'/%3e%3c/svg%3e");
+    --lf-btn-close-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23EAF0FF' stroke-linecap='round' stroke-linejoin='round'%3e%3cpath d='M2 2l12 12M14 2L2 14'/%3e%3c/svg%3e");
+    --lf-input-system-icon-filter: invert(1) grayscale(100%) brightness(190%);
+}
+  

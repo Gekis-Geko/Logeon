@@ -1,0 +1,258 @@
+{% include 'layouts/header.twig' %}
+
+<section id="installer-page" class="container py-4 ui-page">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
+            <div class="p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                    <div>
+                        <h3 class="mb-1">Installer Guidato</h3>
+                        <p class="text-muted mb-0">Configura applicazione e database in pochi passaggi.</p>
+                    </div>
+                    <span class="badge text-bg-secondary" id="install-step-label">Step 1/5</span>
+                </div>
+
+                <div class="mb-3">
+                    <div class="progress" style="height: 8px;">
+                        <div id="install-progress" class="progress-bar bg-primary" role="progressbar" style="width: 20%;"></div>
+                    </div>
+                </div>
+
+                <div id="install-alert" class="alert d-none mb-3"></div>
+
+                <div data-install-step="1">
+                    <h5 class="mb-3">1. Dati Applicazione</h5>
+
+                    <p class="text-muted small mb-2">Informazioni sul progetto</p>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label">Base URL</label>
+                            <input type="text" class="form-control" id="app-baseurl" placeholder="es. mygame.site">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Lingua</label>
+                            <select class="form-select" id="app-lang">
+                                <option value="it">Italiano (it)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="app-name" placeholder="Nome applicazione">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Titolo</label>
+                            <input type="text" class="form-control" id="app-title" placeholder="Titolo sito">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Descrizione</label>
+                            <input type="text" class="form-control" id="app-description" placeholder="Descrizione breve">
+                        </div>
+                    </div>
+
+                    <p class="text-muted small mb-2">Responsabili</p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Web Master — Nome</label>
+                            <input type="text" class="form-control" id="app-wm-name" placeholder="-">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Web Master — E-Mail</label>
+                            <input type="email" class="form-control" id="app-wm-email" placeholder="-">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Responsabile dati — Nome</label>
+                            <input type="text" class="form-control" id="app-dba-name" placeholder="-">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Responsabile dati — E-Mail</label>
+                            <input type="email" class="form-control" id="app-dba-email" placeholder="-">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Supporto — Nome</label>
+                            <input type="text" class="form-control" id="app-support-name" placeholder="-">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Supporto — E-Mail</label>
+                            <input type="email" class="form-control" id="app-support-email" placeholder="-">
+                        </div>
+                    </div>
+                </div>
+
+                <div data-install-step="2" class="d-none">
+                    <h5 class="mb-3">2. Connessione Database</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Host</label>
+                            <input type="text" class="form-control" id="db-host" placeholder="localhost">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Database</label>
+                            <input type="text" class="form-control" id="db-name" placeholder="appdb">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Utente</label>
+                            <input type="text" class="form-control" id="db-user" placeholder="root">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="db-pwd" placeholder="">
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Charset</label>
+                            <select class="form-select" id="db-charset">
+                                <optgroup label="Unicode (tutte le lingue)">
+                                    <option value="utf8mb4">utf8mb4 — consigliato (Unicode 4 byte, emoji)</option>
+                                    <option value="utf8">utf8 — legacy (Unicode 3 byte, no emoji)</option>
+                                    <option value="utf16">utf16</option>
+                                    <option value="utf32">utf32</option>
+                                </optgroup>
+                                <optgroup label="Europa occidentale">
+                                    <option value="latin1">latin1 (ISO-8859-1)</option>
+                                    <option value="latin2">latin2 — Europa centrale</option>
+                                    <option value="latin5">latin5 — Turco</option>
+                                    <option value="latin7">latin7 — Baltico</option>
+                                </optgroup>
+                                <optgroup label="Lingue specifiche">
+                                    <option value="greek">greek</option>
+                                    <option value="hebrew">hebrew</option>
+                                    <option value="arabic">arabic</option>
+                                </optgroup>
+                                <optgroup label="Windows code page">
+                                    <option value="cp1250">cp1250 — Europa centrale</option>
+                                    <option value="cp1251">cp1251 — Cirillico</option>
+                                    <option value="cp1256">cp1256 — Arabo</option>
+                                    <option value="cp1257">cp1257 — Baltico</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Collation</label>
+                            <select class="form-select" id="db-collation">
+                                <optgroup label="utf8mb4 — universale">
+                                    <option value="utf8mb4_unicode_ci">utf8mb4_unicode_ci — consigliato</option>
+                                    <option value="utf8mb4_unicode_520_ci">utf8mb4_unicode_520_ci</option>
+                                    <option value="utf8mb4_0900_ai_ci">utf8mb4_0900_ai_ci (MySQL 8+)</option>
+                                    <option value="utf8mb4_0900_as_cs">utf8mb4_0900_as_cs (MySQL 8+, case sensitive)</option>
+                                    <option value="utf8mb4_general_ci">utf8mb4_general_ci</option>
+                                    <option value="utf8mb4_bin">utf8mb4_bin (binario)</option>
+                                </optgroup>
+                                <optgroup label="utf8mb4 — lingue specifiche">
+                                    <option value="utf8mb4_italian_ci">utf8mb4_italian_ci</option>
+                                    <option value="utf8mb4_spanish_ci">utf8mb4_spanish_ci</option>
+                                    <option value="utf8mb4_spanish2_ci">utf8mb4_spanish2_ci</option>
+                                    <option value="utf8mb4_german2_ci">utf8mb4_german2_ci</option>
+                                    <option value="utf8mb4_french_ci">utf8mb4_french_ci</option>
+                                    <option value="utf8mb4_polish_ci">utf8mb4_polish_ci</option>
+                                    <option value="utf8mb4_turkish_ci">utf8mb4_turkish_ci</option>
+                                    <option value="utf8mb4_czech_ci">utf8mb4_czech_ci</option>
+                                    <option value="utf8mb4_danish_ci">utf8mb4_danish_ci</option>
+                                    <option value="utf8mb4_hungarian_ci">utf8mb4_hungarian_ci</option>
+                                    <option value="utf8mb4_persian_ci">utf8mb4_persian_ci</option>
+                                    <option value="utf8mb4_romanian_ci">utf8mb4_romanian_ci</option>
+                                    <option value="utf8mb4_croatian_ci">utf8mb4_croatian_ci</option>
+                                    <option value="utf8mb4_slovenian_ci">utf8mb4_slovenian_ci</option>
+                                    <option value="utf8mb4_estonian_ci">utf8mb4_estonian_ci</option>
+                                    <option value="utf8mb4_latvian_ci">utf8mb4_latvian_ci</option>
+                                    <option value="utf8mb4_lithuanian_ci">utf8mb4_lithuanian_ci</option>
+                                    <option value="utf8mb4_slovak_ci">utf8mb4_slovak_ci</option>
+                                    <option value="utf8mb4_swedish_ci">utf8mb4_swedish_ci</option>
+                                    <option value="utf8mb4_vietnamese_ci">utf8mb4_vietnamese_ci</option>
+                                    <option value="utf8mb4_roman_ci">utf8mb4_roman_ci</option>
+                                </optgroup>
+                                <optgroup label="utf8 — legacy">
+                                    <option value="utf8_unicode_ci">utf8_unicode_ci</option>
+                                    <option value="utf8_unicode_520_ci">utf8_unicode_520_ci</option>
+                                    <option value="utf8_general_ci">utf8_general_ci</option>
+                                    <option value="utf8_bin">utf8_bin</option>
+                                    <option value="utf8_italian_ci">utf8_italian_ci</option>
+                                    <option value="utf8_spanish_ci">utf8_spanish_ci</option>
+                                    <option value="utf8_german2_ci">utf8_german2_ci</option>
+                                    <option value="utf8_turkish_ci">utf8_turkish_ci</option>
+                                </optgroup>
+                                <optgroup label="latin / codepage">
+                                    <option value="latin1_swedish_ci">latin1_swedish_ci</option>
+                                    <option value="latin1_general_ci">latin1_general_ci</option>
+                                    <option value="latin1_general_cs">latin1_general_cs</option>
+                                    <option value="latin1_bin">latin1_bin</option>
+                                    <option value="latin2_general_ci">latin2_general_ci</option>
+                                    <option value="latin5_turkish_ci">latin5_turkish_ci</option>
+                                    <option value="greek_general_ci">greek_general_ci</option>
+                                    <option value="hebrew_general_ci">hebrew_general_ci</option>
+                                    <option value="cp1250_general_ci">cp1250_general_ci</option>
+                                    <option value="cp1251_general_ci">cp1251_general_ci</option>
+                                    <option value="cp1256_general_ci">cp1256_general_ci</option>
+                                    <option value="cp1257_general_ci">cp1257_general_ci</option>
+                                </optgroup>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Chiave di cifratura <span class="text-muted small">(usata per cifrare le email — conservala, non è recuperabile)</span></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control font-monospace" id="db-crypt-key" readonly>
+                                <button type="button" class="btn btn-outline-secondary" id="btn-regen-crypt-key">Rigenera</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-outline-secondary" id="btn-test-db">Test connessione DB</button>
+                    </div>
+                </div>
+
+                <div data-install-step="3" class="d-none">
+                    <h5 class="mb-3">3. Scrittura Configurazione</h5>
+                    <p class="text-muted mb-2">Scrive automaticamente:</p>
+                    <ul class="mb-3">
+                        <li><code>configs/app.php</code></li>
+                        <li><code>configs/db.php</code></li>
+                    </ul>
+                    <button type="button" class="btn btn-primary" id="btn-write-config">Scrivi configurazione</button>
+                </div>
+
+                <div data-install-step="4" class="d-none">
+                    <h5 class="mb-3">4. Inizializzazione Database</h5>
+                    <p class="text-muted mb-3">Importa lo schema iniziale da <code>database/logeon_db_core.sql</code>.</p>
+                    <button type="button" class="btn btn-primary" id="btn-init-db">Inizializza database</button>
+                </div>
+
+                <div data-install-step="5" class="d-none">
+                    <h5 class="mb-3">5. Account amministratore</h5>
+                    <p class="text-muted mb-3">Crea l'utenza superuser e il personaggio con cui accedere al gioco.</p>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" id="admin-email" placeholder="admin@example.com">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Nome personaggio</label>
+                            <input type="text" class="form-control" id="admin-character-name" placeholder="max 25 caratteri">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="admin-password" placeholder="min 6 caratteri">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Conferma password</label>
+                            <input type="password" class="form-control" id="admin-password-confirm" placeholder="">
+                            <div id="admin-password-match-feedback" class="form-text d-none"></div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Genere personaggio</label>
+                            <select class="form-select" id="admin-gender">
+                                <option value="1">Maschile</option>
+                                <option value="2">Femminile</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button type="button" class="btn btn-success" id="btn-create-admin">Crea account e completa installazione</button>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4 pt-2 border-top">
+                    <button type="button" class="btn btn-outline-secondary" id="btn-prev" disabled>Indietro</button>
+                    <button type="button" class="btn btn-primary" id="btn-next">Avanti</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

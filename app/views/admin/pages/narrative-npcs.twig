@@ -1,0 +1,56 @@
+<div data-admin-page="narrative-npcs">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+        <header>
+            <h4 class="display-6 mb-1">PNG Leggeri</h4>
+            <h6 class="mb-0">Personaggi non giocanti narrativi associati a gilde, fazioni o liberi.</h6>
+        </header>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-npcs-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-npcs-create">
+                <i class="bi bi-plus-lg me-1"></i>Nuovo PNG
+            </button>
+        </div>
+    </div>
+
+    <div id="admin-npcs-alert" class="alert d-none mb-3" role="alert"></div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form id="admin-npcs-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+                <div class="col-auto">
+                    <label for="admin-npcs-search" class="form-label mb-1">Ricerca</label>
+                    <input type="search" id="admin-npcs-search" name="search" class="form-control form-control-sm" placeholder="Nome PNG...">
+                </div>
+                <div class="col-auto">
+                    <label for="admin-npcs-filter-group-type" class="form-label mb-1">Tipo gruppo</label>
+                    <select id="admin-npcs-filter-group-type" name="group_type" class="form-select form-select-sm">
+                        <option value="">Tutti</option>
+                        <option value="guild">Gilda</option>
+                        <option value="faction">Fazione</option>
+                        <option value="none">Nessuno</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label for="admin-npcs-filter-active" class="form-label mb-1">Stato</label>
+                    <select id="admin-npcs-filter-active" name="is_active" class="form-select form-select-sm">
+                        <option value="">Tutti</option>
+                        <option value="1">Attivo</option>
+                        <option value="0">Inattivo</option>
+                    </select>
+                </div>
+                <div class="col-auto d-flex gap-2">
+                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                        <i class="bi bi-search me-1"></i>Filtra
+                    </button>
+                    <a class="btn btn-sm btn-outline-secondary" href="/admin/narrative-npcs">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="grid-admin-npcs"></div>
+
+    {% include 'admin/modals/narrative-npcs.twig' %}
+</div>

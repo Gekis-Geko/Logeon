@@ -1,0 +1,33 @@
+<div class="modal fade" id="profile-experience-assign-modal" tabindex="-1" aria-hidden="true" data-requires-staff>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Assegna esperienza</h4>
+                <h6 class="text-center text-muted">Registra una nuova assegnazione con quantita e motivazione.</h6>
+                <hr class="my-4" />
+
+                <form id="profile-experience-assign-form">
+                    <input type="hidden" name="character_id">
+                    <div class="form-group mb-3">
+                        <label class="form-label">Quantita da assegnare</label>
+                        <input type="number" name="delta" class="form-control" step="0.01" min="0.01" required>
+                        <div class="form-text">Valore decimale consentito (es. 2.50).</div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Motivazione / causale</label>
+                        <textarea name="reason" class="form-control" rows="4" maxlength="255" required placeholder="Es. quest completata, evento speciale, premio narrativo..."></textarea>
+                        <div class="form-text">L'assegnazione viene tracciata nel Log esperienza.</div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button type="submit" class="btn btn-primary" data-experience-assign-save>Assegna</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

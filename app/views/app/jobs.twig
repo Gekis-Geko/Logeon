@@ -1,0 +1,121 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<main class="container">
+    <section id="jobs-page" class="row g-3 ui-page pb-3" data-location-id="{{ location_id|default('') }}" data-jobs-mode="board-open">
+        <header>
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+                <div>
+                    <h4 class="display-6 mt-3">Bacheca lavori</h4>
+                    <h6>Scegli una professione, completa incarichi giornalieri e monitora la crescita del personaggio.</h6>
+                    {% if location_id %}
+                        <div class="small mt-1">
+                            Filtrati per location{% if location_name %}: <b>{{ location_name }}</b>{% endif %}.
+                            <a href="/game/jobs" class="ms-2">Mostra tutti</a>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <small class="text-muted" name="job-reset-countdown">Nuovi incarichi tra --:--:--</small>
+                    <button id="job-change" class="btn btn-sm btn-outline-secondary d-none" type="button"><i class="bi bi-arrow-clockwise"></i> Aggiorna bacheca</button>
+                </div>
+            </div>
+        </header>
+        <hr class="w-75 ms-2" />
+        <div class="col-12">
+            <div class="row g-3">
+                <aside class="col-12 col-lg-6 col-xxl-5">
+                    <article id="jobs-panel" class="card text-bg-light shadow-sm mb-2">
+                        <div class="card-header">
+                            <h6 class="mb-0"><i class="bi bi-briefcase"></i> Stato lavorativo</h6>
+                        </div>
+                        <div class="card-body">
+                            <div id="job-current" class="border rounded p-3 d-none">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-semibold" name="job_current_name"></div>
+                                        <small class="text-muted" name="job_current_meta"></small>
+                                    </div>
+                                    <span class="badge text-bg-dark" name="job_current_level"></span>
+                                </div>
+                                <div class="mt-2">
+                                    <div class="d-flex justify-content-between align-items-center small">
+                                        <span class="text-muted">Progressione</span>
+                                        <span class="fw-semibold" name="job_progress_text">-</span>
+                                    </div>
+                                    <div class="progress mt-1" style="height: 8px;">
+                                        <div class="progress-bar" role="progressbar" name="job_progress_bar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" style="width: 0%;"></div>
+                                    </div>
+                                    <div class="small text-muted mt-1" name="job_bonus">Bonus retribuzione attivo: +0%</div>
+                                </div>
+                                <div class="mt-3 d-flex justify-content-end">
+                                    <button id="job-leave" class="btn btn-sm btn-outline-danger d-none" type="button"><i class="bi bi-box-arrow-left"></i> Lascia lavoro</button>
+                                </div>
+                            </div>
+
+                            <div id="job-empty" class="text-muted small border rounded p-3">Nessun lavoro attivo. Scegline uno dalla bacheca.</div>
+                        </div>
+                    </article>
+                    <article class="card text-bg-light shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="mb-0"><i class="bi bi-signpost-2"></i> Opportunita di lavoro</h6>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="job-available"></div>
+                        </div>
+                    </article>
+                </aside>
+                <section class="col-12 col-lg-6 col-xxl-7">
+                    <article class="card text-bg-light shadow-sm mb-2">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="mb-0"><i class="bi bi-list-check"></i> Incarichi giornalieri</h6>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="job-tasks"></div>
+                        </div>
+                    </article>
+                    <article class="card text-bg-light shadow-sm">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center gap-2">
+                                <h6 class="mb-0"><i class="bi bi-clock-history"></i> Storico incarichi</h6>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="job-history"></div>
+                        </div>
+                    </article>
+                </section>
+            </div>
+        </div>
+    </section>
+</main>
+
+<template name="template_job_available">
+    <div class="border rounded p-3 mb-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+            <div>
+                <div class="fw-semibold" name="name"></div>
+                <small class="text-muted" name="meta"></small>
+            </div>
+            <button class="btn btn-sm btn-outline-primary fw-semibold" name="choose" type="button"><i class="bi bi-check2-circle"></i> Scegli</button>
+        </div>
+    </div>
+</template>
+<template name="template_job_task">
+    <div class="border rounded p-3 mb-3">
+        <div class="fw-semibold" name="title"></div>
+        <div class="text-muted small" name="body"></div>
+        <div class="d-flex flex-wrap gap-2 mt-3" name="choices"></div>
+        <div class="d-flex align-items-center gap-2 mt-2 flex-wrap">
+            <div class="small text-muted" name="status"></div>
+            <a class="btn btn-sm btn-outline-secondary d-none" name="go_location" href="/game/maps"><i class="bi bi-arrow-right-short"></i> Vai alla location</a>
+        </div>
+    </div>
+</template>
+{% endblock %}
+
+

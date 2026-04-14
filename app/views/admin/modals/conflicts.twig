@@ -1,0 +1,530 @@
+<div class="modal fade" id="admin-conflicts-settings-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Impostazioni conflitti</h4>
+                <h6 class="text-center text-muted">Configura risoluzione, soglie e policy operative del sistema conflitti.</h6>
+                <hr class="my-4" />
+
+                <div class="row g-2">
+                    <div class="col-12">
+                        <label class="form-label d-block">Modalita risoluzione globale</label>
+                        <input type="hidden" id="admin-conflicts-mode" value="narrative">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Margine stretto max</label>
+                        <input type="number" class="form-control form-control-sm" id="admin-conflicts-margin-narrow-max" min="1" step="1">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Margine chiaro max</label>
+                        <input type="number" class="form-control form-control-sm" id="admin-conflicts-margin-clear-max" min="2" step="1">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Soglia fallimento critico</label>
+                        <input type="number" class="form-control form-control-sm" id="admin-conflicts-critical-failure" min="1" step="1">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Soglia successo critico</label>
+                        <input type="number" class="form-control form-control-sm" id="admin-conflicts-critical-success" min="0" step="1">
+                        <div class="form-text">0 = massimo valore del dado.</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Policy sovrapposizione</label>
+                        <select id="admin-conflicts-overlap-policy" class="form-select form-select-sm">
+                            <option value="warn_only" selected>Solo avviso</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Avviso inattivita (ore)</label>
+                        <input type="number" class="form-control form-control-sm" id="admin-conflicts-inactivity-warning-hours" min="1" step="1">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Archiviazione automatica (giorni)</label>
+                        <input type="number" class="form-control form-control-sm" id="admin-conflicts-inactivity-archive-days" min="1" step="1">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label d-block">Eventi chat compatti</label>
+                        <input type="hidden" id="admin-conflicts-chat-compact-events" value="1">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-conflicts-save-settings">Salva impostazioni</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-conflict-open-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Apri conflitto</h4>
+                <h6 class="text-center text-muted">Apertura formale del conflitto con autorita di risoluzione e nota iniziale.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-conflict-open-form" class="row g-3">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Luogo (opzionale)</label>
+                        <input type="text" class="form-control" name="location_name" placeholder="Cerca luogo..." autocomplete="off">
+                        <input type="hidden" name="location_id" value="">
+                        <div class="list-group mt-1 d-none" id="admin-conflict-open-location-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Autorita risoluzione</label>
+                        <select class="form-select" name="resolution_authority">
+                            <option value="players">Giocatori</option>
+                            <option value="master">Master</option>
+                            <option value="mixed">Misto</option>
+                            <option value="deferred_review">Revisione differita</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stato iniziale</label>
+                        <select class="form-select" name="status">
+                            <option value="proposal">Proposta</option>
+                            <option value="open" selected>Aperto</option>
+                            <option value="active">Attivo</option>
+                            <option value="awaiting_resolution">In attesa risoluzione</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Nota apertura (opzionale)</label>
+                        <textarea class="form-control" name="opening_note" rows="3" placeholder="Descrivi il contesto iniziale del conflitto..."></textarea>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-conflict-open-save">Apri conflitto</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-conflict-quick-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Lettura rapida conflitto</h4>
+                <h6 class="text-center text-muted">Vista sintetica in sola lettura per consultazione veloce.</h6>
+                <hr class="my-4" />
+
+                <input type="hidden" id="admin-conflict-quick-id" value="0">
+
+                <div class="row g-2 mb-3">
+                    <div class="col-6 col-md-3">
+                        <div class="small text-muted">ID</div>
+                        <div><b data-role="admin-conflict-quick-summary-id">-</b></div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="small text-muted">Stato</div>
+                        <div data-role="admin-conflict-quick-summary-status">-</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="small text-muted">Modalita</div>
+                        <div data-role="admin-conflict-quick-summary-mode">-</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="small text-muted">Creato</div>
+                        <div data-role="admin-conflict-quick-summary-created">-</div>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-12 col-lg-5">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Partecipanti</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Personaggio</th>
+                                                <th>Ruolo</th>
+                                                <th>Stato</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-role="admin-conflict-quick-participants-list"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-7">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h6 class="mb-0">Ultime azioni</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group" data-role="admin-conflict-quick-actions-list"></div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0">Ultimi tiri</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-sm align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Ora</th>
+                                                <th>Attore</th>
+                                                <th>Tipo</th>
+                                                <th>Esito</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-role="admin-conflict-quick-rolls-list"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-conflict-quick-to-detail">Apri dettaglio completo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-conflict-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Dettaglio conflitto</h4>
+                <h6 class="text-center text-muted">Gestione partecipanti, azioni, tiri, risoluzione e chiusura.</h6>
+                <hr class="my-4" />
+
+                <input type="hidden" id="admin-conflict-current-id" value="0">
+
+                <div class="row g-2 mb-3">
+                    <div class="col-6 col-md-2">
+                        <div class="small text-muted">ID</div>
+                        <div><b data-role="admin-conflict-summary-id">-</b></div>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <div class="small text-muted">Stato</div>
+                        <div data-role="admin-conflict-summary-status">-</div>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <div class="small text-muted">Modalita</div>
+                        <div data-role="admin-conflict-summary-mode">-</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="small text-muted">Autorita</div>
+                        <div data-role="admin-conflict-summary-authority">-</div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="small text-muted">Creato</div>
+                        <div data-role="admin-conflict-summary-created">-</div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-conflict-detail-reload">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna dettaglio
+                    </button>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-12 col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Partecipanti</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-sm align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Personaggio</th>
+                                                <th>Ruolo</th>
+                                                <th>Stato</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-role="admin-conflict-participants-list"></tbody>
+                                    </table>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-12">
+                                        <label class="form-label mb-1">Personaggio</label>
+                                        <input type="text" class="form-control form-control-sm" id="admin-conflict-participant-name" placeholder="Cerca per nome..." autocomplete="off">
+                                        <input type="hidden" id="admin-conflict-participant-id">
+                                        <div class="list-group mt-1 d-none" id="admin-conflict-participant-suggestions"></div>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label mb-1">Ruolo</label>
+                                        <select class="form-select form-select-sm" id="admin-conflict-participant-role">
+                                            <option value="actor">Attore</option>
+                                            <option value="target">Bersaglio</option>
+                                            <option value="support">Supporto</option>
+                                            <option value="witness">Testimone</option>
+                                            <option value="other">Altro</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label d-block mb-1">Attivo</label>
+                                        <input type="hidden" id="admin-conflict-participant-active" value="1">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-conflict-participant-add">Aggiorna partecipante</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-8">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Azioni e note</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="list-group mb-3" data-role="admin-conflict-actions-list"></div>
+                                <div class="row g-2">
+                                    <div class="col-12 col-md-4">
+                                        <label class="form-label mb-1">Tipo azione</label>
+                                        <select class="form-select form-select-sm" id="admin-conflict-action-type">
+                                            <option value="action">Azione</option>
+                                            <option value="note">Nota</option>
+                                            <option value="verdict">Verdetto</option>
+                                            <option value="system">Sistema</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-8">
+                                        <label class="form-label mb-1">Testo</label>
+                                        <textarea class="form-control form-control-sm" id="admin-conflict-action-body" rows="2"></textarea>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-conflict-action-add">Aggiungi azione</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-7">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Log tiri</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive mb-3">
+                                    <table class="table table-sm align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Ora</th>
+                                                <th>Attore</th>
+                                                <th>Tipo</th>
+                                                <th>Dado</th>
+                                                <th>Risultato</th>
+                                                <th>Critico</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody data-role="admin-conflict-rolls-list"></tbody>
+                                    </table>
+                                </div>
+
+                                <div class="row g-2">
+                                    <div class="col-6 col-md-4">
+                                        <label class="form-label mb-1">Tipo tiro</label>
+                                        <select class="form-select form-select-sm" id="admin-conflict-roll-type">
+                                            <option value="single_roll">Singolo</option>
+                                            <option value="single_roll_with_modifiers">Singolo + Modificatori</option>
+                                            <option value="opposed_roll">Contrapposto</option>
+                                            <option value="threshold_roll">Soglia</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6 col-md-2">
+                                        <label class="form-label mb-1">Dado</label>
+                                        <select class="form-select form-select-sm" id="admin-conflict-roll-die">
+                                            <option value="d4">d4</option>
+                                            <option value="d6">d6</option>
+                                            <option value="d8">d8</option>
+                                            <option value="d10">d10</option>
+                                            <option value="d12">d12</option>
+                                            <option value="d16">d16</option>
+                                            <option value="d20" selected>d20</option>
+                                            <option value="d100">d100</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label class="form-label mb-1">Bersaglio</label>
+                                        <input type="text" class="form-control form-control-sm" id="admin-conflict-roll-target-name" placeholder="Cerca personaggio..." autocomplete="off">
+                                        <input type="hidden" id="admin-conflict-roll-target-id" value="">
+                                        <div class="list-group mt-1 d-none" id="admin-conflict-roll-target-suggestions"></div>
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label class="form-label mb-1">Soglia</label>
+                                        <input type="number" class="form-control form-control-sm" id="admin-conflict-roll-threshold" min="1" step="0.01">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label class="form-label mb-1">Mod. attore</label>
+                                        <input type="number" class="form-control form-control-sm" id="admin-conflict-roll-actor-modifier" step="0.01">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label class="form-label mb-1">Attributo attore</label>
+                                        <input type="text" class="form-control form-control-sm" id="admin-conflict-roll-actor-attribute" placeholder="es. forza">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label class="form-label mb-1">Mod. bersaglio</label>
+                                        <input type="number" class="form-control form-control-sm" id="admin-conflict-roll-target-modifier" step="0.01">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label class="form-label mb-1">Attributo bersaglio</label>
+                                        <input type="text" class="form-control form-control-sm" id="admin-conflict-roll-target-attribute" placeholder="es. difesa">
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-conflict-roll-run">Esegui tiro</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-5">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Risoluzione e chiusura</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="row g-2 mb-3">
+                                    <div class="col-12 col-md-7">
+                                        <label class="form-label mb-1">Cambia stato</label>
+                                        <select class="form-select form-select-sm" id="admin-conflict-status-next">
+                                            <option value="open">Aperto</option>
+                                            <option value="active">Attivo</option>
+                                            <option value="awaiting_resolution">In attesa risoluzione</option>
+                                            <option value="resolved">Risolto</option>
+                                            <option value="closed">Chiuso</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-md-5 d-flex align-items-end">
+                                        <button type="button" class="btn btn-sm btn-outline-primary w-100" data-action="admin-conflict-status-set">Applica stato</button>
+                                    </div>
+                                </div>
+
+                                <div class="mb-2">
+                                    <label class="form-label mb-1">Riepilogo esito</label>
+                                    <textarea class="form-control form-control-sm" id="admin-conflict-outcome-summary" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label mb-1">Testo verdetto (opzionale)</label>
+                                    <textarea class="form-control form-control-sm" id="admin-conflict-verdict-text" rows="3"></textarea>
+                                </div>
+                                <div class="d-flex flex-wrap justify-content-end gap-2">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-conflict-force-open">Apertura forzata</button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-action="admin-conflict-force-close">Chiusura forzata</button>
+                                    <button type="button" class="btn btn-sm btn-outline-info" data-action="admin-conflict-edit-log">Modifica log</button>
+                                    <button type="button" class="btn btn-sm btn-outline-info" data-action="admin-conflict-override-roll">Forza tiro</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-conflict-resolve">Risolvi conflitto</button>
+                                    <button type="button" class="btn btn-sm btn-outline-warning" data-action="admin-conflict-close">Chiudi conflitto</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-conflict-edit-log-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Modifica log conflitto</h4>
+                <h6 class="text-center text-muted">Seleziona una azione e aggiorna il contenuto del log.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-conflict-edit-log-form" class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Azione da modificare</label>
+                        <select class="form-select" id="admin-conflict-edit-log-action-id">
+                            <option value="">Seleziona azione...</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Nuovo contenuto</label>
+                        <textarea class="form-control" id="admin-conflict-edit-log-body" rows="4" placeholder="Inserisci il nuovo testo del log..."></textarea>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-conflict-edit-log-save">Salva modifica</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-conflict-override-roll-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Forzatura tiro</h4>
+                <h6 class="text-center text-muted">Seleziona partecipante e risultato finale da applicare.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-conflict-override-roll-form" class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label">Attore</label>
+                        <input type="text" class="form-control" id="admin-conflict-override-actor-name" placeholder="Cerca partecipante..." autocomplete="off">
+                        <input type="hidden" id="admin-conflict-override-actor-id" value="">
+                        <div class="list-group mt-1 d-none" id="admin-conflict-override-actor-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Risultato finale</label>
+                        <input type="number" class="form-control" id="admin-conflict-override-final-result" step="0.01" placeholder="Es. 10.5">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Critico</label>
+                        <select class="form-select" id="admin-conflict-override-critical-flag">
+                            <option value="none">Nessuno</option>
+                            <option value="success">Successo critico</option>
+                            <option value="failure">Fallimento critico</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Nota</label>
+                        <input type="text" class="form-control" id="admin-conflict-override-note" maxlength="255" value="Override admin da pannello conflitti">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-conflict-override-roll-save">Applica forzatura</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

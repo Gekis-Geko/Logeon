@@ -1,0 +1,89 @@
+<div class="modal fade" id="admin-jobs-tasks-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Compito</h4>
+                <h6 class="text-center text-muted">Configura titolo, testo, livello e scelte disponibili.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-jobs-tasks-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Titolo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="title" maxlength="150" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attivo</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Lavoro <span class="text-danger">*</span></label>
+                        <select class="form-select" name="job_id">
+                            <option value="">— Seleziona —</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Livello minimo</label>
+                        <input type="number" class="form-control" name="min_level" min="1" value="1">
+                    </div>
+                    <div class="col-12 col-md-3 position-relative">
+                        <label class="form-label">Luogo richiesto</label>
+                        <input type="text"
+                               class="form-control"
+                               name="requires_location_label"
+                               maxlength="120"
+                               autocomplete="off"
+                               placeholder="Cerca...">
+                        <input type="hidden" name="requires_location_id" value="">
+                        <div class="list-group mt-1 position-absolute w-100" style="z-index:100;display:none" data-role="admin-jobs-tasks-location-suggestions"></div>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Testo del compito</label>
+                        <textarea class="form-control" name="body" rows="4" maxlength="4000"></textarea>
+                    </div>
+                </form>
+
+                <hr class="my-4" />
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="mb-0">Scelte</h6>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-jobs-tasks-add-choice">
+                        <i class="bi bi-plus-lg me-1"></i>Aggiungi scelta
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Codice</th>
+                                <th>Etichetta</th>
+                                <th style="width:80px">Paga</th>
+                                <th style="width:80px">Fama</th>
+                                <th style="width:80px">Punti</th>
+                                <th style="width:40px"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-jobs-tasks-choices-body">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="text-muted small mt-1" id="admin-jobs-tasks-choices-empty" style="display:none">
+                    Nessuna scelta definita.
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-jobs-tasks-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-jobs-tasks-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

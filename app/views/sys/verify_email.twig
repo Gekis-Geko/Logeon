@@ -1,0 +1,30 @@
+{% extends theme_shell('public', 'layouts/layout.twig') %}
+
+{% block content %}
+{% set verification = verification|default({}) %}
+{% set status = verification.status|default('invalid') %}
+{% set message = verification.message|default('Verifica non riuscita.') %}
+{% set isSuccess = status == 'success' or status == 'already_active' %}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+            <div class="card shadow-sm">
+                <div class="card-body text-center p-4 p-lg-5">
+                    <h4 class="mb-3">{{ isSuccess ? 'Email verificata' : 'Verifica email' }}</h4>
+                    <p class="text-muted mb-4">{{ message }}</p>
+
+                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                        {% if isSuccess %}
+                            <button type="button" class="btn btn-primary" data-action="open-signin-modal">Accedi ora</button>
+                        {% endif %}
+                        <a class="btn btn-outline-secondary" href="/">Torna alla homepage</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

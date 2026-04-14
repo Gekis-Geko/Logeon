@@ -1,0 +1,37 @@
+<div data-admin-page="logs-currency">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <header class="mt-3">
+            <h4 class="display-6">Logs Valute</h4>
+            <h6>Storico movimenti di valuta per i personaggi</h6>
+        </header>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-logs-currency-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form id="admin-logs-currency-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+                <div class="col-auto">
+                    <label for="admin-logs-currency-filter-character-id" class="form-label mb-1">ID Personaggio</label>
+                    <input id="admin-logs-currency-filter-character-id" name="character_id" type="number" class="form-control" min="1" placeholder="ID personaggio">
+                </div>
+                <div class="col-auto">
+                    <label for="admin-logs-currency-filter-currency-id" class="form-label mb-1">ID Valuta</label>
+                    <input id="admin-logs-currency-filter-currency-id" name="currency_id" type="number" class="form-control" min="1" placeholder="ID valuta">
+                </div>
+                <div class="col-auto">
+                    <label for="admin-logs-currency-filter-source" class="form-label mb-1">Sorgente</label>
+                    <input id="admin-logs-currency-filter-source" name="source" type="text" class="form-control" placeholder="Sorgente">
+                </div>
+                <div class="d-flex gap-2 col-auto">
+                    <a class="btn btn-sm btn-outline-secondary" href="/admin/logs-currency">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="grid-admin-logs-currency"></div>
+</div>

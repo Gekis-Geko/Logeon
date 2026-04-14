@@ -1,0 +1,81 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Ciclo vita personaggio</h4>
+        <h6 class="mb-0">Fasi configurabili del percorso narrativo e registro immutabile delle transizioni.</h6>
+    </header>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-lifecycle-phases-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-action="admin-lifecycle-phase-create">
+            <i class="bi bi-plus-lg me-1"></i>Nuova fase
+        </button>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-12 col-xl-8">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Catalogo fasi</h6>
+            </div>
+            <div class="card-body">
+                <div id="grid-admin-lifecycle-phases"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12 col-xl-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="mb-0">Assegna transizione</h6>
+            </div>
+            <div class="card-body">
+                <form id="admin-lifecycle-transition-form" class="row g-2">
+                    <div class="col-12">
+                        <label class="form-label">Personaggio</label>
+                        <div class="input-group input-group-sm">
+                            <input type="text" class="form-control" id="admin-lifecycle-transition-character-name" name="character_name" placeholder="Cerca personaggio..." autocomplete="off">
+                            <input type="hidden" id="admin-lifecycle-transition-character-id" name="character_id" value="">
+                            <button type="button" class="btn btn-outline-secondary" data-action="admin-lifecycle-transition-lookup">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </div>
+                        <div class="list-group mt-1 d-none" id="admin-lifecycle-transition-character-suggestions"></div>
+                    </div>
+                    <div class="col-12">
+                        <div class="small text-muted" id="admin-lifecycle-character-current"></div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Fase destinazione</label>
+                        <select class="form-select form-select-sm" name="to_phase_id" id="admin-lifecycle-transition-phase-select">
+                            <option value="">Seleziona fase...</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Origine</label>
+                        <select class="form-select form-select-sm" name="triggered_by">
+                            <option value="admin">Admin (manuale)</option>
+                            <option value="event">Evento narrativo</option>
+                            <option value="combat">Combattimento</option>
+                            <option value="conflict">Conflitto</option>
+                            <option value="system">Sistema</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Note (opzionale)</label>
+                        <textarea class="form-control form-control-sm" name="notes" rows="2" placeholder="Motivazione o contesto della transizione..."></textarea>
+                    </div>
+                    <div class="col-12">
+                        <button type="button" class="btn btn-sm btn-primary w-100" data-action="admin-lifecycle-transition-save">
+                            Applica transizione
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'admin/modals/character-lifecycle.twig' %}
+

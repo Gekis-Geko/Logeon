@@ -1,0 +1,72 @@
+<div class="modal fade" id="admin-currencies-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Valuta</h4>
+                <h6 class="text-center text-muted">Configura nome, codice, simbolo e disponibilita.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-currencies-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Codice</label>
+                        <input type="text" class="form-control text-uppercase" name="code" maxlength="20" required>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Simbolo</label>
+                        <input type="text" class="form-control" name="symbol" maxlength="10" placeholder="Es. C">
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Icona</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="image" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="currency_image" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="currency_image">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="currency_image">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="currency_image">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Valuta predefinita</label>
+                        <select class="form-select" name="is_default">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Attiva</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-currencies-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-currencies-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

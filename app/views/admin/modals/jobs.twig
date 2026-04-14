@@ -1,0 +1,91 @@
+<div class="modal fade" id="admin-jobs-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Lavoro</h4>
+                <h6 class="text-center text-muted">Configura nome, ricompense e requisiti del lavoro.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-jobs-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attivo</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-9">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="3" maxlength="2000"></textarea>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Icona <span class="text-muted small">(mostrata nel profilo)</span></label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control mb-1" name="icon" maxlength="255" placeholder="https://...">
+                                <img data-role="admin-jobs-icon-preview" data-img-preview src="" alt="" width="32" height="32" style="object-fit:contain;display:none;">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="job_icon" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="job_icon">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="job_icon">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="job_icon">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 position-relative">
+                        <label class="form-label">Luogo (opzionale)</label>
+                        <input type="text"
+                               class="form-control"
+                               name="location_label"
+                               maxlength="120"
+                               autocomplete="off"
+                               placeholder="Cerca luogo e seleziona...">
+                        <input type="hidden" name="location_id" value="">
+                        <div class="list-group mt-1 position-absolute w-100" style="z-index:100;display:none" data-role="admin-jobs-location-suggestions"></div>
+                    </div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stato sociale minimo</label>
+                        <select class="form-select" name="min_socialstatus_id">
+                            <option value="">Nessuno</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Paga base</label>
+                        <input type="number" class="form-control" name="base_pay" min="0" value="0">
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Incarichi al giorno</label>
+                        <input type="number" class="form-control" name="daily_tasks" min="1" max="20" value="2">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-jobs-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-jobs-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

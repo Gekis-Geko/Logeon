@@ -1,0 +1,247 @@
+<div class="modal fade" id="admin-characters-profile-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Scheda personaggio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <div class="d-none py-4 text-center text-muted" data-role="admin-characters-profile-loading">Caricamento scheda...</div>
+
+                <div data-role="admin-characters-profile-content">
+                    <div class="row g-3">
+                        <div class="col-12 col-xl-4">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <div class="text-center mb-3">
+                                        <img id="admin-characters-profile-avatar" src="/assets/imgs/defaults-images/default-profile.png" alt="" class="img-fluid rounded border" style="max-height: 280px;">
+                                    </div>
+                                    <h4 class="mb-1" data-role="admin-characters-profile-name">-</h4>
+                                    <div class="small text-muted mb-2">Proprietario: <span data-role="admin-characters-profile-owner">-</span></div>
+                                    <div class="d-flex flex-wrap gap-2 mb-3">
+                                        <span data-role="admin-characters-profile-visibility"></span>
+                                        <span data-role="admin-characters-profile-online"></span>
+                                    </div>
+                                    <ul class="list-group">
+                                        <li class="list-group-item d-flex justify-content-between"><span>Posizione</span><b data-role="admin-characters-profile-position">-</b></li>
+                                        <li class="list-group-item d-flex justify-content-between"><span>Creato il</span><b data-role="admin-characters-profile-created">-</b></li>
+                                        <li class="list-group-item d-flex justify-content-between"><span>Ultimo accesso</span><b data-role="admin-characters-profile-last-signin">-</b></li>
+                                        <li class="list-group-item d-flex justify-content-between"><span>Ultima attivita</span><b data-role="admin-characters-profile-last-seed">-</b></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-xl-8">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">Statistiche principali</div>
+                                        <div class="card-body">
+                                            <div class="row row-cols-2 row-cols-md-3 g-2">
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Rank</small><b data-role="admin-characters-profile-rank">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Esperienza</small><b data-role="admin-characters-profile-exp">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Salute</small><b data-role="admin-characters-profile-health">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Fama</small><b data-role="admin-characters-profile-fame">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Portafoglio</small><b data-role="admin-characters-profile-money">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Banca</small><b data-role="admin-characters-profile-bank">-</b></div></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">Dettagli fisici</div>
+                                        <div class="card-body">
+                                            <div class="row row-cols-2 row-cols-md-3 g-2">
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Genere</small><b data-role="admin-characters-profile-gender">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Altezza</small><b data-role="admin-characters-profile-height">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Peso</small><b data-role="admin-characters-profile-weight">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Occhi</small><b data-role="admin-characters-profile-eyes">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Capelli</small><b data-role="admin-characters-profile-hair">-</b></div></div>
+                                                <div class="col"><div class="border rounded p-2"><small class="text-muted d-block">Pelle</small><b data-role="admin-characters-profile-skin">-</b></div></div>
+                                            </div>
+                                            <div class="mt-3">
+                                                <small class="text-muted d-block">Segni particolari</small>
+                                                <div class="border rounded p-2" data-role="admin-characters-profile-signs">-</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">Descrizione e storia</div>
+                                        <div class="card-body">
+                                            <small class="text-muted d-block mb-1">Descrizione fisica</small>
+                                            <div class="border rounded p-2 mb-3" data-role="admin-characters-profile-body">-</div>
+                                            <small class="text-muted d-block mb-1">Carattere</small>
+                                            <div class="border rounded p-2 mb-3" data-role="admin-characters-profile-temper">-</div>
+                                            <small class="text-muted d-block mb-1">Background</small>
+                                            <div class="border rounded p-2 mb-3" data-role="admin-characters-profile-story">-</div>
+                                            <small class="text-muted d-block mb-1">Note del master</small>
+                                            <div class="border rounded p-2" data-role="admin-characters-profile-master-notes">-</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-characters-edit-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifica personaggio: <span data-role="admin-edit-char-name">-</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="admin-edit-char-id" value="">
+
+                <ul class="nav nav-tabs mb-3" id="admin-edit-tabs">
+                    <li class="nav-item"><button class="nav-link active" data-action="admin-edit-tab" data-tab="identity">Identità fisica</button></li>
+                    <li class="nav-item"><button class="nav-link" data-action="admin-edit-tab" data-tab="narrative">Narrativa</button></li>
+                    <li class="nav-item"><button class="nav-link" data-action="admin-edit-tab" data-tab="stats">Statistiche</button></li>
+                    <li class="nav-item"><button class="nav-link" data-action="admin-edit-tab" data-tab="economy">Economia</button></li>
+                    <li class="nav-item"><button class="nav-link" data-action="admin-edit-tab" data-tab="notes">Note master</button></li>
+                    <li class="nav-item"><button class="nav-link d-none" data-action="admin-edit-tab" data-tab="archetypes" data-role="admin-edit-tab-archetypes">Archetipi</button></li>
+                </ul>
+
+                {# Tab: Identità fisica #}
+                <div id="admin-edit-panel-identity">
+                    <div class="row g-3">
+                        <div class="col-md-6"><label class="form-label">Cognome</label><input type="text" class="form-control" name="ae_surname" maxlength="30"></div>
+                        <div class="col-md-6"><label class="form-label">Presta-volto</label><input type="text" class="form-control" name="ae_loanface" maxlength="255"></div>
+                        <div class="col-md-3"><label class="form-label">Altezza (m)</label><input type="number" class="form-control" name="ae_height" step="0.01" min="0.5" max="3.0"></div>
+                        <div class="col-md-3"><label class="form-label">Peso (kg)</label><input type="number" class="form-control" name="ae_weight" step="1" min="20" max="500"></div>
+                        <div class="col-md-2"><label class="form-label">Occhi</label><input type="text" class="form-control" name="ae_eyes" maxlength="80"></div>
+                        <div class="col-md-2"><label class="form-label">Capelli</label><input type="text" class="form-control" name="ae_hair" maxlength="80"></div>
+                        <div class="col-md-2"><label class="form-label">Pelle</label><input type="text" class="form-control" name="ae_skin" maxlength="80"></div>
+                        <div class="col-12"><label class="form-label">Segni particolari</label><input type="text" class="form-control" name="ae_particular_signs" maxlength="255"></div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary" data-action="admin-edit-save-identity">Salva identità</button>
+                    </div>
+                </div>
+
+                {# Tab: Narrativa #}
+                <div id="admin-edit-panel-narrative" style="display:none;">
+                    <div class="row g-3">
+                        <div class="col-md-6"><label class="form-label">Descrizione fisica</label><textarea class="form-control" name="ae_description_body" rows="5"></textarea></div>
+                        <div class="col-md-6"><label class="form-label">Descrizione caratteriale</label><textarea class="form-control" name="ae_description_temper" rows="5"></textarea></div>
+                        <div class="col-12"><label class="form-label">Storia</label><textarea class="form-control" name="ae_background_story" rows="6"></textarea></div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary" data-action="admin-edit-save-narrative">Salva narrativa</button>
+                    </div>
+                </div>
+
+                {# Tab: Statistiche #}
+                <div id="admin-edit-panel-stats" style="display:none;">
+                    <div class="row g-3">
+                        <div class="col-md-4"><label class="form-label">Salute attuale</label><input type="number" class="form-control" name="ae_health" step="1" min="0"></div>
+                        <div class="col-md-4"><label class="form-label">Salute massima</label><input type="number" class="form-control" name="ae_health_max" step="0.01" min="0"></div>
+                        <div class="col-md-4"><label class="form-label">Rank</label><input type="number" class="form-control" name="ae_rank" step="1" min="1"></div>
+                        <div class="col-md-6"><label class="form-label">Esperienza (delta ±)</label><input type="number" class="form-control" name="ae_experience_delta" step="0.01" placeholder="es. 50 oppure -10"></div>
+                        <div class="col-md-6"><label class="form-label">Motivazione EXP</label><input type="text" class="form-control" name="ae_experience_reason" maxlength="255" placeholder="Motivazione (obbligatoria per delta ≠ 0)"></div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary" data-action="admin-edit-save-stats">Salva statistiche</button>
+                    </div>
+                </div>
+
+                {# Tab: Economia #}
+                <div id="admin-edit-panel-economy" style="display:none;">
+                    <div class="row g-3">
+                        <div class="col-md-4"><label class="form-label">Portafoglio (delta ±)</label><input type="number" class="form-control" name="ae_money_delta" step="1" placeholder="es. 100 oppure -50"></div>
+                        <div class="col-md-4"><label class="form-label">Banca (delta ±)</label><input type="number" class="form-control" name="ae_bank_delta" step="1" placeholder="es. 500 oppure -200"></div>
+                        <div class="col-md-4"><label class="form-label">Fama (imposta a)</label><input type="number" class="form-control" name="ae_fame_set" step="0.01" min="0" placeholder="Lascia vuoto per non cambiare"></div>
+                        <div class="col-md-6">
+                            <label class="form-label">Stato sociale</label>
+                            <select class="form-select" name="ae_social_status_id">
+                                <option value="">Non cambiare</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary" data-action="admin-edit-save-economy">Salva economia</button>
+                    </div>
+                </div>
+
+                {# Tab: Note master #}
+                <div id="admin-edit-panel-notes" style="display:none;">
+                    <div class="mb-3">
+                        <label class="form-label">Note del master</label>
+                        <textarea class="form-control" name="ae_mod_status" rows="8"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary" data-action="admin-edit-save-notes">Salva note</button>
+                    </div>
+                </div>
+
+                {# Tab: Archetipi (shown only when archetypes_enabled = 1) #}
+                <div id="admin-edit-panel-archetypes" style="display:none;">
+                    <p class="text-muted small mb-3" data-role="admin-edit-archetypes-hint"></p>
+                    <div class="row g-2 mb-3" data-role="admin-edit-archetypes-list"></div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary" data-action="admin-edit-save-archetypes">Salva archetipi</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-characters-experience-logs-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Log esperienza - <span data-role="admin-characters-log-character-name">-</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <div class="small text-muted mb-2 d-none" data-role="admin-characters-experience-loading">Caricamento...</div>
+                <div id="admin-characters-experience-grid"></div>
+                <div class="text-muted mt-2 d-none" data-role="admin-characters-experience-empty">Nessun log esperienza disponibile.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-characters-economy-logs-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Log economia - <span data-role="admin-characters-log-character-name">-</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <div class="small text-muted mb-2 d-none" data-role="admin-characters-economy-loading">Caricamento...</div>
+                <div id="admin-characters-economy-grid"></div>
+                <div class="text-muted mt-2 d-none" data-role="admin-characters-economy-empty">Nessun log economico disponibile.</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-characters-session-logs-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Log accessi - <span data-role="admin-characters-log-character-name">-</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <div class="small text-muted mb-2 d-none" data-role="admin-characters-session-loading">Caricamento...</div>
+                <div id="admin-characters-session-grid"></div>
+                <div class="text-muted mt-2 d-none" data-role="admin-characters-session-empty">Nessun log accessi disponibile.</div>
+            </div>
+        </div>
+    </div>
+</div>

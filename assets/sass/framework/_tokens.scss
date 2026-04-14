@@ -1,0 +1,47 @@
+:root,
+[data-bs-theme="dark"] {
+    --lf-bg: #0B0D12;
+    --lf-surface: #121827;
+    --lf-surface-alt: #0F1420;
+    --lf-border: #263046;
+    --lf-text-primary: #EAF0FF;
+    --lf-text-secondary: #A9B4CC;
+    --lf-muted: #7E8AA6;
+
+    --lf-primary: #8B5CF6;
+    --lf-primary-hover: #7C3AED;
+    --lf-secondary: #121827;
+    --lf-accent-magenta: #D946EF;
+    --lf-accent-warm: #F97316;
+    --lf-accent-warm-hover: #EA580C;
+
+    --lf-success: #22C55E;
+    --lf-warning: #F59E0B;
+    --lf-danger: #EF4444;
+    --lf-info: #38BDF8;
+
+    --lf-radius: 12px;
+    --lf-focus-ring: 0 0 0 0.2rem rgba(139, 92, 246, 0.25);
+    --lf-transition-fast: 0.16s ease-in-out;
+
+    /* Backward compatibility aliases */
+    --swd-bg: var(--lf-bg);
+    --swd-surface: var(--lf-surface);
+    --swd-surface-soft: var(--lf-surface-alt);
+    --swd-surface-alt: var(--lf-surface-alt);
+    --swd-border: var(--lf-border);
+    --swd-border-strong: var(--lf-border);
+    --swd-text: var(--lf-text-primary);
+    --swd-muted: var(--lf-muted);
+    --swd-accent: var(--lf-primary);
+    --swd-accent-soft: rgba(139, 92, 246, 0.14);
+    --swd-info-soft: rgba(56, 189, 248, 0.16);
+    --swd-success-soft: rgba(34, 197, 94, 0.16);
+    --swd-warning-soft: rgba(245, 158, 11, 0.16);
+    --swd-danger-soft: rgba(239, 68, 68, 0.16);
+    --swd-radius: var(--lf-radius);
+    --swd-shadow: none;
+    --swd-shadow-soft: none;
+    --swd-focus-ring: var(--lf-focus-ring);
+    --swd-transition-fast: var(--lf-transition-fast);
+}

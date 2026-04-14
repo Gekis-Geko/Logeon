@@ -1,0 +1,38 @@
+<div class="modal fade" id="admin-how-to-play-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Come giocare</h4>
+                <hr class="my-4" />
+
+                <form id="admin-how-to-play-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Passo <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="step" min="1" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Sottopasso <span class="text-muted small">(0 = principale)</span></label>
+                        <input type="number" class="form-control" name="substep" min="0" value="0">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Titolo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="title" maxlength="255" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Contenuto <span class="text-muted small">(HTML supportato)</span></label>
+                        <textarea class="form-control" name="body" rows="12" placeholder="Contenuto del passo..."></textarea>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-how-to-play-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-how-to-play-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

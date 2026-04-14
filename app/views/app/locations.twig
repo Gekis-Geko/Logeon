@@ -1,0 +1,46 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+    <section id="locations-page" class="row ui-page" data-map-id="{{ map_id|e('html_attr') }}">
+        <header class="d-flex justify-content-between align-items-center">
+            <div>
+                <h4 class="display-6" name="map_name"></h4>
+                <h6 id="map-neighbors"></h6>
+            </div>
+            <div>
+                <a class="btn btn-sm btn-outline-secondary" href="/game/maps/"><i class="bi bi-arrow-left-short"></i> Torna alle mappe</a>
+            </div>
+        </header>
+        <article class="col-md-12">
+            <div id="map-visual" class="d-none">
+                <div class="position-relative w-100">
+                    <img id="map-visual-image" class="img-fluid w-100" alt="">
+                    <div id="map-visual-pins" class="position-absolute top-0 start-0 w-100 h-100"></div>
+                </div>
+            </div>
+            <div id="locations-page-body" class="row"></div>
+        </article>
+    </section>
+</div>
+
+<template name="template_locations_list">
+    <article class="col-md-4">
+        <div class="card">
+            <img class="card-img-top">
+            <div class="card-body">
+                <h5 class="card-title"></h5>
+                <p class="card-text"></p>
+                <div class="location-meta small text-muted d-flex justify-content-between align-items-center mt-2">
+                    <span class="location-capacity"></span>
+                    <span class="badge bg-warning text-dark d-none location-badge-full">Piena</span>
+                </div>
+                <div class="text-end">
+                    <a href="#" class="btn btn-primary location-link">Entra <i class="bi bi-arrow-right-short"></i></a>
+                </div>
+            </div>
+        </div>
+    </article>
+</template>
+{% endblock %}
+

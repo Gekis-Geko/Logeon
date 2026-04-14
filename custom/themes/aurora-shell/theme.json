@@ -1,0 +1,30 @@
+{
+  "id": "aurora-shell",
+  "name": "Aurora Shell",
+  "version": "1.0.0",
+  "compat": {
+    "core": ">=0.1.0 <2.0.0"
+  },
+  "shell": {
+    "public_layout": "layouts/theme-public.twig",
+    "game_layout": "app/layouts/theme-game.twig"
+  },
+  "assets": {
+    "public_css": [
+      "css/public.css"
+    ],
+    "public_js": [
+      "js/public.js"
+    ],
+    "game_css": [
+      "css/game.css"
+    ],
+    "game_js": [
+      "js/game.js"
+    ]
+  },
+  "features": {
+    "allow_public_overrides": true,
+    "allow_game_overrides": true
+  }
+}

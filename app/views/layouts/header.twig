@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="{{ APP.lang }}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="shortcut icon" href="{{ APP.brand_logo_icon }}" type="image/x-icon">
+    <meta name="title" content="{{ APP.name }}">
+    <meta name="description" content="{{ APP.description }}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <meta name="app-config-availability-idle-minutes" content="{{ (session('config_availability_idle_minutes') is not empty) ? session('config_availability_idle_minutes') : 20 }}">
+    <meta name="app-config-onlines-auto-toast" content="{{ (session('config_onlines_auto_toast') is not empty) ? session('config_onlines_auto_toast') : 0 }}">
+    <meta name="app-config-maps-view-mode" content="{{ (session('config_maps_view_mode') is not empty) ? session('config_maps_view_mode') : 'cards' }}">
+    <script id="app-config-chat-commands" type="application/json">{{ CONFIG['chat_commands']|json_encode|raw }}</script>
+    {% set pilot_bundle_version = APP.frontend.pilot_bundle_version|default('20260403') %}
+
+    <title>{{ APP.name }}</title>
+
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-5.3.8/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/assets/vendor/bootstrap-icons-1.13.1/bootstrap-icons.css">
+    <link rel="stylesheet" href="/assets/js/plugins/summernote-0.8.18/summernote-lite.min.css">
+    <link rel="stylesheet" href="/assets/css/framework.css"></link>
+    <link rel="stylesheet" href="/assets/css/style.css"></link>
+    {% if THEME_CONTEXT == 'public' %}
+    {{ theme_assets('public_css')|raw }}
+    {% elseif THEME_CONTEXT == 'game' %}
+    {{ theme_assets('game_css')|raw }}
+    {% endif %}
+
+    <script type="text/javascript" src="/assets/js/jquery/jquery.min.js"></script>
+
+    <script type="text/javascript" src="/assets/js/plugins/popperjs-2.11.7/popperjs.min.js"></script>
+    <script type="text/javascript" src="/assets/vendor/bootstrap-5.3.8/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/assets/js/plugins/summernote-0.8.18/summernote-lite.min.js"></script>
+    <script type="text/javascript" src="/assets/js/plugins/summernote-0.8.18/lang/summernote-it-IT.min.js"></script>
+
+    <script type="text/javascript" src="/assets/js/dist/runtime-core.bundle.js?v={{ pilot_bundle_version }}"></script>
+</head>
+
+<body>
+
+

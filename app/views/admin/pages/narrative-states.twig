@@ -1,0 +1,70 @@
+<div data-admin-page="narrative-states">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+        <header>
+            <h4 class="display-6 mb-1">Stati narrativi</h4>
+            <h6 class="mb-0">Catalogo stati, conflitti e visibilita per il runtime narrativo.</h6>
+        </header>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-narrative-states-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-narrative-states-create">
+                <i class="bi bi-plus-circle me-1"></i>Nuovo stato
+            </button>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row g-2 align-items-end">
+                <div class="col-auto">
+                    <label class="form-label mb-1" for="admin-narrative-states-filter-search">Ricerca</label>
+                    <input type="search" class="form-control form-control-sm" id="admin-narrative-states-filter-search" placeholder="Codice, nome, descrizione...">
+                </div>
+                <div class="col-auto">
+                    <label class="form-label mb-1" for="admin-narrative-states-filter-category">Categoria</label>
+                    <input type="text" class="form-control form-control-sm" id="admin-narrative-states-filter-category" placeholder="Es. postura">
+                </div>
+                <div class="col-auto">
+                    <label class="form-label mb-1" for="admin-narrative-states-filter-scope">Ambito</label>
+                    <select id="admin-narrative-states-filter-scope" class="form-select form-select-sm">
+                        <option value="">Tutti</option>
+                        <option value="character">Personaggio</option>
+                        <option value="scene">Scena</option>
+                        <option value="both">Entrambi</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="form-label mb-1" for="admin-narrative-states-filter-stack-mode">Accumulo</label>
+                    <select id="admin-narrative-states-filter-stack-mode" class="form-select form-select-sm">
+                        <option value="">Tutti</option>
+                        <option value="replace">Sostituisci</option>
+                        <option value="stack">Accumula</option>
+                        <option value="refresh">Aggiorna durata</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="form-label mb-1" for="admin-narrative-states-filter-visible">Visibilita</label>
+                    <select id="admin-narrative-states-filter-visible" class="form-select form-select-sm">
+                        <option value="">Tutte</option>
+                        <option value="1">Visibili ai player</option>
+                        <option value="0">Nascoste ai player</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <label class="form-label mb-1 d-block">Solo attivi</label>
+                    <input type="hidden" id="admin-narrative-states-include-inactive" value="0">
+                </div>
+                <div class="col-auto d-flex align-items-end">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-narrative-states-filters-reset">
+                        <i class="bi bi-x-circle me-1"></i>Reset 
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="grid-admin-narrative-states"></div>
+
+    {% include 'admin/modals/narrative-states.twig' %}
+</div>

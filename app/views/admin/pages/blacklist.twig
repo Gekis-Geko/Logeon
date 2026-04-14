@@ -1,0 +1,46 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <header class="mt-3">
+        <h4 class="display-6">Blacklist</h4>
+        <h6>Gestione ban account con durata temporanea o permanente</h6>
+    </header>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-blacklist-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-action="admin-blacklist-create">
+            <i class="bi bi-plus-lg me-1"></i>Nuovo ban
+        </button>
+    </div>
+</div>
+
+<div class="card card-body mb-3">
+    <form id="admin-blacklist-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+        <div class="col-auto">
+            <label for="admin-blacklist-filter-email" class="form-label mb-1">Email utente</label>
+            <input id="admin-blacklist-filter-email"
+                    name="email"
+                    type="text"
+                    class="form-control form-control-sm"
+                    placeholder="Cerca per email account">
+        </div>
+        <div class="col-auto">
+            <label for="admin-blacklist-filter-status" class="form-label mb-1">Stato</label>
+            <select id="admin-blacklist-filter-status" name="status" class="form-select form-select-sm">
+                <option value="all">Tutti</option>
+                <option value="active">Attivi</option>
+                <option value="expired">Scaduti</option>
+                <option value="permanent">Permanenti</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <label class="form-label mb-1 d-block">Solo attivi adesso</label>
+            <input type="hidden" id="admin-blacklist-filter-only-active" name="only_active_now" value="1">
+        </div>
+        <div class="d-flex gap-2 col-auto">
+            <a class="btn btn-sm btn-outline-secondary" href="/admin/blacklist">Reset</a>
+        </div>
+    </form>
+</div>
+
+<div id="grid-admin-blacklist"></div>
+{% include 'admin/modals/blacklist.twig' %}

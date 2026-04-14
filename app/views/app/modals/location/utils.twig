@@ -1,0 +1,80 @@
+<div class="modal fade" id="location-utils-modal" tabindex="-1" aria-labelledby="location-utils-modal-label" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="location-utils-modal-label">Pannello utilita</h4>
+                <h6 class="text-center text-muted">Consultazione rapida del personaggio e strumenti di supporto.</h6>
+                <hr class="my-4" />
+                <ul class="nav nav-tabs mb-3" id="utilsLocationTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="true">
+                            <i class="bi bi-person-rolodex" data-bs-toggle="tooltip" data-bs-title="Informazioni"></i> Informazioni
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="bag-tab" data-bs-toggle="tab" data-bs-target="#bag-tab-pane" type="button" role="tab" aria-controls="bag-tab-pane" aria-selected="false">
+                            <i class="bi bi-handbag-fill" data-bs-toggle="tooltip" data-bs-title="Inventario"></i> Inventario
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a class="nav-link" id="equip-tab" data-bs-toggle="tab" data-bs-target="#equip-tab-pane" type="button" role="tab" aria-controls="equip-tab-pane" aria-selected="false">
+                            <i class="bi bi-shield-shaded" data-bs-toggle="tooltip" data-bs-title="Equipaggiamento"></i> Equipaggiamento
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="utilsLocationTabContent">
+                    <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+                        <div id="location-profile-loading" class="text-muted small py-2 text-start">Caricamento profilo...</div>
+                        <div id="location-profile-content" class="d-none">
+
+                            <div class="card card-body mb-3">
+                                <ul id="location-profile-facts" class="list-group list-group-flush"></ul>
+                            </div>
+
+                            <div class="card card-body mb-3 d-none" id="location-profile-signs-wrap">
+                                <h6 class="mb-2">Segni particolari</h6>
+                                <p id="location-profile-signs-text" class="small mb-0"></p>
+                            </div>
+
+                            <div class="card card-body mb-3">
+                                <h6 class="mb-2">Ruolo e appartenenza</h6>
+                                <ul id="location-profile-role-list" class="list-group list-group-flush"></ul>
+                            </div>
+
+                            <div class="card card-body mb-3 d-none" id="location-utils-attributes-wrap">
+                                <h6 class="mb-2">Attributi</h6>
+                                <div class="small d-grid gap-1" id="location-utils-attributes-list"></div>
+                            </div>
+
+                            {{ module_slot('game.location.character_abilities') }}
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="bag-tab-pane" role="tabpanel" aria-labelledby="bag-tab" tabindex="2">
+                        <ul class="nav nav-tabs mb-3" id="location-bag-categories" role="tablist"></ul>
+                        <div id="location-bag-grid"></div>
+                    </div>
+
+                    <div class="tab-pane fade" id="equip-tab-pane" role="tabpanel" aria-labelledby="equip-tab" tabindex="3">
+                        <div class="row g-2">
+                            <div class="col-12 col-xl-5">
+                                <div class="card card-body p-2">
+                                    <div class="equip-slots-grid" id="location-equip-slots-grid"></div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-7">
+                                <div id="location-equip-details-grid"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

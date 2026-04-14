@@ -1,0 +1,68 @@
+<div data-admin-page="themes">
+    <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+        <header>
+            <h4 class="display-6 mb-1">Temi</h4>
+            <h6 class="mb-0">Gestione temi disponibili in <code>custom/themes</code> con attivazione guidata.</h6>
+        </header>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-themes-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+        </div>
+    </div>
+
+    <div class="card card-body mb-3">
+        <form id="admin-themes-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label for="admin-themes-filter-query" class="form-label mb-1">Ricerca</label>
+                <input id="admin-themes-filter-query" type="search" class="form-control form-control-sm" placeholder="ID, nome, autore..." />
+            </div>
+            <div class="col-auto">
+                <label for="admin-themes-filter-status" class="form-label mb-1">Stato</label>
+                <select id="admin-themes-filter-status" class="form-select form-select-sm">
+                    <option value="all" selected>Tutti</option>
+                    <option value="active">Attivo</option>
+                    <option value="inactive">Inattivo</option>
+                    <option value="invalid">Con errori</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-themes-reset-filters">Reset</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="row g-2 mb-3" data-role="admin-themes-summary">
+        <div class="col-6 col-md-3 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body py-2">
+                    <div class="small text-muted">Attivi</div>
+                    <div class="h5 mb-0" data-role="themes-summary-active">0</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body py-2">
+                    <div class="small text-muted">Inattivi</div>
+                    <div class="h5 mb-0" data-role="themes-summary-inactive">0</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3 col-xl-2">
+            <div class="card h-100">
+                <div class="card-body py-2">
+                    <div class="small text-muted">Con errori</div>
+                    <div class="h5 mb-0 text-warning" data-role="themes-summary-invalid">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-secondary py-2 small">
+        Solo un tema puo essere attivo alla volta. La disattivazione ripristina il layout core.
+    </div>
+
+    <div id="grid-admin-themes"></div>
+</div>
+

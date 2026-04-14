@@ -1,0 +1,121 @@
+{% set archetypes_enabled_nav = archetypes_enabled_nav is defined ? archetypes_enabled_nav : archetypes_enabled() %}
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><span class="bi bi-person"></span> Personaggio</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+            <li class="nav-item" data-ref="profile"><a class="nav-link" href="/game/profile"><i class="bi bi-person-vcard"></i> Scheda personaggio</a></li>
+            <li class="nav-item"><hr></li>
+            <li class="nav-item"><a class="nav-link" href="/game/bag"><i class="bi bi-backpack2"></i> Inventario</a></li>
+            <li class="nav-item"><a class="nav-link" href="/game/equips"><i class="bi bi-luggage"></i> Equipaggiamento</a></li>
+            {% for menu_entry in profile_offcanvas_module_entries %}
+            <li class="nav-item">
+                <a class="nav-link{% if menu_entry.class is not empty %} {{ menu_entry.class }}{% endif %}" href="{{ menu_entry.href }}"{% if menu_entry.target is not empty %} target="{{ menu_entry.target|e('html_attr') }}"{% endif %}{% if menu_entry.rel is not empty %} rel="{{ menu_entry.rel|e('html_attr') }}"{% endif %}>
+                    {% if menu_entry.icon is not empty %}<span class="{{ menu_entry.icon|e('html_attr') }} me-1"></span>{% endif %}{{ menu_entry.label }}
+                </a>
+            </li>
+            {% endfor %}
+            <li class="nav-item"><hr></li>
+            <li class="nav-item"><a class="nav-link" href="/game/profile/edit"><i class="bi bi-person-gear"></i> Modifica</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMobileMenu" aria-labelledby="offcanvasMobileMenuLabel">
+    <div class="offcanvas-header">
+        <a class="d-flex align-items-center gap-2 text-decoration-none" href="/">
+            <img src="{{ APP.brand_logo_icon }}" alt="{{ APP.name }}" height="32">
+            <img src="{{ APP.brand_logo_wordmark }}" alt="{{ APP.name }}" height="24">
+        </a>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item" data-ref="forum">
+                <a class="nav-link" href="/game/forum">
+                    <span class="bi bi-chat-left-quote"></span>
+                    Forum
+                </a>
+            </li>
+            <li class="nav-item" data-ref="messages">
+                <a class="nav-link" href="#" data-action="open-inbox" data-requires-auth>
+                    <span class="position-relative d-inline-block">
+                        <span class="bi bi-envelope"></span>
+                        <span class="position-absolute mt-1 start-100 translate-middle badge rounded-pill bg-danger d-none" data-feed-badge="messages">0</span>
+                    </span>
+                    Messaggi
+                </a>
+            </li>
+            <li><hr/></li>
+            <li class="nav-item">
+                <a class="nav-link" href="/game/shop">
+                    <span class="bi bi-shop"></span> Negozio
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/game/bank">
+                    <span class="bi bi-bank2"></span> Banca
+                </a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="bi bi-diagram-3"></span> Organizzazioni
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/game/jobs" data-ref="organizations"><span class="bi bi-briefcase me-2"></span> Lavori</a></li>
+                    <li><a class="dropdown-item" href="/game/guilds" data-ref="organizations"><span class="bi bi-buildings me-2"></span> Gilde</a></li>
+                    <li><a class="dropdown-item" href="/game/factions" data-ref="organizations"><span class="bi bi-shield-shaded me-2"></span> Fazioni</a></li>
+                </ul>
+            </li>
+            <li class="nav-item" data-ref="quests">
+                <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasQuests">
+                    <span class="bi bi-journal-text"></span> Quest
+                    <span class="badge rounded-pill text-bg-info ms-2 d-none" data-feed-badge="quests">0</span>
+                </a>
+            </li>
+            <li><hr/></li>
+            <li class="nav-item" data-ref="news">
+                <a class="nav-link" href="#" data-action="open-news">
+                    <span class="bi bi-megaphone"></span>
+                    Novita
+                    <span class="badge rounded-pill text-bg-warning ms-2 d-none" data-feed-badge="news">0</span>
+                </a>
+            </li>
+            <li class="nav-item" data-ref="narrative-events">
+                <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNarrativeEvents">
+                    <span class="bi bi-calendar-event"></span> Attivita recenti
+                    <span class="badge rounded-pill text-bg-primary ms-2 d-none" data-feed-badge="narrative-events">0</span>
+                </a>
+            </li>
+            <li class="nav-item" data-ref="system-events">
+                <a class="nav-link" href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSystemEvents">
+                    <span class="bi bi-calendar2-week"></span> Eventi
+                    <span class="badge rounded-pill text-bg-danger ms-2 d-none" data-feed-badge="system-events">0</span>
+                </a>
+            </li>
+            <li><hr/></li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#!" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="bi bi-info-lg"></span> Informazioni
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#" data-action="open-rules">Regolamento</a></li>
+                    <li><a class="dropdown-item" href="#" data-action="open-storyboards">Ambientazione</a></li>
+                    <li><a class="dropdown-item" href="#" data-action="open-how-to-play">Come giocare</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/game/anagrafica">Anagrafica</a></li>
+                    {% if archetypes_enabled_nav %}
+                    <li><a class="dropdown-item" href="/game/archetypes">Archetipi</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/game/settings">
+                    <span class="bi bi-gear"></span> Impostazioni
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

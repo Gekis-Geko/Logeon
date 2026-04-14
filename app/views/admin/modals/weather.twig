@@ -1,0 +1,496 @@
+<div class="modal fade" id="admin-climate-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-climate-modal-title">Area climatica</h4>
+                <h6 class="text-center text-muted">Definisce le condizioni meteo predefinite per i luoghi assegnati.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-climate-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Codice <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="code" maxlength="50" required placeholder="es. northern-mountains">
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required placeholder="es. Montagne del Nord">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="2" placeholder="Descrizione opzionale dell'area"></textarea>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Condizione meteo</label>
+                        <select class="form-select" name="weather_key" id="admin-climate-weather-key">
+                            <option value="">Eredita (automatico)</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Temperatura (&deg;C)</label>
+                        <input type="number" class="form-control" name="degrees" min="-80" max="80" step="1" placeholder="Eredita (automatico)">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Fase lunare</label>
+                        <select class="form-select" name="moon_phase" id="admin-climate-moon-phase">
+                            <option value="">Eredita (automatico)</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attiva</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-climate-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-climate-delete-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body text-center py-4">
+                <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h5 class="mb-2">Elimina area climatica</h5>
+                <p class="text-muted small mb-4">I luoghi assegnati perderanno l'associazione. L'operazione è irreversibile.</p>
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-danger" data-action="admin-climate-delete-confirm">Elimina</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-weather-type-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-weather-type-modal-title">Tipo meteo</h4>
+                <h6 class="text-center text-muted">Definisce una condizione meteo osservabile nel gioco.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-weather-type-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required placeholder="es. Nebbia fitta">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Slug <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="slug" maxlength="80" required placeholder="es. fog-heavy">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Gruppo visivo</label>
+                        <select class="form-select" name="visual_group">
+                            <option value="">Nessuno</option>
+                            <option value="clear">Sereno</option>
+                            <option value="cloudy">Nuvoloso</option>
+                            <option value="rain">Pioggia</option>
+                            <option value="snow">Neve</option>
+                            <option value="storm">Tempesta</option>
+                            <option value="fog">Nebbia</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Ordine</label>
+                        <input type="number" class="form-control" name="sort_order" value="0" step="1">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attivo</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="2" placeholder="Descrizione opzionale"></textarea>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Precipitazione</label>
+                        <select class="form-select" name="is_precipitation">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Neve</label>
+                        <select class="form-select" name="is_snow">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tempesta</label>
+                        <select class="form-select" name="is_storm">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Riduce visibilità</label>
+                        <select class="form-select" name="reduces_visibility">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-weather-types-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-weather-season-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-weather-season-modal-title">Stagione</h4>
+                <h6 class="text-center text-muted">Definisce una stagione attiva nel sistema meteo.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-weather-season-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="100" required placeholder="es. Stagione secca">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Slug <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="slug" maxlength="80" required placeholder="es. dry-season">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Ordine</label>
+                        <input type="number" class="form-control" name="sort_order" value="0" step="1">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attiva</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Descrizione</label>
+                        <input type="text" class="form-control" name="description" maxlength="255" placeholder="Opzionale">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Inizio mese</label>
+                        <input type="number" class="form-control" name="starts_at_month" min="1" max="12" step="1" placeholder="1-12">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Inizio giorno</label>
+                        <input type="number" class="form-control" name="starts_at_day" min="1" max="31" step="1" placeholder="1-31">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Fine mese</label>
+                        <input type="number" class="form-control" name="ends_at_month" min="1" max="12" step="1" placeholder="1-12">
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <label class="form-label">Fine giorno</label>
+                        <input type="number" class="form-control" name="ends_at_day" min="1" max="31" step="1" placeholder="1-31">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-weather-seasons-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-weather-zone-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-weather-zone-modal-title">Zona climatica</h4>
+                <h6 class="text-center text-muted">Rappresenta il profilo climatico di un contesto geografico.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-weather-zone-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="120" required placeholder="es. Tundra boreale">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Slug <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="slug" maxlength="80" required placeholder="es. tundra-boreale">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Ordine</label>
+                        <input type="number" class="form-control" name="sort_order" value="0" step="1">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attiva</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="2" placeholder="Descrizione opzionale"></textarea>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-weather-zones-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-weather-profile-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-weather-profile-modal-title">Profilo stagionale</h4>
+                <h6 class="text-center text-muted">Definisce l'intervallo di temperatura e il meteo predefinito per una zona in una stagione.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-weather-profile-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Zona climatica <span class="text-danger">*</span></label>
+                        <select class="form-select" name="climate_zone_id" data-weather-zone-select required>
+                            <option value="">Seleziona zona</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Stagione <span class="text-danger">*</span></label>
+                        <select class="form-select" name="season_id" data-weather-season-select required>
+                            <option value="">Seleziona stagione</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Temp. min (&deg;C)</label>
+                        <input type="number" class="form-control" name="temperature_min" step="0.1" min="-80" max="80" placeholder="es. -5">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Temp. max (&deg;C)</label>
+                        <input type="number" class="form-control" name="temperature_max" step="0.1" min="-80" max="80" placeholder="es. 15">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Arrotondamento</label>
+                        <select class="form-select" name="temperature_round_mode">
+                            <option value="round">Standard</option>
+                            <option value="none">Nessuno</option>
+                            <option value="floor">Per difetto</option>
+                            <option value="ceil">Per eccesso</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Attivo</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Meteo predefinito</label>
+                        <select class="form-select" name="default_weather_type_id" data-weather-type-select>
+                            <option value="">Nessuno</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-weather-profiles-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-weather-profile-weights-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-weather-profile-weights-title">Pesi meteo profilo</h4>
+                <h6 class="text-center text-muted">Definisci la distribuzione ponderata dei tipi meteo per questo profilo.</h6>
+                <hr class="my-4" />
+
+                <input type="hidden" id="admin-weather-profile-weights-profile-id" value="">
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-profile-weight-add-row">
+                        <i class="bi bi-plus-lg me-1"></i>Aggiungi riga
+                    </button>
+                </div>
+                <div class="d-grid gap-2" data-weather-weights-list></div>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-weather-profile-weights-save">Salva pesi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-weather-assignment-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-weather-assignment-modal-title">Assegnazione climatica</h4>
+                <h6 class="text-center text-muted">Associa una zona climatica a un ambito geografico.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-weather-assignment-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Ambito <span class="text-danger">*</span></label>
+                        <select class="form-select" name="scope_type" required>
+                            <option value="world">Mondo</option>
+                            <option value="map">Mappa</option>
+                            <option value="location">Luogo</option>
+                            <option value="region">Regione</option>
+                            <option value="area">Area</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Elemento di riferimento <span class="text-danger">*</span></label>
+                        <input type="hidden" name="scope_id" value="">
+                        <input type="text" class="form-control" name="scope_label" autocomplete="off" placeholder="Cerca mondo, mappa, luogo o area...">
+                        <div class="list-group mt-1 d-none" data-role="admin-weather-assignment-scope-suggestions"></div>
+                        <div class="form-text">Campo guidato in base all'ambito selezionato.</div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Zona climatica <span class="text-danger">*</span></label>
+                        <select class="form-select" name="climate_zone_id" data-weather-zone-select required>
+                            <option value="">Seleziona zona</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Priorità</label>
+                        <input type="number" class="form-control" name="priority" value="0" step="1">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attiva</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-weather-assignments-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-weather-override-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-weather-override-modal-title">Forzatura meteo</h4>
+                <h6 class="text-center text-muted">Forza il meteo su un ambito con validità opzionale.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-weather-override-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Ambito <span class="text-danger">*</span></label>
+                        <select class="form-select" name="scope_type" required>
+                            <option value="world">Mondo</option>
+                            <option value="map">Mappa</option>
+                            <option value="location">Luogo</option>
+                            <option value="region">Regione</option>
+                            <option value="area">Area</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Elemento di riferimento <span class="text-danger">*</span></label>
+                        <input type="hidden" name="scope_id" value="">
+                        <input type="text" class="form-control" name="scope_label" autocomplete="off" placeholder="Cerca mondo, mappa, luogo o area...">
+                        <div class="list-group mt-1 d-none" data-role="admin-weather-override-scope-suggestions"></div>
+                        <div class="form-text">Campo guidato in base all'ambito selezionato.</div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Tipo meteo</label>
+                        <select class="form-select" name="weather_type_id" data-weather-type-select>
+                            <option value="">Nessuno</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Temperatura forzata (&deg;C)</label>
+                        <input type="number" class="form-control" name="temperature_override" step="0.1" min="-80" max="80" placeholder="Opzionale">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Inizio</label>
+                        <input type="datetime-local" class="form-control" name="starts_at">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Scadenza</label>
+                        <input type="datetime-local" class="form-control" name="expires_at">
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Motivo</label>
+                        <input type="text" class="form-control" name="reason" maxlength="500" placeholder="es. Tempesta narrativa in corso">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Attivo</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Sì</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-weather-overrides-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

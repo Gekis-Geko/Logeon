@@ -1,0 +1,119 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Meteo e Clima</h4>
+        <h6 class="mb-0">Panoramica operativa del sistema meteo e climatico.</h6>
+    </header>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <a href="/admin/weather-catalogs" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-list-ul me-1"></i>Cataloghi
+        </a>
+        <a href="/admin/weather-profiles" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-diagram-3 me-1"></i>Profili
+        </a>
+        <a href="/admin/weather-overrides" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-sliders me-1"></i>Forzature
+        </a>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-reload-all">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna tutto
+        </button>
+    </div>
+</div>
+
+<div class="mb-3 small text-muted">
+    <i class="bi bi-info-circle me-1"></i>
+    Gerarchia di risoluzione: <strong>forzatura staff</strong> &rarr; <strong>assegnazione climatica (ambito)</strong> &rarr; <strong>profilo zona/stagione</strong> &rarr; <strong>predefinito globale</strong>.
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-12 col-xl-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="mb-1">Cataloghi climatici</h5>
+                <p class="small text-muted mb-3">Tipi meteo, stagioni e zone climatiche base.</p>
+                <a href="/admin/weather-catalogs" class="btn btn-sm btn-primary">
+                    Apri cataloghi
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="mb-1">Profili e assegnazioni</h5>
+                <p class="small text-muted mb-3">Profili stagionali, pesi meteo e assegnazioni per ambito.</p>
+                <a href="/admin/weather-profiles" class="btn btn-sm btn-primary">
+                    Apri profili
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-xl-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="mb-1">Forzature e compatibilità</h5>
+                <p class="small text-muted mb-3">Forzature staff e gestione dati precedenti.</p>
+                <a href="/admin/weather-overrides" class="btn btn-sm btn-primary">
+                    Apri forzature
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex flex-wrap align-items-center justify-content-between gap-2">
+        <div>
+            <h5 class="mb-0">Forzatura per mondo</h5>
+            <p class="text-muted small mb-0">Forza meteo, temperatura e fase lunare a livello mondo (predefinito).</p>
+        </div>
+        <div class="d-flex gap-1">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-world-load">
+                <i class="bi bi-arrow-clockwise me-1"></i>Carica
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-weather-overrides-create">
+                <i class="bi bi-plus-lg me-1"></i>Nuova forzatura
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div id="admin-world-weather-form" class="row g-3">
+            <div class="col-auto">
+                <label class="form-label">Mondo</label>
+                <select class="form-select form-select-sm" id="admin-world-id">
+                    <option value="1">Mondo 1</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="form-label">Condizione meteo</label>
+                <select class="form-select form-select-sm" id="admin-world-weather-key">
+                    <option value="">Eredita (globale/automatico)</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="form-label">Temperatura (&deg;C)</label>
+                <input type="number" class="form-control form-control-sm" id="admin-world-degrees" min="-80" max="80" step="1" placeholder="Eredita (automatico)">
+            </div>
+            <div class="col-auto">
+                <label class="form-label">Fase lunare</label>
+                <select class="form-select form-select-sm" id="admin-world-moon-phase">
+                    <option value="">Eredita (globale/automatico)</option>
+                </select>
+            </div>
+            <div class="col-12 d-flex flex-wrap gap-2">
+                <button type="button" class="btn btn-sm btn-primary" data-action="admin-weather-world-save">Applica forzatura</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-weather-world-clear">Rimuovi forzatura</button>
+            </div>
+        </div>
+        <div id="admin-world-weather-state" class="small text-muted mt-3">
+            <span>Origine dati: <strong data-world-weather-scope>n/d</strong></span>
+            <span class="mx-2">|</span>
+            <span>Meteo: <strong data-world-weather-condition>n/d</strong></span>
+            <span class="mx-2">|</span>
+            <span>Temperatura: <strong data-world-weather-temp>n/d</strong></span>
+            <span class="mx-2">|</span>
+            <span>Luna: <strong data-world-weather-moon>n/d</strong></span>
+        </div>
+    </div>
+</div>
+
+{% include 'admin/modals/weather.twig' %}

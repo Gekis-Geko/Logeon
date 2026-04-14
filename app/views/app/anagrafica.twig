@@ -1,0 +1,127 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+    <section id="anagrafica-page"
+             class="row ui-page"
+             data-page="{{ page|default(1)|e('html_attr') }}"
+             data-results="{{ results|default(20)|e('html_attr') }}"
+             data-total-count="{{ total_count|default(0)|e('html_attr') }}"
+             data-search-query="{{ search_query|default('')|e('html_attr') }}">
+        <header class="mt-3">
+            <h4 class="display-6">Anagrafica personaggi</h4>
+            <h6 class="mb-0">Elenco personaggi registrati nella piattaforma con informazioni base.</h6>
+        </header>
+        <hr class="w-75 ms-2" />
+
+        <article class="mb-3 col-md-12 p-3 pb-0">
+            <div class="card card-body">
+                <form method="get" action="/game/anagrafica" class="row g-2 align-items-end">
+                    <input type="hidden" name="results" value="{{ results|default(20)|e('html_attr') }}">
+                    <div class="col-auto">
+                        <label for="anagrafica-filter-search" class="form-label mb-1">Ricerca personaggio</label>
+                        <input
+                            id="anagrafica-filter-search"
+                            type="text"
+                            name="q"
+                            class="form-control form-control-sm"
+                            placeholder="Cerca per nome o cognome"
+                            value="{{ search_query|default('')|e('html_attr') }}"
+                        >
+                    </div>
+                    <div class="col-auto d-flex gap-2 justify-content-end">
+                        <button type="submit" class="btn btn-sm btn-outline-primary">Cerca</button>
+                        <a href="/game/anagrafica" class="btn btn-sm btn-outline-secondary">Reset</a>
+                    </div>
+                </form>
+                <div class="form-text mt-2">In elenco compaiono solo personaggi con utenza attiva.</div>
+            </div>
+        </article>
+
+        <article class="mb-3 col-md-12 p-3">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">Personaggi</h6>
+                    <span class="badge text-bg-secondary">{{ total_count|default(0) }}</span>
+                </div>
+                <div class="card-body p-0">
+                    {% if anagrafica_rows is not empty %}
+                        <div class="list-group list-group-flush">
+                            {% for row in anagrafica_rows %}
+                                {% set full_name = ((row.name|default('') ~ ' ' ~ row.surname|default(''))|trim) %}
+                                {% set gender_label = '-' %}
+                                {% if row.gender is same as(1) or row.gender is same as('1') %}
+                                    {% set gender_label = 'Uomo' %}
+                                {% elseif row.gender is same as(0) or row.gender is same as('0') %}
+                                    {% set gender_label = 'Donna' %}
+                                {% endif %}
+                                <div class="list-group-item">
+                                    <div class="d-flex justify-content-between align-items-start gap-3 flex-wrap">
+                                        <div class="d-flex align-items-start gap-3">
+                                            <img
+                                                src="{{ row.avatar is not empty ? row.avatar : '/assets/imgs/defaults-images/default-profile.png' }}"
+                                                alt="{{ full_name != '' ? full_name : 'Personaggio' }}"
+                                                class="img-fluid rounded border border-dark-subtle"
+                                                style="width: 52px; height: 78px; object-fit: cover;"
+                                            >
+                                            <div>
+                                                <div class="fw-semibold">
+                                                    {{ full_name != '' ? full_name : ('PG #' ~ row.id) }}
+                                                    {% if row.is_online|default(0) == 1 %}
+                                                        <span class="badge text-bg-success ms-2">Online</span>
+                                                    {% else %}
+                                                        <span class="badge text-bg-secondary ms-2">Offline</span>
+                                                    {% endif %}
+                                                    {% if is_staff_viewer and row.is_visible|default(1) == 0 %}
+                                                        <span class="bi bi-eye-slash-fill text-warning ms-2" data-bs-toggle="tooltip" data-bs-title="Invisibile"></span>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="small text-muted">
+                                                    Genere: <b>{{ gender_label }}</b>
+                                                    {% if row.socialstatus_name is not empty %}
+                                                        &middot; Stato sociale: <b>{{ row.socialstatus_name }}</b>
+                                                    {% endif %}
+                                                </div>
+                                                <div class="small text-muted">
+                                                    {% if row.last_map|default(0) > 0 and row.map_name is not empty %}
+                                                        Mappa: <b>{{ row.map_name }}</b>
+                                                        {% if row.last_location|default(0) > 0 and row.location_name is not empty %}
+                                                            &middot; Luogo: <b>{{ row.location_name }}</b>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        Alle mappe
+                                                    {% endif %}
+                                                </div>
+                                                <div class="small text-muted">
+                                                    Iscrizione:
+                                                    {% if row.date_created is not empty %}
+                                                        <b>{{ row.date_created|date('d/m/Y') }}</b>
+                                                    {% else %}
+                                                        <b>N/D</b>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-center">
+                                            <a href="/game/profile/{{ row.id|default(0) }}" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-person-vcard me-1"></i>Scheda personaggio
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="p-3 text-muted small">Nessun personaggio disponibile.</div>
+                    {% endif %}
+                </div>
+                <div class="card-footer">
+                    <div id="anagrafica-pagination"></div>
+                </div>
+            </div>
+        </article>
+    </section>
+</div>
+{% endblock %}
+
+

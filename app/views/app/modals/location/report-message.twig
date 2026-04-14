@@ -1,0 +1,45 @@
+<div class="modal fade" id="modal-report-message" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="location-utils-modal-label">Segnala messaggio</h4>
+                <hr class="my-4" />
+                <p class="text-muted small mb-3">
+                    La segnalazione sarà inviata allo staff per verifica.
+                    Un uso improprio di questo strumento può essere soggetto a provvedimenti.
+                </p>
+                <form id="report-message-form" autocomplete="off">
+                    <input type="hidden" id="report-message-id" name="message_id" value="">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Motivo <span class="text-danger">*</span></label>
+                        <select id="report-reason-code" name="reason_code" class="form-select" required>
+                            <option value="">Seleziona un motivo...</option>
+                            <option value="offensive_language">Linguaggio offensivo</option>
+                            <option value="harassment">Molestia / intimidazione</option>
+                            <option value="spam_flood">Spam o flood</option>
+                            <option value="inappropriate_content">Contenuto inappropriato</option>
+                            <option value="rule_violation">Violazione del regolamento</option>
+                            <option value="other">Altro</option>
+                        </select>
+                    </div>
+                    <div class="mb-3" id="report-reason-text-wrap" style="display:none;">
+                        <label class="form-label fw-semibold">
+                            Descrizione
+                            <span id="report-reason-text-required" class="text-danger d-none">*</span>
+                        </label>
+                        <textarea id="report-reason-text" name="reason_text" class="form-control" rows="3" maxlength="1000" placeholder="Descrivi brevemente il problema..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" id="report-message-submit" class="btn btn-danger">
+                    <i class="bi bi-flag me-1"></i>Invia segnalazione
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

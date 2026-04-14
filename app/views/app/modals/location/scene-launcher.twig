@@ -1,0 +1,151 @@
+<div class="modal fade" id="location-scene-launcher-modal" tabindex="-1" aria-labelledby="location-scene-launcher-label" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="location-scene-launcher-label">Azioni scena</h4>
+                <h6 class="text-center text-muted">
+                    Usa oggetti con conferma guidata nel luogo corrente.
+                </h6>
+                <hr class="my-4" />
+
+                <div class="card text-bg-dark shadow" data-bs-theme="dark">
+                    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+                        <ul class="nav nav-tabs card-header-tabs mb-0" id="location-scene-launcher-tabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="location-scene-items-tab" data-bs-toggle="tab" data-bs-target="#location-scene-items-pane" type="button" role="tab" aria-controls="location-scene-items-pane" aria-selected="true">
+                                    Oggetti
+                                </button>
+                            </li>
+                            {{ module_slot('game.location.scene_launcher.abilities_tab') }}
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="location-scene-money-tab" data-bs-toggle="tab" data-bs-target="#location-scene-money-pane" type="button" role="tab" aria-controls="location-scene-money-pane" aria-selected="false">
+                                    Monete
+                                </button>
+                            </li>
+                            <li class="nav-item d-none" id="location-scene-narrative-tab-item" role="presentation">
+                                <button class="nav-link" id="location-scene-narrative-tab" data-bs-toggle="tab" data-bs-target="#location-scene-narrative-pane" type="button" role="tab" aria-controls="location-scene-narrative-pane" aria-selected="false">
+                                    <i class="bi bi-calendar-event me-1"></i>Narrativa
+                                </button>
+                            </li>
+                        </ul>
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-action="scene-launcher-refresh">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="location-scene-items-pane" role="tabpanel" aria-labelledby="location-scene-items-tab" tabindex="0">
+                                <div class="small text-muted mb-2">Usa o lascia a terra oggetti dall'inventario.</div>
+                                <div class="mb-2">
+                                    <input type="search" class="form-control form-control-sm" id="location-scene-items-search" placeholder="Cerca per nome..." autocomplete="off">
+                                </div>
+                                <div id="location-scene-items-grid"></div>
+                            </div>
+
+                            {{ module_slot('game.location.scene_launcher.abilities_pane') }}
+
+                            <div class="tab-pane fade" id="location-scene-narrative-pane" role="tabpanel" aria-labelledby="location-scene-narrative-tab" tabindex="0">
+
+                                {# Scena attiva: gestione + PNG Effimeri #}
+                                <div id="location-scene-narrative-active" class="mb-3 d-none">
+                                    <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                                        <div>
+                                            <div class="fw-bold small" id="location-scene-narrative-title"></div>
+                                            <div class="text-muted small" id="location-scene-narrative-desc"></div>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-outline-danger flex-shrink-0" data-action="scene-narrative-close">
+                                            Chiudi scena
+                                        </button>
+                                    </div>
+                                    <hr class="my-2">
+                                    <div class="small fw-semibold mb-2">PNG Effimeri</div>
+                                    <div id="location-scene-ephemeral-npcs-list" class="mb-2"></div>
+                                    <button type="button" class="btn btn-sm btn-outline-primary w-100" data-action="scene-spawn-npc">
+                                        <i class="bi bi-person-plus me-1"></i>Spawna PNG Effimero
+                                    </button>
+                                </div>
+
+                                {# Nessuna scena: form di creazione (solo per narrative actor) #}
+                                <div id="location-scene-narrative-create-form" class="d-none">
+                                    <div class="small text-muted mb-3">Avvia una scena narrativa locale in questa location.</div>
+                                    <div class="mb-2">
+                                        <input type="text" class="form-control form-control-sm" id="scene-create-title" placeholder="Titolo *" maxlength="255">
+                                    </div>
+                                    <div class="mb-2">
+                                        <textarea class="form-control form-control-sm" id="scene-create-description" rows="2" placeholder="Descrizione (opzionale)" maxlength="1000"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <select class="form-select form-select-sm" id="scene-create-impact">
+                                            <option value="0">Impatto: Nessuno</option>
+                                            <option value="1">Impatto: Limitato (messaggio in chat)</option>
+                                            <option value="2">Impatto: Alto (solo staff)</option>
+                                        </select>
+                                    </div>
+                                    <div id="scene-create-alert" class="alert alert-danger d-none small py-1 px-2 mb-2"></div>
+                                    <div class="d-grid">
+                                        <button type="button" class="btn btn-sm btn-primary" data-action="scene-create-local">
+                                            <span class="spinner-border spinner-border-sm d-none me-1" id="scene-create-spinner"></span>
+                                            <i class="bi bi-play-fill me-1"></i>Avvia scena
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {# Nessuna scena: messaggio per non-actor #}
+                                <div id="location-scene-narrative-empty" class="text-muted small text-center py-3 d-none">
+                                    Nessuna scena narrativa attiva in questa location.
+                                </div>
+
+                                {# Form spawn PNG (appare sopra la lista quando richiesto) #}
+                                <div id="location-scene-narrative-spawn-form" class="mt-3 d-none">
+                                    <hr>
+                                    <div class="small fw-semibold mb-2">Nuovo PNG Effimero</div>
+                                    <div class="mb-2">
+                                        <input type="text" class="form-control form-control-sm" id="scene-npc-name" placeholder="Nome PNG *" maxlength="255">
+                                    </div>
+                                    <div class="mb-2">
+                                        <textarea class="form-control form-control-sm" id="scene-npc-description" rows="2" placeholder="Descrizione (opzionale)" maxlength="1000"></textarea>
+                                    </div>
+                                    <div id="scene-npc-spawn-alert" class="alert alert-danger d-none small py-1 px-2 mb-2"></div>
+                                    <div class="d-flex gap-2">
+                                        <button type="button" class="btn btn-sm btn-secondary" data-action="scene-spawn-npc-cancel">Annulla</button>
+                                        <button type="button" class="btn btn-sm btn-primary flex-grow-1" data-action="scene-spawn-npc-confirm">
+                                            <span class="spinner-border spinner-border-sm d-none me-1" id="scene-npc-spawn-spinner"></span>
+                                            Spawna
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="location-scene-money-pane" role="tabpanel" aria-labelledby="location-scene-money-tab" tabindex="0">
+                                <div class="small text-muted mb-3">Trasferisci monete a un personaggio presente nella location corrente.</div>
+                                <div class="mb-3">
+                                    <div class="small text-muted">Il tuo saldo attuale</div>
+                                    <div class="fw-bold" id="location-scene-money-balance">-</div>
+                                </div>
+                                <div class="mb-2">
+                                    <label class="form-label form-label-sm">Destinatario</label>
+                                    <input type="text" class="form-control form-control-sm" id="location-scene-money-target-name" placeholder="Cerca personaggio nella location..." autocomplete="off">
+                                    <input type="hidden" id="location-scene-money-target-id">
+                                    <div class="list-group mt-1 d-none" id="location-scene-money-suggestions"></div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label form-label-sm">Quantita</label>
+                                    <input type="number" class="form-control form-control-sm" id="location-scene-money-amount" min="1" placeholder="Es. 50">
+                                </div>
+                                <div id="location-scene-money-alerts" class="d-none mb-2"></div>
+                                <div class="d-grid">
+                                    <button type="button" class="btn btn-sm btn-primary" data-action="scene-launcher-money-give">
+                                        Dai monete
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

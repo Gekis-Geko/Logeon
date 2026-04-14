@@ -1,0 +1,45 @@
+#offcanvasOnline.offcanvas,
+.offcanvas {
+    background: var(--swd-surface);
+    color: var(--lf-text-primary);
+    border-left: 1px solid var(--swd-border);
+}
+
+.offcanvas.offcanvas-start {
+    border-left: 0;
+    border-right: 1px solid var(--swd-border);
+}
+
+.offcanvas.offcanvas-end {
+    border-left: 1px solid var(--swd-border);
+    border-right: 0;
+}
+
+.offcanvas.offcanvas-top {
+    --bs-offcanvas-height: min(72vh, 760px);
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 1px solid var(--swd-border);
+}
+
+.offcanvas.offcanvas-bottom {
+    --bs-offcanvas-height: min(78vh, 820px);
+    border-left: 0;
+    border-right: 0;
+    border-top: 1px solid var(--swd-border);
+}
+
+.offcanvas .offcanvas-header,
+.offcanvas .offcanvas-footer {
+    border-color: var(--swd-border);
+}
+
+#offcanvasOnline .list-group-item {
+    border-color: var(--swd-border);
+    background: var(--swd-surface-alt);
+}
+
+#offcanvasOnline .ui-offcanvas-list .list-group-item {
+    border-left: 0;
+    border-right: 0;
+}

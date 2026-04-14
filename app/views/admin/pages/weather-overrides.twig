@@ -1,0 +1,116 @@
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+    <header>
+        <h4 class="display-6 mb-1">Meteo e Clima - Forzature</h4>
+        <h6 class="mb-0">Forzature meteo e strumenti per la migrazione dei dati precedenti.</h6>
+    </header>
+    <div class="d-flex flex-wrap align-items-center gap-2">
+        <a href="/admin/weather-overview" class="btn btn-sm btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Panoramica
+        </a>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-overrides-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna forzature
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-action="admin-weather-overrides-create">
+            <i class="bi bi-plus-lg me-1"></i>Nuova forzatura
+        </button>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+        <div>
+            <h5 class="mb-0">Forzature meteo</h5>
+            <p class="text-muted small mb-0">Forzature temporanee o permanenti tracciabili per lo staff.</p>
+        </div>
+        <div class="d-flex gap-1">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-weather-overrides-reload"><i class="bi bi-arrow-clockwise"></i></button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-weather-overrides-create"><i class="bi bi-plus-lg"></i></button>
+        </div>
+    </div>
+    <div class="card-body">
+        <form class="row g-2 align-items-end mb-3" data-role="admin-weather-overrides-filters" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-overrides-filter-query">Ricerca</label>
+                <input id="admin-weather-overrides-filter-query" type="search" class="form-control form-control-sm" data-role="admin-weather-overrides-filter-query" data-weather-filter-target="weather-overrides" placeholder="Ambito, riferimento, meteo, motivo..." />
+            </div>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-overrides-filter-scope">Ambito</label>
+                <select id="admin-weather-overrides-filter-scope" class="form-select form-select-sm" data-role="admin-weather-overrides-filter-scope" data-weather-filter-target="weather-overrides">
+                    <option value="" selected>Tutti</option>
+                    <option value="world">Mondo</option>
+                    <option value="map">Mappa</option>
+                    <option value="location">Luogo</option>
+                    <option value="region">Regione</option>
+                    <option value="area">Area</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-weather-overrides-filter-state">Stato</label>
+                <select id="admin-weather-overrides-filter-state" class="form-select form-select-sm" data-role="admin-weather-overrides-filter-state" data-weather-filter-target="weather-overrides">
+                    <option value="all" selected>Tutti</option>
+                    <option value="1">Attivi</option>
+                    <option value="0">Inattivi</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-weather-overrides-reset-filters">Reset</button>
+            </div>
+        </form>
+        <div id="grid-admin-weather-overrides"></div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center gap-2">
+        <div>
+            <h5 class="mb-0">Compatibilità aree climatiche (dati precedenti)</h5>
+            <p class="text-muted small mb-0">Supporto ai dati precedenti fino al completamento della migrazione.</p>
+        </div>
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-climate-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+    </div>
+    <div class="card-body">
+        <form class="row g-2 align-items-end mb-3" data-role="admin-climate-areas-filters" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-climate-areas-filter-query">Ricerca</label>
+                <input id="admin-climate-areas-filter-query" type="search" class="form-control form-control-sm" data-role="admin-climate-areas-filter-query" data-weather-filter-target="climate-areas" placeholder="Codice, nome, meteo..." />
+            </div>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-climate-areas-filter-state">Stato</label>
+                <select id="admin-climate-areas-filter-state" class="form-select form-select-sm" data-role="admin-climate-areas-filter-state" data-weather-filter-target="climate-areas">
+                    <option value="all" selected>Tutte</option>
+                    <option value="1">Attive</option>
+                    <option value="0">Inattive</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-climate-areas-reset-filters">Reset</button>
+            </div>
+        </form>
+        <div id="grid-admin-climate-areas"></div>
+        <hr class="my-4" />
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <header>
+                <h5 class="mb-1">Assegnazione luoghi (dati precedenti)</h5>
+                <p class="text-muted small mb-0">Associa i luoghi alle aree climatiche precedenti.</p>
+            </header>
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-climate-locations-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+        </div>
+        <form class="row g-2 align-items-end mb-3" data-role="admin-climate-locations-filters" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label class="form-label mb-1" for="admin-climate-locations-filter-query">Ricerca luoghi</label>
+                <input id="admin-climate-locations-filter-query" type="search" class="form-control form-control-sm" data-role="admin-climate-locations-filter-query" data-weather-filter-target="climate-locations" placeholder="Nome luogo o mappa..." />
+            </div>
+            <div class="col-auto">
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-climate-locations-reset-filters">Reset</button>
+            </div>
+        </form>
+        <div id="grid-admin-climate-locations"></div>
+    </div>
+</div>
+
+{% include 'admin/modals/weather.twig' %}
+

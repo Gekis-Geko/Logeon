@@ -1,0 +1,42 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+    <div id="forum-page" class="row ui-page">
+        <header>
+            <h4 class="display-6">Forum</h4>
+            <h6>Scopri le novita e discuti con gli altri giocatori sui temi di gioco e di varia natura</h6>
+        </header>
+        <hr class="w-75 ms-2" />
+        <article class="mt-4 mb-3 col-md-12">
+            <div id="forums-page-body"></div>
+        </article>
+    </div>
+</div>
+
+<template name="template_forum_section">
+    <div class="card card-body forum-section mb-2">
+        <h5><span name="type_title"></span> <small class="badge text-bg-light border ms-4"><span name="is_on_game"></span></small></h5>
+        <hr class="w-75 ms-2" />
+        <div class="list-group my-4">
+        </div>
+    </div>
+</template>
+
+<template name="template_forum_list_sections">
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col-11">
+                <h6><a name="title"></a></h6>
+                <p name="body"></p>
+                <small>Ci sono <b name="count_thread"></b> discussioni</small>
+            </div>
+            <a name="chevron_link" class="col-1 flex content-end">
+                <i class="fas fa-fw fa-chevron-right"></i>
+            </a>
+        </div>
+    </div>
+</template>
+
+{% endblock %}
+

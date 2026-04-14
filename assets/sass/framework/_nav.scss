@@ -1,0 +1,48 @@
+#appNavbar,
+#homeNavbar {
+    border-bottom: 1px solid var(--swd-border);
+    box-shadow: none;
+    background: var(--swd-surface) !important;
+    backdrop-filter: none;
+}
+
+#appNavbar .nav-link,
+#homeNavbar .nav-link {
+    color: var(--lf-text-secondary);
+    border-radius: 8px;
+}
+
+#appNavbar .nav-link:hover,
+#homeNavbar .nav-link:hover {
+    color: var(--lf-text-primary);
+    background: var(--swd-accent-soft);
+}
+
+#appNavbar .dropdown-menu,
+#homeNavbar .dropdown-menu {
+    border: 1px solid var(--swd-border);
+    border-radius: 12px;
+    box-shadow: var(--swd-shadow);
+}
+
+@keyframes lf-feed-badge-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.22);
+    }
+    70% {
+        box-shadow: 0 0 0 0.42rem rgba(255, 255, 255, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+.feed-badge-pulse {
+    animation: lf-feed-badge-pulse 1.35s ease-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .feed-badge-pulse {
+        animation: none;
+    }
+}

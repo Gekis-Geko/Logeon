@@ -1,0 +1,28 @@
+<div class="modal fade" id="profile-master-notes-modal" tabindex="-1" aria-hidden="true" data-requires-staff>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Modifica note del master</h4>
+                <h6 class="text-center text-muted">Campo riservato allo staff per note narrative e amministrative.</h6>
+                <hr class="my-4" />
+
+                <form id="profile-master-notes-form">
+                    <input type="hidden" name="character_id">
+                    <div class="form-group">
+                        <label class="form-label">Contenuto</label>
+                        <textarea name="mod_status" class="form-control" rows="8" maxlength="5000" placeholder="Inserisci note riservate dello staff..."></textarea>
+                        <div class="form-text">Solo staff (master, moderatori, admin) puo modificare questo contenuto.</div>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2 mt-3">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button type="submit" class="btn btn-primary" data-master-notes-save>Salva</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,49 @@
+<div class="modal fade" id="edit-diary-modal" tabindex="-1" role="dialog" aria-hidden="true" data-requires-match="any" data-requires-page-owner data-requires-staff>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">            
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+
+                <h6 class="text-muted">Crea o modifica un avvenimento che interessa il tuo personaggio per ricordarlo o mostrarlo agli altri giocatori</h6>
+                
+                <hr class="my-4" />
+
+                <div class="d-grid gap-2 col-12 mx-auto my-3">
+                    <form id="edit-diary-modal-form">
+                        <input type="hidden" name="id">
+                        <input type="hidden" name="character_id">
+                        <div class="form-group form-floating my-2">
+                            <input type="text" name="title" class="form-control" placeholder="Es. Litigio al bar" required>
+                            <label>Titolo dell'avvenimento <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="form-group my-2">
+                            <label>Descrizione avvenimento <span class="text-danger">*</span></label>
+                            <textarea name="body" class="form-control" rows="10" placeholder="Es. Ho fatto una rissa con due persone" required></textarea>
+                        </div>
+                        <div class="form-group my-2">
+                            <label>Luogo dell'avvenimento <span class="text-danger">*</span></label>
+                            <select name="location_id" class="form-select" required>
+                                <option value="">Luogo dell'avvenimento</option>
+                            </select>
+                        </div>
+                        <div class="form-group form-floating my-2">
+                            <input type="date" name="date_event" class="form-control" placeholder="Data dell'avvenimento">
+                            <label>Data dell'avvenimento <span class="text-danger">*</span></label>
+                        </div>
+                        <div class="form-group my-2">
+                            <label>Ãˆ visibile a tutti?</label>
+                            <div>
+                                <input name="is_visible" placeholder="VisibilitÃ  dell'avvenimento" required>
+                            </div>
+                        </div>
+                        <div class="d-grid gap-2 col-6 mx-auto mt-4">
+                            <button type="submit" class="btn btn-primary btn-block btn-round" id="edit-diary-submit" data-requires-match="any" data-requires-page-owner data-requires-staff>Salva</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

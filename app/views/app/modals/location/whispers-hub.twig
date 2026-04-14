@@ -1,0 +1,46 @@
+<div class="modal fade" id="whispers-hub-modal" tabindex="-1" aria-labelledby="whispers-hub-modal-label" aria-hidden="true" data-requires-auth>
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body d-flex flex-column">
+                <div class="whispers-hub-head flex-shrink-0">
+                    <div class="d-flex justify-content-end my-3 mx-4">
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                    </div>
+                    <h4 class="display-6 text-center mt-3 mb-2" id="whispers-hub-modal-label">Hub Sussurri</h4>
+                    <h6 class="text-center text-muted">Gestisci tutte le conversazioni private della location corrente.</h6>
+                    <hr class="my-4" />
+                </div>
+
+                <div class="whispers-hub-main flex-grow-1">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-4">
+                            <label class="form-label small">Cerca conversazione</label>
+                            <input type="text" class="form-control form-control-sm" data-whispers-hub-filter placeholder="Filtra conversazioni...">
+                            <div class="list-group mt-2 overflow-auto" id="whispers-hub-threads"></div>
+                            <div class="mt-2 d-none" id="whispers-hub-pagination"></div>
+                            <hr class="my-3">
+                            <label class="form-label small">Inizia nuova conversazione</label>
+                            <input type="text" class="form-control form-control-sm" id="whispers-hub-new-search" placeholder="Cerca personaggio nella location...">
+                            <div class="list-group mt-2 d-none" id="whispers-hub-new-suggestions"></div>
+                        </div>
+                        <div class="col-12 col-lg-8">
+                            <div class="card h-100">
+                                <div class="card-header">
+                                    <strong data-whispers-hub-thread-title>Seleziona una conversazione</strong>
+                                </div>
+                                <div class="card-body d-flex flex-column">
+                                    <div class="list-group list-group-flush small mb-3 flex-grow-1 overflow-auto" id="whispers-hub-messages"></div>
+                                    <div class="flex-shrink-0">
+                                        <textarea class="form-control form-control-sm mb-2" name="whispers_hub_body" rows="3" placeholder="Scrivi un sussurro..."></textarea>
+                                        <button class="btn btn-sm btn-primary" type="button" data-whispers-hub-send data-requires-auth>Invia sussurro</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

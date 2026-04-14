@@ -1,0 +1,50 @@
+{% include 'layouts/header.twig' %}
+
+{% set pilot_bundle_mode = APP.frontend.pilot_bundle_mode|default('manual') %}
+{% set pilot_bundle_enabled = APP.frontend.pilot_bundle_enabled|default(false) %}
+{% if pilot_bundle_mode == 'on' %}
+    {% set pilot_bundle_enabled = true %}
+{% elseif pilot_bundle_mode == 'off' %}
+    {% set pilot_bundle_enabled = false %}
+{% elseif pilot_bundle_mode == 'auto' %}
+    {% set pilot_bundle_enabled = (CONFIG.debug|default(true) ? false : true) %}
+{% endif %}
+{% set pilot_bundle_version = APP.frontend.pilot_bundle_version|default('20260403') %}
+
+{% block game_shell %}
+    <section class="container-fluid ui-app-shell">
+        {% block game_primary_navigation %}
+            {% include 'app/layouts/navbar.twig' %}
+        {% endblock %}
+        <script type="text/javascript" src="/assets/js/dist/game-core.bundle.js?v={{ pilot_bundle_version }}"></script>
+        <script type="text/javascript">
+            window.__APP_USE_PAGE_BUNDLES = {{ pilot_bundle_enabled ? 'true' : 'false' }};
+        </script>
+        {{ module_assets('game')|raw }}
+        {% block game_tail_assets %}
+            {{ theme_assets('game_js')|raw }}
+        {% endblock %}
+        {% block game_global_overlays %}
+            {% include 'app/offcanvas/onlines.twig' %}
+        {% endblock %}
+        <section class="row ui-app-body-row">
+            <section id="page-content" class="col-12 ui-app-content"
+                data-app-page="{{ app_page|default('') }}"
+                data-session-user-id="{{ session('user_id')|default(0) }}"
+                data-session-character-id="{{ session('character_id')|default(0) }}"
+                data-session-is-admin="{{ session('user_is_administrator') == 1 ? '1' : '0' }}"
+                data-session-is-moderator="{{ session('user_is_moderator') == 1 ? '1' : '0' }}"
+                data-session-is-master="{{ session('user_is_master') == 1 ? '1' : '0' }}"
+                data-session-is-superuser="{{ session('user_is_superuser') == 1 ? '1' : '0' }}">
+                {% block game_page_content %}
+                    {% block content %}{% endblock %}
+                {% endblock %}
+            </section>
+        </section>
+    </section>
+{% endblock %}
+
+{% include 'sys/dialogs/general_confirm.twig' %}
+{% include 'sys/dialogs/general_dialog.twig' %}
+{% include 'sys/dialogs/location_invite.twig' %}
+{% include 'sys/toasts/default_toast.twig' %}

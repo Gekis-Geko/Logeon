@@ -1,0 +1,89 @@
+<div class="modal fade" id="admin-narrative-state-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Stato narrativo</h4>
+                <h6 class="text-center text-muted">Crea o modifica uno stato per personaggio o scena.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-narrative-state-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Codice <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="code" maxlength="120" required placeholder="es. stance_guard">
+                        <div class="form-text">Identificatore univoco in snake_case. Viene normalizzato automaticamente.</div>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="120" required placeholder="es. Guardia">
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="3" placeholder="Descrizione funzionale dello stato..."></textarea>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Categoria</label>
+                        <input type="text" class="form-control" name="category" maxlength="80" placeholder="es. postura, movimento" list="admin-narrative-state-category-list" autocomplete="off">
+                        <datalist id="admin-narrative-state-category-list"></datalist>
+                        <div class="form-text">Raggruppamento libero per filtrare gli stati.</div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Ambito</label>
+                        <select class="form-select" name="scope">
+                            <option value="character">Personaggio</option>
+                            <option value="scene">Scena</option>
+                            <option value="both">Entrambi</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Modalita accumulo</label>
+                        <select class="form-select" name="stack_mode">
+                            <option value="replace">Sostituisci</option>
+                            <option value="stack">Accumula</option>
+                            <option value="refresh">Aggiorna durata</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Stack massimi</label>
+                        <input type="number" class="form-control" name="max_stacks" min="1" step="1" value="1">
+                        <div class="form-text">Rilevante solo in modalita Accumula.</div>
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Gruppo conflitto</label>
+                        <input type="text" class="form-control" name="conflict_group" maxlength="80" placeholder="es. stance" list="admin-narrative-state-conflict-group-list" autocomplete="off">
+                        <datalist id="admin-narrative-state-conflict-group-list"></datalist>
+                        <div class="form-text">Stati nello stesso gruppo si escludono a vicenda in base alla priorita.</div>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Priorita</label>
+                        <input type="number" class="form-control" name="priority" step="1" value="0">
+                        <div class="form-text">Valore piu alto = vince il conflitto.</div>
+                    </div>
+
+                    <div class="col-12"><hr class="my-1"></div>
+
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stato</label>
+                        <input type="hidden" name="is_active" value="1">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Visibilita player</label>
+                        <input type="hidden" name="visible_to_players" value="1">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-narrative-state-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="modal fade" id="char-request-decide-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="char-request-modal-title">Gestisci richiesta</h4>
+                <hr class="my-4" />
+
+                <input type="hidden" id="char-request-id" value="">
+                <input type="hidden" id="char-request-type" value="">
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between text-muted small mb-1">
+                        <span>Personaggio</span>
+                        <span id="char-request-character-name"></span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small mb-1">
+                        <span>Valore attuale</span>
+                        <span id="char-request-current-value" class="fw-bold"></span>
+                    </div>
+                    <div class="d-flex justify-content-between text-muted small mb-1">
+                        <span>Valore richiesto</span>
+                        <span id="char-request-new-value" class="fw-bold text-primary"></span>
+                    </div>
+                    <div class="mt-2" id="char-request-reason-row" style="display:none;">
+                        <span class="text-muted small">Motivazione: </span>
+                        <span class="small" id="char-request-reason"></span>
+                    </div>
+                    <div class="text-muted small mt-1">
+                        Richiesta il: <span id="char-request-date"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-danger" data-action="char-request-reject">Rifiuta</button>
+                    <button type="button" class="btn btn-success" data-action="char-request-approve">Approva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

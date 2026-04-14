@@ -1,0 +1,229 @@
+<div class="modal fade" id="admin-faction-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Gestione fazione</h4>
+                <h6 class="text-center text-muted">Crea o modifica una fazione narrativa.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-faction-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Codice <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="code" maxlength="80" required>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="120" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="3"></textarea>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" name="type">
+                            <option value="political">Politico</option>
+                            <option value="military">Militare</option>
+                            <option value="religious">Religioso</option>
+                            <option value="criminal">Criminale</option>
+                            <option value="mercantile">Mercantile</option>
+                            <option value="other">Altro</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Portata</label>
+                        <select class="form-select" name="scope">
+                            <option value="local">Locale</option>
+                            <option value="regional" selected>Regionale</option>
+                            <option value="global">Globale</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Allineamento</label>
+                        <select class="form-select" name="alignment">
+                            <option value="">— Nessuno —</option>
+                            <option value="lawful_good">Legale buono</option>
+                            <option value="neutral_good">Neutrale buono</option>
+                            <option value="chaotic_good">Caotico buono</option>
+                            <option value="lawful_neutral">Legale neutrale</option>
+                            <option value="true_neutral">Neutrale puro</option>
+                            <option value="chaotic_neutral">Caotico neutrale</option>
+                            <option value="lawful_evil">Legale malvagio</option>
+                            <option value="neutral_evil">Neutrale malvagio</option>
+                            <option value="chaotic_evil">Caotico malvagio</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Potere narrativo (1-10)</label>
+                        <input type="number" class="form-control" name="power_level" min="1" max="10" step="1" value="5">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Colore (hex)</label>
+                        <input type="text" class="form-control" name="color_hex" maxlength="7" placeholder="#3498db">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Icona</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="icon" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="faction_icon" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="faction_icon">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="faction_icon">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="faction_icon">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Pubblica</label>
+                        <select class="form-select" name="is_public">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Attiva</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Accetta richieste di adesione</label>
+                        <select class="form-select" name="allow_join_requests">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="mt-3">
+                    <label class="form-label small fw-semibold">Tag narrativi</label>
+                    <div id="admin-faction-tags-container" class="d-flex flex-wrap gap-2 border rounded p-2">
+                        <span class="text-muted small">Caricamento tag...</span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-faction-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Manage faction (members + relations) modal #}
+<div class="modal fade" id="admin-faction-manage-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="admin-faction-manage-title">Gestione fazione</h4>
+                <hr class="my-4" />
+
+                <div class="row g-3">
+                    {# Members panel #}
+                    <div class="col-12 col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Membri</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="admin-faction-members-list" class="mb-3"></div>
+                                <hr>
+                                <form id="admin-faction-member-form" class="row g-2">
+                                    <div class="col-12">
+                                        <label class="form-label small">Aggiungi membro</label>
+                                    </div>
+                                    <div class="col-12 col-sm-5">
+                                        <input type="text" class="form-control form-control-sm" name="character_name" placeholder="Cerca personaggio..." autocomplete="off">
+                                        <input type="hidden" name="character_id" value="">
+                                        <div class="list-group mt-1 d-none" data-role="admin-faction-member-suggestions"></div>
+                                    </div>
+                                    <div class="col-12 col-sm-3">
+                                        <select class="form-select form-select-sm" name="role">
+                                            <option value="member">Membro</option>
+                                            <option value="leader">Leader</option>
+                                            <option value="advisor">Consigliere</option>
+                                            <option value="agent">Agente</option>
+                                            <option value="initiate">Iniziato</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12 col-sm-4">
+                                        <input type="text" class="form-control form-control-sm" name="rank" placeholder="Titolo (opz.)">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-sm btn-primary w-100" data-action="admin-faction-member-add">
+                                            Aggiungi
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# Relations panel #}
+                    <div class="col-12 col-lg-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">Relazioni con altre fazioni</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="admin-faction-relations-list" class="mb-3"></div>
+                                <hr>
+                                <form id="admin-faction-relation-form" class="row g-2">
+                                    <div class="col-12">
+                                        <label class="form-label small">Imposta relazione</label>
+                                    </div>
+                                    <div class="col-12">
+                                        <select class="form-select form-select-sm" name="target_faction_id" id="admin-faction-relation-target-select">
+                                            <option value="">Seleziona fazione...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <select class="form-select form-select-sm" name="relation_type">
+                                            <option value="ally">Alleato</option>
+                                            <option value="neutral" selected>Neutrale</option>
+                                            <option value="rival">Rivale</option>
+                                            <option value="enemy">Nemico</option>
+                                            <option value="vassal">Vassallo</option>
+                                            <option value="overlord">Signore</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="number" class="form-control form-control-sm" name="intensity" min="1" max="10" step="1" value="5" placeholder="Intensita 1-10">
+                                    </div>
+                                    <div class="col-12">
+                                        <input type="text" class="form-control form-control-sm" name="notes" placeholder="Note (opzionale)">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="button" class="btn btn-sm btn-primary w-100" data-action="admin-faction-relation-set">
+                                            Salva relazione
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,263 @@
+{% set is_staff_quests = (session('user_is_administrator') == 1 or session('user_is_moderator') == 1 or session('user_is_master') == 1) %}
+
+<div class="offcanvas offcanvas-bottom" tabindex="-1" id="offcanvasQuests" aria-labelledby="offcanvasQuestsLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasQuestsLabel">
+            <i class="bi bi-journal-text me-2"></i>Quest
+        </h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Chiudi"></button>
+    </div>
+    <div class="offcanvas-body p-0 d-flex flex-column">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 px-3 py-2 border-bottom">
+            <div class="d-flex flex-wrap align-items-center gap-2">
+                <select id="quests-status-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutti gli stati</option>
+                    <option value="available">Disponibile</option>
+                    <option value="active">Attiva</option>
+                    <option value="completed">Completata</option>
+                    <option value="failed">Fallita</option>
+                </select>
+                <select id="quests-scope-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutti gli ambiti</option>
+                    <option value="world">Mondo</option>
+                    <option value="character">Personaggio</option>
+                    <option value="faction">Fazione</option>
+                    <option value="guild">Gilda</option>
+                </select>
+                <select id="quests-tag-filter" class="form-select form-select-sm" style="width:auto;">
+                    <option value="">Tutti i tag</option>
+                </select>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <a href="/game/quests/history" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-clock-history me-1"></i>Archivio
+                </a>
+                {% if is_staff_quests %}
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="quests-open-staff">
+                        <i class="bi bi-shield-lock me-1"></i>Staff
+                    </button>
+                {% endif %}
+                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="quests-reload" aria-label="Aggiorna">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+            </div>
+        </div>
+
+        <div id="quests-loading" class="text-center py-4 text-muted small d-none">
+            Caricamento...
+        </div>
+        <div id="quests-empty" class="text-center py-4 text-muted small d-none">
+            Nessuna quest disponibile.
+        </div>
+        <div id="quests-list" class="list-group list-group-flush flex-grow-1 overflow-auto"></div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="quest-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <div id="quest-detail-modal-body"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if is_staff_quests %}
+<div class="modal fade" id="quest-staff-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Strumenti Quest Staff</h4>
+                <h6 class="text-center text-muted">Conferme step, avanzamenti e stato istanze.</h6>
+                <hr class="my-4" />
+
+                <div class="row g-3 mb-3">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stato istanza</label>
+                        <select id="quest-staff-status-filter" class="form-select">
+                            <option value="">Tutti</option>
+                            <option value="active">Attive</option>
+                            <option value="available">Disponibili</option>
+                            <option value="completed">Completate</option>
+                            <option value="failed">Fallite</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Assegnatario</label>
+                        <select id="quest-staff-assignee-filter" class="form-select">
+                            <option value="">Tutti</option>
+                            <option value="character">Personaggio</option>
+                            <option value="faction">Fazione</option>
+                            <option value="guild">Gilda</option>
+                            <option value="world">Mondo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4 d-flex align-items-end">
+                        <button type="button" class="btn btn-outline-primary w-100" data-action="quest-staff-reload">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna elenco
+                        </button>
+                    </div>
+                </div>
+
+                <div id="quest-staff-list" class="list-group mb-3"></div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Azione rapida su istanza selezionata</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Istanza selezionata</label>
+                                <input type="hidden" id="quest-staff-instance-id" value="0">
+                                <input type="text" id="quest-staff-instance-label" class="form-control" readonly placeholder="Seleziona un'istanza dalla lista">
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Stato istanza</label>
+                                <select id="quest-staff-instance-status" class="form-select">
+                                    <option value="available">Disponibile</option>
+                                    <option value="active">Attiva</option>
+                                    <option value="completed">Completata</option>
+                                    <option value="failed">Fallita</option>
+                                    <option value="cancelled">Annullata</option>
+                                    <option value="expired">Scaduta</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4 d-flex align-items-end">
+                                <button type="button" class="btn btn-outline-secondary w-100" data-action="quest-staff-set-status">
+                                    Imposta stato
+                                </button>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Step istanza</label>
+                                <select id="quest-staff-step-id" class="form-select">
+                                    <option value="">Seleziona uno step</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Esito step</label>
+                                <select id="quest-staff-step-status" class="form-select">
+                                    <option value="completed">Completato</option>
+                                    <option value="failed">Fallito</option>
+                                    <option value="active">Attivo</option>
+                                    <option value="skipped">Saltato</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-4 d-flex align-items-end">
+                                <button type="button" class="btn btn-primary w-100" data-action="quest-staff-confirm-step">
+                                    Conferma step
+                                </button>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end mt-3">
+                            <button type="button" class="btn btn-outline-warning" data-action="quest-staff-force-progress">
+                                Forza avanzamento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">Chiusura quest e ricompense</h6>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="quest-staff-load-closure">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Stato finale</label>
+                                <select id="quest-staff-final-status" class="form-select">
+                                    <option value="completed">Completata</option>
+                                    <option value="failed">Fallita</option>
+                                    <option value="cancelled">Annullata</option>
+                                    <option value="expired">Scaduta</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Tipo chiusura</label>
+                                <select id="quest-staff-closure-type" class="form-select">
+                                    <option value="success">Successo</option>
+                                    <option value="partial_success">Successo parziale</option>
+                                    <option value="failure">Fallimento</option>
+                                    <option value="cancelled">Annullata</option>
+                                    <option value="unresolved">Non risolta</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Visibile al player</label>
+                                <select id="quest-staff-player-visible" class="form-select">
+                                    <option value="1">Si</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Etichetta esito</label>
+                                <input type="text" id="quest-staff-outcome-label" class="form-control" maxlength="120" placeholder="Esito">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Summary pubblico</label>
+                                <textarea id="quest-staff-summary-public" class="form-control" rows="2" placeholder="Testo visibile nello storico player"></textarea>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Summary privato</label>
+                                <textarea id="quest-staff-summary-private" class="form-control" rows="2" placeholder="Note interne staff"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Note staff</label>
+                                <textarea id="quest-staff-notes" class="form-control" rows="2"></textarea>
+                            </div>
+
+                            <div class="col-12">
+                                <hr class="my-2">
+                                <h6 class="mb-2">Ricompense v1 (opzionali)</h6>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Esperienza</label>
+                                <input type="number" id="quest-staff-reward-exp" class="form-control" min="0" step="0.01" placeholder="0.00">
+                            </div>
+                            <div class="col-12 col-md-5">
+                                <label class="form-label">Oggetto (guidato)</label>
+                                <input type="text" id="quest-staff-reward-item-label" class="form-control" autocomplete="off" placeholder="Cerca oggetto...">
+                                <input type="hidden" id="quest-staff-reward-item-id" value="0">
+                                <div id="quest-staff-reward-item-suggestions" class="list-group mt-1 d-none"></div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <label class="form-label">Quantita</label>
+                                <input type="number" id="quest-staff-reward-item-qty" class="form-control" min="1" value="1">
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <label class="form-label">Visibilita</label>
+                                <select id="quest-staff-reward-visibility" class="form-select">
+                                    <option value="public">Pubblica</option>
+                                    <option value="player_private">Privata player</option>
+                                    <option value="staff_only">Solo staff</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-end gap-2 mt-3">
+                            <button type="button" class="btn btn-outline-secondary" data-action="quest-staff-load-closure">Ricarica dati</button>
+                            <button type="button" class="btn btn-success" data-action="quest-staff-finalize">Concludi quest</button>
+                        </div>
+
+                        <div class="mt-3">
+                            <div class="small text-muted mb-1">Ricompense gia assegnate</div>
+                            <div id="quest-staff-rewards-list" class="list-group"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

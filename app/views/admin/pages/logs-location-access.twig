@@ -1,0 +1,41 @@
+<div data-admin-page="logs-location-access">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <header class="mt-3">
+            <h4 class="display-6">Logs Accessi ai Luoghi</h4>
+            <h6>Storico tentativi di accesso ai luoghi</h6>
+        </header>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-logs-location-access-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body">
+            <form id="admin-logs-location-access-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+                <div class="col-auto">
+                    <label for="admin-logs-location-access-filter-character-id" class="form-label mb-1">ID Personaggio</label>
+                    <input id="admin-logs-location-access-filter-character-id" name="character_id" type="number" class="form-control" min="1" placeholder="ID personaggio">
+                </div>
+                <div class="col-auto">
+                    <label for="admin-logs-location-access-filter-location-id" class="form-label mb-1">ID Luogo</label>
+                    <input id="admin-logs-location-access-filter-location-id" name="location_id" type="number" class="form-control" min="1" placeholder="ID luogo">
+                </div>
+                <div class="col-auto">
+                    <label for="admin-logs-location-access-filter-allowed" class="form-label mb-1">Accesso</label>
+                    <select id="admin-logs-location-access-filter-allowed" name="allowed" class="form-select">
+                        <option value="">Tutti</option>
+                        <option value="1">Consentito</option>
+                        <option value="0">Bloccato</option>
+                    </select>
+                </div>
+                <div class="d-flex gap-2 col-auto">
+                    <a class="btn btn-sm btn-outline-secondary" href="/admin/logs-location-access">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="grid-admin-logs-location-access"></div>
+</div>

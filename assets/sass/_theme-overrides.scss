@@ -1,0 +1,577 @@
+/* Logeon dark theme final overrides (import last in style.scss) */
+
+html,
+body {
+    background-color: var(--lf-bg);
+    color: var(--lf-text-primary);
+}
+
+a {
+    color: var(--lf-primary);
+}
+
+a:hover,
+a:focus {
+    color: var(--lf-primary-hover);
+}
+
+:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 .15rem rgba(139, 92, 246, .28);
+}
+
+.text-dark,
+a.text-dark,
+.text-black,
+.text-white,
+a.text-white {
+    color: var(--lf-text-primary) !important;
+}
+
+.text-secondary,
+a.text-secondary,
+.text-muted,
+.text-black-50,
+.form-text,
+small.text-muted {
+    color: var(--lf-text-secondary) !important;
+}
+
+.bg-white,
+.bg-info-subtle,
+.bg-primary-subtle,
+.bg-success-subtle,
+.bg-warning-subtle,
+.bg-danger-subtle {
+    background-color: var(--lf-surface) !important;
+    color: var(--lf-text-primary) !important;
+    border-color: var(--lf-border) !important;
+}
+
+.bg-light,
+.table-light,
+.thead-light,
+.bg-secondary-subtle,
+.text-bg-light {
+    background-color: var(--lf-surface-alt) !important;
+    color: var(--lf-text-primary) !important;
+    border-color: var(--lf-border) !important;
+}
+
+.card,
+.card.bg-white,
+.dropdown-menu,
+.dropdown-item,
+.modal-content,
+.offcanvas,
+.offcanvas-body,
+.list-group-item,
+.navbar,
+.table,
+.accordion-item {
+    background-color: var(--lf-surface);
+    color: var(--lf-text-primary);
+    border-color: var(--lf-border);
+}
+
+.card.bg-light {
+    background-color: var(--lf-surface-alt);
+    color: var(--lf-text-primary);
+    border-color: var(--lf-border);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background-color: rgba(139, 92, 246, .14);
+    color: var(--lf-text-primary);
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: var(--lf-text-secondary);
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus,
+.navbar .nav-link.active,
+.navbar .navbar-brand:hover,
+.navbar .navbar-brand:focus {
+    color: var(--lf-text-primary);
+}
+
+.form-control,
+.form-select,
+.form-check-input,
+.input-group-text {
+    background-color: var(--lf-surface-alt);
+    color: var(--lf-text-primary);
+    border-color: var(--lf-border);
+}
+
+.form-control::placeholder,
+.form-select::placeholder {
+    color: var(--lf-muted);
+}
+
+.form-control:disabled,
+.form-control[readonly],
+.form-select:disabled,
+textarea.form-control:disabled,
+textarea.form-control[readonly] {
+    opacity: 1;
+    color: var(--lf-text-primary);
+    -webkit-text-fill-color: var(--lf-text-primary);
+    background-color: var(--lf-surface);
+    border-color: var(--lf-border);
+    cursor: not-allowed;
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+    background-color: var(--lf-surface-alt);
+    color: var(--lf-text-primary);
+    border-color: var(--lf-primary);
+    box-shadow: 0 0 0 .15rem rgba(139, 92, 246, .28);
+}
+
+.form-select {
+    --bs-form-select-bg-img: var(--lf-form-select-indicator);
+    background-image: var(--bs-form-select-bg-img);
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 20px 14px;
+}
+
+.form-select[multiple],
+.form-select[size]:not([size="1"]) {
+    background-image: none;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+input[type="month"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="week"]::-webkit-calendar-picker-indicator,
+input[type="search"]::-webkit-search-cancel-button {
+    filter: var(--lf-input-system-icon-filter);
+}
+
+/* Bootstrap form-floating readability on dark surfaces */
+.form-floating > .form-control,
+.form-floating > .form-select {
+    background-color: var(--lf-surface-alt);
+    color: var(--lf-text-primary);
+    border-color: var(--lf-border);
+}
+
+.form-floating > label {
+    color: var(--lf-text-secondary) !important;
+}
+
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label,
+.form-floating > .form-select ~ label {
+    color: var(--lf-text-primary) !important;
+}
+
+.form-floating > label::after {
+    background-color: var(--lf-surface-alt) !important;
+}
+
+.table > :not(caption) > * > * {
+    color: var(--lf-text-primary);
+    background-color: var(--lf-surface);
+    border-color: var(--lf-border);
+}
+
+.table thead th {
+    background-color: var(--lf-surface-alt);
+    color: var(--lf-text-primary);
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: rgba(255, 255, 255, .025);
+}
+
+.table-hover > tbody > tr:hover > * {
+    --bs-table-accent-bg: rgba(255, 255, 255, .04);
+}
+
+.btn {
+    box-shadow: none;
+}
+
+.btn:focus,
+.btn.focus {
+    box-shadow: 0 0 0 .15rem rgba(139, 92, 246, .28) !important;
+}
+
+.btn-primary {
+    background-color: var(--lf-primary);
+    border-color: var(--lf-primary);
+    color: var(--lf-text-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active {
+    background-color: var(--lf-primary-hover);
+    border-color: var(--lf-primary-hover);
+    color: var(--lf-text-primary);
+}
+
+.btn-secondary {
+    background-color: var(--lf-surface);
+    border-color: var(--lf-border);
+    color: var(--lf-text-primary);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:active,
+.btn-secondary.active {
+    background-color: var(--lf-surface-alt);
+    border-color: var(--lf-primary);
+    color: var(--lf-text-primary);
+}
+
+.btn-success,
+.btn-warning,
+.btn-info {
+    color: var(--lf-bg);
+}
+
+.btn-danger {
+    color: var(--lf-text-primary);
+}
+
+.btn-outline-primary {
+    color: var(--lf-primary);
+    border-color: var(--lf-primary);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active,
+.btn-outline-primary.active {
+    color: var(--lf-text-primary);
+    background-color: var(--lf-primary);
+    border-color: var(--lf-primary);
+}
+
+.btn-outline-secondary {
+    color: var(--lf-text-primary);
+    border-color: var(--lf-border);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus,
+.btn-outline-secondary:active,
+.btn-outline-secondary.active {
+    color: var(--lf-text-primary);
+    background-color: var(--lf-surface-alt);
+    border-color: var(--lf-primary);
+}
+
+.btn-outline-secondary,
+.btn-outline-dark,
+.btn-outline-warning {
+    --bs-btn-color: var(--lf-text-primary);
+    --bs-btn-border-color: var(--lf-border);
+    --bs-btn-hover-color: var(--lf-text-primary);
+    --bs-btn-hover-bg: var(--lf-surface-alt);
+    --bs-btn-hover-border-color: var(--lf-primary);
+    --bs-btn-focus-shadow-rgb: 139, 92, 246;
+    --bs-btn-active-color: var(--lf-text-primary);
+    --bs-btn-active-bg: var(--lf-surface-alt);
+    --bs-btn-active-border-color: var(--lf-primary);
+    --bs-btn-disabled-color: var(--lf-text-secondary);
+    --bs-btn-disabled-bg: transparent;
+    --bs-btn-disabled-border-color: var(--lf-border);
+}
+
+.btn-outline-warning {
+    --bs-btn-color: #ffe2ad;
+    --bs-btn-border-color: rgba(245, 158, 11, .45);
+    --bs-btn-hover-color: var(--lf-bg);
+    --bs-btn-hover-bg: #f59e0b;
+    --bs-btn-hover-border-color: #f59e0b;
+    --bs-btn-active-color: var(--lf-bg);
+    --bs-btn-active-bg: #f59e0b;
+    --bs-btn-active-border-color: #f59e0b;
+    --bs-btn-disabled-color: #ffe2ad;
+    --bs-btn-disabled-border-color: rgba(245, 158, 11, .45);
+}
+
+.alert.alert-info,
+.alert.alert-warning,
+.alert.alert-danger,
+.alert.alert-success {
+    border-width: 1px;
+    border-radius: 12px;
+}
+
+.alert.alert-info {
+    background: rgba(56, 189, 248, .14);
+    border-color: rgba(56, 189, 248, .45);
+    color: #cbefff;
+}
+
+.alert.alert-warning {
+    background: rgba(245, 158, 11, .14);
+    border-color: rgba(245, 158, 11, .45);
+    color: #ffe2ad;
+}
+
+.alert.alert-danger {
+    background: rgba(239, 68, 68, .14);
+    border-color: rgba(239, 68, 68, .45);
+    color: #ffd0d0;
+}
+
+.alert.alert-success {
+    background: rgba(34, 197, 94, .14);
+    border-color: rgba(34, 197, 94, .45);
+    color: #cbffdc;
+}
+
+.badge.bg-warning,
+.badge.badge-warning,
+.badge.bg-info,
+.badge.badge-info,
+.badge.bg-success,
+.badge.badge-success {
+    color: var(--lf-bg) !important;
+}
+
+.badge.bg-danger,
+.badge.badge-danger {
+    color: var(--lf-text-primary) !important;
+}
+
+.text-bg-primary {
+    background-color: rgba(139, 92, 246, .18) !important;
+    border-color: rgba(139, 92, 246, .45) !important;
+    color: var(--lf-text-primary) !important;
+}
+
+.text-bg-secondary {
+    background-color: var(--lf-surface) !important;
+    border-color: var(--lf-border) !important;
+    color: var(--lf-text-primary) !important;
+}
+
+.text-bg-light {
+    background-color: var(--lf-surface-alt) !important;
+    border-color: var(--lf-border) !important;
+    color: var(--lf-text-primary) !important;
+}
+
+.text-bg-dark {
+    background-color: var(--lf-bg) !important;
+    border-color: var(--lf-border) !important;
+    color: var(--lf-text-primary) !important;
+}
+
+.text-bg-warning {
+    background-color: rgba(245, 158, 11, .18) !important;
+    border-color: rgba(245, 158, 11, .45) !important;
+    color: #ffe2ad !important;
+}
+
+.text-bg-info {
+    background-color: rgba(56, 189, 248, .18) !important;
+    border-color: rgba(56, 189, 248, .45) !important;
+    color: #cbefff !important;
+}
+
+.text-bg-success {
+    background-color: rgba(34, 197, 94, .18) !important;
+    border-color: rgba(34, 197, 94, .45) !important;
+    color: #cbffdc !important;
+}
+
+.text-bg-danger {
+    background-color: rgba(239, 68, 68, .18) !important;
+    border-color: rgba(239, 68, 68, .45) !important;
+    color: #ffd0d0 !important;
+}
+
+/* Bootstrap 5 fullscreen modal compatibility */
+.modal-dialog.modal-fullscreen {
+    width: 100vw !important;
+    max-width: none !important;
+    height: 100% !important;
+    margin: 0 !important;
+}
+
+.modal-dialog.modal-fullscreen .modal-content {
+    height: 100% !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+}
+
+.modal-dialog.modal-fullscreen .modal-body {
+    overflow-y: auto;
+}
+
+/* Close button visibility and consistency */
+.btn-close {
+    width: 1.1rem;
+    height: 1.1rem;
+    padding: 0.2rem;
+    background-size: 1.1rem 1.1rem;
+    background-image: var(--lf-btn-close-bg) !important;
+    filter: none !important;
+    opacity: 0.95;
+}
+
+/* Navbar toggler icon — almost white on dark surfaces (mirrors .btn-close approach) */
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%23EAF0FF' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+[data-bs-theme=light] .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%231F2937' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/*.modal .modal-header .btn-close,
+.offcanvas .offcanvas-header .btn-close {
+    margin: 0;
+}*/
+
+/* Dark-surface contrast fixes */
+hr {
+    border-top-color: rgba(234, 240, 255, 0.26);
+    opacity: 1;
+}
+
+.dropdown-divider {
+    border-top-color: rgba(234, 240, 255, 0.26);
+    opacity: 1;
+}
+
+.text-light,
+a.text-light {
+    color: var(--lf-text-primary) !important;
+}
+
+.btn-outline-dark {
+    color: var(--lf-text-primary);
+    border-color: var(--lf-border);
+}
+
+.btn-outline-dark:hover,
+.btn-outline-dark:focus,
+.btn-outline-dark:active,
+.btn-outline-dark.active {
+    color: var(--lf-text-primary);
+    background-color: var(--lf-surface-alt);
+    border-color: var(--lf-primary);
+}
+
+.btn-outline-secondary.disabled,
+.btn-outline-secondary:disabled,
+.btn-outline-dark.disabled,
+.btn-outline-dark:disabled {
+    color: var(--lf-text-secondary);
+    border-color: var(--lf-border);
+    background-color: transparent;
+}
+
+#profile-page [name="character_name_surname"] {
+    color: var(--lf-text-primary) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, .45);
+}
+
+.ui-richtext .note-toolbar {
+    background: var(--lf-surface-alt);
+    border-bottom: 1px solid var(--lf-border);
+    color: var(--lf-text-primary);
+}
+
+.ui-richtext .note-btn {
+    color: var(--lf-text-primary);
+    background: var(--lf-surface);
+    border-color: var(--lf-border);
+}
+
+.ui-richtext .note-btn:hover,
+.ui-richtext .note-btn:focus,
+.ui-richtext .note-btn:active,
+.ui-richtext .note-btn.active {
+    color: var(--lf-text-primary);
+    background: var(--lf-surface-alt);
+    border-color: var(--lf-primary);
+}
+
+.ui-richtext .note-dropdown-menu {
+    background: var(--lf-surface);
+    border-color: var(--lf-border);
+}
+
+.ui-richtext .note-dropdown-item,
+.ui-richtext .note-dropdown-menu a {
+    color: var(--lf-text-primary);
+}
+
+.ui-richtext .note-dropdown-item:hover,
+.ui-richtext .note-dropdown-item:focus,
+.ui-richtext .note-dropdown-menu a:hover,
+.ui-richtext .note-dropdown-menu a:focus {
+    background: rgba(139, 92, 246, 0.14);
+    color: var(--lf-text-primary);
+}
+
+.ui-richtext .note-editing-area .note-editable {
+    background: var(--lf-surface);
+    color: var(--lf-text-primary);
+}
+
+.ui-richtext .note-editing-area .note-editable p,
+.ui-richtext .note-editing-area .note-editable div,
+.ui-richtext .note-editing-area .note-editable span,
+.ui-richtext .note-editing-area .note-editable li,
+.ui-richtext .note-editing-area .note-editable h1,
+.ui-richtext .note-editing-area .note-editable h2,
+.ui-richtext .note-editing-area .note-editable h3,
+.ui-richtext .note-editing-area .note-editable h4,
+.ui-richtext .note-editing-area .note-editable h5,
+.ui-richtext .note-editing-area .note-editable h6,
+.ui-richtext .note-editing-area .note-editable blockquote {
+    color: inherit;
+}
+
+.ui-richtext .note-editing-area .note-editable a {
+    color: var(--lf-primary);
+}
+
+.ui-richtext .note-editing-area .note-editable a:hover {
+    color: var(--lf-primary-hover);
+}
+
+.ui-richtext .note-placeholder {
+    color: var(--lf-text-secondary);
+}
+
+.ui-richtext .note-editing-area .note-codable {
+    background: var(--lf-surface-alt);
+    color: var(--lf-text-primary);
+}
+
+.ui-richtext.note-frame .note-statusbar,
+.ui-richtext.note-airframe .note-statusbar {
+    background: var(--lf-surface-alt);
+    border-top: 1px solid var(--lf-border);
+}
+
+.ui-richtext .note-status-output {
+    color: var(--lf-text-secondary);
+    border-top-color: var(--lf-border);
+}
+
+.ui-richtext .note-toolbar .dropdown-toggle::after {
+    border-top-color: var(--lf-text-secondary);
+}

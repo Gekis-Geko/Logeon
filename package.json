@@ -1,0 +1,35 @@
+{
+  "name": "sword",
+  "version": "0.8.0",
+  "description": "Motore open-source per giochi play-by-chat con backend PHP/Twig e runtime frontend modulare.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:frontend:pilot": "node scripts/build/frontend-pilot.mjs",
+    "build:frontend:release": "node scripts/build/frontend-pilot.mjs --release && node scripts/build/check-window-globals.mjs",
+    "build:frontend:pilot:watch": "node scripts/build/frontend-pilot.mjs --watch",
+    "check:window-globals": "node scripts/build/check-window-globals.mjs",
+    "check:window-globals:update": "node scripts/build/check-window-globals.mjs --update",
+    "check:deprecations": "node scripts/guardrails/check-runtime-deprecations.mjs",
+    "check:frontend-patterns": "node scripts/guardrails/check-frontend-patterns.mjs",
+    "smoke:ready:dist-only-js": "node scripts/release/smoke-ready-dist-only-js.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/gekis88geko/sword.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://gitlab.com/gekis88geko/sword/issues"
+  },
+  "homepage": "https://gitlab.com/gekis88geko/sword#readme",
+  "devDependencies": {
+    "esbuild": "^0.28.0"
+  }
+}

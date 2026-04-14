@@ -1,0 +1,44 @@
+<div class="modal fade" id="admin-guild-events-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Evento gilda</h4>
+                <hr class="my-4" />
+
+                <form id="admin-guild-events-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12">
+                        <label class="form-label">Gilda</label>
+                        <select class="form-select" name="guild_id" id="admin-guild-events-modal-guild">
+                            <option value="">— seleziona gilda —</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Titolo</label>
+                        <input type="text" class="form-control" name="title" maxlength="200" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Inizio</label>
+                        <input type="datetime-local" class="form-control" name="starts_at" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Fine <span class="text-muted small">(opzionale)</span></label>
+                        <input type="datetime-local" class="form-control" name="ends_at">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione <span class="text-muted small">(opzionale)</span></label>
+                        <textarea class="form-control" name="body_html" rows="4" placeholder="Testo descrittivo dell'evento..."></textarea>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-guild-events-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-guild-events-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

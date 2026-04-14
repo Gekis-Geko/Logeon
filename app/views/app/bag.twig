@@ -1,0 +1,64 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+
+<main id="bag-page" class="row g-3 ui-page pb-3" data-character-id="{{ session('character_id')|e('html_attr') }}">
+    <header class="col-12">
+        <div class="card">
+            <div class="card-body d-flex flex-wrap justify-content-between align-items-start gap-3">
+                <div>
+                    <h1 class="h4 mb-1">Inventario</h1>
+                    <p class="text-muted mb-0">Gestisci gli oggetti del personaggio e organizzali per categoria.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="col-12 col-xl-3">
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="input-group">
+                    <input id="bag-search" type="text" class="form-control" placeholder="Cerca oggetto..." aria-describedby="button-reset">
+                    <button type="button" id="button-reset" class="btn btn-outline-secondary" data-action="bag-search-clear" title="Reset ricerca">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <ul class="nav nav-pills flex-column gap-2" id="bag-category-tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link disabled w-100 text-start" type="button" aria-disabled="true">Caricamento categorie...</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </aside>
+
+    <section class="col-12 col-xl-9">
+        <div class="card">
+            <div class="card-header d-flex justify-content-end align-items-center flex-wrap gap-2">
+                <div class="d-flex align-items-center flex-wrap gap-2" data-role="bag-sort-controls">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="Campo ordinamento inventario">
+                        <button type="button" class="btn btn-outline-primary active" data-role="bag-sort-field" data-sort-field="name" data-sort-default-direction="asc">Nome</button>
+                        <button type="button" class="btn btn-outline-primary" data-role="bag-sort-field" data-sort-field="quantity" data-sort-default-direction="desc">Quantita</button>
+                        <button type="button" class="btn btn-outline-primary" data-role="bag-sort-field" data-sort-field="rarity" data-sort-default-direction="asc">Rarita</button>
+                    </div>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-role="bag-sort-direction" title="Ordine ascendente" aria-label="Ordine ascendente">
+                        <i class="bi bi-sort-up" data-role="bag-sort-direction-icon" aria-hidden="true"></i>
+                        <span class="ms-1" data-role="bag-sort-direction-label">ASC</span>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="grid-bag"></div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock %}
+
+

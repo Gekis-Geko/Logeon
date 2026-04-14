@@ -1,0 +1,32 @@
+<div class="modal fade news-modal" id="news-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+
+                <h4 class="display-5 text-center mt-3 mb-3">Novità</h4>
+                <h6 class="text-center text-muted">Trovi tutte le ultime novità che riguardano il gioco</h6>
+
+                <hr class="my-4" />
+
+                <div id="news-modal-body" class="d-grid gap-2 col-12 mx-auto my-4">
+                    <div class="text-muted text-center">Caricamento...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<template name="template_news_list">
+    <div class="card rounded-0 border-0  border-bottom border-dark shadow">
+        <img class="card-img-top rounded-0" src="/assets/imgs/defaults-images/default-location.png" name="image">
+        <div class="card-body">
+            <h4 class="card-title" name="title"></h4>
+            <small class="text-end" name="date_create"></small>
+            <hr class="w-75 mx-auto" />
+            <div class="card-text" name="body"></div>
+        </div>
+    </div>
+</template>

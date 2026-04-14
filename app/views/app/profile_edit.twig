@@ -1,0 +1,275 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+{% set is_owner = (character_id == session('character_id')) %}
+
+<main id="profile-edit-page" class="row g-3 ui-page pb-3" data-character-id="{{ character_id|e('html_attr') }}" data-is-owner="{{ is_owner ? 1 : 0 }}">
+    <header class="col-12">
+        <div class="card">
+            <div class="card-body d-flex flex-wrap justify-content-between align-items-start gap-3">
+                <div>
+                    <h1 class="h4 mb-1">Modifica la scheda personaggio</h1>
+                    <p class="text-muted mb-0">Aggiorna identita fisica, narrativa e immagine del personaggio.</p>
+                </div>
+                <a href="/game/profile" class="btn btn-outline-secondary btn-sm">Torna al profilo</a>
+            </div>
+        </div>
+    </header>
+
+    {% if is_owner %}
+    <aside class="col-12 col-xl-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <h2 class="h6 mb-0">Suggerimenti rapidi</h2>
+            </div>
+            <div class="card-body small text-muted">
+                <ul class="mb-0">
+                    <li>I campi one-shot si bloccano dopo il primo salvataggio.</li>
+                    <li>Segni particolari resta sempre modificabile.</li>
+                    <li>Descrizioni e storia supportano HTML tramite editor.</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <h2 class="h6 mb-0">Stato campi one-shot</h2>
+            </div>
+            <div class="card-body small text-muted">
+                Per cambiare un presta-volto gia impostato usa la richiesta dedicata: viene gestita con cooldown e approvazione staff.
+            </div>
+        </div>
+
+        <div class="card mb-3" id="identity-request-card" style="display:none;">
+            <div class="card-header">
+                <h2 class="h6 mb-0">Richiesta cambio identità fisica</h2>
+            </div>
+            <div class="card-body">
+                <div class="small text-muted mb-2" data-identity-request-status>Campi bloccati? Invia una richiesta di modifica con motivazione.</div>
+                <div class="mb-2">
+                    <span class="badge text-bg-secondary d-none" data-identity-request-badge></span>
+                </div>
+                <div class="row g-2" id="identity-request-form">
+                    <div class="col-12">
+                        <label class="form-label">Cognome</label>
+                        <input type="text" class="form-control form-control-sm" name="ir_surname" maxlength="30" placeholder="Lascia vuoto per non cambiarlo">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Altezza (m)</label>
+                        <input type="number" class="form-control form-control-sm" name="ir_height" step="0.01" min="0.5" max="3.0">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Peso (kg)</label>
+                        <input type="number" class="form-control form-control-sm" name="ir_weight" step="1" min="20" max="500">
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Occhi</label>
+                        <input type="text" class="form-control form-control-sm" name="ir_eyes" maxlength="80">
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Capelli</label>
+                        <input type="text" class="form-control form-control-sm" name="ir_hair" maxlength="80">
+                    </div>
+                    <div class="col-4">
+                        <label class="form-label">Pelle</label>
+                        <input type="text" class="form-control form-control-sm" name="ir_skin" maxlength="80">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Motivazione</label>
+                        <input type="text" class="form-control form-control-sm" name="ir_reason" maxlength="255">
+                    </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="button" class="btn btn-outline-secondary btn-sm" data-identity-request-submit>Invia richiesta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="h6 mb-0">Richiesta cambio presta-volto</h2>
+                </div>
+                <div class="card-body">
+                    <div class="small text-muted mb-2" data-loanface-request-status>Se vuoi cambiare presta-volto, invia una richiesta con motivazione.</div>
+                    <div class="mb-3">
+                        <span class="badge text-bg-secondary d-none" data-loanface-request-badge></span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="profile-loanface-request">Nuovo presta-volto</label>
+                            <input id="profile-loanface-request" type="text" class="form-control" maxlength="255">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="profile-loanface-request-reason">Motivazione</label>
+                            <input id="profile-loanface-request-reason" type="text" class="form-control" maxlength="255">
+                        </div>
+                        <div class="col-12 d-flex justify-content-end">
+                            <button type="button" class="btn btn-outline-secondary" data-loanface-request-submit>Invia richiesta</button>
+                        </div>
+                    </div>
+                    <div class="form-text mt-2">Cooldown: <span data-loanface-request-cooldown>90</span> giorni dall'ultima approvazione.</div>
+                </div>
+            </div>
+    </aside>
+
+    <section class="col-12 col-xl-8">
+        <form id="profile-form" data-requires-page-owner>
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="h6 mb-0">Identita fisica</h2>
+                </div>
+                <div class="card-body">
+                    <p class="small text-muted mb-3">I campi marcati come one-shot possono essere modificati una sola volta. "Segni particolari" resta sempre modificabile.</p>
+                    <div class="row g-3">
+                        <div class="col-md-6 form-once-group">
+                            <label class="form-label">Cognome</label>
+                            <input type="text" class="form-control" name="surname" data-once="1" maxlength="30">
+                            <small class="text-danger d-none" data-lock-msg>Campo bloccato: richiedi modifica allo staff.</small>
+                        </div>
+                        <div class="col-md-6 form-once-group">
+                            <label class="form-label">Presta-volto</label>
+                            <input type="text" class="form-control" name="loanface" data-once="1" maxlength="255">
+                            <small class="text-danger d-none" data-lock-msg>Campo bloccato: usa la richiesta cambio presta-volto.</small>
+                        </div>
+
+                        <div class="col-md-3 form-once-group">
+                            <label class="form-label">Altezza (m)</label>
+                            <input type="number" class="form-control" name="height" data-once="1" step="0.01" min="0">
+                            <small class="text-danger d-none" data-lock-msg>Campo bloccato: richiedi modifica allo staff.</small>
+                        </div>
+                        <div class="col-md-3 form-once-group">
+                            <label class="form-label">Peso (kg)</label>
+                            <input type="number" class="form-control" name="weight" data-once="1" step="1" min="0">
+                            <small class="text-danger d-none" data-lock-msg>Campo bloccato: richiedi modifica allo staff.</small>
+                        </div>
+                        <div class="col-md-3 form-once-group">
+                            <label class="form-label">Occhi</label>
+                            <input type="text" class="form-control" name="eyes" data-once="1" maxlength="80">
+                            <small class="text-danger d-none" data-lock-msg>Campo bloccato: richiedi modifica allo staff.</small>
+                        </div>
+                        <div class="col-md-3 form-once-group">
+                            <label class="form-label">Capelli</label>
+                            <input type="text" class="form-control" name="hair" data-once="1" maxlength="80">
+                            <small class="text-danger d-none" data-lock-msg>Campo bloccato: richiedi modifica allo staff.</small>
+                        </div>
+
+                        <div class="col-md-3 form-once-group">
+                            <label class="form-label">Pelle</label>
+                            <input type="text" class="form-control" name="skin" data-once="1" maxlength="80">
+                            <small class="text-danger d-none" data-lock-msg>Campo bloccato: richiedi modifica allo staff.</small>
+                        </div>
+                        <div class="col-md-9">
+                            <label class="form-label">Segni particolari</label>
+                            <input type="text" class="form-control" name="particular_signs" maxlength="255">
+                            <div class="form-text">Campo libero: aggiornabile in base all'evoluzione narrativa del personaggio.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="h6 mb-0">Narrativa personaggio</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Descrizione fisica</label>
+                            <textarea class="form-control summernote" name="description_body" rows="6"></textarea>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Descrizione caratteriale</label>
+                            <textarea class="form-control summernote" name="description_temper" rows="6"></textarea>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Storia</label>
+                            <textarea class="form-control summernote" name="background_story" rows="8"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="h6 mb-0">Brano di sottofondo</h2>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group btn-group-sm mb-3" role="group" data-music-tab-group>
+                        <button type="button" class="btn btn-outline-primary active" data-music-tab-btn="link">Incolla link</button>
+                        <button type="button" class="btn btn-outline-primary" data-music-tab-btn="upload">Carica file</button>
+                    </div>
+
+                    <div data-music-tab-panel="link">
+                        <input id="profile-background-music-url" type="url" class="form-control" name="background_music_url" maxlength="512" placeholder="https://.../brano.mp3">
+                        <div class="form-text">Formati supportati: mp3, ogg, wav, m4a, aac, webm.</div>
+                        <div class="small text-warning mt-2 d-none" data-music-preview-warning>Il link deve puntare a un file audio diretto.</div>
+                    </div>
+
+                    <div data-music-tab-panel="upload" style="display:none;">
+                        <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="background_music_url" style="cursor:pointer;">
+                            <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="background_music_url">scegli file</button>
+                        </div>
+                        <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="background_music_url">10</span> MB.</div>
+                        <div class="progress mt-2 d-none" data-upload-progress="background_music_url">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="background_music_url">Annulla</button>
+                        <div class="mt-2 small text-muted d-none" data-music-upload-current></div>
+                    </div>
+
+                    <div class="mt-3 d-none" data-music-preview-wrap>
+                        <audio controls preload="none" loop data-music-preview-audio class="w-100"></audio>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2 class="h6 mb-0">Immagine profilo</h2>
+                </div>
+                <div class="card-body">
+                    <div class="btn-group btn-group-sm mb-3" role="group" data-avatar-tab-group>
+                        <button type="button" class="btn btn-outline-primary active" data-avatar-tab-btn="link">Incolla link</button>
+                        <button type="button" class="btn btn-outline-primary" data-avatar-tab-btn="upload">Carica file</button>
+                    </div>
+
+                    <div data-avatar-tab-panel="link">
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="avatar" data-preview-target="#profile-avatar-preview" maxlength="255" placeholder="https://.../immagine.jpg">
+                            <button class="btn btn-outline-secondary" type="button" data-clear-target="avatar">Svuota</button>
+                        </div>
+                        <div class="form-text">Incolla l'URL diretto dell'immagine.</div>
+                    </div>
+
+                    <div data-avatar-tab-panel="upload" style="display:none;">
+                        <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="avatar" style="cursor:pointer;">
+                            <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                            <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="avatar">scegli file</button>
+                        </div>
+                        <div class="form-text">Formati: JPG, PNG, GIF. Limite: <span data-upload-max-label="avatar">2</span> MB.</div>
+                        <div class="progress mt-2 d-none" data-upload-progress="avatar">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                        </div>
+                        <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="avatar">Annulla</button>
+                    </div>
+
+                    <img id="profile-avatar-preview" class="img-fluid rounded mt-3 border border-dark-subtle d-block mx-auto" style="max-width: 300px; width: 100%; max-height: 500px; object-fit: cover; object-position: center;" src="" alt="">
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2 mt-3">
+                <button type="button" class="btn btn-primary" data-profile-save>Salva modifiche</button>
+            </div>
+        </form>
+    </section>
+    {% else %}
+    <section class="col-12">
+        <div class="alert alert-warning" data-requires-page-owner="0">Operazione non consentita.</div>
+    </section>
+    {% endif %}
+</main>
+
+{% endblock %}
+
+

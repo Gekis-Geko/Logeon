@@ -1,0 +1,195 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<main class="container">
+    <section id="guild-page" class="row g-3 ui-page" data-guild-id="{{ guild_id|default('') }}">
+        <header class="col-12 ui-page-header d-flex justify-content-between align-items-center">
+            <h4 class="display-6 mt-3">Dettagli gilda</h4>
+            <a href="/game/guilds" class="btn btn-sm btn-outline-secondary"><i class="bi bi-arrow-left-short"></i> Torna alle gilde</a>
+        </header>
+        <hr class="w-75 ms-2" />
+
+        <article class="col-12 col-xl-8">
+            <article id="guild-hero" class="card text-bg-light mb-3 shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex align-items-center gap-3 flex-wrap">
+                        <img name="guild_image" class="img-fluid rounded border border-dark-subtle" style="width: 96px; aspect-ratio: 1 / 1; object-fit: cover;" alt="">
+                        <div class="flex-grow-1">
+                            <h5 name="guild_name" class="mb-1"></h5>
+                            <div class="text-muted small" name="guild_alignment"></div>
+                            <div class="small" name="guild_members_count"></div>
+                            <a href="#" name="guild_website" class="small d-none" target="_blank" rel="noopener">Sito ufficiale</a>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <button id="guild-doc-purpose-open" class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-journal-text"></i> Scopo</button>
+                        <button id="guild-doc-statute-open" class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-file-text"></i> Statuto</button>
+                        <button id="guild-doc-objectives-open" class="btn btn-sm btn-outline-secondary" type="button"><i class="bi bi-bullseye"></i> Obiettivi</button>
+                    </div>
+                </div>
+            </article>
+
+            <div class="card text-bg-light mb-3 shadow-sm">
+                <header class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-megaphone"></i> Bacheca di gilda</span>
+                    <button id="guild-announcement-open" class="btn btn-sm btn-outline-primary d-none" type="button" title="Nuovo annuncio"><i class="bi bi-plus-lg"></i></button>
+                </header>
+                <div class="card-body">
+                    <div id="guild-announcements" class="mt-2"></div>
+                    <div id="guild-announcements-pagination" class="mt-3 d-none"></div>
+                </div>
+            </div>
+
+            <div class="card text-bg-light mb-3 shadow-sm">
+                <header class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-calendar-event"></i> Riunioni</span>
+                    <button id="guild-event-open" class="btn btn-sm btn-outline-primary d-none" type="button" title="Nuovo evento"><i class="bi bi-plus-lg"></i></button>
+                </header>
+                <div class="card-body">
+                    <div id="guild-events" class="mt-2"></div>
+                    <div id="guild-events-pagination" class="mt-3 d-none"></div>
+                </div>
+            </div>
+
+            <div id="guild-applications-panel" class="card text-bg-light mb-3 shadow-sm d-none">
+                <header class="card-header">
+                    <i class="bi bi-person-lines-fill"></i> Candidature in attesa
+                </header>
+                <div class="card-body">
+                    <div id="guild-applications" class="mt-2"></div>
+                </div>
+            </div>
+
+            <div id="guild-logs-panel" class="card text-bg-light mb-3 shadow-sm d-none">
+                <header class="card-header">
+                    <i class="bi bi-clock-history"></i> Registro eventi
+                </header>
+                <div class="card-body">
+                    <div id="guild-logs" class="mt-2"></div>
+                    <div id="guild-logs-pagination" class="mt-3 d-none"></div>
+                </div>
+            </div>
+        </article>
+
+        <aside class="col-12 col-xl-4">
+            <div id="guild-membership-panel" class="card text-bg-light mb-3 shadow-sm d-none">
+                <header class="card-header">
+                    <span><i class="bi bi-person-badge"></i> Il tuo ruolo</span>
+                </header>
+                <div class="card-body">
+                    <h6 name="membership_role"></h6>
+                    <ul class="list-group list-group-flush mt-2">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">Tipo appartenenza</span>
+                            <span class="small" name="membership_primary_label">-</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span class="small text-muted">Stipendio</span>
+                            <span class="small" name="membership_salary">-</span>
+                        </li>
+                    </ul>
+                    <div class="d-flex flex-wrap gap-2 mt-3">
+                        <button id="guild-primary-toggle" class="btn btn-sm btn-outline-secondary d-none" type="button">Imposta come principale</button>
+                        <button id="guild-claim-salary" class="btn btn-sm btn-outline-success" type="button">Riscatta stipendio</button>
+                    </div>
+                    <div class="small text-muted mt-2 d-none" id="guild-salary-status"></div>
+                    <div class="small text-muted mt-2 d-none" id="guild-bank-status"></div>
+                </div>
+            </div>
+
+            <div id="guild-requirements-panel" class="card text-bg-light mb-3 shadow-sm ">
+                <header class="card-header d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-list-check"></i> Requisiti</span>
+                    <button id="guild-requirement-open" class="btn btn-sm btn-outline-primary d-none" type="button" title="Nuovo requisito"><i class="bi bi-plus-lg"></i></button>
+                </header>
+                <div class="card-body">
+                    <div id="guild-requirements"></div>
+                </div>
+            </div>
+
+            <div id="guild-apply-panel" class="card text-bg-light mb-3 shadow-sm d-none">
+                <header class="card-header">
+                    <i class="bi bi-send"></i> Candidatura
+                </header>
+                <div class="card-body">
+                    <div class="text-muted small mb-2">Presentati brevemente e spiega la motivazione.</div>
+                    <textarea id="guild-apply-message" class="form-control mb-2" rows="4" placeholder="Scrivi un messaggio..."></textarea>
+                    <button id="guild-apply-submit" class="btn btn-sm btn-outline-primary" type="button">Invia candidatura</button>
+                    <div id="guild-apply-disabled" class="alert alert-warning mt-3 d-none"></div>
+                </div>
+            </div>
+
+            <div class="card text-bg-light my-3 shadow-sm">
+                <header class="card-header">
+                    <i class="bi bi-people"></i> Membri
+                </header>
+                <div id="guild-members" class="card-body mt-2"></div>
+            </div>
+        </aside>
+    </section>
+</main>
+
+<template name="template_guild_member">
+    <div class="p-2 mb-2 border rounded">
+        <div class="d-flex align-items-center gap-2">
+            <img name="avatar" class="rounded border border-dark-subtle" style="width: 44px; height: 66px; object-fit: cover;" alt="">
+            <div class="d-flex flex-column justify-content-center flex-grow-1">
+                <div class="fw-semibold" name="name"></div>
+                <div class="small text-muted" name="role"></div>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary d-none" name="member_manage" type="button" title="Gestisci membro"><i class="bi bi-gear"></i></button>
+        </div>
+    </div>
+</template>
+
+<template name="template_guild_application">
+    <div class="border rounded p-2 mb-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="fw-semibold" name="name"></div>
+            <div class="small text-muted" name="date"></div>
+        </div>
+        <div class="small text-muted" name="message"></div>
+        <div class="mt-2 d-none" name="role_picker">
+            <label class="form-label small mb-1">Ruolo iniziale</label>
+            <select class="form-select form-select-sm" name="role_select"></select>
+        </div>
+        <div class="d-flex gap-2 mt-2">
+            <button class="btn btn-sm btn-outline-success" name="accept" type="button">Accetta</button>
+            <button class="btn btn-sm btn-outline-danger" name="decline" type="button">Rifiuta</button>
+        </div>
+    </div>
+</template>
+
+<template name="template_guild_announcement">
+    <div class="border rounded p-2 mb-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="fw-semibold" name="title"></div>
+            <div class="small text-muted" name="meta"></div>
+        </div>
+        <div class="small mt-2" name="body"></div>
+        <div class="d-flex justify-content-end mt-2" name="actions"></div>
+    </div>
+</template>
+
+<template name="template_guild_event">
+    <div class="border rounded p-2 mb-2">
+        <div class="d-flex justify-content-between align-items-center">
+            <div class="fw-semibold" name="title"></div>
+            <div class="small text-muted" name="meta"></div>
+        </div>
+        <div class="small text-muted" name="author"></div>
+        <div class="small mt-2" name="body"></div>
+        <div class="d-flex justify-content-end mt-2" name="actions"></div>
+    </div>
+</template>
+
+<template name="template_guild_log">
+    <div class="border rounded p-2 mb-2">
+        <div class="small" name="action"></div>
+        <div class="small text-muted" name="date"></div>
+    </div>
+</template>
+
+{% include 'app/modals/guild/guild.twig' %}
+{% endblock %}
+

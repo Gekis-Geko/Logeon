@@ -1,0 +1,201 @@
+{% set admin_page = admin_page|default('dashboard')|lower %}
+{% set module_admin_sections = module_menu_sections('admin', 'aside') %}
+
+{% set is_superuser  = session('user_is_superuser') == 1 %}
+{% set is_admin      = session('user_is_administrator') == 1 %}
+{% set is_moderator  = session('user_is_moderator') == 1 %}
+{% set is_master     = session('user_is_master') == 1 %}
+
+<aside class="col-lg-3 col-xl-2 py-2 admin-aside">
+    <div class="nav nav-pills justify-content-between admin-menu admin-menu-tools" aria-orientation="vertical">
+        <a class="nav-link {{ admin_page in ['dashboard'] ? 'active' : '' }}" href="/admin/" data-bs-toggle="tooltip" data-bs-title="Panoramica">
+            <i class="bi bi-easel-fill"></i>
+        </a>
+        {% if is_superuser %}
+        <a class="nav-link {{ admin_page in ['themes'] ? 'active' : '' }}" href="/admin/themes" data-bs-toggle="tooltip" data-bs-title="Temi">
+            <i class="bi bi-palette-fill"></i>
+        </a>
+        <a class="nav-link {{ admin_page in ['modules'] ? 'active' : '' }}" href="/admin/modules" data-bs-toggle="tooltip" data-bs-title="Moduli">
+            <i class="bi bi-box-seam-fill"></i>
+        </a>
+        <a class="nav-link {{ admin_page in ['settings'] ? 'active' : '' }}" href="/admin/settings" data-bs-toggle="tooltip" data-bs-title="Impostazioni">
+            <i class="bi bi-gear-fill"></i>
+        </a>
+        {% endif %}
+        <a class="nav-link text-danger" href="/game/" data-bs-toggle="tooltip" data-bs-title="Torna al Gioco">
+            <i class="bi bi-box-arrow-left"></i>
+        </a>
+    </div>
+
+    <div class="input-group input-group-sm my-2">
+        <input id="menu-search" type="text" class="form-control" placeholder="Cerca nel menu...">
+        <button type="button" class="btn btn-outline-secondary" data-action="menu-search-clear" title="Pulisci ricerca">
+            <i class="bi bi-x-circle"></i>
+        </button>
+    </div>
+
+    <section id="admin-list-menu">
+        {% if is_moderator or is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Utenti e personaggi</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            {% if is_admin or is_superuser %}
+            <a class="nav-link {{ admin_page == 'users' ? 'active' : '' }}" href="/admin/users">Utenti</a>
+            {% endif %}
+            <a class="nav-link {{ admin_page == 'characters' ? 'active' : '' }}" href="/admin/characters">Personaggi</a>
+            <a class="nav-link {{ admin_page == 'blacklist' ? 'active' : '' }}" href="/admin/blacklist">Blacklist</a>
+        </div>
+        {% endif %}
+
+        {% if is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Parametri ed entita</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'archetypes' ? 'active' : '' }}" href="/admin/archetypes">Archetipi</a>
+            <a class="nav-link {{ admin_page == 'character-attributes' ? 'active' : '' }}" href="/admin/character-attributes">Attributi personaggio</a>
+        </div>
+        {% endif %}
+
+        {% if is_moderator or is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Richieste e segnalazioni</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'character-requests' ? 'active' : '' }}" href="/admin/character-requests">Richieste personaggio</a>
+            <a class="nav-link {{ admin_page == 'message-reports' ? 'active' : '' }}" href="/admin/message-reports">Segnalazioni messaggi</a>
+        </div>
+        {% endif %}
+
+        {% if is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Oggetti</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'items' ? 'active' : '' }}" href="/admin/items">Oggetti</a>
+            <a class="nav-link {{ admin_page in ['items-categories', 'categories'] ? 'active' : '' }}" href="/admin/items-categories">Categorie oggetti</a>
+            <a class="nav-link {{ admin_page in ['items-rarities', 'rarities'] ? 'active' : '' }}" href="/admin/items-rarities">Rarita oggetti</a>
+            <a class="nav-link {{ admin_page == 'equipment-slots' ? 'active' : '' }}" href="/admin/equipment-slots">Slot equipaggiamento</a>
+            <a class="nav-link {{ admin_page == 'item-equipment-rules' ? 'active' : '' }}" href="/admin/item-equipment-rules">Regole equipaggiamento</a>
+        </div>
+        {% endif %}
+
+        {% for module_section in module_admin_sections %}
+            <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> {{ module_section.title }}</h6>
+            <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+                {% for menu_entry in module_section.items %}
+                    {% set module_page_active = (menu_entry.page is not empty and admin_page == menu_entry.page) %}
+                    <a class="nav-link {{ module_page_active ? 'active' : '' }}{% if menu_entry.class is not empty %} {{ menu_entry.class }}{% endif %}" href="{{ menu_entry.href }}"{% if menu_entry.target is not empty %} target="{{ menu_entry.target|e('html_attr') }}"{% endif %}{% if menu_entry.rel is not empty %} rel="{{ menu_entry.rel|e('html_attr') }}"{% endif %}>
+                        {% if menu_entry.icon is not empty %}<i class="{{ menu_entry.icon|e('html_attr') }} me-1"></i>{% endif %}{{ menu_entry.label }}
+                    </a>
+                {% endfor %}
+            </div>
+        {% endfor %}
+
+        {% if is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Commercio</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            {% if is_superuser %}
+            <a class="nav-link {{ admin_page == 'currencies' ? 'active' : '' }}" href="/admin/currencies">Valute</a>
+            <hr class="w-75 my-1" />
+            {% endif %}
+            <a class="nav-link {{ admin_page == 'shops' ? 'active' : '' }}" href="/admin/shops">Negozi</a>
+            <a class="nav-link {{ admin_page in ['inventory-shop', 'inventory'] ? 'active' : '' }}" href="/admin/inventory-shop">Inventario negozi</a>
+        </div>
+        {% endif %}
+
+        {% if is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Mondo e navigazione</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'maps' ? 'active' : '' }}" href="/admin/maps">Mappe</a>
+            <a class="nav-link {{ admin_page == 'locations' ? 'active' : '' }}" href="/admin/locations">Luoghi</a>
+            <hr class="w-75 my-1" />
+            <a class="nav-link {{ admin_page in ['weather', 'weather-overview'] ? 'active' : '' }}" href="/admin/weather-overview">Panoramica meteo</a>
+            <a class="nav-link {{ admin_page == 'weather-catalogs' ? 'active' : '' }}" href="/admin/weather-catalogs">Cataloghi meteo</a>
+            <a class="nav-link {{ admin_page == 'weather-profiles' ? 'active' : '' }}" href="/admin/weather-profiles">Profili e assegnazioni</a>
+            <a class="nav-link {{ admin_page == 'weather-overrides' ? 'active' : '' }}" href="/admin/weather-overrides">Override e legacy</a>
+        </div>
+        {% endif %}
+
+        {% if is_master or is_moderator or is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Narrativa</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'quests' ? 'active' : '' }}" href="/admin/quests">Quest</a>
+            <a class="nav-link {{ admin_page == 'narrative-events' ? 'active' : '' }}" href="/admin/narrative-events">Attivita recenti</a>
+            <a class="nav-link {{ admin_page == 'system-events' ? 'active' : '' }}" href="/admin/system-events">Eventi di sistema</a>
+            {% if is_superuser %}
+            <a class="nav-link {{ admin_page == 'character-lifecycle' ? 'active' : '' }}" href="/admin/character-lifecycle">Ciclo vita PG</a>
+            {% endif %}
+            <a class="nav-link {{ admin_page == 'conflicts' ? 'active' : '' }}" href="/admin/conflicts">Conflitti</a>
+            <a class="nav-link {{ admin_page == 'narrative-states' ? 'active' : '' }}" href="/admin/narrative-states">Stati narrativi</a>
+            {% if is_moderator or is_admin or is_superuser %}
+            <a class="nav-link {{ admin_page == 'narrative-tags' ? 'active' : '' }}" href="/admin/narrative-tags">Tag narrativi</a>
+            {% endif %}
+            {% if is_superuser %}
+            <hr class="w-75 my-1" />
+            <a class="nav-link {{ admin_page == 'narrative-delegation-grants' ? 'active' : '' }}" href="/admin/narrative-delegation-grants">Permessi narrativi</a>
+            <a class="nav-link {{ admin_page == 'narrative-npcs' ? 'active' : '' }}" href="/admin/narrative-npcs">PNG Leggeri</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Economia</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'jobs' ? 'active' : '' }}" href="/admin/jobs">Lavori</a>
+            <a class="nav-link {{ admin_page == 'jobs-tasks' ? 'active' : '' }}" href="/admin/jobs-tasks">Compiti lavori</a>
+            <a class="nav-link {{ admin_page == 'jobs-levels' ? 'active' : '' }}" href="/admin/jobs-levels">Livelli lavori</a>
+        </div>
+        {% endif %}
+
+        {% if is_moderator or is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Gruppi e fazioni</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            {% if is_superuser %}
+            <a class="nav-link {{ admin_page == 'social-status' ? 'active' : '' }}" href="/admin/social-status">Stati sociali</a>
+            {% endif %}
+            {% if is_admin or is_superuser %}
+            {% if is_superuser %}<hr class="w-75 my-1" />{% endif %}
+            <a class="nav-link {{ admin_page == 'guilds' ? 'active' : '' }}" href="/admin/guilds">Gilde</a>
+            <a class="nav-link {{ admin_page == 'guild-alignments' ? 'active' : '' }}" href="/admin/guild-alignments">Allineamento gilde</a>
+            <a class="nav-link {{ admin_page in ['guilds-reqs', 'guild-reqs'] ? 'active' : '' }}" href="/admin/guilds-reqs">Requisiti gilde</a>
+            <a class="nav-link {{ admin_page in ['guilds-locations', 'guild-locations'] ? 'active' : '' }}" href="/admin/guilds-locations">Luoghi gilde</a>
+            {% endif %}
+            <a class="nav-link {{ admin_page == 'guilds-events' ? 'active' : '' }}" href="/admin/guilds-events">Eventi gilde</a>
+            {% if is_superuser %}
+            <hr class="w-75 my-1" />
+            <a class="nav-link {{ admin_page == 'factions' ? 'active' : '' }}" href="/admin/factions">Fazioni</a>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {% if is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Comunicazione</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'news' ? 'active' : '' }}" href="/admin/news">News</a>
+            <hr class="w-75 my-1" />
+            <a class="nav-link {{ admin_page == 'forums' ? 'active' : '' }}" href="/admin/forums">Forum</a>
+            <a class="nav-link {{ admin_page == 'forums-types' ? 'active' : '' }}" href="/admin/forums-types">Categorie forum</a>
+        </div>
+        {% endif %}
+
+        {% if is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Documentazione</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'storyboards' ? 'active' : '' }}" href="/admin/storyboards">Ambientazione</a>
+            <a class="nav-link {{ admin_page == 'rules' ? 'active' : '' }}" href="/admin/rules">Regolamento</a>
+            <a class="nav-link {{ admin_page == 'how-to-play' ? 'active' : '' }}" href="/admin/how-to-play">Come giocare</a>
+        </div>
+        {% endif %}
+
+        {% if is_moderator or is_admin or is_superuser %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Logs</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            <a class="nav-link {{ admin_page == 'logs-conflicts' ? 'active' : '' }}" href="/admin/logs-conflicts">Logs conflitti</a>
+            <a class="nav-link {{ admin_page == 'logs-currency' ? 'active' : '' }}" href="/admin/logs-currency">Logs valute</a>
+            <a class="nav-link {{ admin_page == 'logs-experience' ? 'active' : '' }}" href="/admin/logs-experience">Logs esperienza</a>
+            <a class="nav-link {{ admin_page == 'logs-fame' ? 'active' : '' }}" href="/admin/logs-fame">Logs fama</a>
+            <a class="nav-link {{ admin_page == 'logs-guild' ? 'active' : '' }}" href="/admin/logs-guild">Logs gilda</a>
+            <a class="nav-link {{ admin_page == 'logs-job' ? 'active' : '' }}" href="/admin/logs-job">Logs lavori</a>
+            <a class="nav-link {{ admin_page == 'logs-location-access' ? 'active' : '' }}" href="/admin/logs-location-access">Logs accessi luoghi</a>
+            {% if is_admin or is_superuser %}
+            <a class="nav-link {{ admin_page == 'logs-sys' ? 'active' : '' }}" href="/admin/logs-sys">Logs sistema</a>
+            <a class="nav-link {{ admin_page == 'logs-narrative' ? 'active' : '' }}" href="/admin/logs-narrative">Log narrativi</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </section>
+</aside>

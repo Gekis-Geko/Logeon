@@ -1,0 +1,80 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<main class="container">
+    <section id="shop-page" class="row ui-page pb-3" data-shop-id="{{ shop_id|default('') }}" data-location-id="{{ location_id|default('') }}">
+        <header>
+            <h4 class="display-6">Negozio</h4>
+            <h6>Acquista oggetti per il tuo personaggio.</h6>
+        </header>
+        <hr class="w-75 ms-2" />
+        <div class="row align-items-center">
+            <div class="col-12 col-lg-9">
+                <div class="row g-2 align-items-end">
+                    <div class="col-12 col-md-7">
+                        <label class="form-label small text-muted">Ordina per:</label>
+                        <div>
+                            <input type="hidden" id="shop-sort" name="shop-sort" value="name">
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <label class="form-label small text-muted">Filtri per:</label>
+                        <div>
+                            <input type="hidden" id="shop-filter" name="shop-filter" value="all">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-3 text-lg-end">
+                <div class="input-group">
+                    <input id="shop-search" type="text" class="form-control" placeholder="Cerca oggetto...">
+                    <button type="button" class="btn btn-outline-secondary" data-action="shop-search-clear"><i class="bi bi-x-circle"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row align-items-center">
+            <div class="col-12">
+                <div id="shop-balance" class="d-flex flex-wrap gap-3 justify-content-end align-items-center"></div>
+            </div>
+        </div>
+
+        <ul class="nav nav-tabs card-header-tabs ui-tabs mb-2" id="shop-category-tabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" type="button" data-role="shop-category" data-category-id="">Tutti</button>
+            </li>
+        </ul>
+
+        <div id="shop-items" class="row row-cols-1 row-cols-md-2 row-cols-lg-3"></div>
+    </section>
+</main>
+
+<template name="template_shop_item">
+    <div class="col">
+        <div class="card h-100 shadow-sm">
+            <img class="card-img-top" name="image" src="/assets/imgs/defaults-images/default-location.png" alt="">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <span name="name"></span>
+                    <span class="badge text-bg-secondary ms-2 d-none" name="soldout">Esaurito</span>
+                </h5>
+                <p class="card-text" name="description"></p>
+                <div class="small text-muted" name="meta"></div>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <span class="badge text-bg-dark" name="price"></span>
+                    <span class="small text-muted" name="stock"></span>
+                    <span class="small text-danger d-none" name="afford">Saldo insufficiente</span>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary d-none" name="sell">Vendi</button>
+                    <button type="button" class="btn btn-sm btn-success" name="buy">Compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+{% endblock %}
+

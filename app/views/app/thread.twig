@@ -1,0 +1,63 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+	<section id="thread-page" class="row ui-page" data-thread-id="{{ thread_id|e('html_attr') }}">
+		<header class="mt-3">
+			<nav class="breadcrumb">
+				<a href="/game/forum" class="breadcrumb-item">Forums</a>
+				<a class="breadcrumb-item" name="forum_title"></a>
+				<span class="breadcrumb-item active" name="thread_title"></span>
+			</nav>
+			<div class="d-flex gap-4 align-items-center">
+				<h4 name="thread_title"></h4>
+				<h4 name="details"></h4>
+			</div>
+			<div class="d-flex gap-2 align-items-center">
+				<p class="lead">Creato da: <b name="character_name"></b> <a href="#" name="link_profile"><i class="bi bi-box-arrow-up-right"></i></a></p>
+				<p>il <span name="date_created"></span></p>
+			</div>
+		</header>
+
+		<section class="row">
+			<article class="col-md-12">
+				<div name="thread_buttons" class="text-end border-bottom px-5 py-2"></div>
+				<div name="thread_body" class="p-5 lead"></div>
+			</article>
+			<hr />
+			<article id="thread_answer" class="col-md-9 mx-auto py-4" data-requires-auth>
+				<h5 class="text-center">Rispondi al thread</h5>
+				<div class="py-3">
+					<div class="form-group">
+						<textarea id="answer_editor" class="summernote form-control" rows="4" name="body"></textarea>
+					</div>
+					<input type="hidden" name="father_id" value="{{ thread_id }}">
+					<input type="hidden" name="forum_id" value="{{ forum_id }}">
+					<input type="hidden" name="character_id" value="{{ session('character_id') }}">
+				</div>
+				<div class="text-center">
+					<button type="button" class="btn btn-success w-50 my-3" data-action="thread-answer" data-requires-auth>
+						Rispondi
+					</button>
+				</div>
+				<hr class="w-75 mx-auto" />
+			</article>
+			<div id="grid-answers"></div>
+		</section>
+	</section>
+</div>
+
+<template name="template_thread_answer">
+	<div class="answer p-4 m-3 bg-light">
+		<h6><b name="answer_date"></b><br/> Da: <span name="answer_character"></span> <a href="#" name="link_profile"><i class="bi bi-box-arrow-up-right"></i></a></h6>
+		<div name="answer_body" class="px-3"></div>
+		<div name="answer_buttons" class="text-end"></div>
+	</div>
+</template>
+
+{% include 'app/modals/forum/thread-edit.twig' with { id: thread_id, forum_id: forum_id, character_id: session('character_id') } %}
+{% include 'app/modals/forum/thread-move.twig' %}
+
+{% endblock %}
+
+

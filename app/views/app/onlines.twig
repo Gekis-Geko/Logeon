@@ -1,0 +1,68 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+    <section id="onlines-page" class="row ui-page">
+        <header class="mt-3">
+            <h4 class="display-6">Personaggi in gioco</h4>
+            <div class="d-flex justify-content-between py-2">
+                <h6>Visualizza la lista per scoprire con chi poter giocare</h6>
+                <button id="pageResync" class="btn btn-light"><span class="bi bi-arrow-repeat"></span> Aggiorna</button>
+            </div>
+        </header>
+        <hr class="w-75 ms-2" />
+        <article class="mb-3 col-md-12 p-3">
+            <div id="onlines-page-body"></div>
+        </article>
+    </section>
+</div>
+
+<template name="template_onlines_section">
+    <div class="onlines-section">
+        <h5><img name="map_icon" class="img-fluid round" width="64"> <span name="map_name"></span></h5>
+        <hr />
+        <div class="onlines-map-groups my-4"></div>
+    </div>
+</template>
+
+<template name="template_onlines_subsection">
+    <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="mb-0" name="group_title"></h6>
+            <a href="#" name="group_travel_link" class="btn btn-sm btn-light d-none">
+                <span class="bi bi-signpost"></span> Viaggia
+            </a>
+        </div>
+        <div class="list-group list-group-flush"></div>
+    </div>
+</template>
+
+<template name="template_onlines_list_sections">
+    <div class="list-group-item">
+        <div class="row">
+            <div class="col">
+                <span class="bi bi-circle-fill me-3" name="availability" data-bs-toggle="tooltip" data-bs-title=""></span>
+                <img name="avatar" class="img-fluid" width="46" height="46">
+                <b name="naming" class="ms-2"></b>
+                <span class="ms-2 bi" name="gender" data-bs-toggle="tooltip" data-bs-title=""></span>
+                <span class="bi bi-eye-slash-fill d-none ml-3" name="invisible_icon" data-bs-toggle="tooltip" data-bs-title="Invisibile"></span>
+            </div>
+            <div class="col d-flex align-items-center">
+                <img name="socialstatus_icon" data-bs-toggle="tooltip" data-bs-title="" class="img-fluid ms-4" width="32">
+            </div>
+            <div class="col ">
+                <div class="d-flex justify-content-end align-items-center">
+                    <a href="#" name="profile_link" class="btn btn-sm btn-light me-3" data-bs-toggle="tooltip" data-bs-title="Visualizza profilo">
+                        <span class="bi bi-person-badge"></span>
+                    </a>
+                    <a href="#" name="message_link" class="btn btn-sm btn-light" data-bs-toggle="tooltip" data-bs-title="Invia messaggio">
+                        <span class="bi bi-envelope-paper"></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+{% endblock %}
+

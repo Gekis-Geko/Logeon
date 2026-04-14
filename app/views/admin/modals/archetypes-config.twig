@@ -1,0 +1,38 @@
+<div class="modal fade" id="admin-archetypes-config-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-sliders me-2"></i>Configurazione sistema archetipi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="form-label mb-1 me-4">Sistema archetipi</label>
+                        <input type="hidden" id="s-archetypes-enabled" name="archetypes_enabled" value="1">
+                        <div class="form-text mt-1">Abilita o disabilita il sistema archetipi nella piattaforma.</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label mb-1 me-4">Archetipo obbligatorio</label>
+                        <input type="hidden" id="s-archetype-required" name="archetype_required" value="0">
+                        <div class="form-text mt-1">Se attivo, la selezione dell'archetipo è obbligatoria alla creazione del personaggio.</div>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label mb-1 me-4">Archetipi multipli</label>
+                        <input type="hidden" id="s-multiple-archetypes" name="multiple_archetypes_allowed" value="0">
+                        <div class="form-text mt-1">Permette l'assegnazione di più archetipi allo stesso personaggio.</div>
+                    </div>
+                    <div class="col-12 d-none" data-role="admin-archetypes-config-note-wrap">
+                        <div class="alert alert-info py-2 mb-0" data-role="admin-archetypes-config-note"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" data-action="admin-archetypes-config-save">
+                    <i class="bi bi-floppy me-1"></i>Salva configurazione
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

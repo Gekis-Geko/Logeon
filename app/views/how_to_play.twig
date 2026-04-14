@@ -1,0 +1,31 @@
+{% extends theme_shell('public', 'layouts/layout.twig') %}
+
+{% block content %}
+<main>
+    <header class="py-5 text-center docs-hero">
+        <div class="bg-light my-5 py-4">
+            <h1 class="display-3 my-4">Come giocare</h1>
+            <h3 class="display-6 text-muted mb-4">Leggi la guida e scopri come iniziare a giocare in modo corretto</h3>
+        </div>
+    </header>
+    <div class="container my-5">
+        <div class="row docs-page" id="how-to-play-page">
+            <div class="col-4 col-lg-3">
+                <div class="mb-3">
+                    <input type="text" class="form-control form-control-sm" data-role="docs-filter" placeholder="Cerca guida...">
+                </div>
+                <ul class="nav flex-column" data-role="docs-nav" role="tablist"></ul>
+            </div>
+            <div class="col-8 col-lg-9">
+                <div class="card card-body">
+                    <div class="tab-content" data-role="docs-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% include 'sys/modals/license.twig' %}
+
+{% endblock %}
+

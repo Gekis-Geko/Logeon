@@ -1,0 +1,38 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+    <div id="maps-page" class="row ui-page">
+        <div class="col-12">
+            <header>
+                <h4 class="display-6"></h4>
+            </header>
+        </div>
+        <article class="mb-3 col-md-12 p-3">
+            <div id="maps-page-body" class="row g-4"></div>
+        </article>
+    </div>
+</div>
+
+<template name="template_maps_card">
+    <article class="col-md-4">
+        <div class="card h-100">
+            <img class="card-img-top map-image" alt="">
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-2">
+                    <img class="map-icon d-none" width="28" height="28" alt="">
+                    <h5 class="card-title mb-0 map-title"></h5>
+                    <span class="badge text-bg-warning map-mobile-badge d-none">Mobile</span>
+                </div>
+                <p class="card-text mt-2 map-description"></p>
+                <div class="small text-muted map-status"></div>
+                <div class="small mt-2 map-neighbors"></div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="#" class="btn btn-primary map-link">Viaggia <i class="bi bi-arrow-right-short"></i></a>
+            </div>
+        </div>
+    </article>
+</template>
+{% endblock %}
+

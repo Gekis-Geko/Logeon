@@ -1,0 +1,917 @@
+<div class="modal fade" id="admin-quest-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Dettaglio quest</h4>
+                <h6 class="text-center text-muted">Panoramica rapida e accesso ai pannelli operativi della quest selezionata.</h6>
+                <hr class="my-4" />
+
+                <div class="d-flex flex-wrap justify-content-end gap-1 mb-3">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quests-open-steps" data-role="admin-quests-detail-action" disabled>Step</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quests-open-conditions" data-role="admin-quests-detail-action" disabled>Condizioni</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quests-open-outcomes" data-role="admin-quests-detail-action" disabled>Esiti</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quests-open-links" data-role="admin-quests-detail-action" disabled>Link eventi</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quests-open-instances" data-role="admin-quests-detail-action" disabled>Istanze</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quests-open-closures" data-role="admin-quests-detail-action" disabled>Chiusure</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quests-open-rewards" data-role="admin-quests-detail-action" disabled>Ricompense</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quests-open-logs" data-role="admin-quests-detail-action" disabled>Log</button>
+                </div>
+
+                <div id="admin-quest-detail-empty" class="small text-muted">Seleziona una quest dalla tabella per vedere i dettagli.</div>
+                <div id="admin-quest-detail" class="d-none"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-steps-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Step Quest</h4>
+                <h6 class="text-center text-muted">Gestisci la sequenza operativa della quest.</h6>
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quest-steps-reload">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+                    </button>
+                </div>
+
+                <div id="admin-quest-steps-list" class="list-group mb-3"></div>
+
+                <form id="admin-quest-step-form" class="row g-2">
+                    <input type="hidden" name="step_id" value="0">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Identificatore step</label>
+                        <input type="text" class="form-control" name="step_key" maxlength="80" placeholder="es. step_intro">
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <label class="form-label">Titolo</label>
+                        <input type="text" class="form-control" name="title" maxlength="255">
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" name="step_type">
+                            <option value="action">Azione</option>
+                            <option value="dialogue">Dialogo</option>
+                            <option value="checkpoint">Checkpoint</option>
+                            <option value="system">Sistema</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-1">
+                        <label class="form-label">Ordine</label>
+                        <input type="number" class="form-control" name="order_index" min="0" value="0">
+                    </div>
+                    <div class="col-12 col-md-1">
+                        <label class="form-label">Opzionale</label>
+                        <select class="form-select" name="is_optional">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="2"></textarea>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-action="admin-quest-step-reset">Reset</button>
+                        <button type="button" class="btn btn-outline-primary" data-action="admin-quest-step-reorder">Salva ordine</button>
+                        <button type="button" class="btn btn-primary" data-action="admin-quest-step-save">Salva</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-conditions-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Condizioni Quest</h4>
+                <h6 class="text-center text-muted">Definisci i trigger che completano gli step.</h6>
+                <hr class="my-4" />
+
+                <div class="row g-2 mb-3">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Filtro step</label>
+                        <select id="admin-quest-condition-step-filter" class="form-select">
+                            <option value="0">Tutti gli step</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quest-conditions-reload">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+                        </button>
+                    </div>
+                </div>
+
+                <div id="admin-quest-conditions-list" class="list-group mb-3"></div>
+
+                <form id="admin-quest-condition-form" class="row g-2">
+                    <input type="hidden" name="condition_id" value="0">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Step</label>
+                        <select class="form-select" name="quest_step_definition_id" data-role="admin-quest-condition-step-id">
+                            <option value="0">Condizione di quest</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo trigger</label>
+                        <select class="form-select" name="condition_type">
+                            <option value="manual_staff">Manuale staff</option>
+                            <option value="narrative.event.created">Evento narrativo</option>
+                            <option value="system_event.status_changed">Evento di sistema</option>
+                            <option value="faction.membership.changed">Membership fazione</option>
+                            <option value="lifecycle.phase.entered">Ciclo vita</option>
+                            <option value="presence.position_changed">Cambio posizione</option>
+                            <option value="quest_lifecycle">Ciclo vita quest</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Operatore</label>
+                        <select class="form-select" name="operator">
+                            <option value="eq">Uguale (=)</option>
+                            <option value="ne">Diverso (&ne;)</option>
+                            <option value="in">Incluso in</option>
+                            <option value="not_in">Escluso da</option>
+                            <option value="gt">Maggiore di (&gt;)</option>
+                            <option value="gte">Maggiore o uguale (&ge;)</option>
+                            <option value="lt">Minore di (&lt;)</option>
+                            <option value="lte">Minore o uguale (&le;)</option>
+                            <option value="contains">Contiene</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Modalita</label>
+                        <select class="form-select" name="evaluation_mode">
+                            <option value="all_required">Tutte necessarie</option>
+                            <option value="any_required">Almeno una</option>
+                            <option value="blocking">Bloccante</option>
+                            <option value="optional">Opzionale</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Attiva</label>
+                        <select class="form-select" name="is_active">
+                            <option value="1">Si</option>
+                            <option value="0">No</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Campo payload (guidato)</label>
+                        <select class="form-select" name="field_key_preset" data-role="admin-quest-condition-field-key-preset">
+                            <option value="">Nessun campo</option>
+                            <option value="event_type">Tipo evento</option>
+                            <option value="status">Stato</option>
+                            <option value="phase">Fase</option>
+                            <option value="membership_action">Azione membership</option>
+                            <option value="member_role">Ruolo membro</option>
+                            <option value="map_id">Mappa</option>
+                            <option value="location_id">Luogo</option>
+                            <option value="custom">Altro (avanzato)</option>
+                        </select>
+                        <input type="text" class="form-control mt-2 d-none" name="field_key_custom" maxlength="120" placeholder="Campo personalizzato...">
+                        <input type="hidden" name="field_key" value="">
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Valore payload (guidato)</label>
+                        <select class="form-select" name="field_value_preset" data-role="admin-quest-condition-value-preset">
+                            <option value="">Nessun valore</option>
+                            <option value="active">Attivo</option>
+                            <option value="completed">Completato</option>
+                            <option value="failed">Fallito</option>
+                            <option value="scheduled">Pianificato</option>
+                            <option value="cancelled">Annullato</option>
+                            <option value="joined">Aderisce</option>
+                            <option value="left">Ha lasciato</option>
+                            <option value="role_changed">Ruolo cambiato</option>
+                            <option value="custom">Altro (avanzato)</option>
+                        </select>
+                        <input type="text" class="form-control mt-2 d-none" name="field_value_custom" maxlength="255" placeholder="Valore personalizzato...">
+                        <input type="hidden" name="field_value" value="">
+                        <div class="form-text">Per operatori <code>in</code> e <code>not_in</code> usa valori separati da virgola nel campo avanzato.</div>
+                    </div>
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-action="admin-quest-condition-reset">Reset</button>
+                        <button type="button" class="btn btn-primary" data-action="admin-quest-condition-save">Salva condizione</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-outcomes-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Esiti Quest</h4>
+                <h6 class="text-center text-muted">Configura gli effetti da applicare a trigger attivati.</h6>
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quest-outcomes-reload">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+                    </button>
+                </div>
+
+                <div id="admin-quest-outcomes-list" class="list-group mb-3"></div>
+
+                <form id="admin-quest-outcome-form" class="row g-2">
+                    <input type="hidden" name="outcome_id" value="0">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Trigger</label>
+                        <select class="form-select" name="trigger_type">
+                            <option value="step_completed">Step completato</option>
+                            <option value="quest_completed">Quest completata</option>
+                            <option value="quest_failed">Quest fallita</option>
+                            <option value="manual_staff">Manuale staff</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo esito</label>
+                        <select class="form-select" name="outcome_type">
+                            <option value="log_progress">Registra progressione</option>
+                            <option value="notify">Notifica</option>
+                            <option value="create_narrative_event">Crea evento narrativo</option>
+                            <option value="unlock_quest">Sblocca quest</option>
+                            <option value="complete_quest">Completa quest</option>
+                            <option value="fail_quest">Fallisci quest</option>
+                            <option value="apply_narrative_state">Applica stato narrativo</option>
+                            <option value="remove_narrative_state">Rimuovi stato narrativo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Visibilita</label>
+                        <select class="form-select" name="visibility">
+                            <option value="hidden">Nascosta</option>
+                            <option value="public">Pubblica</option>
+                            <option value="private">Privata</option>
+                            <option value="staff_only">Solo staff</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Conferma staff</label>
+                        <select class="form-select" name="requires_staff_confirmation">
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Ordine</label>
+                        <input type="number" class="form-control" name="sort_order" min="0" value="0">
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Quest target (guidato)</label>
+                        <input type="text" class="form-control" name="target_quest_label" autocomplete="off" placeholder="Cerca quest..." data-role="admin-quest-outcome-target-label">
+                        <input type="hidden" name="target_quest_definition_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-quest-outcome-target-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo evento narrativo</label>
+                        <select class="form-select" name="narrative_event_type">
+                            <option value="">Nessuno</option>
+                            <option value="quest_update">Aggiornamento quest</option>
+                            <option value="quest_started">Quest avviata</option>
+                            <option value="quest_step_completed">Step completato</option>
+                            <option value="quest_completed">Quest completata</option>
+                            <option value="quest_failed">Quest fallita</option>
+                            <option value="quest_unlocked">Quest sbloccata</option>
+                            <option value="staff_note">Nota staff</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Titolo evento narrativo</label>
+                        <input type="text" class="form-control" name="narrative_event_title" maxlength="255">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Messaggio/causale</label>
+                        <textarea class="form-control" name="message" rows="2"></textarea>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Stato narrativo (guidato)</label>
+                        <input type="text" class="form-control" name="state_label" autocomplete="off" placeholder="Cerca stato narrativo..." data-role="admin-quest-outcome-state-label">
+                        <input type="hidden" name="state_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-quest-outcome-state-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Intensita</label>
+                        <input type="number" class="form-control" name="intensity" min="0" step="0.1">
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Durata</label>
+                        <input type="number" class="form-control" name="duration_value" min="0">
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Unita durata</label>
+                        <select class="form-select" name="duration_unit">
+                            <option value="">-</option>
+                            <option value="scene">Scena</option>
+                            <option value="minute">Minuto</option>
+                            <option value="hour">Ora</option>
+                            <option value="day">Giorno</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Tipo log</label>
+                        <select class="form-select" name="log_type_preset" data-role="admin-quest-outcome-log-type-preset">
+                            <option value="custom_log">Log personalizzato</option>
+                            <option value="quest_status_changed">Cambio stato quest</option>
+                            <option value="step_status_changed">Cambio stato step</option>
+                            <option value="outcome_applied">Esito applicato</option>
+                            <option value="staff_override">Override staff</option>
+                            <option value="custom">Altro (avanzato)</option>
+                        </select>
+                        <input type="text" class="form-control mt-2 d-none" name="log_type_custom" maxlength="80" placeholder="Tipo log personalizzato...">
+                        <input type="hidden" name="log_type" value="custom_log">
+                    </div>
+                    <div class="col-12 d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-outline-secondary" data-action="admin-quest-outcome-reset">Reset</button>
+                        <button type="button" class="btn btn-primary" data-action="admin-quest-outcome-save">Salva esito</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-links-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Link eventi Quest</h4>
+                <h6 class="text-center text-muted">Collega la quest a eventi narrativi o di sistema.</h6>
+                <hr class="my-4" />
+
+                <div class="d-flex justify-content-end mb-2">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quest-links-reload">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+                    </button>
+                </div>
+
+                <div id="admin-quest-links-list" class="list-group mb-3"></div>
+
+                <form id="admin-quest-link-form" class="row g-2">
+                    <input type="hidden" name="link_id" value="0">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Tipo entita</label>
+                        <select class="form-select" name="entity_type" data-role="admin-quest-link-entity-type">
+                            <option value="narrative_event">Evento narrativo</option>
+                            <option value="system_event">Evento di sistema</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Entita (guidata)</label>
+                        <input type="text" class="form-control" name="entity_label" autocomplete="off" placeholder="Cerca entita..." data-role="admin-quest-link-entity-label">
+                        <input type="hidden" name="entity_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-quest-link-entity-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Link type</label>
+                        <select class="form-select" name="link_type">
+                            <option value="contextualized_by">Contestualizzata da</option>
+                            <option value="source_of">Fonte di</option>
+                            <option value="triggered_by">Innescata da</option>
+                            <option value="related_to">Correlata a</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
+                        <button type="button" class="btn btn-primary" data-action="admin-quest-link-save">Salva link</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-instances-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Istanze Quest</h4>
+                <h6 class="text-center text-muted">Assegna e gestisci istanze runtime della quest selezionata.</h6>
+                <hr class="my-4" />
+
+                <div class="row g-2 mb-3">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Filtro stato</label>
+                        <select id="admin-quest-instances-filter-status" class="form-select">
+                            <option value="">Tutti</option>
+                            <option value="available">Disponibile</option>
+                            <option value="active">Attiva</option>
+                            <option value="completed">Completata</option>
+                            <option value="failed">Fallita</option>
+                            <option value="cancelled">Annullata</option>
+                            <option value="expired">Scaduta</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Filtro assegnatario</label>
+                        <select id="admin-quest-instances-filter-assignee" class="form-select">
+                            <option value="">Tutti</option>
+                            <option value="character">Personaggio</option>
+                            <option value="faction">Fazione</option>
+                            <option value="guild">Gilda</option>
+                            <option value="world">Mondo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6 d-flex align-items-end justify-content-end">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quest-instances-reload">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna elenco
+                        </button>
+                    </div>
+                </div>
+
+                <div id="admin-quest-instances-list" class="list-group mb-3"></div>
+
+                <form id="admin-quest-instance-form" class="row g-2 mb-3">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Assegnatario</label>
+                        <select class="form-select" name="assignee_type" data-role="admin-quest-instance-assignee-type">
+                            <option value="character">Personaggio</option>
+                            <option value="faction">Fazione</option>
+                            <option value="guild">Gilda</option>
+                            <option value="world">Mondo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-5">
+                        <label class="form-label">Target (guidato)</label>
+                        <input type="text" class="form-control" name="assignee_label" autocomplete="off" placeholder="Cerca target..." data-role="admin-quest-instance-assignee-label">
+                        <input type="hidden" name="assignee_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-quest-instance-assignee-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Stato iniziale</label>
+                        <select class="form-select" name="status">
+                            <option value="available">Disponibile</option>
+                            <option value="active">Attiva</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Scadenza</label>
+                        <input type="datetime-local" class="form-control" name="expires_at">
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Intensita istanza</label>
+                        <select class="form-select" name="intensity_level">
+                            <option value="STANDARD" selected>STANDARD</option>
+                            <option value="CHILL">CHILL</option>
+                            <option value="SOFT">SOFT</option>
+                            <option value="HIGH">HIGH</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                            <option value="">Eredita definizione</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Note assegnazione</label>
+                        <input type="text" class="form-control" name="notes" maxlength="255">
+                    </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary" data-action="admin-quest-instance-assign">Assegna istanza</button>
+                    </div>
+                </form>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Azione rapida su istanza</h6>
+                    </div>
+                    <div class="card-body">
+                        <form id="admin-quest-instance-action-form" class="row g-2">
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Istanza selezionata</label>
+                                <input type="text" class="form-control" name="quest_instance_id" readonly>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Nuovo stato istanza</label>
+                                <select class="form-select" name="instance_status">
+                                    <option value="available">Disponibile</option>
+                                    <option value="active">Attiva</option>
+                                    <option value="completed">Completata</option>
+                                    <option value="failed">Fallita</option>
+                                    <option value="cancelled">Annullata</option>
+                                    <option value="expired">Scaduta</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3 d-flex align-items-end">
+                                <button type="button" class="btn btn-outline-secondary w-100" data-action="admin-quest-instance-set-status">Imposta stato</button>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Override intensita</label>
+                                <select class="form-select" name="instance_intensity_level">
+                                    <option value="">Mantieni corrente</option>
+                                    <option value="STANDARD">STANDARD</option>
+                                    <option value="CHILL">CHILL</option>
+                                    <option value="SOFT">SOFT</option>
+                                    <option value="HIGH">HIGH</option>
+                                    <option value="CRITICAL">CRITICAL</option>
+                                    <option value="null">Rimuovi override</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-text" data-role="admin-quest-instance-intensity-current">Intensita corrente: -</div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Step istanza</label>
+                                <select class="form-select" name="step_instance_id">
+                                    <option value="0">Seleziona uno step</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Nuovo stato step</label>
+                                <select class="form-select" name="step_status">
+                                    <option value="active">Attivo</option>
+                                    <option value="completed">Completato</option>
+                                    <option value="failed">Fallito</option>
+                                    <option value="skipped">Saltato</option>
+                                    <option value="locked">Bloccato</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3 d-flex align-items-end">
+                                <button type="button" class="btn btn-outline-primary w-100" data-action="admin-quest-instance-set-step">Imposta step</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-closures-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Chiusure Quest</h4>
+                <h6 class="text-center text-muted">Report finale pubblico/privato ed esiti della quest.</h6>
+                <hr class="my-4" />
+
+                <div class="card mb-3">
+                    <div class="card-header py-2">Filtro e selezione</div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-12 col-md-8">
+                                <label class="form-label">Istanza quest (guidata)</label>
+                                <input type="text" class="form-control" id="admin-quest-closure-instance-label" autocomplete="off" placeholder="Cerca istanza...">
+                                <input type="hidden" id="admin-quest-closure-instance-id" value="0">
+                                <div class="list-group mt-1 d-none" id="admin-quest-closure-instance-suggestions" data-role="admin-quest-closure-instance-suggestions"></div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Tipo chiusura</label>
+                                <select id="admin-quest-closure-type-filter" class="form-select">
+                                    <option value="">Tutti</option>
+                                    <option value="success">Successo</option>
+                                    <option value="partial_success">Successo parziale</option>
+                                    <option value="failure">Fallimento</option>
+                                    <option value="cancelled">Annullata</option>
+                                    <option value="unresolved">Non risolta</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3">
+                    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                        <span>Report disponibili</span>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quest-closures-reload">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="admin-quest-closures-list" class="list-group list-group-flush"></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header py-2">Editor report</div>
+                    <div class="card-body">
+                        <form id="admin-quest-closure-form" class="row g-2">
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Stato finale</label>
+                                <select class="form-select" name="final_status">
+                                    <option value="completed">Completata</option>
+                                    <option value="failed">Fallita</option>
+                                    <option value="cancelled">Annullata</option>
+                                    <option value="expired">Scaduta</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Tipo chiusura</label>
+                                <select class="form-select" name="closure_type">
+                                    <option value="success">Successo</option>
+                                    <option value="partial_success">Successo parziale</option>
+                                    <option value="failure">Fallimento</option>
+                                    <option value="cancelled">Annullata</option>
+                                    <option value="unresolved">Non risolta</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Visibile al player</label>
+                                <select class="form-select" name="player_visible">
+                                    <option value="1">Si</option>
+                                    <option value="0">No</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Etichetta esito</label>
+                                <input type="text" class="form-control" name="outcome_label" maxlength="120">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Summary pubblico</label>
+                                <textarea class="form-control" name="summary_public" rows="2"></textarea>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label">Summary privato</label>
+                                <textarea class="form-control" name="summary_private" rows="2"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Note staff</label>
+                                <textarea class="form-control" name="staff_notes" rows="2"></textarea>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end gap-2">
+                                <button type="button" class="btn btn-outline-primary" data-action="admin-quest-closure-load">Carica report</button>
+                                <button type="button" class="btn btn-primary" data-action="admin-quest-closure-save">Salva report</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-rewards-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Ricompense Quest</h4>
+                <h6 class="text-center text-muted">Assegnazione ricompense v1 (esperienza e oggetti) con tracciamento.</h6>
+                <hr class="my-4" />
+
+                <div class="card mb-3">
+                    <div class="card-header py-2">Assegna ricompensa</div>
+                    <div class="card-body">
+                        <form id="admin-quest-reward-form" class="row g-2">
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Istanza quest (guidata)</label>
+                                <input type="text" class="form-control" name="instance_label" autocomplete="off" placeholder="Cerca istanza..." data-role="admin-quest-reward-instance-label">
+                                <input type="hidden" name="quest_instance_id" value="0">
+                                <div class="list-group mt-1 d-none" data-role="admin-quest-reward-instance-suggestions"></div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <label class="form-label">Destinatario (guidato)</label>
+                                <input type="text" class="form-control" name="recipient_label" autocomplete="off" placeholder="Cerca personaggio..." data-role="admin-quest-reward-character-label">
+                                <input type="hidden" name="recipient_id" value="0">
+                                <div class="list-group mt-1 d-none" data-role="admin-quest-reward-character-suggestions"></div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <label class="form-label">Tipo reward</label>
+                                <select class="form-select" name="reward_type">
+                                    <option value="experience">Esperienza</option>
+                                    <option value="item">Oggetto</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <label class="form-label">Visibilita</label>
+                                <select class="form-select" name="visibility">
+                                    <option value="public">Pubblica</option>
+                                    <option value="player_private">Privata player</option>
+                                    <option value="staff_only">Solo staff</option>
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-5" data-role="admin-quest-reward-item-wrap">
+                                <label class="form-label">Oggetto (guidato)</label>
+                                <input type="text" class="form-control" name="item_label" autocomplete="off" placeholder="Cerca oggetto..." data-role="admin-quest-reward-item-label">
+                                <input type="hidden" name="reward_reference_id" value="0">
+                                <div class="list-group mt-1 d-none" data-role="admin-quest-reward-item-suggestions"></div>
+                            </div>
+                            <div class="col-12 col-md-2">
+                                <label class="form-label">Quantita</label>
+                                <input type="number" class="form-control" name="item_quantity" min="1" value="1">
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <label class="form-label">Esperienza</label>
+                                <input type="number" class="form-control" name="experience_amount" min="0" step="0.01" placeholder="0.00">
+                            </div>
+                            <div class="col-12 col-md-2 d-flex align-items-end justify-content-end">
+                                <button type="button" class="btn btn-primary w-100" data-action="admin-quest-reward-assign">Assegna</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                        <span>Storico ricompense</span>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quest-rewards-reload">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna elenco
+                        </button>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="admin-quest-rewards-list" class="list-group list-group-flush"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-logs-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Log progressione Quest</h4>
+                <h6 class="text-center text-muted">Storico tecnico degli avanzamenti e delle transizioni.</h6>
+                <hr class="my-4" />
+
+                <div class="row g-2 mb-3">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Istanza (guidata)</label>
+                        <input type="text" id="admin-quest-logs-filter-instance-label" class="form-control" autocomplete="off" placeholder="Cerca istanza...">
+                        <input type="hidden" id="admin-quest-logs-filter-instance-id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-quest-logs-instance-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Filtro tipo log</label>
+                        <select id="admin-quest-logs-filter-type-preset" class="form-select" data-role="admin-quest-logs-filter-type-preset">
+                            <option value="">Tutti</option>
+                            <option value="quest_status_changed">Cambio stato quest</option>
+                            <option value="step_status_changed">Cambio stato step</option>
+                            <option value="outcome_applied">Esito applicato</option>
+                            <option value="condition_matched">Condizione soddisfatta</option>
+                            <option value="staff_override">Override staff</option>
+                            <option value="maintenance">Manutenzione</option>
+                            <option value="custom">Altro (avanzato)</option>
+                        </select>
+                        <input type="text" id="admin-quest-logs-filter-type-custom" class="form-control mt-2 d-none" maxlength="80" placeholder="Inserisci tipo log personalizzato...">
+                        <input type="hidden" id="admin-quest-logs-filter-type" value="">
+                    </div>
+                    <div class="col-12 col-md-5 d-flex align-items-end justify-content-end">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-quest-logs-reload">
+                            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna log
+                        </button>
+                    </div>
+                </div>
+
+                <div id="admin-quest-logs-list" class="list-group"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-quest-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Definizione Quest</h4>
+                <h6 class="text-center text-muted">Compila i campi principali della quest.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-quest-form" class="row g-3">
+                    <input type="hidden" name="id" value="0">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Slug <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="slug" maxlength="100" required>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        <label class="form-label">Titolo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="title" maxlength="255" required>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo quest</label>
+                        <select class="form-select" name="quest_type">
+                            <option value="personal">Personale</option>
+                            <option value="faction">Fazione</option>
+                            <option value="guild">Gilda</option>
+                            <option value="world">Mondo</option>
+                            <option value="storyline">Trama</option>
+                            <option value="event">Evento</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Stato</label>
+                        <select class="form-select" name="status">
+                            <option value="draft">Bozza</option>
+                            <option value="published">Pubblicata</option>
+                            <option value="archived">Archiviata</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Visibilita</label>
+                        <select class="form-select" name="visibility">
+                            <option value="public">Pubblica</option>
+                            <option value="private">Privata</option>
+                            <option value="staff_only">Solo staff</option>
+                            <option value="hidden">Nascosta</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Disponibilita</label>
+                        <select class="form-select" name="availability_type">
+                            <option value="manual_join">Adesione manuale</option>
+                            <option value="staff_assign">Assegnazione staff</option>
+                            <option value="auto_join">Assegnazione automatica</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Intensita narrativa</label>
+                        <select class="form-select" name="intensity_level">
+                            <option value="CHILL">CHILL</option>
+                            <option value="SOFT">SOFT</option>
+                            <option value="STANDARD" selected>STANDARD</option>
+                            <option value="HIGH">HIGH</option>
+                            <option value="CRITICAL">CRITICAL</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Visibilita intensita</label>
+                        <select class="form-select" name="intensity_visibility">
+                            <option value="visible" selected>Visibile</option>
+                            <option value="hidden">Nascosta</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <div class="form-text mt-md-4">
+                            L'intensita indica la pressione narrativa della quest, non la difficolta meccanica.
+                        </div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Ambito</label>
+                        <select class="form-select" name="scope_type" data-role="admin-quest-scope-type">
+                            <option value="world">Mondo</option>
+                            <option value="character">Personaggio</option>
+                            <option value="faction">Fazione</option>
+                            <option value="guild">Gilda</option>
+                            <option value="map">Mappa</option>
+                            <option value="location">Luogo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-7">
+                        <label class="form-label">Target ambito (guidato)</label>
+                        <input type="text" class="form-control" name="scope_label" autocomplete="off" placeholder="Cerca per nome..." data-role="admin-quest-scope-label">
+                        <input type="hidden" name="scope_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-quest-scope-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-2">
+                        <label class="form-label">Ordine</label>
+                        <input type="number" class="form-control" name="sort_order" min="0" value="0">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Sommario</label>
+                        <textarea class="form-control" name="summary" rows="2"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="5"></textarea>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Tag narrativi</label>
+                        <input type="text" class="form-control form-control-sm mb-2" data-role="admin-quest-tags-filter" placeholder="Filtra tag..." autocomplete="off">
+                        <div class="border rounded p-2" style="max-height: 160px; overflow-y: auto;" data-role="admin-quest-tags-checkboxes">
+                            <span class="small text-muted">Caricamento tag...</span>
+                        </div>
+                        <div class="form-text">Massimo 8 tag per quest.</div>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-quest-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

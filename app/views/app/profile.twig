@@ -1,0 +1,396 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+{% set is_owner = (character_id == session('character_id')) %}
+{% set is_staff = (session('user_is_administrator') == 1 or session('user_is_moderator') == 1 or session('user_is_master') == 1) %}
+{% set can_view_events = (is_owner or is_staff) %}
+{% set can_manage_events = can_view_events %}
+{% set can_view_private_logs = (is_owner or is_staff) %}
+{% set can_view_session_logs = (session('user_is_administrator') == 1 or session('user_is_moderator') == 1) %}
+{% set can_view_registration_date = (is_owner or session('user_is_administrator') == 1 or session('user_is_moderator') == 1) %}
+{% set can_edit_master_notes = is_staff %}
+{% set can_edit_profile_metrics = is_staff %}
+
+<main id="profile-page" class="row ui-page pb-3" data-character-id="{{ character_id|e('html_attr') }}" data-is-owner="{{ is_owner ? 1 : 0 }}">
+    <section class="col-12">
+        <div class="row">
+            <div class="col-md-5 col-xl-2">
+                <div class="card mb-2">
+                    <img name="character_profile_img" class="img-fluid card-img-top" src="">
+                    <div class="card-body">
+                        <h3 class="text-center"><span name="character_name_surname"></span></h3>
+                        <div class="d-flex justify-content-between my-3">
+                            <div class="d-flex justify-content-center d-none" data-profile-music-control-wrap>
+                                <input type="hidden" data-profile-music-toggle value="">
+                            </div>
+                            <audio data-profile-music-player class="d-none" preload="none" loop></audio>
+                            {% if not is_owner %}
+                                <div class="d-flex justify-content-around" data-requires-page-owner="0">
+                                    <button class="btn btn-sm btn-outline-primary" data-action="profile-send-dm"><i class="bi bi-send"></i> Scrivi</button>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            {% if can_view_registration_date %}
+                            <li class="list-group-item">
+                                Iscrizione: <br/> <b><span name="date_created"></span></b>
+                            </li>
+                            {% endif %}
+                            <li class="list-group-item">
+                                Ultimo accesso: <br/> <b><span name="date_last_signin"></span></b>
+                            </li>
+                        </ul>
+                        {% if can_view_private_logs %}
+                        <hr>
+                        <div class="d-grid gap-2" data-role="profile-private-logs-actions">
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-action="profile-open-experience-logs">
+                                Log esperienza
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-action="profile-open-economy-logs">
+                                Log transazioni
+                            </button>
+                            {% if can_view_session_logs %}
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-action="profile-open-session-logs">
+                                Log accessi
+                            </button>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% if is_owner %}
+                    <div id="profile-lifecycle-section" class="px-2"></div>
+                    {% endif %}
+                    {% if is_owner or is_staff %}
+                    <div id="profile-narrative-states-section" class="px-2" data-character-id="{{ character_id|e('html_attr') }}"></div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-7 col-xl-3">
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush mb-2">
+                            <li class="list-group-item d-flex justify-content-between">
+                                Genere: <b><span name="gender"></span></b>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                Altezza: <b><span name="height"></span> m</b>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                Peso: <b><span name="weight"></span> kg</b>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center bg-secondary">
+                                    <div class="small text-muted">Rank attuale</div>
+                                    <div class="fw-bold" data-role="profile-rank-current">1</div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="border rounded p-2 text-center bg-secondary">
+                                    <div class="small text-muted">Prossimo rank</div>
+                                    <div class="fw-bold" data-role="profile-rank-next">2</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="small fw-semibold"><i class="bi bi-heart-pulse me-1"></i> Salute/Vita</span>
+                                <span class="small">
+                                    <b data-role="profile-health-current">0</b> / <b data-role="profile-health-max">100</b>
+                                </span>
+                            </div>
+                            {% if can_edit_profile_metrics %}
+                            <div class="d-flex justify-content-end mb-1">
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-action="profile-open-health-edit" data-requires-staff title="Modifica salute/vita" aria-label="Modifica salute/vita">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                            <div class="progress" role="progressbar" aria-label="Salute personaggio" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-danger" data-role="profile-health-bar" style="width: 0%" aria-valuenow="0"></div>
+                            </div>
+                            <div class="small text-muted mt-1 d-flex justify-content-between align-items-center">
+                                <span>Integrita: <span data-role="profile-health-percent">0%</span></span>
+                                <span class="badge text-bg-secondary" data-role="profile-health-state">Sconosciuto</span>
+                            </div>
+                            <span class="d-none" data-role="profile-health-label">0 / 100</span>
+                        </div>
+
+                        <div>
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="small fw-semibold"><i class="bi bi-stars me-1"></i> Esperienza</span>
+                                <span class="small">
+                                    <b data-role="profile-experience-current">0</b> / <b data-role="profile-experience-max">100</b>
+                                </span>
+                            </div>
+                            {% if can_edit_profile_metrics %}
+                            <div class="d-flex justify-content-end mb-1">
+                                <button type="button" class="btn btn-sm btn-outline-primary" data-action="profile-open-experience-assign" data-requires-staff title="Assegna esperienza" aria-label="Assegna esperienza">
+                                    <i class="bi bi-plus-circle"></i>
+                                </button>
+                            </div>
+                            {% endif %}
+                            <div class="progress" role="progressbar" aria-label="Esperienza personaggio" aria-valuemin="0" aria-valuemax="100">
+                                <div class="progress-bar bg-primary" data-role="profile-experience-bar" style="width: 0%" aria-valuenow="0"></div>
+                            </div>
+                            <div class="small text-muted mt-1 d-flex justify-content-between">
+                                <span>Progresso livello: <span data-role="profile-experience-percent">0%</span></span>
+                                <span>Totale exp: <span data-role="profile-experience-total">0</span></span>
+                            </div>
+                            <div class="row g-2 mt-1">
+                                <div class="col-12">
+                                    <div class="border rounded p-2 bg-secondary">
+                                        Mancano <b data-role="profile-next-rank-remaining">0</b> EXP al prossimo rank
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="d-none" data-role="profile-experience-label">0 / 100</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-2" data-role="profile-attributes-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Attributi personaggio</h5>
+                        {% if can_edit_profile_metrics %}
+                        <button
+                            type="button"
+                            class="btn btn-sm btn-outline-primary"
+                            data-action="profile-open-attributes-edit"
+                            data-requires-staff
+                            title="Gestione attributi personaggio"
+                            aria-label="Gestione attributi personaggio">
+                            <i class="bi bi-sliders"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div class="alert alert-secondary py-2 mb-2 d-none" data-role="profile-attributes-disabled">
+                            Sistema attributi non attivo.
+                        </div>
+                        <div class="mb-2" data-role="profile-attributes-group-primary-wrap">
+                            <h6 class="mb-1">Primari</h6>
+                            <ul class="list-group list-group-flush" data-role="profile-attributes-group-primary"></ul>
+                            <div class="small text-muted d-none" data-role="profile-attributes-group-primary-empty">Nessun attributo.</div>
+                        </div>
+
+                        <div class="mb-2" data-role="profile-attributes-group-secondary-wrap">
+                            <h6 class="mb-1">Secondari</h6>
+                            <ul class="list-group list-group-flush" data-role="profile-attributes-group-secondary"></ul>
+                            <div class="small text-muted d-none" data-role="profile-attributes-group-secondary-empty">Nessun attributo.</div>
+                        </div>
+
+                        <div class="mb-0" data-role="profile-attributes-group-narrative-wrap">
+                            <h6 class="mb-1">Narrativi</h6>
+                            <ul class="list-group list-group-flush" data-role="profile-attributes-group-narrative"></ul>
+                            <div class="small text-muted d-none" data-role="profile-attributes-group-narrative-empty">Nessun attributo.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xl-3">
+                <div class="card mb-2">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Note del master</h5>
+                        {% if can_edit_master_notes %}
+                        <button type="button" class="btn btn-sm btn-outline-primary" data-action="profile-open-master-notes-edit" data-requires-staff title="Modifica note del master" aria-label="Modifica note del master">
+                            <i class="bi bi-pencil-square"></i>
+                        </button>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <p name="mod_status"></p>
+                    </div>
+                </div>
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center" data-archetype-item style="display:none;">
+                                <span name="archetype_label">Archetipo</span>
+                                <span name="archetype_icons" class="d-flex gap-1 flex-wrap justify-content-end"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Stato sociale <img src="" name="socialstatus_icon" width="32" data-bs-toggle="tooltip" data-bs-title="">
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Gilde <span name="guild_icons" class="d-flex gap-1 flex-wrap justify-content-end"></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Occupazione <img src="" name="job_icon" width="32" data-bs-toggle="tooltip" data-bs-title="" style="display:none;">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                {% if is_owner %}
+                <div class="card mb-3" data-requires-page-owner>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush" data-role="wallets-list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-wallet"></i> In tasca</span> <span><b name="character_money"></b> <i name="currency_name"></i></span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span><i class="bi bi-bank"></i> In banca</span> <span><b name="character_bank"></b> <i name="currency_name"></i></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6 col-xl-4">
+                {% if can_view_events %}
+                <div class="card h-100 mh-100 overflow-auto" data-requires-match="any" data-requires-page-owner data-requires-staff>
+                    <div class="card-header">
+                        <h5>Diario</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-end mb-3">
+                            {% if can_manage_events %}
+                            <button class="btn btn-sm btn-outline-primary" data-action="profile-open-diary" data-requires-match="any" data-requires-page-owner data-requires-staff>
+                                <i class="bi bi-plus"></i> Aggiungi
+                            </button>
+                            {% endif %}
+                        </div>
+                        <div id="profile-events-empty" class="alert alert-info d-none">Nessun avvenimento registrato.</div>
+                        <div id="profile-events" class="row g-3"></div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="row mt-3">
+            <section class="col-12">
+                <ul class="nav nav-tabs" id="profileTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description-tab-pane" type="button" role="tab" aria-controls="description-tab-pane" aria-selected="true">
+                            Descrizioni
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="background-tab" data-bs-toggle="tab" data-bs-target="#background-tab-pane" type="button" role="tab" aria-controls="background-tab-pane" aria-selected="false">
+                            Background
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="friends-tab" data-bs-toggle="tab" data-bs-target="#friends-tab-pane" type="button" role="tab" aria-controls="friends-tab-pane" aria-selected="false">
+                            Affetti &amp; Conoscenze
+                        </button>
+                    </li>
+                </ul>
+                <div class="tab-content bg-secondary" id="profileTabContent">
+                    <div class="tab-pane fade show active p-3" id="description-tab-pane" role="tabpanel" aria-labelledby="description-tab" tabindex="0">
+                        <div class="row p-2">
+                            <div class="col-md-12 col-xl-4">
+                                <ul class="list-group list-group-flush mb-3">
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        Occhi: <b name="eyes"></b>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        Capelli: <b name="hair"></b>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        Pelle: <b name="skin"></b>
+                                    </li>
+                                </ul>
+                                <h6>Segni particolari</h6>
+                                <p name="particular_signs"></p>
+                            </div>
+                            <div class="col-md-12 col-xl-4">
+                                <h4 class="display-6">Descrizione fisica</h4>
+                                <div class="p-2" name="description_body"></div>
+                            </div>
+                            <div class="col-md-12 col-xl-4">
+                                <h4 class="display-6">Descrizione personalità</h4>
+                                <div class="p-2" name="description_temper"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade p-3" id="background-tab-pane" role="tabpanel" aria-labelledby="background-tab" tabindex="1">
+                        <div class="row p-2">
+                            <div class="col-12">
+                                <div class="p-2" name="background_story"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade p-3" id="friends-tab-pane" role="tabpanel" aria-labelledby="friends-tab" tabindex="2">
+                        <div class="row p-2">
+                            <div class="col-12 mb-3">
+                                <div class="p-2" name="friends-list"></div>
+                            </div>
+                            <div class="col-12 mb-3">
+                                <h5 class="mb-2">Legami</h5>
+                                <div class="list-group" data-role="bonds-list"></div>
+                                <div class="alert alert-info d-none mt-2 mb-0" data-role="bonds-empty">Nessun legame attivo.</div>
+                            </div>
+                            {% if is_owner %}
+                            <div class="col-12 col-lg-6 mb-3">
+                                <h6 class="mb-2">Richieste in ingresso</h6>
+                                <div class="list-group" data-role="bond-requests-incoming"></div>
+                                <div class="alert alert-secondary d-none mt-2 mb-0" data-role="bond-requests-incoming-empty">Nessuna richiesta in ingresso.</div>
+                            </div>
+                            <div class="col-12 col-lg-6 mb-3">
+                                <h6 class="mb-2">Richieste in uscita</h6>
+                                <div class="list-group" data-role="bond-requests-outgoing"></div>
+                                <div class="alert alert-secondary d-none mt-2 mb-0" data-role="bond-requests-outgoing-empty">Nessuna richiesta in uscita.</div>
+                            </div>
+                            {% else %}
+                            <div class="col-12 mb-3">
+                                <h6 class="mb-2">Interazioni rapide</h6>
+                                <div class="d-flex flex-wrap gap-2" data-role="bond-actions">
+                                    <button type="button" class="btn btn-sm btn-primary" data-action="bond-request-create" data-requested-type="conoscente">Aggiungi conoscenza</button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="bond-request-create" data-requested-type="amico">Proponi amicizia</button>
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+
+<template name="template_profile_event">
+    <div class="col-lg-12">
+        <div class="card h-100">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                    <div class="btn-group" name="actions"></div>
+                    <span name="visibility" class="bi bi-eye-slash text-muted d-none" data-bs-toggle="tooltip" data-bs-title="Non visibile"></span>
+                    <span>Avvenuto il: <b name="date_event"></b></span>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title" name="title"></h5>
+                <p class="card-text" name="body"></p>
+                <p class="small text-muted mb-0" name="location"></p>
+            </div>
+            <div class="card-footer"><small>Ultima modifica: <b name="date_updated"></b></small></div>
+        </div>
+    </div>
+</template>
+{% include 'app/modals/profile/edit-diary.twig' %}
+{% if can_edit_master_notes %}
+{% include 'app/modals/profile/edit-master-notes.twig' %}
+{% endif %}
+{% if can_edit_profile_metrics %}
+{% include 'app/modals/profile/edit-health.twig' %}
+{% include 'app/modals/profile/assign-experience.twig' %}
+{% include 'app/modals/profile/edit-attributes.twig' %}
+{% endif %}
+{% if can_view_private_logs %}
+{% include 'app/modals/profile/log-experience.twig' %}
+{% include 'app/modals/profile/log-economy.twig' %}
+{% if can_view_session_logs %}
+{% include 'app/modals/profile/log-session.twig' %}
+{% endif %}
+{% endif %}
+{% endblock %}
+
+
+
+

@@ -1,0 +1,43 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <header class="mt-3">
+        <h4 class="display-6">Requisiti gilde</h4>
+        <h6>Gestione dei requisiti di accesso per ogni gilda</h6>
+    </header>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-guild-reqs-reload">
+            <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+        </button>
+        <button type="button" class="btn btn-sm btn-primary" data-action="admin-guild-reqs-create">
+            <i class="bi bi-plus-lg me-1"></i>Nuovo requisito
+        </button>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form id="admin-guild-reqs-filters" class="row g-2 align-items-end" autocomplete="off" novalidate>
+            <div class="col-auto">
+                <label for="admin-guild-reqs-filter-guild" class="form-label mb-1">Gilda</label>
+                <select id="admin-guild-reqs-filter-guild" name="guild_id" class="form-select">
+                    <option value="">Tutte</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="admin-guild-reqs-filter-type" class="form-label mb-1">Tipo</label>
+                <select id="admin-guild-reqs-filter-type" name="type" class="form-select">
+                    <option value="">Tutti</option>
+                    <option value="min_fame">Fama minima</option>
+                    <option value="min_socialstatus_id">Stato sociale</option>
+                    <option value="job_id">Lavoro richiesto</option>
+                    <option value="no_job">Senza lavoro</option>
+                </select>
+            </div>
+            <div class="d-flex gap-2 col-auto">
+                <a class="btn btn-sm btn-outline-secondary" href="/admin/guilds-reqs">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="grid-admin-guild-reqs"></div>
+{% include 'admin/modals/guilds-reqs.twig' %}

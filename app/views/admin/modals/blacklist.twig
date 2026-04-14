@@ -1,0 +1,50 @@
+<div class="modal fade" id="admin-blacklist-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="admin-blacklist-modal-title">Nuovo ban</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <form id="admin-blacklist-form" autocomplete="off" novalidate>
+                    <input type="hidden" name="id" value="">
+                    <input type="hidden" name="banned_id" value="">
+
+                    <div class="mb-3">
+                        <label for="admin-blacklist-user-search" class="form-label">Utente</label>
+                        <input id="admin-blacklist-user-search"
+                               type="text"
+                               class="form-control"
+                               placeholder="Cerca email utente...">
+                        <div class="form-text">Seleziona un account dalla lista suggerita.</div>
+                        <div id="admin-blacklist-user-suggestions" class="list-group mt-2 d-none"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="admin-blacklist-motivation" class="form-label">Motivazione</label>
+                        <textarea id="admin-blacklist-motivation" name="motivation" class="form-control" rows="3" maxlength="255" required></textarea>
+                    </div>
+
+                    <div class="row g-2">
+                        <div class="col-12 col-md-6">
+                            <label for="admin-blacklist-date-start" class="form-label">Inizio</label>
+                            <input id="admin-blacklist-date-start" name="date_start" type="datetime-local" class="form-control">
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <label for="admin-blacklist-date-end" class="form-label">Fine</label>
+                            <input id="admin-blacklist-date-end" name="date_end" type="datetime-local" class="form-control">
+                            <div class="form-text">Lascia vuoto per ban permanente.</div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger d-none me-auto" data-action="admin-blacklist-delete">
+                    Elimina
+                </button>
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" data-action="admin-blacklist-save">Salva</button>
+            </div>
+        </div>
+    </div>
+</div>

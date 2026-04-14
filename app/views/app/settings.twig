@@ -1,0 +1,151 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+    <div id="settings-page" class="row ui-page">
+        <header class="mt-3">
+            <h4 class="display-6">Impostazioni</h4>
+        </header>
+        <hr class="w-75 ms-2" />
+        <article class="mt-4 mb-3 col-md-12">
+            <form id="settings-form">
+                <div class="accordion" id="settings-accordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="settings-account-heading">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#settings-account" aria-expanded="true" aria-controls="settings-account">
+                                Account
+                            </button>
+                        </h2>
+                        <div id="settings-account" class="accordion-collapse collapse show" data-bs-parent="#settings-accordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-lg-6">
+                                        <div class="border rounded p-3">
+                                            <h6 class="mb-3">Aggiorna password</h6>
+                                            <div class="mb-3">
+                                                <label class="form-label">Password attuale</label>
+                                                <input type="password" class="form-control" id="settings-old-password" autocomplete="current-password">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nuova password</label>
+                                                <input type="password" class="form-control" id="settings-new-password" autocomplete="new-password">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Conferma nuova password</label>
+                                                <input type="password" class="form-control" id="settings-new-password-confirm" autocomplete="new-password">
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-primary" data-password-submit>Aggiorna password</button>
+                                            </div>
+                                            <div class="form-text mt-2">Dopo il cambio verrai disconnesso dalle altre sessioni.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="border rounded p-3">
+                                            <h6 class="mb-3">Sessioni attive</h6>
+                                            <p class="small text-muted mb-3">Chiudi tutte le sessioni attive e richiedi un nuovo accesso.</p>
+                                            <div class="small text-muted mb-3" data-sessions-last-revoked></div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-outline-light" data-sessions-revoke>Disconnetti tutte le sessioni</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="settings-character-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settings-character" aria-expanded="false" aria-controls="settings-character">
+                                Personaggio
+                            </button>
+                        </h2>
+                        <div id="settings-character" class="accordion-collapse collapse" data-bs-parent="#settings-accordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-lg-6">
+                                        <div class="border rounded p-3 h-100">
+                                            <h6 class="mb-2">Cambio nome personaggio <span class="badge text-bg-secondary ms-2 d-none" data-name-request-badge></span></h6>
+                                            <div class="small text-muted mb-3" data-name-request-status>Inserisci il nuovo nome e invia la richiesta allo staff.</div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Nuovo nome</label>
+                                                <input type="text" class="form-control" id="settings-name-request" maxlength="25">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Motivazione (opzionale)</label>
+                                                <textarea class="form-control" id="settings-name-reason" rows="3"></textarea>
+                                            </div>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="button" class="btn btn-outline-primary" data-name-request-submit>Invia richiesta</button>
+                                            </div>
+                                            <div class="form-text mt-2">La richiesta sara valutata dallo staff. Cooldown: <span data-name-request-cooldown>30</span> giorni dall'ultima approvazione.</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="border border-danger rounded p-3 h-100">
+                                            <h6 class="text-danger mb-2">Eliminazione personaggio</h6>
+                                            <div class="small text-muted mb-3" data-delete-status>La cancellazione e reversibile per 10 giorni. Puoi annullarla prima della scadenza.</div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Conferma password</label>
+                                                <input type="password" class="form-control" id="settings-delete-password" autocomplete="current-password">
+                                            </div>
+                                            <div class="mb-2">
+                                                <select id="settings-delete-confirm" name="delete_confirm"></select>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2 flex-wrap">
+                                                <button type="button" class="btn btn-danger" data-delete-request disabled>Richiedi eliminazione</button>
+                                                <button type="button" class="btn btn-outline-primary d-none" data-delete-cancel>Annulla eliminazione</button>
+                                                <span class="small text-muted" data-delete-countdown></span>
+                                            </div>
+                                            <div class="form-text mt-2">Richiede conferma e un breve tempo di attesa.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="settings-preferences-heading">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#settings-preferences" aria-expanded="false" aria-controls="settings-preferences">
+                                Preferenze
+                            </button>
+                        </h2>
+                        <div id="settings-preferences" class="accordion-collapse collapse" data-bs-parent="#settings-accordion">
+                            <div class="accordion-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Messaggi privati</label>
+                                        <div>
+                                            <input type="hidden" name="dm_policy" id="settings-dm-policy" value="">
+                                        </div>
+                                        <div class="form-text">Scegli chi puo inviarti messaggi privati.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Inviti a location private</label>
+                                        <div>
+                                            <input type="hidden" name="invite_policy" id="settings-invite-policy" value="">
+                                        </div>
+                                        <div class="form-text">Scegli chi puo invitarti nelle location private.</div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Notifiche in piattaforma</label>
+                                        <div>
+                                            <select name="notifications" id="settings-notifications" multiple></select>
+                                        </div>
+                                        <div class="form-text">Scegli quali notifiche ricevere.</div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end gap-2 mt-3">
+                                    <button type="button" class="btn btn-primary" data-settings-save>Salva preferenze</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </article>
+</div>
+
+{% endblock %}
+

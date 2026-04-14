@@ -1,0 +1,45 @@
+<div data-admin-page="narrative-delegation-grants">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 mt-3">
+        <header>
+            <h4 class="display-6 mb-1">Permessi narrativi</h4>
+            <h6 class="mb-0">Assegna le capability narrative ai ruoli di gilda, fazione e utente.</h6>
+        </header>
+        <div class="d-flex flex-wrap align-items-center gap-2">
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-ndg-create">
+                <i class="bi bi-plus-lg me-1"></i>Nuovo permesso
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-ndg-reload">
+                <i class="bi bi-arrow-clockwise me-1"></i>Aggiorna
+            </button>
+        </div>
+    </div>
+
+    <div id="admin-ndg-alert" class="alert d-none mb-3" role="alert"></div>
+
+    <div class="card card-body mb-3">
+        <form id="admin-ndg-filters" class="row g-2 align-items-end">
+            <div class="col-auto">
+                <label for="admin-ndg-filter-type" class="form-label mb-1">Tipo grantee</label>
+                <select id="admin-ndg-filter-type" name="grantee_type" class="form-select form-select-sm">
+                    <option value="">Tutti</option>
+                    <option value="guild_role">Ruolo di gilda</option>
+                    <option value="faction_role">Ruolo di fazione</option>
+                    <option value="user_role">Ruolo utente</option>
+                </select>
+            </div>
+            <div class="col-auto">
+                <label for="admin-ndg-filter-cap" class="form-label mb-1">Capability</label>
+                <select id="admin-ndg-filter-cap" name="capability" class="form-select form-select-sm">
+                    <option value="">Tutte</option>
+                </select>
+            </div>
+            <div class="col-auto d-flex gap-2">
+                <a class="btn btn-sm btn-outline-secondary" href="/admin/narrative-delegation-grants">Reset</a>
+            </div>
+        </form>
+    </div>
+
+    <div id="grid-admin-ndg"></div>
+
+    {% include 'admin/modals/narrative-delegation-grants.twig' %}
+</div>

@@ -1,0 +1,55 @@
+<div class="modal fade" id="location-weather-modal" tabindex="-1" aria-labelledby="location-weather-modal-label" aria-hidden="true" data-requires-staff>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2" id="location-weather-modal-label">Meteo location</h4>
+                <h6 class="text-center text-muted">Override locale visibile solo allo staff.</h6>
+                <hr class="my-4" />
+
+                <div id="location-weather-staff" data-bs-theme="dark" data-requires-staff>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span class="small text-muted">Scope meteo</span>
+                        <span class="badge text-bg-secondary" data-weather-staff-scope>Auto</span>
+                    </div>
+                    <div class="mb-2" id="weather-staff-area-info" style="display:none;">
+                        <span class="small text-muted">Area clima: </span>
+                        <span class="small" data-weather-staff-area-name></span>
+                    </div>
+                    <div class="mb-2" id="weather-staff-expires-info" style="display:none;">
+                        <span class="small text-warning"><i class="bi bi-clock me-1"></i>Override scade: <span data-weather-staff-expires></span></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small mb-1">Condizione</label>
+                        <input type="hidden" id="weather-location-key" name="weather_location_key" value="inherit">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small mb-1">Temperatura (opzionale)</label>
+                        <input type="number" class="form-control form-control-sm" name="weather_location_degrees" min="-80" max="80" step="1" placeholder="Auto">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small mb-1">Fase lunare (opzionale)</label>
+                        <select class="form-select form-select-sm" id="weather-location-moon" name="weather_location_moon_phase">
+                            <option value="">Auto</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small mb-1">Scade il (opzionale)</label>
+                        <input type="datetime-local" class="form-control form-control-sm" name="weather_location_expires_at" placeholder="Nessuna scadenza">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small mb-1">Nota staff (opzionale)</label>
+                        <input type="text" class="form-control form-control-sm" name="weather_location_note" maxlength="500" placeholder="Motivo dell'overrideâ€¦">
+                    </div>
+                    <div class="d-flex gap-2 mt-2">
+                        <button type="button" class="btn btn-sm btn-primary" data-weather-location-save>Applica</button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-weather-location-clear>Eredita globale</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

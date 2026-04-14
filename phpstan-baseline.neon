@@ -1,0 +1,2167 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Services/ArchetypeService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\{enabled\: false, client_id\: '''', client_secret\: '''', redirect_uri\: ''''\} will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''baseurl'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''client_id'' on array\{enabled\: false, client_id\: '''', client_secret\: '''', redirect_uri\: ''''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''client_secret'' on array\{enabled\: false, client_id\: '''', client_secret\: '''', redirect_uri\: ''''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''db_name'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''enabled'' on array\{enabled\: false, client_id\: '''', client_secret\: '''', redirect_uri\: ''''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''oauth_google'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''redirect_uri'' on array\{enabled\: false, client_id\: '''', client_secret\: '''', redirect_uri\: ''''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Result of \|\| is always false\.$#'
+			identifier: booleanOr.alwaysFalse
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and '''' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string\|false and 1 will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string\|false and true will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Services/AuthGoogleService.php
+
+		-
+			message: '#^Offset ''baseurl'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthPasswordResetService.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/AuthPasswordResetService.php
+
+		-
+			message: '#^Offset ''support_email'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthPasswordResetService.php
+
+		-
+			message: '#^Unsafe access to private property App\\Services\\AuthService\:\:\$dbAdapter through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 5
+			path: app/Services/AuthService.php
+
+		-
+			message: '#^Unsafe call to private method App\\Services\\AuthService\:\:db\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 4
+			path: app/Services/AuthService.php
+
+		-
+			message: '#^Unsafe call to private method App\\Services\\AuthService\:\:passwordChangeService\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: app/Services/AuthService.php
+
+		-
+			message: '#^Unsafe call to private method App\\Services\\AuthService\:\:passwordResetService\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Services/AuthService.php
+
+		-
+			message: '#^Unsafe call to private method App\\Services\\AuthService\:\:signinService\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 5
+			path: app/Services/AuthService.php
+
+		-
+			message: '#^Unsafe call to private method App\\Services\\AuthService\:\:signupService\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: app/Services/AuthService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/AuthSigninService.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/AuthSigninService.php
+
+		-
+			message: '#^Offset ''db_name'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthSigninService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and '''' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: app/Services/AuthSigninService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Services/AuthSigninService.php
+
+		-
+			message: '#^Offset ''baseurl'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthSignupService.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/AuthSignupService.php
+
+		-
+			message: '#^Offset ''db_name'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthSignupService.php
+
+		-
+			message: '#^Offset ''name'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthSignupService.php
+
+		-
+			message: '#^Offset ''support_email'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthSignupService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/AuthSignupService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and '''' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: app/Services/AuthSignupService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Services/AuthSignupService.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/BlacklistAdminService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/BlacklistAdminService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/CharacterAttributesBaseService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/CharacterAttributesDefinitionService.php
+
+		-
+			message: '#^Method App\\Services\\CharacterAttributesEngineService\:\:resolveNonDerivedBaseValue\(\) never assigns null to &\$source so it can be removed from the by\-ref type\.$#'
+			identifier: parameterByRef.unusedType
+			count: 1
+			path: app/Services/CharacterAttributesEngineService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 9
+			path: app/Services/CharacterAttributesEngineService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/CharacterAttributesFacadeService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between array\{''override_value \= \?''\}\|array\{0\: ''base_value \= \?'', 1\?\: ''override_value \= \?''\} and array\{\} will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/CharacterAttributesValueService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/CharacterProfileService.php
+
+		-
+			message: '#^Offset ''chat_commands'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/ChatCommandService.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: app/Services/ChatCommandService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between mixed and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/ConflictRandomResolver.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 16
+			path: app/Services/ConflictService.php
+
+		-
+			message: '#^Dead catch \- Throwable is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 2
+			path: app/Services/ConflictService.php
+
+		-
+			message: '#^Offset ''db_name'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Services/ConflictService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and '''' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 2
+			path: app/Services/ConflictService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-string and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/ConflictService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 4
+			path: app/Services/ConflictService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/ConflictSettingsService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Services/FactionService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/ForumAdminService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/ForumTypeAdminService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/GuildAdminService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/GuildEventAdminService.php
+
+		-
+			message: '#^Call to function method_exists\(\) with mysqli and ''begin_transaction'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Call to function method_exists\(\) with mysqli and ''commit'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Call to function method_exists\(\) with mysqli and ''rollback'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Method App\\Services\\InstallerService\:\:beginTransaction\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Method App\\Services\\InstallerService\:\:commitTransaction\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Method App\\Services\\InstallerService\:\:hasUsersTable\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Method App\\Services\\InstallerService\:\:rollbackTransaction\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Negated boolean expression is always false\.$#'
+			identifier: booleanNot.alwaysFalse
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in empty\(\) always exists and is always falsy\.$#'
+			identifier: empty.offset
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Offset ''db_name'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Offset ''host'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Offset ''mysql'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.offset
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Offset ''mysql'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Offset ''pwd'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Offset ''user'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
+			count: 3
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and '''' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 3
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 2
+			path: app/Services/InstallerService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/InventoryCapacityService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 3
+			path: app/Services/InventoryService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between non\-empty\-string and '''' will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/InventoryService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/ItemService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/JobAdminService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/JobLevelAdminService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-list\<int\> and array\{\} will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/JobService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/JobTaskAdminService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/LocationMessageService.php
+
+		-
+			message: '#^Offset ''location_chat…'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/LocationMessageService.php
+
+		-
+			message: '#^Offset ''location_whisper…'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/LocationMessageService.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/LocationMessageService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 4
+			path: app/Services/LocationService.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/LogSysAdminService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/MapsAdminService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Services/MapsAdminService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: app/Services/MessageReportService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/MessageReportService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-string and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/NarrativeDomainService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Services/NarrativeEventService.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: app/Services/NarrativeEventService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/NarrativeStateService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/NarrativeTagService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/NarrativeTagService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/NoveltyService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/NoveltyService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/QuestClosureService.php
+
+		-
+			message: '#^Comparison operation "\>" between int\<1, max\> and 0 is always true\.$#'
+			identifier: greater.alwaysTrue
+			count: 1
+			path: app/Services/QuestClosureService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/QuestClosureService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/QuestHistoryResolverService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between list\{0\: ''i\.current_status \= \?''\|''i\.current_status IN…'', 1\?\: non\-falsy\-string, 2\?\: non\-falsy\-string, 3\?\: non\-falsy\-string, 4\?\: non\-falsy\-string, 5\?\: ''\(r\.player_visible \=…''\|''d\.visibility \<\> …'', 6\?\: ''\(r\.player_visible \=…''\} and array\{\} will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/QuestHistoryResolverService.php
+
+		-
+			message: '#^Comparison operation "\>" between int\<1, max\> and 0 is always true\.$#'
+			identifier: greater.alwaysTrue
+			count: 2
+			path: app/Services/QuestResolverService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Services/QuestResolverService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-string and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/QuestResolverService.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 2
+			path: app/Services/QuestResolverService.php
+
+		-
+			message: '#^Offset 2 on non\-empty\-array\<int\|string, mixed\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/QuestTriggerService.php
+
+		-
+			message: '#^Offset ''capacity_max'' on array\{capacity_max\: 30, stack_max\: 50\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Offset ''location_chat…'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Offset ''location_whisper…'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Offset ''oauth_google'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Offset ''stack_max'' on array\{capacity_max\: 30, stack_max\: 50\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Result of \|\| is always false\.$#'
+			identifier: booleanOr.alwaysFalse
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and ''1'' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between false and true will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/SettingsService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/ShopInventoryAdminService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: app/Services/ShopInventoryAdminService.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: app/Services/ShopService.php
+
+		-
+			message: '#^Offset ''debug'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/ShopService.php
+
+		-
+			message: '#^Offset ''sell_ratio'' on array\{sell_ratio\: 0\.5\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/ShopService.php
+
+		-
+			message: '#^Offset ''shop'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/ShopService.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: app/Services/ShopService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between false and true will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/ShopService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/SocialStatusAdminService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: app/Services/SystemEventEffectService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-string and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/SystemEventEffectService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between int and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/SystemEventResolverService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-string and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/SystemEventResolverService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-string and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/SystemEventRewardService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/SystemEventService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between string and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/SystemEventService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between list\{0\: ''e\.status \= \?''\|''e\.status IN \(…'', 1\?\: non\-falsy\-string, 2\?\: non\-falsy\-string, 3\?\: non\-falsy\-string, 4\?\: non\-falsy\-string, 5\?\: non\-falsy\-string, 6\?\: literal\-string&non\-falsy\-string\} and array\{\} will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Services/SystemEventService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-string and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 2
+			path: app/Services/SystemEventService.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: app/Services/SystemEventService.php
+
+		-
+			message: '#^Comparison operation "\<\=" between 5 and 0 is always false\.$#'
+			identifier: smallerOrEqual.alwaysFalse
+			count: 1
+			path: app/Services/UserService.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Services/UserService.php
+
+		-
+			message: '#^Offset ''db_name'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Services/UserService.php
+
+		-
+			message: '#^Offset ''password_length'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/UserService.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/UserService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and '''' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 2
+			path: app/Services/UserService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 2
+			path: app/Services/UserService.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Services/WeatherClimateService.php
+
+		-
+			message: '#^Dead catch \- Throwable is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Services/WeatherClimateService.php
+
+		-
+			message: '#^Offset ''db_name'' on array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/WeatherClimateService.php
+
+		-
+			message: '#^Offset ''slug'' on non\-empty\-array on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/WeatherClimateService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 10
+			path: app/Services/WeatherClimateService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and '''' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: app/Services/WeatherClimateService.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: app/Services/WeatherClimateService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/Services/WeatherOverrideService.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between true and true will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: app/Services/WeatherOverrideService.php
+
+		-
+			message: '#^Offset ''imgs'' on array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Services/WeatherResolverService.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between int and '''' will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: app/controllers/Archetypes.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/controllers/Characters.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/controllers/Characters.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/controllers/LocationMessages.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, non\-empty\-string, numeric\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/controllers/LocationMessages.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, numeric\-string, non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/controllers/LocationMessages.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, numeric\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/controllers/LocationMessages.php
+
+		-
+			message: '#^Offset 2 on array\{non\-falsy\-string, non\-empty\-string, numeric\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/controllers/LocationMessages.php
+
+		-
+			message: '#^Offset 2 on array\{non\-falsy\-string, numeric\-string, non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/controllers/LocationMessages.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<int, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/controllers/Locations.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/controllers/Locations.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<int, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/controllers/Themes.php
+
+		-
+			message: '#^Call to function is_array\(\) with list\<string\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/controllers/Themes.php
+
+		-
+			message: '#^Offset ''id'' on \*NEVER\* on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/controllers/Themes.php
+
+		-
+			message: '#^Offset ''is_active'' on array\{id\: non\-empty\-string, name\: string, version\: string, description\: string, author\: string, compat\: string, shell\: string, is_active\: 0\|1, \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/controllers/Themes.php
+
+		-
+			message: '#^Offset ''name'' on array\{id\: non\-empty\-string, name\: string, version\: string, description\: string, author\: string, compat\: string, shell\: string, is_active\: 0\|1, \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/controllers/Themes.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-list\<string\> and array\{\} will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/controllers/Themes.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: app/controllers/Users.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: app/controllers/Weathers.php
+
+		-
+			message: '#^Unsafe access to private property Core\\AuditLogService\:\:\$dbAdapter through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 5
+			path: core/AuditLogService.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuditLogService\:\:db\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/AuditLogService.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuditLogService\:\:getSessionAdminId\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/AuditLogService.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuditLogService\:\:getSessionUserId\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/AuditLogService.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuditLogService\:\:getSessionValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/AuditLogService.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuditLogService\:\:resolveAuthor\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/AuditLogService.php
+
+		-
+			message: '#^Unsafe access to private property Core\\AuthGuard\:\:\$dbAdapter through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 8
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe access to private property Core\\AuthGuard\:\:\$dbProvider through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 4
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe access to private property Core\\AuthGuard\:\:\$session through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 6
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuthGuard\:\:db\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuthGuard\:\:getSessionFlag\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 4
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuthGuard\:\:hasSharedGuild\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuthGuard\:\:normalizeAbility\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuthGuard\:\:policyMessage\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 4
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuthGuard\:\:session\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 4
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\AuthGuard\:\:sharedGuildCount\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/AuthGuard.php
+
+		-
+			message: '#^Offset ''dir'' on array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Offset ''enabled'' on array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Offset ''tmp'' on array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Offset ''ttl'' on array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between ''/tmp'' and '''' will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between false and true will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Cache\:\:decodePayload\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Cache\:\:dir\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/Cache.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Cache\:\:enabled\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/Cache.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Cache\:\:ensureDir\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Cache\:\:path\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/Cache.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Cache\:\:ttl\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Cache.php
+
+		-
+			message: '#^Unsafe access to private property Core\\Csrf\:\:\$session through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 6
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe access to private property Core\\Csrf\:\:\$session_key through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 2
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Csrf\:\:getRequestToken\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Csrf\:\:getServerValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Csrf\:\:getSessionToken\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Csrf\:\:getSessionValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Csrf\:\:session\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Csrf\:\:setSessionToken\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Csrf\:\:setSessionValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Csrf.php
+
+		-
+			message: '#^Unsafe access to private property Core\\CurrencyLogs\:\:\$dbAdapter through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 5
+			path: core/CurrencyLogs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\CurrencyLogs\:\:db\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/CurrencyLogs.php
+
+		-
+			message: '#^Call to function method_exists\(\) with mysqli_stmt and ''get_result'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Database/MysqliDbAdapter.php
+
+		-
+			message: '#^Comparison operation "\<" between 0\|1 and 2 is always true\.$#'
+			identifier: smaller.alwaysTrue
+			count: 1
+			path: core/Database/MysqliDbAdapter.php
+
+		-
+			message: '#^Offset ''crypt_key'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/Database/MysqliDbAdapter.php
+
+		-
+			message: '#^Offset ''mysql'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/Database/MysqliDbAdapter.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: core/Database/MysqliDbAdapter.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: core/Database/MysqliDbAdapter.php
+
+		-
+			message: '#^Unsafe access to private property Core\\FeatureFlags\:\:\$cache through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 16
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe access to private property Core\\FeatureFlags\:\:\$config through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 6
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe access to private property Core\\FeatureFlags\:\:\$dbAdapter through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 8
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe access to private property Core\\FeatureFlags\:\:\$dbProvider through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 4
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe access to private property Core\\FeatureFlags\:\:\$session through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 6
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:config\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:configSessionPrefix\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:db\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:getSessionConfigValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:getSessionValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:normalizeKey\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 5
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:parseBool\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 9
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:session\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:setSessionConfigValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\FeatureFlags\:\:setSessionValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/FeatureFlags.php
+
+		-
+			message: '#^Unsafe call to private method Core\\HtmlSanitizer\:\:defaultAllowedTags\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/HtmlSanitizer.php
+
+		-
+			message: '#^Unsafe call to private method Core\\HtmlSanitizer\:\:fallbackSanitize\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/HtmlSanitizer.php
+
+		-
+			message: '#^Unsafe call to private method Core\\HtmlSanitizer\:\:normalizeAllowedTagList\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/HtmlSanitizer.php
+
+		-
+			message: '#^Unsafe call to private method Core\\HtmlSanitizer\:\:normalizeAllowedTags\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/HtmlSanitizer.php
+
+		-
+			message: '#^Unsafe call to private method Core\\HtmlSanitizer\:\:sanitizeAttributes\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/HtmlSanitizer.php
+
+		-
+			message: '#^Unsafe call to private method Core\\HtmlSanitizer\:\:sanitizeNode\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/HtmlSanitizer.php
+
+		-
+			message: '#^Unsafe call to private method Core\\HtmlSanitizer\:\:sanitizeUrl\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/HtmlSanitizer.php
+
+		-
+			message: '#^Unsafe call to private method Core\\HtmlSanitizer\:\:unwrapNode\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/HtmlSanitizer.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Http\\AppError\:\:normalizeErrorCode\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Http/AppError.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: core/Http/ErrorResponder.php
+
+		-
+			message: '#^Static method Core\\Http\\ErrorResponder\:\:logger\(\) is unused\.$#'
+			identifier: method.unused
+			count: 1
+			path: core/Http/ErrorResponder.php
+
+		-
+			message: '#^Ternary operator condition is always false\.$#'
+			identifier: ternary.alwaysFalse
+			count: 1
+			path: core/Http/ErrorResponder.php
+
+		-
+			message: '#^Unsafe access to private property Core\\Http\\ErrorResponder\:\:\$logger through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 5
+			path: core/Http/ErrorResponder.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Http\\ErrorResponder\:\:escapeHtml\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Http/ErrorResponder.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Http\\ErrorResponder\:\:renderTwigErrorPage\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Http/ErrorResponder.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Http\\ErrorResponder\:\:resolveErrorTitle\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Http/ErrorResponder.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Http\\ErrorResponder\:\:withErrorCode\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Http/ErrorResponder.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Http/RequestContext.php
+
+		-
+			message: '#^Result of && is always true\.$#'
+			identifier: booleanAnd.alwaysTrue
+			count: 1
+			path: core/Http/RequestContext.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between array and false will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: core/Http/RequestContext.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 4
+			path: core/Http/RequestData.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Http/ResponseEmitter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Http\\ResponseEmitter\:\:sendHeader\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/Http/ResponseEmitter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Http\\ResponseEmitter\:\:sendHeaders\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/Http/ResponseEmitter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Http\\ResponseEmitter\:\:sendStatus\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/Http/ResponseEmitter.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 3
+			path: core/Logs.php
+
+		-
+			message: '#^Call to function is_array\(\) with list\<non\-falsy\-string\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Offset ''debug'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Offset ''function'' on array\{function\: string, line\?\: int, file\?\: string, class\?\: class\-string, type\?\: ''\-\>''\|''\:\:'', args\?\: list\<mixed\>, object\?\: object\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Offset ''logs'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) does not exist\.$#'
+			identifier: isset.offset
+			count: 4
+			path: core/Logs.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 7
+			path: core/Logs.php
+
+		-
+			message: '#^Result of \|\| is always true\.$#'
+			identifier: booleanOr.alwaysTrue
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between false and true will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Logs\:\:asCliText\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Logs\:\:emitDebugIfNeeded\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/Logs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Logs\:\:isAjaxRequest\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Logs\:\:shouldEchoCli\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Logs\:\:shouldTrace\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/Logs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Logs\:\:shouldTraceStack\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Logs\:\:traceStackLimit\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Logs.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Logs\:\:write\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/Logs.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between mixed~\(0\|0\.0\|''''\|array\{\}\|false\|null\) and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: core/Models.php
+
+		-
+			message: '#^Offset 0 on non\-empty\-list\<string\> on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: core/Models/ListQuery.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between int\<1, max\> and 0 will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: core/Models/ListQuery.php
+
+		-
+			message: '#^Comparison operation "\<\=" between 3306 and 0 is always false\.$#'
+			identifier: smallerOrEqual.alwaysFalse
+			count: 1
+			path: core/ModuleManager.php
+
+		-
+			message: '#^Offset ''mysql'' on array\{mysql\: array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\}, crypt_key\: ''''\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/ModuleManager.php
+
+		-
+			message: '#^Offset ''port'' on array\{\}\|array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/ModuleManager.php
+
+		-
+			message: '#^Offset ''socket'' on array\{\}\|array\{host\: '''', db_name\: '''', user\: '''', pwd\: '''', charset\: ''utf8mb4'', collation\: ''utf8mb4_unicode_ci''\} on left side of \?\? does not exist\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/ModuleManager.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: core/ModuleManager.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between '''' and '''' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: core/ModuleManager.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between non\-empty\-string and '''' will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: core/ModuleManager.php
+
+		-
+			message: '#^Call to function is_array\(\) with non\-empty\-list will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/ModuleRuntime.php
+
+		-
+			message: '#^Offset ''items'' on array\{key\: non\-empty\-string, title\: non\-empty\-string, order\: int, items\: non\-empty\-list\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/ModuleRuntime.php
+
+		-
+			message: '#^Offset ''label'' on array\{module_id\: string, label\: non\-empty\-string, href\: non\-empty\-string, icon\: string, target\: string, rel\: string, class\: string, page\: string, \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: core/ModuleRuntime.php
+
+		-
+			message: '#^Offset ''order'' on array\{key\: non\-empty\-string, title\: non\-empty\-string, order\: int, items\: non\-empty\-list\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: core/ModuleRuntime.php
+
+		-
+			message: '#^Offset ''order'' on array\{module_id\: string, label\: non\-empty\-string, href\: non\-empty\-string, icon\: string, target\: string, rel\: string, class\: string, page\: string, \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: core/ModuleRuntime.php
+
+		-
+			message: '#^Offset ''title'' on array\{key\: non\-empty\-string, title\: non\-empty\-string, order\: int, items\: non\-empty\-list\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: core/ModuleRuntime.php
+
+		-
+			message: '#^Unsafe access to private property Core\\RateLimiter\:\:\$configCache through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 7
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe access to private property Core\\RateLimiter\:\:\$dbAdapter through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 8
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe access to private property Core\\RateLimiter\:\:\$dbProvider through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 4
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe access to private property Core\\RateLimiter\:\:\$session through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 6
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:db\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:getServerValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:getSessionUserId\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:getSessionValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:getStore\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:key\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:now\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:pruneExpiredStore\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:resolveIdentifier\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:session\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:setSessionValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\RateLimiter\:\:setStore\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/RateLimiter.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Redirect\:\:escapeUrl\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Redirect.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Redirect\:\:redirectPayload\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Redirect.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Redirect\:\:send\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: core/Redirect.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Redirect\:\:shouldRespondJson\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Redirect.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Router.php
+
+		-
+			message: '#^If condition is always false\.$#'
+			identifier: if.alwaysFalse
+			count: 1
+			path: core/Router.php
+
+		-
+			message: '#^Offset ''debug'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in empty\(\) always exists and is always falsy\.$#'
+			identifier: empty.offset
+			count: 1
+			path: core/Router.php
+
+		-
+			message: '#^Result of && is always false\.$#'
+			identifier: booleanAnd.alwaysFalse
+			count: 1
+			path: core/Router.php
+
+		-
+			message: '#^Right side of && is always true\.$#'
+			identifier: booleanAnd.rightAlwaysTrue
+			count: 1
+			path: core/Router.php
+
+		-
+			message: '#^Offset ''chat_commands'' on array\{debug\: false, cache\: array\{enabled\: false, ttl\: 0, dir\: ''/tmp''\}, dirs\: array\{base\: '''', core\: '''', views\: '''', assets\: '''', imgs\: '''', tmp\: ''/tmp''\}, password_length\: 5, session_time_life\: 5400, location_chat_history_hours\: 3, location_whisper_retention_hours\: 24, inventory\: array\{capacity_max\: 30, stack_max\: 50\}, \.\.\.\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: core/SessionGuard.php
+
+		-
+			message: '#^Unsafe access to private property Core\\SessionGuard\:\:\$dbAdapter through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 8
+			path: core/SessionGuard.php
+
+		-
+			message: '#^Unsafe access to private property Core\\SessionGuard\:\:\$dbProvider through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 4
+			path: core/SessionGuard.php
+
+		-
+			message: '#^Unsafe access to private property Core\\SessionGuard\:\:\$session through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 6
+			path: core/SessionGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\SessionGuard\:\:db\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/SessionGuard.php
+
+		-
+			message: '#^Unsafe call to private method Core\\SessionGuard\:\:session\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/SessionGuard.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: core/SessionStore.php
+
+		-
+			message: '#^Unsafe call to private method Core\\SessionStore\:\:ensureSessionArray\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/SessionStore.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\<string, mixed\> will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Offset ''context'' on array\{context\: string, views_paths\: array\<int, string\>, theme\: array\<string, mixed\>\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Offset ''theme'' on array\{context\: string, views_paths\: array\<int, string\>, theme\: array\<string, mixed\>\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Offset ''views_paths'' on array\{context\: string, views_paths\: array\<int, string\>, theme\: array\<string, mixed\>\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Static property Core\\Template\:\:\$twigThemeRuntime is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe access to private constant Core\\Template\:\:ERR_TEMPLATE_UNSUPPORTED through static\:\:\.$#'
+			identifier: staticClassAccess.privateConstant
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe access to private constant Core\\Template\:\:ERR_TWIG_MISSING through static\:\:\.$#'
+			identifier: staticClassAccess.privateConstant
+			count: 2
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe access to private property Core\\Template\:\:\$config through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 6
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe access to private property Core\\Template\:\:\$twig through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 5
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe access to private property Core\\Template\:\:\$twigFactory through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 5
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe access to private property Core\\Template\:\:\$twigThemeRuntime through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 2
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:assertTwigAvailable\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:config\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:getSessionValue\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:getTwig\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:isTwigAvailable\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:isTwigFile\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:resolveTwigRuntime\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:twigFactory\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 2
+			path: core/Template.php
+
+		-
+			message: '#^Unsafe call to private method Core\\Template\:\:viewTwig\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 1
+			path: core/Template.php
+
+		-
+			message: '#^Call to function is_string\(\) with string will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Templates/TwigEnvironmentFactory.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Themes/ThemeResolver.php
+
+		-
+			message: '#^Call to function is_array\(\) with array\{enabled\: false, active_theme\: '''', strict_mode\: false, allow_custom_js\: false\} will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: core/Themes/ThemeResolver.php
+
+		-
+			message: '#^Offset ''theme'' on array\{baseurl\: '''', lang\: ''it'', name\: ''Logeon'', title\: ''Logeon'', description\: '''', brand_logo_icon\: '''', brand_logo_wordmark\: '''', wm_name\: '''', \.\.\.\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/Themes/ThemeResolver.php
+
+		-
+			message: '#^Offset ''valid'' on array\{valid\: bool, manifest\?\: array\<string, mixed\>\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: core/Themes/ThemeResolver.php
+
+		-
+			message: '#^Unsafe access to private property Core\\UploadManager\:\:\$dbAdapter through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 5
+			path: core/UploadManager.php
+
+		-
+			message: '#^Unsafe access to private property Core\\UploadManager\:\:\$paths through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 5
+			path: core/UploadManager.php
+
+		-
+			message: '#^Unsafe call to private method Core\\UploadManager\:\:db\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 23
+			path: core/UploadManager.php
+
+		-
+			message: '#^Unsafe call to private method Core\\UploadManager\:\:paths\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 14
+			path: core/UploadManager.php

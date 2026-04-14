@@ -1,0 +1,255 @@
+<div class="modal fade" id="admin-system-event-detail-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Dettaglio evento</h4>
+                <h6 class="text-center text-muted">Panoramica evento di sistema e accesso ai pannelli di gestione collegati.</h6>
+                <hr class="my-4" />
+
+                <div class="d-flex flex-wrap justify-content-end gap-1 mb-3">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-system-events-open-effects" disabled data-role="admin-system-events-detail-action">
+                        Effetti
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-system-events-open-participations" disabled data-role="admin-system-events-detail-action">
+                        Partecipazioni
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-system-events-open-rewards" disabled data-role="admin-system-events-detail-action">
+                        Ricompense
+                    </button>
+                </div>
+
+                <div class="small text-muted" id="admin-system-event-detail-empty">Seleziona un evento dalla tabella per vedere i dettagli.</div>
+                <div id="admin-system-event-detail" class="d-none"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-system-event-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Evento di sistema</h4>
+                <h6 class="text-center text-muted">Compila i dati principali e la pianificazione.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-system-event-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12">
+                        <label class="form-label">Titolo <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="title" maxlength="255" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="4"></textarea>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" name="type">
+                            <option value="general">Generale</option>
+                            <option value="war">Guerra</option>
+                            <option value="festival">Festival</option>
+                            <option value="tournament">Torneo</option>
+                            <option value="raid">Incursione</option>
+                            <option value="seasonal">Stagionale</option>
+                            <option value="diplomatic">Diplomatico</option>
+                            <option value="crisis">Crisi</option>
+                            <option value="ceremony">Cerimonia</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Stato</label>
+                        <select class="form-select" name="status">
+                            <option value="draft">Bozza</option>
+                            <option value="scheduled">Programmato</option>
+                            <option value="active">Attivo</option>
+                            <option value="completed">Completato</option>
+                            <option value="cancelled">Annullato</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Visibilita</label>
+                        <select class="form-select" name="visibility">
+                            <option value="public">Pubblica</option>
+                            <option value="staff_only">Solo staff</option>
+                            <option value="private">Privata</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Feed homepage</label>
+                        <input type="hidden" name="show_on_homepage_feed" value="0">
+                        <div class="small text-muted mt-1">Mostra l'evento nel feed della homepage pubblica</div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Partecipazione</label>
+                        <select class="form-select" name="participant_mode">
+                            <option value="character">Personaggi</option>
+                            <option value="faction">Fazioni</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Ambito</label>
+                        <select class="form-select" name="scope_type" data-role="admin-system-event-scope-type">
+                            <option value="global">Globale</option>
+                            <option value="map">Mappa</option>
+                            <option value="location">Luogo</option>
+                            <option value="faction">Fazione</option>
+                            <option value="character">Personaggio</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-9">
+                        <label class="form-label">Entità ambito</label>
+                        <input type="text" class="form-control" name="scope_label" autocomplete="off" placeholder="Cerca per nome..." data-role="admin-system-event-scope-label">
+                        <input type="hidden" name="scope_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-system-event-scope-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Inizio</label>
+                        <input type="datetime-local" class="form-control" name="starts_at">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Fine</label>
+                        <input type="datetime-local" class="form-control" name="ends_at">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Ricorrenza</label>
+                        <select class="form-select" name="recurrence">
+                            <option value="none">Nessuna</option>
+                            <option value="daily">Giornaliera</option>
+                            <option value="weekly">Settimanale</option>
+                            <option value="monthly">Mensile</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Tag narrativi</label>
+                        <div id="admin-system-event-tags-container" class="d-flex flex-wrap gap-2 border rounded p-2">
+                            <span class="text-muted small">Caricamento tag...</span>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-system-event-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-system-event-effects-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Effetti evento</h4>
+                <h6 class="text-center text-muted">Configura ricompense automatiche in valuta.</h6>
+                <hr class="my-4" />
+
+                <div id="admin-system-event-effects-list" class="list-group mb-3"></div>
+
+                <form id="admin-system-event-effect-form" class="row g-2">
+                    <input type="hidden" name="effect_id" value="0">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Valuta</label>
+                        <input type="text" class="form-control" name="currency_label" autocomplete="off" placeholder="Cerca valuta..." data-role="admin-system-event-currency-label">
+                        <input type="hidden" name="currency_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-system-event-currency-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Importo</label>
+                        <input type="number" class="form-control" name="amount" min="1" value="1">
+                    </div>
+                    <div class="col-12 col-md-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary w-100" data-action="admin-system-event-effect-save">Salva effetto</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-system-event-participations-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Partecipazioni evento</h4>
+                <h6 class="text-center text-muted">Assegna manualmente personaggi o fazioni.</h6>
+                <hr class="my-4" />
+
+                <div id="admin-system-event-participations-list" class="list-group mb-3"></div>
+
+                <form id="admin-system-event-participation-form" class="row g-2">
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Modalita</label>
+                        <select class="form-select" name="participant_mode" data-role="admin-system-event-participant-mode">
+                            <option value="character">Personaggio</option>
+                            <option value="faction">Fazione</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Destinatario</label>
+                        <input type="text" class="form-control" name="participant_label" autocomplete="off" placeholder="Cerca..." data-role="admin-system-event-participant-label">
+                        <input type="hidden" name="character_id" value="0">
+                        <input type="hidden" name="faction_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-system-event-participant-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-primary w-100" data-action="admin-system-event-participation-save">Aggiungi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-system-event-rewards-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Ricompense evento</h4>
+                <h6 class="text-center text-muted">Assegna una ricompensa manuale e consulta il log.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-system-event-reward-form" class="row g-2 mb-3">
+                    <div class="col-12 col-md-5">
+                        <label class="form-label">Personaggio</label>
+                        <input type="text" class="form-control" name="character_label" autocomplete="off" placeholder="Cerca personaggio..." data-role="admin-system-event-reward-character-label">
+                        <input type="hidden" name="character_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-system-event-reward-character-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Valuta</label>
+                        <input type="text" class="form-control" name="currency_label" autocomplete="off" placeholder="Cerca valuta..." data-role="admin-system-event-reward-currency-label">
+                        <input type="hidden" name="currency_id" value="0">
+                        <div class="list-group mt-1 d-none" data-role="admin-system-event-reward-currency-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Importo</label>
+                        <input type="number" class="form-control" name="amount" min="1" value="1">
+                    </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="button" class="btn btn-primary" data-action="admin-system-event-reward-assign">Assegna ricompensa</button>
+                    </div>
+                </form>
+
+                <div class="small text-muted mb-2">Log ricompense</div>
+                <div id="admin-system-event-rewards-log" class="list-group"></div>
+            </div>
+        </div>
+    </div>
+</div>

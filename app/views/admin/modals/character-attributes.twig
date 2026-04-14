@@ -1,0 +1,228 @@
+<div class="modal fade" id="admin-character-attributes-settings-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Impostazioni attributi</h4>
+                <h6 class="text-center text-muted">Abilita o disabilita il sistema attributi core a livello runtime.</h6>
+                <hr class="my-4" />
+
+                <div class="row g-2">
+                    <div class="col-12">
+                        <label class="form-label d-block mb-1">Sistema attributi attivo</label>
+                        <input type="hidden" id="admin-character-attributes-enabled" value="0">
+                        <div class="form-text mt-2">Quando disattivo, il runtime core usa fallback salute massima = 100.</div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-character-attributes-save-settings">Salva impostazioni</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-character-attributes-recompute-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Ricalcolo attributi</h4>
+                <h6 class="text-center text-muted">Esegui il ricalcolo su un singolo personaggio o in batch.</h6>
+                <hr class="my-4" />
+
+                <div class="row g-2 align-items-end">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label mb-1">Personaggio (opzionale)</label>
+                        <input type="text" class="form-control form-control-sm" id="admin-character-attributes-recompute-character-name" placeholder="Cerca personaggio..." autocomplete="off">
+                        <input type="hidden" id="admin-character-attributes-recompute-character-id" value="">
+                        <div class="list-group mt-1 d-none" id="admin-character-attributes-recompute-character-suggestions"></div>
+                    </div>
+                    <div class="col-12 col-md-6 d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-primary w-100" data-action="admin-character-attributes-recompute-single">Ricalcola target</button>
+                        <button type="button" class="btn btn-sm btn-outline-warning w-100" data-action="admin-character-attributes-recompute-batch">Ricalcola batch</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-character-attribute-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Definizione attributo</h4>
+                <h6 class="text-center text-muted">Configura attributo core con vincoli e visibilita runtime.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-character-attribute-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Nome</label>
+                        <input type="text" class="form-control" name="name" maxlength="120" required>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Slug</label>
+                        <input type="text" class="form-control" name="slug" maxlength="80" placeholder="es: forza" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="2"></textarea>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Gruppo</label>
+                        <select class="form-select" name="attribute_group">
+                            <option value="primary">Primario</option>
+                            <option value="secondary">Secondario</option>
+                            <option value="narrative">Narrativo</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Tipo</label>
+                        <select class="form-select" name="value_type">
+                            <option value="number">Numero</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Posizione</label>
+                        <input type="number" class="form-control" name="position" min="0" step="1" value="0">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Arrotondamento</label>
+                        <select class="form-select" name="round_mode">
+                            <option value="none">Nessuno</option>
+                            <option value="floor">Floor</option>
+                            <option value="ceil">Ceil</option>
+                            <option value="round">Round</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Min</label>
+                        <input type="number" class="form-control" name="min_value" step="0.01">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Max</label>
+                        <input type="number" class="form-control" name="max_value" step="0.01">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Default</label>
+                        <input type="number" class="form-control" name="default_value" step="0.01">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label">Fallback</label>
+                        <input type="number" class="form-control" name="fallback_value" step="0.01">
+                    </div>
+
+                    <div class="col-12 col-md-3">
+                        <label class="form-label d-block">Attivo</label>
+                        <input type="hidden" name="is_active" value="1">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label d-block">Derivato</label>
+                        <input type="hidden" name="is_derived" value="0">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label d-block">Override manuale</label>
+                        <input type="hidden" name="allow_manual_override" value="0">
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <label class="form-label d-block">Mappa su HP max</label>
+                        <input type="hidden" name="maps_to_core_health_max" value="0">
+                    </div>
+
+                    <div class="col-12 col-md-6">
+                        <label class="form-label d-block">Visibile in profile</label>
+                        <input type="hidden" name="visible_in_profile" value="1">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label d-block">Visibile in location</label>
+                        <input type="hidden" name="visible_in_location" value="0">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Chiudi</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-character-attribute-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="admin-character-attribute-rule-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-5 text-center mt-3 mb-3">Regola attributo derivato</h4>
+                <h6 class="text-center text-muted">Formula builder sequenziale guidato (no formula testuale libera).</h6>
+                <hr class="my-4" />
+
+                <input type="hidden" id="admin-character-attribute-rule-attribute-id" value="">
+                <div class="mb-2">
+                    <b data-role="admin-character-attribute-rule-title">Attributo</b>
+                </div>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Fallback regola</label>
+                        <input type="number" class="form-control form-control-sm" id="admin-character-attribute-rule-fallback" step="0.01">
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label">Round regola (opzionale)</label>
+                        <select class="form-select form-select-sm" id="admin-character-attribute-rule-round">
+                            <option value="">Usa definizione attributo</option>
+                            <option value="none">Nessuno</option>
+                            <option value="floor">Floor</option>
+                            <option value="ceil">Ceil</option>
+                            <option value="round">Round</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label class="form-label d-block">Stato regola</label>
+                        <input type="hidden" id="admin-character-attribute-rule-active" value="1">
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th style="width: 90px;">Step</th>
+                                <th style="width: 120px;">Operatore</th>
+                                <th style="width: 140px;">Operando</th>
+                                <th>Valore / Attributo</th>
+                                <th style="width: 70px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-character-attribute-rule-steps"></tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-character-attribute-rule-add-step">
+                        <i class="bi bi-plus-lg me-1"></i>Aggiungi step
+                    </button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-sm btn-outline-danger" data-action="admin-character-attribute-rule-delete">Elimina regola</button>
+                        <button type="button" class="btn btn-sm btn-primary" data-action="admin-character-attribute-rule-save">Salva regola</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
