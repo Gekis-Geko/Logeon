@@ -1,6 +1,6 @@
 # Guida Creazione Moduli
 
-Ultimo aggiornamento: 2026-04-03
+Ultimo aggiornamento: 2026-04-15
 
 ## Scopo
 Creare un modulo Logeon senza modificare il core, mantenendo separazione netta tra:
@@ -35,6 +35,9 @@ Campi fondamentali:
 3. Migrazioni SQL idempotenti.
 4. Nessun campo JSON libero nei form admin core: usare payload guidati.
 5. Namespace e naming coerenti col dominio del modulo.
+6. Per agganciarsi a eventi del core, usare `document.addEventListener` su `CustomEvent` neutrali documentati (es. `location:sceneLauncher.init`). Non modificare il core per far reagire il modulo.
+7. Le interfacce condivise con il core vanno in `app/Contracts/`; quelle interne al modulo restano nel modulo.
+8. I nuovi file JS del modulo devono usare ESM (`import`/`export`); registrare i simboli esposti come global in `scripts/build/window-globals-registry.json`.
 
 ## UI modulo
 1. Inserire menu tramite `menus` nel manifest (slot supportati dal core).

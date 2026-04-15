@@ -1,6 +1,6 @@
 # Guida Personalizzazione Gioco
 
-Ultimo aggiornamento: 2026-04-02
+Ultimo aggiornamento: 2026-04-15
 
 Guida step-by-step per chi scarica Logeon e vuole creare il proprio gioco personalizzato.
 

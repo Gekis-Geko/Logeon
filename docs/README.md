@@ -1,6 +1,6 @@
 # Indice Documentazione Logeon
 
-Ultimo aggiornamento: 2026-04-09
+Ultimo aggiornamento: 2026-04-15
 
 ## Scopo
 Indice unico della documentazione pubblica, pronta per pubblicazione su GitBook.
@@ -35,11 +35,11 @@ Usa come indice principale `docs/SUMMARY.md` e trascrivi solo le pagine elencate
 15. `docs/guida-intensita-quest.md`
 16. `docs/changelog.md`
 
-## Aggiornamenti recenti (2026-04-09)
-1. Aggiunte guide operative: produzione, upgrade, backup/ripristino, troubleshooting.
-2. Aggiunte guide su autenticazione/sessioni e matrice ruoli/permessi.
-3. Aggiunta guida creazione moduli.
-4. Aggiunta guida temi e layout + smoke runtime dedicato.
+## Aggiornamenti recenti (2026-04-15 — v0.8.0)
+1. `description_project.md` aggiornato: rimossa data, aggiunto stato v0.8.0, contratti, modelli, tree shaking, disaccoppiamento moduli.
+2. `guida-contributori.md`: aggiunte regole su `app/Contracts/`, `app/Models/`, disaccoppiamento via `CustomEvent`, ESM obbligatorio.
+3. `guida-architettura-frontend.md`: aggiunta sezione disaccoppiamento core/moduli via `CustomEvent`; aggiunta sezione bundler ESM e `window-globals-registry.json`.
+4. `guida-sistema-moduli.md` e `guida-creazione-moduli.md`: aggiornate con regola di disaccoppiamento via DOM events e regole ESM.
 
 ## Riferimenti tecnici rapidi
 1. `docs/contratti-api-backend.md`

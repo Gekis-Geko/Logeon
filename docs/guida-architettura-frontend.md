@@ -1,6 +1,6 @@
 # Guida Architettura Frontend
 
-Ultimo aggiornamento: 2026-04-02
+Ultimo aggiornamento: 2026-04-15
 
 ## Obiettivo
 Definire lo standard operativo del frontend modulare basato su `AppBootstrap`, con priorita su gameplay (`app/views/app`) e view leggere.
@@ -114,12 +114,33 @@ Vincoli:
 - bloccare include a file rimossi
 - mantenere integrazione `SelectionGroup`/`RadioGroup` coerente
 
+## Disaccoppiamento core / moduli opzionali
+
+Il core non deve importare o richiamare direttamente codice appartenente a moduli opzionali. Il pattern corretto e basato su `CustomEvent` DOM neutrali:
+
+1. Il core (es. `LocationSidebarPage.js`) emette eventi documentati:
+   - `location:sceneLauncher.init` — `{ detail: { location_id, character_id } }`
+   - `location:sceneLauncher.refresh` — `{ detail: { location_id } }`
+   - `location:characters.loaded` — `{ detail: { characters } }`
+2. I moduli opzionali si agganciano con `document.addEventListener(...)`.
+3. Il modulo opzionale non e mai referenziato nel core; puo essere aggiunto o rimosso senza toccare il core.
+
+Questo pattern si applica ogni volta che un modulo opzionale ha bisogno di reagire a eventi di pagine core.
+
+## Bundler e moduli ESM
+
+- Tree shaking completato (Step 0-4): tutti i nuovi file JS usano ESM (`import`/`export`).
+- Bundler: esbuild attivo.
+- `scripts/build/window-globals-registry.json`: fonte autoritativa per i simboli esposti come global. Ogni nuovo simbolo che deve essere raggiungibile da `window` va registrato qui.
+- Non usare IIFE ne assegnamenti `window.*` nei nuovi file.
+
 ## Stato consolidato
 - Runtime gameplay operativo in modalita module-first.
 - Runtime admin operativo con registry modulare.
 - Helper legacy globali consolidati nel core.
 - `App.js` ridotto a facade runtime.
 - Componenti shared in fase continua di hardening, senza dipendenze nascoste.
+- Tree shaking completato; bundler ESM operativo.
 
 ## Pattern Datagrid admin — note operative
 - Usare `grid.loadData(payload, limit, page, orderBy)` per pagine con filtri liberi.

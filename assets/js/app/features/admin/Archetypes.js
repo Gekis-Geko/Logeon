@@ -332,6 +332,8 @@
         },
 
         syncConfigDependencies: function () {
+            if (this._syncingDeps) { return; }
+            this._syncingDeps = true;
             var enabled = this.getSwitchBool('archetypes_enabled', true) === 1;
             var requiredSwitch = this.switches.archetype_required;
             var multipleSwitch = this.switches.multiple_archetypes_allowed;
@@ -361,6 +363,7 @@
                     this.configNoteWrap.classList.remove('d-none');
                 }
             }
+            this._syncingDeps = false;
         },
 
         saveConfig: function () {

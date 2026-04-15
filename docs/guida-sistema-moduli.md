@@ -1,6 +1,6 @@
 # Guida Sistema Moduli
 
-Ultimo aggiornamento: 2026-04-03
+Ultimo aggiornamento: 2026-04-15
 
 ## Scopo
 Questa guida descrive come Logeon gestisce i moduli nel core:
@@ -13,6 +13,7 @@ Questa guida descrive come Logeon gestisce i moduli nel core:
 1. Il core documenta e gestisce solo il sistema di orchestrazione moduli (`/admin/modules/*`).
 2. Le API funzionali di un modulo (es. endpoint gameplay specifici) vanno documentate nella guida del modulo stesso.
 3. `docs/contratti-api-backend.md` include i contratti core, inclusa la gestione moduli, ma non i contratti di feature opzionali.
+4. Il core non importa codice di moduli opzionali. La comunicazione avviene tramite `CustomEvent` DOM neutrali o hook (`Core\Hooks`). Il modulo ascolta gli eventi che il core emette e agisce di conseguenza, senza che il core sappia dell'esistenza del modulo.
 
 ## Stati modulo
 Stati supportati:

@@ -1,6 +1,6 @@
 # Guida Upgrade Versioni
 
-Ultimo aggiornamento: 2026-04-03
+Ultimo aggiornamento: 2026-04-15
 
 ## Scopo
 Aggiornare Logeon riducendo rischio di downtime e regressioni.

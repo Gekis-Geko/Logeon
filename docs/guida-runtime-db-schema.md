@@ -1,6 +1,6 @@
 # Guida Runtime DB
 
-Ultimo aggiornamento: 2026-04-03
+Ultimo aggiornamento: 2026-04-15
 
 ## Scopo
 Documento unico per:
@@ -26,6 +26,7 @@ Lo step `init-db` dell'installer esegue:
 2. deve essere coerente con il runtime core corrente.
 3. deve evitare dati di test/smoke non essenziali.
 4. deve mantenere almeno l'utenza admin di baseline.
+5. le patch SQL (`database/patches/*.sql`) sono temporanee: una volta integrate nel file unico, il file patch va eliminato.
 
 ## Checklist prima rilascio DB
 1. import su DB vuoto completato senza errori.

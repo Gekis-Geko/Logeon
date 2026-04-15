@@ -1,6 +1,6 @@
 # Guida Contributori
 
-Ultimo aggiornamento: 2026-04-10
+Ultimo aggiornamento: 2026-04-15
 
 ## Scopo
 Guida unica per contribuire a Logeon senza regressioni su `/game`, `/admin` e core runtime.
@@ -28,6 +28,9 @@ Guida unica per contribuire a Logeon senza regressioni su `/game`, `/admin` e co
 5. Non introdurre nuovi pattern legacy (`echo json_encode(...)`, `die(...)`, parsing diretto `$_POST['data']`).
 6. Se una logica e modulo-specifica, non metterla nel core.
 7. Le view pubbliche che includono la modale login devono ricevere dal backend il contesto `google_auth` (almeno `google_auth.enabled`).
+8. Le interfacce di dominio vanno in `app/Contracts/`, non mescolate con i file di service.
+9. Il core non deve importare o richiamare direttamente codice di moduli opzionali: usare `CustomEvent` neutrali o hook (`Core\Hooks`).
+10. I nuovi file JS devono usare ESM (`import`/`export`), non IIFE ne assegnamenti `window.*`.
 
 ## File ad alto rischio (toccare solo con task mirato)
 1. `core/Models.php`
@@ -72,9 +75,11 @@ Guida unica per contribuire a Logeon senza regressioni su `/game`, `/admin` e co
 1. Validazione input lato controller.
 2. Business rules nei service.
 3. Error code coerenti e stabili.
-4. Patch SQL idempotenti.
+4. Patch SQL idempotenti; una volta integrate in `database/logeon_db_core.sql` i file patch separati vanno eliminati.
 5. Nessuna dipendenza hard del core da moduli opzionali.
 6. Per nuove dipendenze runtime nel core, preferire i contratti esposti da `Core\AppContext` (session, auth context, renderer, config repository, db provider) invece di chiamate statiche dirette.
+7. Le interfacce di dominio appartengono a `app/Contracts/` (namespace `App\Contracts`), non a `app/Services/`.
+8. I modelli (`app/Models/`) estendono `Core\Models` con `$table`, `$primary_key` e `$fillable`; nessuna logica di business al loro interno.
 
 ## Verifiche minime prima di commit
 1. `php -l` su ogni file PHP toccato.

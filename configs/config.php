@@ -1,7 +1,7 @@
 <?php
 
 const CONFIG = [
-    'debug' => true,
+    'debug' => false,
     'cache' => [
         'enabled' => true,
         'ttl' => 300,

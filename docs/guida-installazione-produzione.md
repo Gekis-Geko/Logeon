@@ -1,6 +1,6 @@
 # Guida Installazione Produzione
 
-Ultimo aggiornamento: 2026-04-03
+Ultimo aggiornamento: 2026-04-15
 
 ## Scopo
 Portare Logeon in produzione in modo sicuro e ripetibile.
