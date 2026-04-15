@@ -81,12 +81,36 @@ File ad alto rischio (solo con refactor dedicato):
 5. test eseguiti
 6. eventuali rischi residui
 
-## 8. Convenzioni docs
+## 8. PHPStan e il baseline
+
+Logeon usa PHPStan (level 4) per l'analisi statica di `app/Services`, `app/Controllers` e `core`.
+
+### Come funziona `phpstan-baseline.neon`
+
+Il file `phpstan-baseline.neon` è una funzionalità nativa di PHPStan, non un workaround custom. Sopprime errori su **righe specifiche di file esistenti**: ogni entry nel baseline è ancorata a un file e a un pattern di messaggio preciso. Il codice che scrivi tu — nuovi file, nuove righe — viene analizzato normalmente. Se introduci lo stesso tipo di errore in un file o riga non listati nel baseline, PHPStan lo segnala e la CI fallisce.
+
+### Perché esiste un baseline così ampio
+
+La maggior parte delle voci riguarda file core ad alto rischio (`core/Template.php`, `core/Logs.php`, `core/RateLimiter.php`, `core/FeatureFlags.php`, `core/Cache.php`…) che per policy del progetto si toccano solo con refactor dedicati e verificati. Il baseline è stato creato per non bloccare il lavoro sulle aree sicure mentre quei file vengono risanati in modo controllato.
+
+### Regola obbligatoria: il baseline può solo ridursi
+
+**Non è accettabile aggiungere nuove voci al baseline in una PR.** Se PHPStan segnala un errore nel codice che stai scrivendo:
+
+1. correggi il codice — è quasi sempre la scelta giusta;
+2. se l'errore è un falso positivo documentabile (es. pattern legacy intenzionale in un file ad alto rischio), apri una discussione prima di procedere;
+3. non eseguire `phpstan --generate-baseline` per sopprimere il problema.
+
+### Riduzione progressiva del baseline
+
+Ogni PR che tocca uno dei file core elencati sopra deve ridurre le voci del baseline relative a quel file. La riduzione del baseline è backlog tecnico esplicito del progetto, non lavoro opzionale.
+
+## 9. Convenzioni docs
 1. Documenti attivi e baseline in docs/.
 2. Evitare archivi storici locali: tenere una sola guida aggiornata per argomento.
 3. La storia tecnica del progetto e nel repository Git.
 
-## 9. Collegamenti rapidi
+## 10. Collegamenti rapidi
 1. `README.md`
 2. `docs/README.md`
 3. `docs/guida-contributori.md`
