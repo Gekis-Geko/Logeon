@@ -1,6 +1,6 @@
 # Guida Contributori
 
-Ultimo aggiornamento: 2026-04-15
+Ultimo aggiornamento: 2026-04-23
 
 ## Scopo
 Guida unica per contribuire a Logeon senza regressioni su `/game`, `/admin` e core runtime.
@@ -54,6 +54,22 @@ Guida unica per contribuire a Logeon senza regressioni su `/game`, `/admin` e co
    - `getPageModules()` in `admin.registry.js` (fonte autoritativa — non ometterlo)
    - `modules` map in `admin.runtime.js`
 7. Aggiorna docs coinvolte.
+
+## Workflow Git e Pull Request (sintesi)
+1. Crea branch breve da `main` aggiornato.
+2. Apri PR in `Draft` appena il perimetro e chiaro.
+3. Porta la PR a `Ready for review` solo dopo i check minimi.
+4. Risolvi commenti review con commit dedicati.
+5. Merge preferito: `Squash and merge`.
+
+Convenzioni rapide:
+1. Branch: `<tipo>/<area>-<descrizione-breve>`
+   - esempio: `fix/admin-settings-toast-save`
+2. Commit: `<type>(<scope>): <summary>`
+   - esempio: `refactor(quests): replace hardcoded navbar slot with extension point`
+
+Riferimento completo:
+1. `CONTRIBUTING.md` (sezioni workflow Git, policy review/merge, esempi codice, Definition of Done)
 
 ### Nota operativa su login
 1. Endpoint base login: `POST /signin`.

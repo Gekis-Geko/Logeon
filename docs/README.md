@@ -1,6 +1,6 @@
 # Indice Documentazione Logeon
 
-Ultimo aggiornamento: 2026-04-15
+Ultimo aggiornamento: 2026-04-23
 
 ## Scopo
 Indice unico della documentazione pubblica, pronta per pubblicazione su GitBook.
@@ -13,6 +13,9 @@ Indice unico della documentazione pubblica, pronta per pubblicazione su GitBook.
 5. `docs/guida-temi-layout.md`
 6. `docs/guida-runtime-db-schema.md`
 7. `docs/contratti-api-backend.md`
+
+Nota:
+`CONTRIBUTING.md` e il riferimento autoritativo per workflow Git, policy Pull Request, convenzioni commit/branch e esempi di stile codice.
 
 ## Struttura GitBook consigliata
 Usa come indice principale `docs/SUMMARY.md` e trascrivi solo le pagine elencate in quel file.
@@ -35,7 +38,11 @@ Usa come indice principale `docs/SUMMARY.md` e trascrivi solo le pagine elencate
 15. `docs/guida-intensita-quest.md`
 16. `docs/changelog.md`
 
-## Aggiornamenti recenti (2026-04-15 — v0.8.0)
+## Aggiornamenti recenti (2026-04-23)
+1. `CONTRIBUTING.md`: aggiunte policy Git/PR ufficiali, naming branch/commit, lifecycle review/merge, Definition of Done e esempi concreti di stile codice (PHP/JS/Twig).
+2. `docs/guida-contributori.md`: aggiunta sintesi operativa su workflow Git/PR con collegamento al riferimento completo in `CONTRIBUTING.md`.
+
+## Aggiornamenti recenti (2026-04-15 - v0.8.0)
 1. `description_project.md` aggiornato: rimossa data, aggiunto stato v0.8.0, contratti, modelli, tree shaking, disaccoppiamento moduli.
 2. `guida-contributori.md`: aggiunte regole su `app/Contracts/`, `app/Models/`, disaccoppiamento via `CustomEvent`, ESM obbligatorio.
 3. `guida-architettura-frontend.md`: aggiunta sezione disaccoppiamento core/moduli via `CustomEvent`; aggiunta sezione bundler ESM e `window-globals-registry.json`.
