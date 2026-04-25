@@ -1,6 +1,6 @@
 # Guida Installazione Produzione
 
-Ultimo aggiornamento: 2026-04-15
+Ultimo aggiornamento: 2026-04-27
 
 ## Scopo
 Portare Logeon in produzione in modo sicuro e ripetibile.
@@ -32,10 +32,10 @@ Portare Logeon in produzione in modo sicuro e ripetibile.
 5. Mantieni `.env`/config fuori da export pubblici del web server.
 
 ## Verifiche post-installazione
-1. Smoke core:
-   - `C:\xampp\php\php.exe scripts/php/smoke-core-db-runtime.php`
-   - `C:\xampp\php\php.exe scripts/php/smoke-core-auth-runtime.php`
-   - `C:\xampp\php\php.exe scripts/php/smoke-core-runtime.php`
+1. Smoke core (adattare il percorso PHP all'ambiente):
+   - `php scripts/php/smoke-core-db-runtime.php`
+   - `php scripts/php/smoke-core-auth-runtime.php`
+   - `php scripts/php/smoke-core-runtime.php`
 2. Verifica area pubblica `/`.
 3. Verifica area gioco `/game`.
 4. Verifica area admin `/admin`.

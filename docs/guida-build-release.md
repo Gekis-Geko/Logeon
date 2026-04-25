@@ -118,7 +118,7 @@ composer install --no-dev --optimize-autoloader
 powershell -ExecutionPolicy Bypass -File scripts/release/build-core-zip.ps1
 ```
 
-Gli zip risultanti sono in `dist/release/` e possono essere caricati direttamente su Altervista o su qualsiasi hosting PHP 7.4+.
+Gli zip risultanti sono in `dist/release/` e possono essere caricati direttamente su Altervista o su qualsiasi hosting PHP 8.1+.
 
 Nota runtime JS in `ready`:
 1. il pacchetto pronto uso usa bundle dist-only (`assets/js/dist/`);

@@ -1,6 +1,6 @@
 # Contratti API Backend
 
-Ultimo aggiornamento: 2026-04-04
+Ultimo aggiornamento: 2026-04-27
 
 ## Scopo
 Questo documento descrive i contratti API **core** esposti dal backend Logeon.
@@ -94,7 +94,8 @@ Codici base ricorrenti:
 3. `module_activation_failed`, `module_deactivation_failed`
 4. `module_deactivation_requires_confirmation`
 5. `module_uninstall_requires_inactive`, `module_uninstall_failed`
-6. `module_audit_failed`
+6. `module_bundled_no_purge` — modulo Classe A (bundled standard), uninstall non supportato
+7. `module_audit_failed`
 
 ### Attributi personaggio
 1. `attributes_system_disabled`
@@ -281,19 +282,18 @@ Codici base ricorrenti:
 
 ### Endpoint lista (`/list/*`)
 1. `POST /list/nationalities`
-2. `POST /list/archetypes`
-3. `POST /list/narrative-tags`
-4. `POST /list/maps`
-5. `POST /list/locations`
-6. `POST /list/profile/bag`
-7. `POST /list/onlines`
-8. `POST /list/onlines/complete`
-9. `POST /list/characters/search`
-10. `POST /list/forum-types`
-11. `POST /list/forum`
-12. `POST /list/news`
-13. `POST /list/forum/threads`
-14. `POST /list/items`
+2. `POST /list/narrative-tags`
+3. `POST /list/maps`
+4. `POST /list/locations`
+5. `POST /list/profile/bag`
+6. `POST /list/onlines`
+7. `POST /list/onlines/complete`
+8. `POST /list/characters/search`
+9. `POST /list/forum-types`
+10. `POST /list/forum`
+11. `POST /list/news`
+12. `POST /list/forum/threads`
+13. `POST /list/items`
 
 ### Endpoint get (`/get/*`)
 1. `POST /get/weather`
@@ -1045,8 +1045,7 @@ Errori:
 
 #### Game archetypes
 1. `/archetypes/list`: catalogo archetipi attivi/selezionabili;
-2. `/archetypes/my`: archetipi del personaggio corrente;
-3. `/list/archetypes`: alias list per catalogo pubblico.
+2. `/archetypes/my`: archetipi del personaggio corrente.
 
 #### Admin archetypes
 1. `/admin/archetypes/config/get|update`: toggle sistema, obbligatorieta, multi-selezione;

@@ -1,6 +1,6 @@
 # Guida Autenticazione e Sessioni
 
-Ultimo aggiornamento: 2026-04-03
+Ultimo aggiornamento: 2026-04-27
 
 ## Scopo
 Spiegare i flussi di accesso account e la gestione sessione utente/personaggio.
@@ -15,8 +15,11 @@ Spiegare i flussi di accesso account e la gestione sessione utente/personaggio.
 2. `POST /signin/characters/list`
 3. `POST /signin/character/select`
 4. `POST /signout`
-5. `GET /auth/google/start`
-6. `GET /auth/google/callback`
+5. `POST /forgot-password`
+6. `POST /reset-password`
+7. `GET /auth/google/start`
+8. `GET /auth/google/callback`
+9. `POST /settings/sessions/revoke` — revoca sessione attiva specifica
 
 ## Configurazioni runtime (admin settings)
 1. Google OAuth:
@@ -46,4 +49,5 @@ Spiegare i flussi di accesso account e la gestione sessione utente/personaggio.
 ## Note sicurezza
 1. I permessi sono sempre verificati lato backend.
 2. Il frontend gestisce solo UX e navigazione.
-3. Le operazioni API richiedono token CSRF valido.
+3. Le operazioni API richiedono token CSRF valido (campo `_csrf` nel payload e header `X-CSRF-Token`).
+4. La revoca sessione (`/settings/sessions/revoke`) invalida il token sessione lato server; il personaggio viene disconnesso alla successiva richiesta.

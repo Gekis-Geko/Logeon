@@ -1,6 +1,6 @@
 # Riferimento Componenti Frontend
 
-Ultimo aggiornamento: 2026-04-02
+Ultimo aggiornamento: 2026-04-27
 
 ## Scopo
 Riferimento sintetico dei componenti JS usati nel runtime Logeon.
@@ -11,14 +11,90 @@ Questa guida sostituisce la vecchia documentazione frammentata in molti file.
 2. Utility pure: `assets/js/components/utils/*`
 
 ## Componenti UI principali
-1. `Modal.js`: wrapper modali Bootstrap.
+1. `Modal.js`: wrapper lifecycle modale (show/hide, beforeShow, afterHide, form reset, spinner).
 2. `Dialog.js`: conferme/alert standard.
 3. `Toast.js`: notifiche toast.
-4. `Tooltip.js`: bootstrap tooltip runtime-safe.
+4. `Tooltip.js`: tooltip runtime-safe.
 5. `DataGrid.js`: tabelle con sorting/filter/paginazione.
 6. `Paginator.js`: paginazione dataset.
 7. `Search.js`: ricerca locale su liste/griglie.
 8. `Uploader.js`: upload file con progress.
+9. `TipTapEditor.js`: editor rich-text (sostituisce Summernote).
+
+### TipTapEditor — note operative
+
+**Auto-init**: al `DOMContentLoaded` su tutti gli elementi `.summernote, .richtext-editor`; nelle modali Bootstrap al `show.bs.modal`.
+
+**API globale** (`window.TipTapEditor`):
+
+```js
+// Inizializza editor sullo scope indicato (o sull'intero document)
+TipTapEditor.init(root, options);
+
+// Recupera istanza esistente (null se non inizializzata)
+const instance = TipTapEditor.getInstance(textarea);
+
+// Inizializza se non esiste, restituisce l'istanza
+const instance = TipTapEditor.ensureInstance(textarea, { height: 300 });
+
+// Distrugge l'istanza e ripristina il textarea originale
+TipTapEditor.destroy(textarea);
+```
+
+**Opzioni** (tutte opzionali):
+
+```js
+TipTapEditor.init(document, {
+    height: 250,               // altezza area editor in px (default 250)
+    imageUploadTarget: 'richtext_image',  // target Uploader per le immagini
+    callbacks: {
+        onInit: function () { /* chiamato quando l'editor è pronto */ }
+    }
+});
+```
+
+**Bridge jQuery** (retrocompatibilita callsite Summernote preesistenti):
+
+```js
+$('.summernote').summernote();                    // init
+$('.summernote').summernote('code');              // get HTML
+$('.summernote').summernote('code', '<p>...</p>'); // set HTML
+$('.summernote').summernote('pasteHTML', html);   // inserisce HTML alla posizione cursore
+$('.summernote').summernote('reset');             // svuota
+$('.summernote').summernote('focus');
+$('.summernote').summernote('disable');
+$('.summernote').summernote('enable');
+$('.summernote').summernote('destroy');
+```
+
+### DataGrid — uso corretto con filtri
+
+```js
+// Caricamento con filtri liberi (pagine con form filtro)
+grid.loadData(payload, limit, page, orderBy);
+
+// Pagine log: usa setFilters(), NON chiamare load() dopo
+grid.setFilters({ user_id: 5, from: '2026-01-01' });
+// setFilters chiama load() internamente — una doppia chiamata manda una seconda
+// request con filtri vuoti che sovrascrive il risultato filtrato.
+```
+
+### Modal — uso tipico
+
+```js
+const modal = Modal('myModalId', {
+    beforeShow: function (data) {
+        // popola i campi prima dell'apertura
+        this.form.find('[name=name]').val(data.name);
+    },
+    afterHide: function () {
+        this.form[0].reset();
+    }
+});
+modal.init();
+modal.show({ name: 'Mario' });
+modal.hide();
+```
 
 ## Componenti di selezione input
 1. `SelectionGroup.js`: base comune.

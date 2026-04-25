@@ -1,6 +1,6 @@
 # Guida Contributori
 
-Ultimo aggiornamento: 2026-04-23
+Ultimo aggiornamento: 2026-04-24
 
 ## Scopo
 Guida unica per contribuire a Logeon senza regressioni su `/game`, `/admin` e core runtime.
@@ -31,6 +31,7 @@ Guida unica per contribuire a Logeon senza regressioni su `/game`, `/admin` e co
 8. Le interfacce di dominio vanno in `app/Contracts/`, non mescolate con i file di service.
 9. Il core non deve importare o richiamare direttamente codice di moduli opzionali: usare `CustomEvent` neutrali o hook (`Core\Hooks`).
 10. I nuovi file JS devono usare ESM (`import`/`export`), non IIFE ne assegnamenti `window.*`.
+11. I moduli hanno due classi: Classe A (bundled, solo activate/deactivate) e Classe B (optional, ciclo completo). I nuovi moduli sono sempre Classe B. Vedi `docs/guida-sistema-moduli.md` — sezione *Tassonomia moduli*.
 
 ## File ad alto rischio (toccare solo con task mirato)
 1. `core/Models.php`

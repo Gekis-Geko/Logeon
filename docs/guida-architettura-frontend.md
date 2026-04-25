@@ -1,6 +1,6 @@
 # Guida Architettura Frontend
 
-Ultimo aggiornamento: 2026-04-15
+Ultimo aggiornamento: 2026-04-27
 
 ## Obiettivo
 Definire lo standard operativo del frontend modulare basato su `AppBootstrap`, con priorita su gameplay (`app/views/app`) e view leggere.
@@ -127,9 +127,36 @@ Il core non deve importare o richiamare direttamente codice appartenente a modul
 
 Questo pattern si applica ogni volta che un modulo opzionale ha bisogno di reagire a eventi di pagine core.
 
+## Asset JS dei moduli opzionali
+
+I moduli che hanno JS (dichiarato in `module.json` sotto `assets.admin.js` / `assets.game.js`) vengono caricati dai layout Twig tramite `{{ module_assets('admin')|raw }}` e `{{ module_assets('game')|raw }}` — implementato da `ModuleRuntime::renderAssetTags()`.
+
+Il modulo si auto-registra nel proprio `assets/js/index.admin.js` o `index.game.js`:
+
+```js
+// modules/logeon.archetypes/assets/js/index.admin.js
+import './admin/ArchetypesModule.js';
+
+if (window.AdminRegistry) {
+    window.AdminRegistry.registerModule('admin.archetypes', 'AdminArchetypesModuleFactory');
+    window.AdminRegistry.extendPage('archetypes', ['admin.archetypes']);
+}
+if (window.AdminFeatureLoader) {
+    window.AdminFeatureLoader.registerPageScripts('archetypes', [
+        '/modules/logeon.archetypes/dist/admin.js'
+    ]);
+}
+```
+
+Il build script (`scripts/build/frontend-pilot.mjs`) ha `discoverModuleTargets()` — rileva automaticamente tutti i moduli con `index.admin.js` / `index.game.js` e produce `dist/admin.js` / `dist/game.js` separati per ciascuno.
+
+Regola: il core (`admin.registry.esm.js`, `game.registry.esm.js`, entry files) **non deve contenere riferimenti a moduli opzionali**. Ogni modulo gestisce la propria registrazione dal proprio `index.*.js`.
+
 ## Bundler e moduli ESM
 
 - Tree shaking completato (Step 0-4): tutti i nuovi file JS usano ESM (`import`/`export`).
+- Step 5 completato: JS dei moduli opzionali isolato nei rispettivi `modules/<id>/assets/js/`. Registry ESM puliti. Build con module discovery automatica.
+- Steps 6-8 (conversione IIFE→ESM dei feature files, rimozione IIFE core, ESM nativo): non eseguiti — file IIFE preesistenti mantenuti; evoluzione post-ESM completata su binari separati (decommission layout legacy, TipTap, split interfacce weather).
 - Bundler: esbuild attivo.
 - `scripts/build/window-globals-registry.json`: fonte autoritativa per i simboli esposti come global. Ogni nuovo simbolo che deve essere raggiungibile da `window` va registrato qui.
 - Non usare IIFE ne assegnamenti `window.*` nei nuovi file.
@@ -141,6 +168,7 @@ Questo pattern si applica ogni volta che un modulo opzionale ha bisogno di reagi
 - `App.js` ridotto a facade runtime.
 - Componenti shared in fase continua di hardening, senza dipendenze nascoste.
 - Tree shaking completato; bundler ESM operativo.
+- Editor rich-text: Summernote rimosso; `TipTapEditor` operativo (auto-init su `.summernote, .richtext-editor`); bridge jQuery (`$.fn.summernote`) attivo per retrocompatibilita callsite esistenti.
 
 ## Pattern Datagrid admin — note operative
 - Usare `grid.loadData(payload, limit, page, orderBy)` per pagine con filtri liberi.

@@ -1,6 +1,6 @@
 # Guida Backup e Ripristino
 
-Ultimo aggiornamento: 2026-04-03
+Ultimo aggiornamento: 2026-04-27
 
 ## Scopo
 Definire backup minimi obbligatori e procedura di ripristino.
@@ -12,7 +12,11 @@ Definire backup minimi obbligatori e procedura di ripristino.
    - `configs/config.php`
    - `configs/db.php`
    - `configs/app.php`
-4. Eventuali cartelle upload/media.
+4. Cartelle upload/media: `tmp/uploads/`, `assets/imgs/uploads/`.
+
+Note:
+- La cartella `tmp/cache/` e `tmp/twig-cache/` sono rigenerabili automaticamente: non richiedono backup.
+- La cartella `modules/` contiene i moduli opzionali installati. I moduli possono essere reinstallati da pacchetto; il backup e utile ma non critico se i pacchetti originali sono disponibili.
 
 ## Frequenza consigliata
 1. DB: giornaliero.
