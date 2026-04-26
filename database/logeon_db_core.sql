@@ -1,3 +1,10 @@
+-- --------------------------------------------------------
+-- Host:                         127.0.0.1
+-- Versione server:              10.4.32-MariaDB - mariadb.org binary distribution
+-- S.O. server:                  Win64
+-- HeidiSQL Versione:            12.15.0.7171
+-- --------------------------------------------------------
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
@@ -53,10 +60,10 @@ CREATE TABLE IF NOT EXISTS `archetype_configs` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.archetype_configs: ~1 rows (circa)
+-- Dump dei dati della tabella logeon_db.archetype_configs: ~0 rows (circa)
 DELETE FROM `archetype_configs`;
 INSERT INTO `archetype_configs` (`id`, `archetypes_enabled`, `archetype_required`, `multiple_archetypes_allowed`) VALUES
-	(1, 0, 0, 0);
+	(1, 1, 0, 0);
 
 -- Dump della struttura di tabella logeon_db.archetypes
 DROP TABLE IF EXISTS `archetypes`;
@@ -74,10 +81,12 @@ CREATE TABLE IF NOT EXISTS `archetypes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_archetypes_slug` (`slug`),
   KEY `idx_archetypes_active_selectable` (`is_active`,`is_selectable`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.archetypes: ~0 rows (circa)
 DELETE FROM `archetypes`;
+INSERT INTO `archetypes` (`id`, `name`, `slug`, `description`, `lore_text`, `icon`, `is_active`, `is_selectable`, `sort_order`, `created_at`) VALUES
+	(1, 'Umano', 'umano', 'Un semplice umano', NULL, NULL, 1, 1, 1, '2026-04-15 12:58:38');
 
 -- Dump della struttura di tabella logeon_db.blacklist
 DROP TABLE IF EXISTS `blacklist`;
@@ -274,6 +283,63 @@ CREATE TABLE IF NOT EXISTS `character_bonds` (
 -- Dump dei dati della tabella logeon_db.character_bonds: ~0 rows (circa)
 DELETE FROM `character_bonds`;
 
+-- Dump della struttura di tabella logeon_db.character_chat_archive_messages
+DROP TABLE IF EXISTS `character_chat_archive_messages`;
+CREATE TABLE IF NOT EXISTS `character_chat_archive_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `archive_id` int(11) NOT NULL,
+  `source_message_id` int(11) DEFAULT NULL,
+  `sent_at` datetime NOT NULL,
+  `character_id` int(11) DEFAULT NULL,
+  `character_name_snapshot` varchar(160) NOT NULL DEFAULT '',
+  `message_type` tinyint(1) NOT NULL DEFAULT 1,
+  `message_html` mediumtext NOT NULL,
+  `metadata_json` longtext DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_chat_archive_msgs_archive_id` (`archive_id`,`id`),
+  KEY `idx_chat_archive_msgs_archive_time` (`archive_id`,`sent_at`),
+  CONSTRAINT `fk_chat_archive_msgs_archive` FOREIGN KEY (`archive_id`) REFERENCES `character_chat_archives` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dump dei dati della tabella logeon_db.character_chat_archive_messages: ~0 rows (circa)
+DELETE FROM `character_chat_archive_messages`;
+
+-- Dump della struttura di tabella logeon_db.character_chat_archives
+DROP TABLE IF EXISTS `character_chat_archives`;
+CREATE TABLE IF NOT EXISTS `character_chat_archives` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid` char(36) NOT NULL,
+  `owner_user_id` int(11) NOT NULL,
+  `owner_character_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `source_type` enum('location') NOT NULL DEFAULT 'location',
+  `source_location_id` int(11) DEFAULT NULL,
+  `started_at` datetime NOT NULL,
+  `ended_at` datetime NOT NULL,
+  `diary_event_id` int(11) DEFAULT NULL,
+  `visibility` enum('private','public') NOT NULL DEFAULT 'private',
+  `public_enabled` tinyint(1) NOT NULL DEFAULT 0,
+  `public_token` varchar(80) DEFAULT NULL,
+  `checksum_hash` varchar(64) NOT NULL DEFAULT '',
+  `total_messages_in_range` int(11) NOT NULL DEFAULT 0,
+  `included_messages_count` int(11) NOT NULL DEFAULT 0,
+  `total_participants_in_range` int(11) NOT NULL DEFAULT 0,
+  `included_participants_count` int(11) NOT NULL DEFAULT 0,
+  `completeness_level` enum('complete','partial') NOT NULL DEFAULT 'complete',
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  `deleted_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uq_chat_archives_uuid` (`uuid`),
+  UNIQUE KEY `uq_chat_archives_public_token` (`public_token`),
+  KEY `idx_chat_archives_owner_char` (`owner_character_id`,`deleted_at`),
+  KEY `idx_chat_archives_owner_user` (`owner_user_id`,`deleted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dump dei dati della tabella logeon_db.character_chat_archives: ~0 rows (circa)
+DELETE FROM `character_chat_archives`;
+
 -- Dump della struttura di tabella logeon_db.character_equipment
 DROP TABLE IF EXISTS `character_equipment`;
 CREATE TABLE IF NOT EXISTS `character_equipment` (
@@ -430,7 +496,7 @@ CREATE TABLE IF NOT EXISTS `character_lifecycle_transitions` (
   KEY `idx_lifecycle_transitions_character` (`character_id`,`created_at`),
   KEY `idx_lifecycle_transitions_phase` (`to_phase_id`),
   KEY `idx_lifecycle_transitions_event` (`triggered_by_event_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.character_lifecycle_transitions: ~0 rows (circa)
 DELETE FROM `character_lifecycle_transitions`;
@@ -496,7 +562,7 @@ CREATE TABLE IF NOT EXISTS `character_wallets` (
   KEY `currency_id` (`currency_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.character_wallets: ~1 rows (circa)
+-- Dump dei dati della tabella logeon_db.character_wallets: ~0 rows (circa)
 DELETE FROM `character_wallets`;
 INSERT INTO `character_wallets` (`id`, `character_id`, `currency_id`, `balance`) VALUES
 	(1, 1, 1, 0);
@@ -575,10 +641,7 @@ CREATE TABLE IF NOT EXISTS `characters` (
   KEY `idx_characters_visibility_seed` (`is_visible`,`date_last_seed`),
   KEY `idx_characters_availability_seed` (`availability`,`date_last_seed`),
   KEY `idx_characters_online_lookup` (`is_visible`,`privacy_show_online`,`date_last_seed`,`last_location`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dump dei dati della tabella logeon_db.characters: ~0 rows (circa)
-DELETE FROM `characters`;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump della struttura di tabella logeon_db.climate_areas
 DROP TABLE IF EXISTS `climate_areas`;
@@ -597,7 +660,7 @@ CREATE TABLE IF NOT EXISTS `climate_areas` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_climate_areas_code` (`code`),
   KEY `idx_climate_areas_is_active` (`is_active`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.climate_areas: ~0 rows (circa)
 DELETE FROM `climate_areas`;
@@ -823,7 +886,7 @@ CREATE TABLE IF NOT EXISTS `currencies` (
   UNIQUE KEY `code_unique` (`code`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.currencies: ~1 rows (circa)
+-- Dump dei dati della tabella logeon_db.currencies: ~0 rows (circa)
 DELETE FROM `currencies`;
 INSERT INTO `currencies` (`id`, `code`, `name`, `symbol`, `image`, `is_default`, `is_active`) VALUES
 	(1, 'Coin', 'Coin', 'C', '/assets/imgs/defaults-images/default-icon.png', 1, 1);
@@ -891,7 +954,7 @@ CREATE TABLE IF NOT EXISTS `equipment_slots` (
   KEY `idx_equipment_slots_group` (`group_key`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.equipment_slots: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.equipment_slots: ~9 rows (circa)
 DELETE FROM `equipment_slots`;
 INSERT INTO `equipment_slots` (`id`, `key`, `name`, `description`, `icon`, `group_key`, `sort_order`, `is_active`, `max_equipped`, `date_created`, `date_updated`) VALUES
 	(1, 'amulet', 'Ciondolo', 'Slot ciondolo', NULL, 'amulet', 10, 1, 1, '2026-03-30 21:04:10', NULL),
@@ -1011,7 +1074,7 @@ CREATE TABLE IF NOT EXISTS `factions` (
   KEY `idx_factions_active` (`is_active`,`is_public`),
   KEY `idx_factions_type` (`type`),
   KEY `idx_factions_scope` (`scope`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.factions: ~0 rows (circa)
 DELETE FROM `factions`;
@@ -1634,10 +1697,16 @@ CREATE TABLE IF NOT EXISTS `location_access_logs` (
   KEY `idx_character_date` (`character_id`,`date_created`),
   KEY `idx_location_date` (`location_id`,`date_created`),
   KEY `idx_allowed` (`allowed`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- Dump dei dati della tabella logeon_db.location_access_logs: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.location_access_logs: ~3 rows (circa)
 DELETE FROM `location_access_logs`;
+INSERT INTO `location_access_logs` (`id`, `character_id`, `location_id`, `allowed`, `reason_code`, `reason`, `date_created`) VALUES
+	(1, 1, 1, 1, 'ok', NULL, '2026-04-26 17:42:00'),
+	(2, 1, 1, 1, 'ok', NULL, '2026-04-26 17:43:01'),
+	(3, 1, 1, 1, 'ok', NULL, '2026-04-26 17:44:01'),
+	(4, 1, 1, 1, 'ok', NULL, '2026-04-26 17:45:01'),
+	(5, 1, 1, 1, 'ok', NULL, '2026-04-26 17:46:01');
 
 -- Dump della struttura di tabella logeon_db.location_invites
 DROP TABLE IF EXISTS `location_invites`;
@@ -1687,6 +1756,25 @@ CREATE TABLE IF NOT EXISTS `location_item_drops` (
 -- Dump dei dati della tabella logeon_db.location_item_drops: ~0 rows (circa)
 DELETE FROM `location_item_drops`;
 
+-- Dump della struttura di tabella logeon_db.location_position_tags
+DROP TABLE IF EXISTS `location_position_tags`;
+CREATE TABLE IF NOT EXISTS `location_position_tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `location_id` int(11) NOT NULL,
+  `name` varchar(80) NOT NULL,
+  `short_description` varchar(255) DEFAULT NULL,
+  `thumbnail` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `idx_lpt_location_active` (`location_id`,`is_active`),
+  CONSTRAINT `fk_lpt_location` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Dump dei dati della tabella logeon_db.location_position_tags: ~0 rows (circa)
+DELETE FROM `location_position_tags`;
+
 -- Dump della struttura di tabella logeon_db.location_weather_overrides
 DROP TABLE IF EXISTS `location_weather_overrides`;
 CREATE TABLE IF NOT EXISTS `location_weather_overrides` (
@@ -1703,7 +1791,7 @@ CREATE TABLE IF NOT EXISTS `location_weather_overrides` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_location_weather_overrides_location` (`location_id`),
   KEY `idx_location_weather_overrides_updated_by` (`updated_by`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.location_weather_overrides: ~0 rows (circa)
 DELETE FROM `location_weather_overrides`;
@@ -1765,10 +1853,12 @@ CREATE TABLE IF NOT EXISTS `locations` (
   KEY `idx_locations_map_active` (`map_id`,`date_deleted`),
   KEY `idx_locations_access` (`is_private`,`is_house`,`min_fame`,`min_socialstatus_id`),
   KEY `idx_locations_climate_area_id` (`climate_area_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.locations: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.locations: ~1 rows (circa)
 DELETE FROM `locations`;
+INSERT INTO `locations` (`id`, `climate_area_id`, `map_id`, `owner_id`, `name`, `short_description`, `description`, `status`, `page`, `map_link`, `map_x`, `map_y`, `icon`, `image`, `guests`, `booking`, `deadline`, `cost`, `min_fame`, `min_socialstatus_id`, `is_chat`, `is_private`, `is_house`, `chat_type`, `access_policy`, `max_guests`, `date_created`, `date_updated`, `date_deleted`) VALUES
+	(1, NULL, 1, NULL, 'Piazza', 'La piazza della città', NULL, 'open', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 1, 0, 0, 'standard', 'open', NULL, '2026-04-15 11:00:48', '2026-04-17 19:25:25', NULL);
 
 -- Dump della struttura di tabella logeon_db.locations_messages
 DROP TABLE IF EXISTS `locations_messages`;
@@ -1782,6 +1872,10 @@ CREATE TABLE IF NOT EXISTS `locations_messages` (
   `body` text NOT NULL,
   `meta_json` longtext DEFAULT NULL,
   `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
+  `location_tag_id` int(11) DEFAULT NULL,
+  `location_tag_label` varchar(80) DEFAULT NULL,
+  `location_tag_detail` varchar(120) DEFAULT NULL,
+  `location_tag_display` varchar(220) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `idx_locations_messages_location` (`location_id`,`id`),
   KEY `idx_locations_messages_date` (`location_id`,`date_created`),
@@ -1811,10 +1905,12 @@ CREATE TABLE IF NOT EXISTS `maps` (
   `meteo` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `MAP_NAME_UNIQUE` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.maps: ~0 rows (circa)
 DELETE FROM `maps`;
+INSERT INTO `maps` (`id`, `name`, `description`, `status`, `initial`, `position`, `mobile`, `width`, `height`, `icon`, `image`, `render_mode`, `meteo`) VALUES
+	(1, 'Città', NULL, 'active', 1, 1, 0, NULL, NULL, NULL, NULL, 'grid', NULL);
 
 -- Dump della struttura di tabella logeon_db.message_reports
 DROP TABLE IF EXISTS `message_reports`;
@@ -1915,10 +2011,51 @@ CREATE TABLE IF NOT EXISTS `module_runtime_artifacts` (
   UNIQUE KEY `uq_module_artifact` (`module_id`,`artifact_type`,`artifact_key`),
   KEY `idx_module_artifact_module` (`module_id`),
   KEY `idx_module_artifact_scope` (`artifact_scope`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=641 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.module_runtime_artifacts: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.module_runtime_artifacts: ~40 rows (circa)
 DELETE FROM `module_runtime_artifacts`;
+INSERT INTO `module_runtime_artifacts` (`id`, `module_id`, `artifact_type`, `artifact_key`, `artifact_scope`, `artifact_payload`, `checksum_sha1`, `date_seen`, `date_created`) VALUES
+	(1, 'logeon.archetypes', 'entrypoint', 'bootstrap:bootstrap.php', 'runtime', '{"module_id":"logeon.archetypes","entrypoint":"bootstrap","path":"bootstrap.php"}', '992d7ebf88be096bae1d22549eb9fac8a6d4b3b2', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(2, 'logeon.archetypes', 'entrypoint', 'routes:routes.php', 'runtime', '{"module_id":"logeon.archetypes","entrypoint":"routes","path":"routes.php"}', '48d3dae669f049eacd2b24aa3f05a7946a6c5086', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(3, 'logeon.archetypes', 'asset_js', 'game:dist/game.js', 'game', '{"module_id":"logeon.archetypes","channel":"game","asset_type":"js","path":"dist/game.js"}', '78a1de3658ba812b7934b465f225066a29dde4a4', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(4, 'logeon.archetypes', 'asset_js', 'admin:dist/admin.js', 'admin', '{"module_id":"logeon.archetypes","channel":"admin","asset_type":"js","path":"dist/admin.js"}', '1750559bfcecfe0e8a019aa16386a78885d941eb', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(5, 'logeon.archetypes', 'menu_entry', 'game:info_dropdown:/game/archetypes', 'game', '{"module_id":"logeon.archetypes","channel":"game","slot":"info_dropdown","label":"Archetipi","href":"/game/archetypes","page":""}', 'edf686b1512e33a9096972f27d2e10d0e983c724', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(6, 'logeon.archetypes', 'menu_entry', 'game:info_offcanvas:/game/archetypes', 'game', '{"module_id":"logeon.archetypes","channel":"game","slot":"info_offcanvas","label":"Archetipi","href":"/game/archetypes","page":""}', '549bbda3397e56b73f5e5b5adf2f8a1ffa0ea7a2', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(7, 'logeon.archetypes', 'menu_entry', 'admin:aside:/admin/archetypes', 'admin', '{"module_id":"logeon.archetypes","channel":"admin","slot":"aside","label":"Archetipi","href":"/admin/archetypes","page":"archetypes"}', 'dada422b69258f15afb1b1d082846fa08bfd26d0', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(8, 'logeon.archetypes', 'menu_entry', 'public:navbar:/archetypes', 'public', '{"module_id":"logeon.archetypes","channel":"public","slot":"navbar","label":"Archetipi","href":"/archetypes","page":""}', '3a7590f5c9f61f1cae200e0f611907507fbf34ac', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(9, 'logeon.attributes', 'entrypoint', 'bootstrap:bootstrap.php', 'runtime', '{"module_id":"logeon.attributes","entrypoint":"bootstrap","path":"bootstrap.php"}', 'fc2670a48a7e4d41078ab9569bf98fa6d7a7717b', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(10, 'logeon.attributes', 'entrypoint', 'routes:routes.php', 'runtime', '{"module_id":"logeon.attributes","entrypoint":"routes","path":"routes.php"}', 'c82d524048522676194cd608d04db658aa2fa2b6', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(11, 'logeon.attributes', 'asset_js', 'admin:dist/admin.js', 'admin', '{"module_id":"logeon.attributes","channel":"admin","asset_type":"js","path":"dist/admin.js"}', 'df39b31105ac47569ceb1a846ea970015efe19bb', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(12, 'logeon.attributes', 'menu_entry', 'admin:aside:/admin/character-attributes', 'admin', '{"module_id":"logeon.attributes","channel":"admin","slot":"aside","label":"Attributi personaggio","href":"/admin/character-attributes","page":"character-attributes"}', '06fb3e0fc74bf2ce4dc7d734ca9fda3c98fddf7d', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(13, 'logeon.factions', 'entrypoint', 'bootstrap:bootstrap.php', 'runtime', '{"module_id":"logeon.factions","entrypoint":"bootstrap","path":"bootstrap.php"}', 'ef08100dc614f274a77508b4c0172d397738dcb8', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(14, 'logeon.factions', 'entrypoint', 'routes:routes.php', 'runtime', '{"module_id":"logeon.factions","entrypoint":"routes","path":"routes.php"}', 'f786775211b2a3c3502fe5ae1ad67582eaba8f36', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(15, 'logeon.factions', 'asset_js', 'game:dist/game.js', 'game', '{"module_id":"logeon.factions","channel":"game","asset_type":"js","path":"dist/game.js"}', '7df464d31c7e15b1fa9be18a5cefe50a67993632', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(16, 'logeon.factions', 'asset_js', 'admin:dist/admin.js', 'admin', '{"module_id":"logeon.factions","channel":"admin","asset_type":"js","path":"dist/admin.js"}', 'd3ee28908e8a341d3b59ad393d9f1838e1e402b7', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(17, 'logeon.factions', 'menu_entry', 'game:organizations_dropdown:/game/factions', 'game', '{"module_id":"logeon.factions","channel":"game","slot":"organizations_dropdown","label":"Fazioni","href":"/game/factions","page":""}', 'bc84313828476bd4f7119065cabbff1226b946d0', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(18, 'logeon.factions', 'menu_entry', 'game:organizations_offcanvas:/game/factions', 'game', '{"module_id":"logeon.factions","channel":"game","slot":"organizations_offcanvas","label":"Fazioni","href":"/game/factions","page":""}', '48b06677d64ca53d0d4089769661fc7cedb7cece', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(19, 'logeon.factions', 'menu_entry', 'admin:aside:/admin/factions', 'admin', '{"module_id":"logeon.factions","channel":"admin","slot":"aside","label":"Fazioni","href":"/admin/factions","page":"factions"}', '34929096de1e4f494a99d1eeb32ce62740891cfa', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(20, 'logeon.multi-currency', 'entrypoint', 'bootstrap:bootstrap.php', 'runtime', '{"module_id":"logeon.multi-currency","entrypoint":"bootstrap","path":"bootstrap.php"}', '21fba6a104d704d0eda78b2fcdb7abc6d3de710a', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(21, 'logeon.multi-currency', 'entrypoint', 'routes:routes.php', 'runtime', '{"module_id":"logeon.multi-currency","entrypoint":"routes","path":"routes.php"}', '6e23e78200b4b0b6ad6b9a91424b896fb6573dba', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(22, 'logeon.novelty', 'entrypoint', 'bootstrap:bootstrap.php', 'runtime', '{"module_id":"logeon.novelty","entrypoint":"bootstrap","path":"bootstrap.php"}', '70b81abc08ff4cc5ff50698682fbe44f120851b3', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(23, 'logeon.novelty', 'entrypoint', 'routes:routes.php', 'runtime', '{"module_id":"logeon.novelty","entrypoint":"routes","path":"routes.php"}', 'f282886e55481c7bd7800d2a3e3c619278341a12', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(24, 'logeon.novelty', 'menu_entry', 'admin:aside:/admin/news', 'admin', '{"module_id":"logeon.novelty","channel":"admin","slot":"aside","label":"News","href":"/admin/news","page":"news"}', 'd0b12a5c8d831985de8fb8301c0520df25c8ada2', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(25, 'logeon.quests', 'entrypoint', 'bootstrap:bootstrap.php', 'runtime', '{"module_id":"logeon.quests","entrypoint":"bootstrap","path":"bootstrap.php"}', 'ee4e9cfe708b84262ce8758b7c7eaa8eff433825', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(26, 'logeon.quests', 'entrypoint', 'routes:routes.php', 'runtime', '{"module_id":"logeon.quests","entrypoint":"routes","path":"routes.php"}', '36c5cd1d489e58f3d53ec0ca66277c3616850f83', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(27, 'logeon.quests', 'asset_js', 'game:dist/game.js', 'game', '{"module_id":"logeon.quests","channel":"game","asset_type":"js","path":"dist/game.js"}', '59b21927c55f99a1e859e33d7eecd1047e0823ce', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(28, 'logeon.quests', 'asset_js', 'admin:dist/admin.js', 'admin', '{"module_id":"logeon.quests","channel":"admin","asset_type":"js","path":"dist/admin.js"}', 'd7ba4a23787b174ba61594ebd998407c733f9f48', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(29, 'logeon.quests', 'menu_entry', 'admin:aside:/admin/quests', 'admin', '{"module_id":"logeon.quests","channel":"admin","slot":"aside","label":"Quest","href":"/admin/quests","page":"quests"}', 'af9104e71ec40a3a6a2c5ea9699432e90753ef7d', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(30, 'logeon.social-status', 'entrypoint', 'bootstrap:bootstrap.php', 'runtime', '{"module_id":"logeon.social-status","entrypoint":"bootstrap","path":"bootstrap.php"}', '47c35cdd1e6551261867ee4118237465d974bdeb', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(31, 'logeon.social-status', 'entrypoint', 'routes:routes.php', 'runtime', '{"module_id":"logeon.social-status","entrypoint":"routes","path":"routes.php"}', 'ea0fd237e7714221bcac78edafa17eebb1369450', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(32, 'logeon.social-status', 'asset_js', 'admin:dist/admin.js', 'admin', '{"module_id":"logeon.social-status","channel":"admin","asset_type":"js","path":"dist/admin.js"}', '9c0a51b22cf2705e8ed89235c5e1a7f352742e14', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(33, 'logeon.social-status', 'menu_entry', 'admin:aside:/admin/social-status', 'admin', '{"module_id":"logeon.social-status","channel":"admin","slot":"aside","label":"Stati sociali","href":"/admin/social-status","page":"social-status"}', 'e155e6b577849fe3c14de0e051da310aa3ea4d6d', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(34, 'logeon.weather', 'entrypoint', 'bootstrap:bootstrap.php', 'runtime', '{"module_id":"logeon.weather","entrypoint":"bootstrap","path":"bootstrap.php"}', 'f5d20bcd0a0799e7d8c1a9346e0f65baab50356f', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(35, 'logeon.weather', 'entrypoint', 'routes:routes.php', 'runtime', '{"module_id":"logeon.weather","entrypoint":"routes","path":"routes.php"}', '5103e555ba03d1c65b2630bb9c189eb9d3798dc9', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(36, 'logeon.weather', 'asset_js', 'admin:dist/admin.js', 'admin', '{"module_id":"logeon.weather","channel":"admin","asset_type":"js","path":"dist/admin.js"}', '61a6007e92364950214fc565ad8b4b77e11a2395', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(37, 'logeon.weather', 'menu_entry', 'admin:aside:/admin/weather-overview', 'admin', '{"module_id":"logeon.weather","channel":"admin","slot":"aside","label":"Panoramica meteo","href":"/admin/weather-overview","page":"weather-overview"}', '76a2a1f0232db506e34c8ce582c595a94da46e3d', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(38, 'logeon.weather', 'menu_entry', 'admin:aside:/admin/weather-catalogs', 'admin', '{"module_id":"logeon.weather","channel":"admin","slot":"aside","label":"Cataloghi meteo","href":"/admin/weather-catalogs","page":"weather-catalogs"}', 'b93352abc924887133b34d0aff5ac470e334f3fe', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(39, 'logeon.weather', 'menu_entry', 'admin:aside:/admin/weather-profiles', 'admin', '{"module_id":"logeon.weather","channel":"admin","slot":"aside","label":"Profili e assegnazioni","href":"/admin/weather-profiles","page":"weather-profiles"}', '1201848eb95c211271727ca8091495f055eb121a', '2026-04-26 15:46:01', '2026-04-26 15:43:00'),
+	(40, 'logeon.weather', 'menu_entry', 'admin:aside:/admin/weather-overrides', 'admin', '{"module_id":"logeon.weather","channel":"admin","slot":"aside","label":"Override e legacy","href":"/admin/weather-overrides","page":"weather-overrides"}', '4c643dd64b2040e2cf52218274b57e4d6042c7cb', '2026-04-26 15:46:01', '2026-04-26 15:43:00');
 
 -- Dump della struttura di tabella logeon_db.narrative_capabilities
 DROP TABLE IF EXISTS `narrative_capabilities`;
@@ -1959,7 +2096,7 @@ CREATE TABLE IF NOT EXISTS `narrative_capability_grants` (
   KEY `idx_grantee` (`grantee_type`,`grantee_ref`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.narrative_capability_grants: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.narrative_capability_grants: ~10 rows (circa)
 DELETE FROM `narrative_capability_grants`;
 INSERT INTO `narrative_capability_grants` (`id`, `grantee_type`, `grantee_ref`, `capability`, `max_impact_level`, `scope_restriction`, `date_created`) VALUES
 	(1, 'guild_role', 'leader', 'narrative.event.create', 0, NULL, '2026-04-14 17:45:39'),
@@ -2074,7 +2211,7 @@ CREATE TABLE IF NOT EXISTS `narrative_states` (
   KEY `idx_narrative_states_conflict` (`conflict_group`,`priority`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.narrative_states: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.narrative_states: ~8 rows (circa)
 DELETE FROM `narrative_states`;
 INSERT INTO `narrative_states` (`id`, `code`, `name`, `description`, `category`, `scope`, `stack_mode`, `max_stacks`, `conflict_group`, `priority`, `is_active`, `visible_to_players`, `metadata_json`, `date_created`, `date_updated`) VALUES
 	(1, 'stance_guard', 'Postura - Guardia', 'Postura difensiva che privilegia protezione e controllo.', 'Postura', 'character', 'replace', 1, 'stance', 20, 1, 1, '{}', '2026-03-30 15:32:14', NULL),
@@ -2123,7 +2260,7 @@ CREATE TABLE IF NOT EXISTS `narrative_tags` (
   KEY `idx_narrative_tags_category` (`category`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.narrative_tags: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.narrative_tags: ~18 rows (circa)
 DELETE FROM `narrative_tags`;
 INSERT INTO `narrative_tags` (`id`, `slug`, `label`, `description`, `category`, `is_active`, `created_by`, `updated_by`, `date_created`, `date_updated`) VALUES
 	(1, 'political', 'Politico', NULL, 'tono', 1, NULL, NULL, '2026-03-25 11:26:59', '2026-03-25 11:26:59'),
@@ -2370,7 +2507,7 @@ CREATE TABLE IF NOT EXISTS `quest_instances` (
   KEY `idx_quest_instances_assignee` (`assignee_type`,`assignee_id`,`current_status`),
   KEY `idx_quest_instances_source` (`source_type`,`source_id`),
   KEY `idx_quest_instances_expire` (`expires_at`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.quest_instances: ~0 rows (circa)
 DELETE FROM `quest_instances`;
@@ -2412,7 +2549,7 @@ CREATE TABLE IF NOT EXISTS `quest_progress_logs` (
   KEY `idx_quest_progress_logs_instance` (`quest_instance_id`,`date_created`),
   KEY `idx_quest_progress_logs_step` (`step_instance_id`),
   KEY `idx_quest_progress_logs_source` (`source_type`,`source_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.quest_progress_logs: ~0 rows (circa)
 DELETE FROM `quest_progress_logs`;
@@ -2465,7 +2602,7 @@ CREATE TABLE IF NOT EXISTS `quest_step_definitions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_quest_step_definition_key` (`quest_definition_id`,`step_key`),
   KEY `idx_quest_step_definition_order` (`quest_definition_id`,`order_index`,`is_active`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.quest_step_definitions: ~0 rows (circa)
 DELETE FROM `quest_step_definitions`;
@@ -2489,9 +2626,9 @@ CREATE TABLE IF NOT EXISTS `quest_step_instances` (
   UNIQUE KEY `uq_quest_step_instance` (`quest_instance_id`,`quest_step_definition_id`),
   KEY `idx_quest_step_instance_status` (`quest_instance_id`,`progress_status`),
   KEY `idx_quest_step_instance_definition` (`quest_step_definition_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.quest_step_instances: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.quest_step_instances: ~1 rows (circa)
 DELETE FROM `quest_step_instances`;
 
 -- Dump della struttura di tabella logeon_db.rules
@@ -2529,7 +2666,7 @@ CREATE TABLE IF NOT EXISTS `seasons` (
   KEY `idx_seasons_active_sort` (`is_active`,`sort_order`,`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.seasons: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.seasons: ~4 rows (circa)
 DELETE FROM `seasons`;
 INSERT INTO `seasons` (`id`, `name`, `slug`, `description`, `sort_order`, `is_active`, `starts_at_month`, `starts_at_day`, `ends_at_month`, `ends_at_day`, `date_created`, `date_updated`) VALUES
 	(1, 'Primavera', 'spring', 'Stagione primaverile', 10, 1, 3, 21, 6, 20, '2026-04-02 12:10:33', '2026-04-02 12:10:33'),
@@ -2634,7 +2771,7 @@ CREATE TABLE IF NOT EXISTS `social_status` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.social_status: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.social_status: ~5 rows (circa)
 DELETE FROM `social_status`;
 INSERT INTO `social_status` (`id`, `name`, `description`, `icon`, `shop_discount`, `unlock_home`, `quest_tier`, `min`, `max`) VALUES
 	(1, 'Sconosciuto', 'Il personaggio Ã¨ pelopiÃ¹ ignoto alla comunitÃ  e non ha alcuna rilevanza a livello sociale. Non sarÃ  ricordato o riconosciuto dalla popolazione.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 0, 19),
@@ -2671,9 +2808,9 @@ CREATE TABLE IF NOT EXISTS `sys_configs` (
   `date_updated` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `CONFIG_KEY_UNIQUE` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=227 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=632 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.sys_configs: ~54 rows (circa)
+-- Dump dei dati della tabella logeon_db.sys_configs: ~64 rows (circa)
 DELETE FROM `sys_configs`;
 INSERT INTO `sys_configs` (`id`, `key`, `value`, `type`, `date_created`, `date_updated`) VALUES
 	(1, 'money_name', 'Coin', 'text', '2023-06-01 12:22:45', '2026-02-08 15:44:00'),
@@ -2685,9 +2822,9 @@ INSERT INTO `sys_configs` (`id`, `key`, `value`, `type`, `date_created`, `date_u
 	(7, 'maps_view_mode', 'cards', 'string', '2026-02-11 09:05:58', NULL),
 	(8, 'location_invite_expiry_hours', '48', 'number', '2026-02-11 15:50:54', NULL),
 	(9, 'location_invite_max_active', '10', 'number', '2026-02-11 15:50:54', NULL),
-	(10, 'weather_global_key', '', 'string', '2026-02-12 16:35:31', '2026-04-02 12:13:16'),
-	(11, 'weather_global_degrees', '', 'number', '2026-02-12 16:35:31', '2026-04-02 12:13:16'),
-	(12, 'weather_global_moon_phase', '', 'string', '2026-02-12 16:35:31', '2026-04-02 12:13:16'),
+	(10, 'weather_global_key', '', 'string', '2026-02-12 16:35:31', '2026-04-17 19:25:25'),
+	(11, 'weather_global_degrees', '', 'number', '2026-02-12 16:35:31', '2026-04-17 19:25:25'),
+	(12, 'weather_global_moon_phase', '', 'string', '2026-02-12 16:35:31', '2026-04-17 19:25:25'),
 	(13, 'weather_render_mode', 'animated', 'string', '2026-02-12 20:58:57', NULL),
 	(14, 'weather_image_base_url', '', 'string', '2026-02-12 20:58:57', NULL),
 	(16, 'rate_auth_signin_limit', '10', 'number', '2026-02-13 12:18:15', NULL),
@@ -2728,8 +2865,20 @@ INSERT INTO `sys_configs` (`id`, `key`, `value`, `type`, `date_created`, `date_u
 	(199, 'weather_fallback_scope_type', 'world', 'string', '2026-04-02 12:10:33', NULL),
 	(200, 'weather_fallback_scope_id', '1', 'number', '2026-04-02 12:10:33', NULL),
 	(224, 'presence_restore_last_position_on_signin', '0', 'number', '2026-04-02 20:01:27', NULL),
-	(225, 'narrative_delegation_enabled', '0', 'number', '2026-04-12 00:00:00', NULL),
-	(226, 'narrative_delegation_level', '0', 'number', '2026-04-12 00:00:00', NULL);
+	(225, 'narrative_delegation_enabled', '0', 'number', '2026-04-12 00:00:00', '2026-04-23 10:33:18'),
+	(226, 'narrative_delegation_level', '2', 'number', '2026-04-12 00:00:00', '2026-04-23 10:33:04'),
+	(479, 'auth_google_enabled', '0', 'number', '2026-04-23 10:33:04', NULL),
+	(480, 'auth_google_client_id', '', 'string', '2026-04-23 10:33:04', NULL),
+	(481, 'auth_google_client_secret', '', 'string', '2026-04-23 10:33:04', NULL),
+	(482, 'auth_google_redirect_uri', '', 'string', '2026-04-23 10:33:04', NULL),
+	(483, 'multi_character_enabled', '0', 'number', '2026-04-23 10:33:04', NULL),
+	(484, 'multi_character_max_per_user', '1', 'number', '2026-04-23 10:33:04', NULL),
+	(564, 'storyboard_view_mode', 'monolithic', 'string', '2026-04-24 20:07:06', '2026-04-24 20:26:29'),
+	(565, 'rules_view_mode', 'monolithic', 'string', '2026-04-24 20:07:06', '2026-04-24 20:26:29'),
+	(566, 'how_to_play_view_mode', 'monolithic', 'string', '2026-04-24 20:07:06', '2026-04-24 20:26:29'),
+	(625, 'archetypes_view_mode', 'monolithic', 'string', '2026-04-24 21:27:02', NULL),
+	(628, 'theme_system_enabled', '0', NULL, '2026-04-26 15:01:19', '2026-04-26 15:01:50'),
+	(629, 'active_theme', '', NULL, '2026-04-26 15:01:19', '2026-04-26 15:01:50');
 
 -- Dump della struttura di tabella logeon_db.sys_logs
 DROP TABLE IF EXISTS `sys_logs`;
@@ -2798,10 +2947,19 @@ CREATE TABLE IF NOT EXISTS `sys_modules` (
   `date_updated` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `module_id` (`module_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Dump dei dati della tabella logeon_db.sys_modules: ~0 rows (circa)
+-- Dump dei dati della tabella logeon_db.sys_modules: ~8 rows (circa)
 DELETE FROM `sys_modules`;
+INSERT INTO `sys_modules` (`id`, `module_id`, `name`, `vendor`, `version`, `status`, `install_path`, `checksum_sha256`, `last_error`, `date_installed`, `date_activated`, `date_deactivated`, `date_updated`) VALUES
+	(128, 'logeon.multi-currency', 'Logeon Multi Currency', 'Logeon', '0.1.0', 'inactive', 'C:\\xampp\\htdocs\\logeon-vNext/modules/logeon.multi-currency', NULL, NULL, '2026-04-24 09:56:01', '2026-04-25 11:50:52', '2026-04-25 11:50:53', '2026-04-25 11:50:53'),
+	(129, 'logeon.archetypes', 'Logeon Archetypes', 'Logeon', '0.1.0', 'inactive', 'C:\\xampp\\htdocs\\logeon-vNext/modules/logeon.archetypes', NULL, NULL, '2026-04-24 09:57:33', '2026-04-24 21:41:14', '2026-04-24 21:41:18', '2026-04-24 21:41:18'),
+	(130, 'logeon.social-status', 'Logeon Social Status', 'Logeon', '0.1.0', 'inactive', 'C:\\xampp\\htdocs\\logeon-vNext/modules/logeon.social-status', NULL, NULL, '2026-04-24 09:59:40', '2026-04-25 11:50:50', '2026-04-25 11:50:50', '2026-04-25 11:50:50'),
+	(131, 'logeon.factions', 'Logeon Factions', 'Logeon', '0.1.0', 'inactive', 'C:\\xampp\\htdocs\\logeon-vNext/modules/logeon.factions', NULL, NULL, '2026-04-24 10:15:42', '2026-04-25 11:50:51', '2026-04-25 11:50:51', '2026-04-25 11:50:51'),
+	(132, 'logeon.attributes', 'Logeon Attributes', 'Logeon', '0.1.0', 'inactive', 'C:\\xampp\\htdocs\\logeon-vNext/modules/logeon.attributes', NULL, NULL, '2026-04-24 10:18:32', '2026-04-25 11:50:51', '2026-04-25 11:50:52', '2026-04-25 11:50:52'),
+	(133, 'logeon.novelty', 'Logeon Novelty', 'Logeon', '0.1.0', 'inactive', 'C:\\xampp\\htdocs\\logeon-vNext/modules/logeon.novelty', NULL, NULL, '2026-04-24 10:20:43', '2026-04-25 11:50:54', '2026-04-25 11:50:54', '2026-04-25 11:50:54'),
+	(134, 'logeon.weather', 'Logeon Weather', 'Logeon', '0.1.0', 'inactive', 'C:\\xampp\\htdocs\\logeon-vNext/modules/logeon.weather', NULL, NULL, '2026-04-24 10:20:52', '2026-04-25 11:50:53', '2026-04-25 11:50:53', '2026-04-25 11:50:53'),
+	(135, 'logeon.quests', 'Logeon Quests', 'Logeon', '0.1.0', 'inactive', 'C:\\xampp\\htdocs\\logeon-vNext/modules/logeon.quests', NULL, NULL, '2026-04-24 10:21:41', '2026-04-25 11:50:54', '2026-04-25 11:50:55', '2026-04-25 11:50:55');
 
 -- Dump della struttura di tabella logeon_db.sys_settings
 DROP TABLE IF EXISTS `sys_settings`;
@@ -2813,7 +2971,7 @@ CREATE TABLE IF NOT EXISTS `sys_settings` (
   `date_updated` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq_key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.sys_settings: ~7 rows (circa)
 DELETE FROM `sys_settings`;
@@ -2843,7 +3001,7 @@ CREATE TABLE IF NOT EXISTS `system_event_effects` (
   PRIMARY KEY (`id`),
   KEY `idx_system_event_effects_event` (`system_event_id`),
   KEY `idx_system_event_effects_type` (`effect_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.system_event_effects: ~0 rows (circa)
 DELETE FROM `system_event_effects`;
@@ -2868,7 +3026,7 @@ CREATE TABLE IF NOT EXISTS `system_event_participations` (
   UNIQUE KEY `uq_system_event_participant_faction` (`system_event_id`,`faction_id`),
   KEY `idx_system_event_participations_event_status` (`system_event_id`,`status`),
   KEY `idx_system_event_participations_mode` (`participant_mode`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.system_event_participations: ~0 rows (circa)
 DELETE FROM `system_event_participations`;
@@ -2907,7 +3065,7 @@ CREATE TABLE IF NOT EXISTS `system_event_reward_logs` (
   KEY `idx_system_event_reward_event` (`system_event_id`),
   KEY `idx_system_event_reward_character` (`character_id`),
   KEY `idx_system_event_reward_currency` (`currency_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.system_event_reward_logs: ~0 rows (circa)
 DELETE FROM `system_event_reward_logs`;
@@ -2942,7 +3100,7 @@ CREATE TABLE IF NOT EXISTS `system_events` (
   KEY `idx_system_events_next_run` (`next_run_at`),
   KEY `idx_system_events_last_activity` (`last_activity_at`),
   KEY `idx_system_events_home_feed` (`show_on_homepage_feed`,`status`,`visibility`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=282 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.system_events: ~0 rows (circa)
 DELETE FROM `system_events`;
@@ -3022,10 +3180,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `USER_EMAIL_UNIQUE` (`email`),
   UNIQUE KEY `uq_users_superuser_unique_guard` (`superuser_unique_guard`),
   UNIQUE KEY `uq_users_google_sub` (`google_sub`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Dump dei dati della tabella logeon_db.users: ~0 rows (circa)
-DELETE FROM `users`;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump della struttura di tabella logeon_db.weather_overrides
 DROP TABLE IF EXISTS `weather_overrides`;

@@ -304,15 +304,22 @@ class LocationService
             return null;
         }
 
-        return $this->firstPrepared(
-            'SELECT locations.*,
-                required_status.name AS required_status_name,
-                required_status.min AS required_status_min
+        $location = $this->firstPrepared(
+            'SELECT locations.*
             FROM locations
-            LEFT JOIN social_status AS required_status ON locations.min_socialstatus_id = required_status.id
             WHERE locations.id = ?',
             [$locationId],
         );
+
+        if (!empty($location)) {
+            $status = (int) ($location->min_socialstatus_id ?? 0) > 0
+                ? SocialStatusProviderRegistry::getById((int) $location->min_socialstatus_id)
+                : null;
+            $location->required_status_name = $status->name ?? null;
+            $location->required_status_min  = $status->min ?? null;
+        }
+
+        return $location;
     }
 
     public function getCharacterById(int $characterId)
@@ -447,23 +454,23 @@ class LocationService
         }
 
         $meetsFame = true;
-        if (isset($location->min_fame) && $location->min_fame !== null && $location->min_fame !== '') {
+        if (isset($location->min_fame) && $location->min_fame !== '') {
             $meetsFame = ((float) $character->fame >= (float) $location->min_fame);
         }
 
         $meetsStatus = true;
-        if (isset($location->min_socialstatus_id) && $location->min_socialstatus_id !== null && $location->min_socialstatus_id !== '') {
-            if (isset($location->required_status_min) && $location->required_status_min !== null) {
-                $meetsStatus = ((float) $character->fame >= (float) $location->required_status_min);
-            } else {
-                $meetsStatus = ((int) $character->socialstatus_id === (int) $location->min_socialstatus_id);
-            }
+        if (isset($location->min_socialstatus_id) && $location->min_socialstatus_id !== '') {
+            $requiredStatusId = (int) $location->min_socialstatus_id;
+            $meetsStatus = SocialStatusProviderRegistry::meetsRequirement(
+                $characterId,
+                $requiredStatusId > 0 ? $requiredStatusId : null,
+            );
         }
 
         if (!$meetsFame) {
             $result['reason'] = 'Fama richiesta';
             $result['reason_code'] = 'fame';
-            if (isset($location->min_fame) && $location->min_fame !== null) {
+            if (isset($location->min_fame)) {
                 $result['reason'] .= ': ' . $location->min_fame;
             }
             return $result;

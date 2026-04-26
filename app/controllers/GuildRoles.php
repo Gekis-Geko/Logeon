@@ -8,7 +8,7 @@ use App\Services\GuildRoleAdminService;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class GuildRoles extends GuildRole
@@ -36,7 +36,7 @@ class GuildRoles extends GuildRole
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -100,3 +100,5 @@ class GuildRoles extends GuildRole
         return parent::delete($operator);
     }
 }
+
+

@@ -7,7 +7,7 @@ use Core\Http\ApiResponse;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class Inventory
@@ -35,7 +35,7 @@ class Inventory
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -238,3 +238,5 @@ class Inventory
         $this->emitJson($result);
     }
 }
+
+

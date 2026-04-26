@@ -56,16 +56,14 @@ class SystemEventParticipationService
             return [];
         }
 
-        $rows = $this->fetchPrepared(
-            'SELECT faction_id
-             FROM faction_memberships
-             WHERE character_id = ?
-               AND status = ?',
-            [$characterId, 'active'],
-        );
+        $rawIds = FactionProviderRegistry::getMembershipsForCharacter((int) $characterId);
+        if (empty($rawIds)) {
+            return [];
+        }
+
         $ids = [];
-        foreach ($rows as $row) {
-            $id = (int) ($row->faction_id ?? 0);
+        foreach ($rawIds as $id) {
+            $id = (int) $id;
             if ($id > 0) {
                 $ids[$id] = $id;
             }
@@ -193,8 +191,10 @@ class SystemEventParticipationService
         if ($factionId <= 0) {
             throw AppError::validation('Fazione obbligatoria per questo evento', [], 'system_event_participation_forbidden');
         }
-        if (!$isStaff) {
-            $this->assertFactionOfficer($actorCharacterId, $factionId);
+        $providerCharacterId = $isStaff ? 0 : $actorCharacterId;
+        $handled = $this->joinEventAsFaction($eventId, $factionId, $providerCharacterId);
+        if (!$handled) {
+            return $this->noOpFactionParticipation($eventId, $factionId, 'joined');
         }
 
         return $this->upsert($eventId, 'faction', 0, $factionId, 'joined', $actorCharacterId, true);
@@ -227,8 +227,10 @@ class SystemEventParticipationService
         if ($factionId <= 0) {
             throw AppError::validation('Fazione obbligatoria per questo evento', [], 'system_event_participation_forbidden');
         }
-        if (!$isStaff) {
-            $this->assertFactionOfficer($actorCharacterId, $factionId);
+        $providerCharacterId = $isStaff ? 0 : $actorCharacterId;
+        $handled = $this->leaveEventAsFaction($eventId, $factionId, $providerCharacterId);
+        if (!$handled) {
+            return $this->noOpFactionParticipation($eventId, $factionId, 'left');
         }
 
         return $this->upsert($eventId, 'faction', 0, $factionId, 'left', $actorCharacterId, false);
@@ -249,6 +251,16 @@ class SystemEventParticipationService
         $status = strtolower(trim((string) ($data['status'] ?? 'joined')));
         if (!in_array($status, ['joined', 'left', 'removed'], true)) {
             $status = 'joined';
+        }
+
+        if ($mode === 'faction' && $factionId > 0) {
+            $providerCharacterId = 0;
+            $handled = ($status === 'joined')
+                ? $this->joinEventAsFaction($eventId, $factionId, $providerCharacterId)
+                : $this->leaveEventAsFaction($eventId, $factionId, $providerCharacterId);
+            if (!$handled) {
+                return $this->noOpFactionParticipation($eventId, $factionId, $status);
+            }
         }
 
         return $this->upsert($eventId, $mode, $characterId, $factionId, $status, $actorCharacterId, false);
@@ -398,30 +410,68 @@ class SystemEventParticipationService
         return $this->decodeRow($this->rowToArray($row));
     }
 
-    private function assertFactionOfficer(int $characterId, int $factionId): void
+    public function inviteFactionToEvent(int $eventId, int $factionId, int $inviterCharacterId): bool
     {
-        if ($characterId <= 0 || $factionId <= 0) {
-            throw AppError::unauthorized('Partecipazione fazione non autorizzata', [], 'system_event_participation_forbidden');
+        try {
+            return FactionProviderRegistry::inviteFactionToEvent($factionId, $eventId, $inviterCharacterId);
+        } catch (AppError $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            return false;
         }
+    }
 
+    private function joinEventAsFaction(int $eventId, int $factionId, int $characterId): bool
+    {
+        try {
+            return FactionProviderRegistry::joinEventAsFaction($factionId, $eventId, $characterId);
+        } catch (AppError $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    private function leaveEventAsFaction(int $eventId, int $factionId, int $characterId): bool
+    {
+        try {
+            return FactionProviderRegistry::leaveEventAsFaction($factionId, $eventId, $characterId);
+        } catch (AppError $e) {
+            throw $e;
+        } catch (\Throwable $e) {
+            return false;
+        }
+    }
+
+    private function noOpFactionParticipation(int $eventId, int $factionId, string $requestedStatus): array
+    {
+        $status = in_array($requestedStatus, ['joined', 'left', 'removed'], true) ? $requestedStatus : 'joined';
         $row = $this->firstPrepared(
-            'SELECT role
-             FROM faction_memberships
-             WHERE faction_id = ?
-               AND character_id = ?
-               AND status = ?
+            'SELECT *
+             FROM system_event_participations
+             WHERE system_event_id = ?
+               AND participant_mode = ?
+               AND faction_id = ?
+             ORDER BY id DESC
              LIMIT 1',
-            [(int) $factionId, (int) $characterId, 'active'],
+            [(int) $eventId, 'faction', (int) $factionId],
         );
-
-        if (empty($row)) {
-            throw AppError::unauthorized('Non appartieni alla fazione selezionata', [], 'system_event_participation_forbidden');
+        if (!empty($row)) {
+            return $this->decodeRow($this->rowToArray($row));
         }
 
-        $role = strtolower(trim((string) ($row->role ?? '')));
-        if (!in_array($role, ['leader', 'officer', 'advisor'], true)) {
-            throw AppError::unauthorized('Solo leader o officer possono aderire per la fazione', [], 'system_event_participation_forbidden');
-        }
+        return [
+            'id' => 0,
+            'system_event_id' => (int) $eventId,
+            'participant_mode' => 'faction',
+            'character_id' => null,
+            'faction_id' => (int) $factionId,
+            'status' => $status,
+            'joined_by_character_id' => null,
+            'date_joined' => null,
+            'date_left' => null,
+            'noop' => 1,
+        ];
     }
 
     public function activeParticipantsForRewards(int $eventId, string $participantMode = 'character'): array
@@ -472,17 +522,14 @@ class SystemEventParticipationService
             return [];
         }
 
-        $placeholders = implode(',', array_fill(0, count($factionIds), '?'));
-        $rows = $this->fetchPrepared(
-            'SELECT DISTINCT character_id
-             FROM faction_memberships
-             WHERE faction_id IN (' . $placeholders . ')
-               AND status = ?',
-            array_merge(array_map('intval', $factionIds), ['active']),
-        );
+        $rows = FactionProviderRegistry::getActiveCharacterIdsForFactions(array_map('intval', $factionIds));
+        if (empty($rows)) {
+            return [];
+        }
+
         $out = [];
         foreach ($rows as $row) {
-            $id = (int) ($row->character_id ?? 0);
+            $id = (int) $row;
             if ($id > 0) {
                 $out[$id] = $id;
             }

@@ -418,7 +418,7 @@ class NarrativeEventService
         );
         $event['narrative_tag_ids'] = array_map(static function ($tag): int {
             return (int) ($tag['id'] ?? 0);
-        }, is_array($event['narrative_tags']) ? $event['narrative_tags'] : []);
+        }, $event['narrative_tags']);
         return $event;
     }
 
@@ -595,8 +595,8 @@ class NarrativeEventService
 
         // Parse sort
         $sortParts = explode('|', $sort);
-        $sortField = in_array($sortParts[0] ?? '', ['id', 'title', 'event_type', 'scope', 'visibility', 'created_at'], true)
-            ? ($sortParts[0] ?? 'created_at') : 'created_at';
+        $sortField = in_array($sortParts[0], ['id', 'title', 'event_type', 'scope', 'visibility', 'created_at'], true)
+            ? $sortParts[0] : 'created_at';
         $sortDir = strtoupper($sortParts[1] ?? 'DESC') === 'ASC' ? 'ASC' : 'DESC';
 
         $offset = max(0, ($page - 1) * $limit);

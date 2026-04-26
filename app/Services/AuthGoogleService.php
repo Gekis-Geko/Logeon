@@ -7,7 +7,7 @@ namespace App\Services;
 use Core\Database\DbAdapterFactory;
 use Core\Database\DbAdapterInterface;
 use Core\Http\RequestData;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\Redirect;
 use Core\SessionStore;
@@ -28,7 +28,7 @@ class AuthGoogleService
     public function __construct(DbAdapterInterface $db = null, LoggerInterface $logger = null)
     {
         $this->db = $db ?: DbAdapterFactory::createFromConfig();
-        $this->logger = $logger ?: new LegacyLoggerAdapter();
+        $this->logger = $logger ?: \Core\AppContext::logger();
     }
 
     public static function redirectToGoogle(): void
@@ -63,7 +63,7 @@ class AuthGoogleService
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
+        if (defined('DB')) {
             return (string) DB['crypt_key'];
         }
 
@@ -91,7 +91,7 @@ class AuthGoogleService
 
     private function baseHost(): string
     {
-        $raw = trim((string) (APP['baseurl'] ?? ''));
+        $raw = trim((string) APP['baseurl']);
         if ($raw === '') {
             $raw = trim((string) $this->getServerValue('HTTP_HOST', ''));
         }
@@ -156,10 +156,7 @@ class AuthGoogleService
 
     private function googleConfig(): array
     {
-        $raw = APP['oauth_google'] ?? [];
-        if (!is_array($raw)) {
-            $raw = [];
-        }
+        $raw = APP['oauth_google'];
 
         $db = $this->readSysConfigValues([
             'auth_google_enabled',
@@ -170,20 +167,20 @@ class AuthGoogleService
 
         $enabledRaw = array_key_exists('auth_google_enabled', $db)
             ? $db['auth_google_enabled']
-            : ($raw['enabled'] ?? false);
-        $enabled = ($enabledRaw === true || $enabledRaw === 1 || (string) $enabledRaw === '1');
+            : $raw['enabled'];
+        $enabled = ((string) $enabledRaw === '1');
 
         $clientId = array_key_exists('auth_google_client_id', $db)
             ? trim((string) $db['auth_google_client_id'])
-            : trim((string) ($raw['client_id'] ?? ''));
+            : trim((string) $raw['client_id']);
 
         $clientSecret = array_key_exists('auth_google_client_secret', $db)
             ? trim((string) $db['auth_google_client_secret'])
-            : trim((string) ($raw['client_secret'] ?? ''));
+            : trim((string) $raw['client_secret']);
 
         $redirectUri = array_key_exists('auth_google_redirect_uri', $db)
             ? trim((string) $db['auth_google_redirect_uri'])
-            : trim((string) ($raw['redirect_uri'] ?? ''));
+            : trim((string) $raw['redirect_uri']);
         if ($redirectUri === '') {
             $redirectUri = $this->absoluteUrl('/auth/google/callback');
         }
@@ -232,11 +229,7 @@ class AuthGoogleService
             return $this->usersColumnCache[$column];
         }
 
-        $dbName = DB['mysql']['db_name'] ?? '';
-        if ($dbName === '') {
-            $this->usersColumnCache[$column] = false;
-            return false;
-        }
+        $dbName = (string) DB['mysql']['db_name'];
 
         $row = $this->firstPrepared(
             'SELECT 1 AS ok
@@ -729,3 +722,5 @@ class AuthGoogleService
         return $response;
     }
 }
+
+

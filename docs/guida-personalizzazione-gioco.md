@@ -94,10 +94,15 @@ Usa questi punti di estensione:
 ## 9. Stile e tema
 1. base CSS: `assets/css/framework.css`
 2. override tema: `assets/css/style.css`
-3. sorgente Sass: `assets/sass/framework.scss`
-4. policy: `assets/sass/*` e la sorgente autorevole, `assets/css/*` e output compilato
-5. build:
-   `sass.cmd assets/sass/framework.scss assets/css/framework.css --style=expanded --no-source-map`
+3. CSS admin: `assets/css/admin.css`
+4. personalizzazioni del creatore di gioco: `assets/css/custom.css`
+5. sorgenti Sass: `assets/sass/framework.scss`, `assets/sass/style.scss`, `assets/sass/admin.scss`
+6. policy: `assets/sass/*` e la sorgente autorevole, `assets/css/*` e output compilato
+7. `assets/css/custom.css` resta volutamente vuoto e va usato solo per override del gioco, non per stili core
+8. build:
+   `sass.cmd --load-path=assets/vendor/bootstrap-5.3.8/scss assets/sass/style.scss assets/css/style.css --style=expanded --source-map`
+   `sass.cmd assets/sass/framework.scss assets/css/framework.css --style=expanded --source-map`
+   `sass.cmd assets/sass/admin.scss assets/css/admin.css --style=expanded --source-map`
 
 ## 10. Configurazione del pannello admin
 Prima di pubblicare, configura le entita di gioco dall'area `/admin`:

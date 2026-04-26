@@ -76,6 +76,56 @@ class NotificationService
         return $this->tableExists;
     }
 
+    private function resolvePreferenceColumn(string $topic, ?string $sourceType = null): ?string
+    {
+        $topic = strtolower(trim($topic));
+        $sourceType = strtolower(trim((string) $sourceType));
+
+        if ($topic === 'direct_message' || $sourceType === 'direct_message') {
+            return 'notify_messages';
+        }
+
+        if (
+            $topic === 'location_invite'
+            || $topic === 'location_invite_result'
+            || $sourceType === 'location_invite'
+        ) {
+            return 'notify_invites';
+        }
+
+        if ($topic === 'news_publish' || $sourceType === 'news') {
+            return 'notify_news';
+        }
+
+        return null;
+    }
+
+    private function recipientAllowsTopic(?int $recipientCharacterId, string $topic, ?string $sourceType = null): bool
+    {
+        if ($recipientCharacterId === null || $recipientCharacterId <= 0) {
+            return true;
+        }
+
+        $column = $this->resolvePreferenceColumn($topic, $sourceType);
+        if ($column === null) {
+            return true;
+        }
+
+        $row = $this->firstPrepared(
+            'SELECT ' . $column . ' AS allowed
+             FROM characters
+             WHERE id = ?
+             LIMIT 1',
+            [$recipientCharacterId],
+        );
+
+        if (empty($row)) {
+            return true;
+        }
+
+        return (int) ($row->allowed ?? 0) === 1;
+    }
+
     /**
      * Crea una notifica per un utente/personaggio.
      *
@@ -112,6 +162,10 @@ class NotificationService
         $sourceMeta = isset($options['source_meta_json']) ? (string) $options['source_meta_json'] : null;
         $dedupKey = isset($options['dedup_key']) ? (string) $options['dedup_key'] : null;
         $expiresAt = isset($options['expires_at']) ? (string) $options['expires_at'] : null;
+
+        if (!$this->recipientAllowsTopic($recipientCharacterId, $topic, $sourceType)) {
+            return null;
+        }
 
         $this->execPrepared(
             'INSERT INTO notifications SET
@@ -175,6 +229,21 @@ class NotificationService
             return null;
         }
 
+        $topic = isset($options['topic']) ? (string) $options['topic'] : 'system_notice';
+        $sourceType = isset($options['source_type']) ? (string) $options['source_type'] : null;
+        $message = isset($options['message']) ? (string) $options['message'] : null;
+        $priority = isset($options['priority']) ? (string) $options['priority'] : 'normal';
+        $actorUserId = isset($options['actor_user_id']) ? (int) $options['actor_user_id'] : null;
+        $actorCharId = isset($options['actor_character_id']) ? (int) $options['actor_character_id'] : null;
+        $actionUrl = isset($options['action_url']) ? (string) $options['action_url'] : null;
+        $sourceId = isset($options['source_id']) ? (int) $options['source_id'] : null;
+        $sourceMeta = isset($options['source_meta_json']) ? (string) $options['source_meta_json'] : null;
+        $expiresAt = isset($options['expires_at']) ? (string) $options['expires_at'] : null;
+
+        if (!$this->recipientAllowsTopic($recipientCharacterId, $topic, $sourceType)) {
+            return null;
+        }
+
         $existing = $this->firstPrepared(
             'SELECT id FROM notifications
              WHERE recipient_user_id = ?
@@ -186,22 +255,46 @@ class NotificationService
         if (!empty($existing)) {
             $this->execPrepared(
                 'UPDATE notifications SET
-                    title        = ?,
-                    is_read      = 0,
-                    read_at      = NULL,
-                    date_updated = NOW()
+                    actor_user_id          = ?,
+                    actor_character_id     = ?,
+                    topic                  = ?,
+                    priority               = ?,
+                    title                  = ?,
+                    message                = ?,
+                    action_url             = ?,
+                    source_type            = ?,
+                    source_id              = ?,
+                    source_meta_json       = ?,
+                    expires_at             = ?,
+                    is_read                = 0,
+                    read_at                = NULL,
+                    date_updated           = NOW()
                  WHERE id = ?',
-                [$title, (int) $existing->id],
+                [
+                    ($actorUserId !== null && $actorUserId > 0) ? $actorUserId : null,
+                    ($actorCharId !== null && $actorCharId > 0) ? $actorCharId : null,
+                    $topic,
+                    $priority,
+                    $title,
+                    $message,
+                    $actionUrl,
+                    $sourceType,
+                    ($sourceId !== null && $sourceId > 0) ? $sourceId : null,
+                    $sourceMeta,
+                    $expiresAt,
+                    (int) $existing->id,
+                ],
             );
             return (int) $existing->id;
         }
 
         $options['dedup_key'] = $dedupKey;
+        $options['topic'] = $topic;
         return $this->create(
             $recipientUserId,
             $recipientCharacterId,
             self::KIND_SYSTEM_UPDATE,
-            'system_notice',
+            $topic,
             $title,
             $options,
         );
@@ -412,7 +505,7 @@ class NotificationService
     /**
      * Marca tutte le notifiche del destinatario come lette.
      */
-    public function markAllRead(int $recipientUserId, array $filters = []): array
+    public function markAllReadForRecipient(int $recipientUserId, ?int $recipientCharacterId, array $filters = []): array
     {
         if (!$this->hasTable()) {
             return ['updated' => 0];
@@ -420,9 +513,16 @@ class NotificationService
 
         $where = ['recipient_user_id = ?', 'is_read = 0'];
         $params = [$recipientUserId];
+        if ($recipientCharacterId && $recipientCharacterId > 0) {
+            $where[] = '(recipient_character_id IS NULL OR recipient_character_id = ?)';
+            $params[] = $recipientCharacterId;
+        }
         if (!empty($filters['kind'])) {
             $where[] = 'kind = ?';
             $params[] = (string) $filters['kind'];
+        }
+        if (!empty($filters['pending_only'])) {
+            $where[] = 'action_status = "pending"';
         }
 
         $this->execPrepared(
@@ -433,6 +533,11 @@ class NotificationService
         $updated = (int) ($affectedRow->n ?? 0);
 
         return ['updated' => $updated];
+    }
+
+    public function markAllRead(int $recipientUserId, array $filters = []): array
+    {
+        return $this->markAllReadForRecipient($recipientUserId, null, $filters);
     }
 
     /**
@@ -543,18 +648,28 @@ class NotificationService
     /**
      * Conta le notifiche non lette per un utente.
      */
-    public function getUnreadCount(int $recipientUserId): int
+    public function getUnreadCount(int $recipientUserId, ?int $recipientCharacterId = null): int
     {
         if (!$this->hasTable() || $recipientUserId <= 0) {
             return 0;
         }
 
+        $where = [
+            'recipient_user_id = ?',
+            'is_read = 0',
+            '(expires_at IS NULL OR expires_at > NOW())',
+        ];
+        $params = [$recipientUserId];
+
+        if ($recipientCharacterId && $recipientCharacterId > 0) {
+            $where[] = '(recipient_character_id IS NULL OR recipient_character_id = ?)';
+            $params[] = $recipientCharacterId;
+        }
+
         $row = $this->firstPrepared(
             'SELECT COUNT(*) AS n FROM notifications
-             WHERE recipient_user_id = ?
-               AND is_read = 0
-               AND (expires_at IS NULL OR expires_at > NOW())',
-            [$recipientUserId],
+             WHERE ' . implode(' AND ', $where),
+            $params,
         );
 
         return (int) ($row->n ?? 0);

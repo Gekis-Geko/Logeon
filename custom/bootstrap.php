@@ -27,10 +27,6 @@ if (class_exists('\\Core\\ModuleRuntime')) {
     \Core\ModuleRuntime::instance()->bootActiveModules();
 }
 
-if (class_exists('\\App\\Services\\QuestTriggerService')) {
-    \App\Services\QuestTriggerService::bootstrap();
-}
-
 // Bootstrap custom logic here.
 // Esempio:
 // Hooks::add('twig.register', function ($twig) {

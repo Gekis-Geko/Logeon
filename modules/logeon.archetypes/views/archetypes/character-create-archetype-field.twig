@@ -1,0 +1,235 @@
+{% set target_form_id = form_id|default('create-character-modal-form') %}
+<div class="form-group" data-role="character-create-archetype-field" data-form-id="{{ target_form_id|e('html_attr') }}" style="display:none;">
+    <label data-role="character-create-archetype-label">
+        Archetipo <span class="text-danger" data-role="character-create-archetype-required" style="display:none;">*</span>
+    </label>
+    <select name="archetype_id" class="form-select" data-role="character-create-archetype-select">
+        <option value="">Seleziona un archetipo</option>
+    </select>
+    <div class="form-text mt-1" data-role="character-create-archetype-hint"></div>
+    <div class="form-text mt-2 d-none" data-role="character-create-archetype-description"></div>
+</div>
+<script type="text/javascript">
+(function () {
+    'use strict';
+
+    var targetFormId = '{{ target_form_id|e('js') }}';
+    var bindingKey = '__archetypes_create_character_bound_' + targetFormId;
+    if (window[bindingKey] === true) {
+        return;
+    }
+    window[bindingKey] = true;
+
+    function asDetail(event) {
+        if (!event || !event.detail || typeof event.detail !== 'object') {
+            return {};
+        }
+        return event.detail;
+    }
+
+    function resolveForm(event) {
+        var detail = asDetail(event);
+        if (detail.form && detail.form.nodeType === 1) {
+            return detail.form;
+        }
+        var candidateFormId = String(detail.formId || '').trim();
+        if (candidateFormId !== '') {
+            return document.getElementById(candidateFormId);
+        }
+        if (targetFormId !== '') {
+            return document.getElementById(targetFormId);
+        }
+        return null;
+    }
+
+    function fieldElements(form) {
+        if (!form) {
+            return null;
+        }
+        var field = form.querySelector('[data-role="character-create-archetype-field"][data-form-id="' + targetFormId + '"]');
+        if (!field) {
+            return null;
+        }
+        return {
+            field: field,
+            label: field.querySelector('[data-role="character-create-archetype-label"]'),
+            required: field.querySelector('[data-role="character-create-archetype-required"]'),
+            select: field.querySelector('[data-role="character-create-archetype-select"]'),
+            hint: field.querySelector('[data-role="character-create-archetype-hint"]'),
+            description: field.querySelector('[data-role="character-create-archetype-description"]')
+        };
+    }
+
+    function escapeHtml(value) {
+        var node = document.createElement('div');
+        node.textContent = value == null ? '' : String(value);
+        return node.innerHTML;
+    }
+
+    function selectedIds(selectNode) {
+        if (!selectNode) {
+            return [];
+        }
+        var out = [];
+        var options = selectNode.selectedOptions || [];
+        for (var i = 0; i < options.length; i += 1) {
+            var id = parseInt(options[i].value || '0', 10) || 0;
+            if (id > 0 && out.indexOf(id) === -1) {
+                out.push(id);
+            }
+        }
+        return out;
+    }
+
+    function renderDescriptions(nodes, byId) {
+        if (!nodes || !nodes.description || !nodes.select) {
+            return;
+        }
+
+        var ids = selectedIds(nodes.select);
+        if (!ids.length) {
+            nodes.description.classList.add('d-none');
+            nodes.description.innerHTML = '';
+            return;
+        }
+
+        var chunks = [];
+        for (var i = 0; i < ids.length; i += 1) {
+            var key = String(ids[i]);
+            if (!Object.prototype.hasOwnProperty.call(byId, key)) {
+                continue;
+            }
+            var row = byId[key] || {};
+            var title = String(row.name || 'Archetipo').trim();
+            var description = String(row.description || '').trim();
+            var lore = String(row.lore_text || '').trim();
+            var lines = [];
+            if (description !== '') {
+                lines.push('<div><b>Descrizione:</b> ' + escapeHtml(description) + '</div>');
+            }
+            if (lore !== '') {
+                lines.push('<div class="mt-1"><b>Lore:</b> ' + escapeHtml(lore) + '</div>');
+            }
+            if (lines.length) {
+                chunks.push(
+                    '<div class="mt-2">'
+                    + '<div class="fw-semibold">' + escapeHtml(title) + '</div>'
+                    + lines.join('')
+                    + '</div>'
+                );
+            }
+        }
+
+        if (!chunks.length) {
+            nodes.description.classList.add('d-none');
+            nodes.description.innerHTML = '';
+            return;
+        }
+
+        nodes.description.innerHTML = chunks.join('');
+        nodes.description.classList.remove('d-none');
+    }
+
+    function showWarning(message) {
+        if (window.Toast && typeof window.Toast.show === 'function') {
+            window.Toast.show({ body: message, type: 'warning' });
+            return;
+        }
+        if (typeof console !== 'undefined' && typeof console.warn === 'function') {
+            console.warn('[ArchetypesCreateCharacter] ' + message);
+        }
+    }
+
+    function hydrateFromApi(form) {
+        var nodes = fieldElements(form);
+        if (!nodes || !nodes.select) {
+            return;
+        }
+        if (!window.Request || !window.Request.http || typeof window.Request.http.post !== 'function') {
+            return;
+        }
+
+        window.Request.http.post('/archetypes/list', {}).then(function (response) {
+            var config = (response && response.config && typeof response.config === 'object') ? response.config : {};
+            var list = (response && Array.isArray(response.dataset)) ? response.dataset : [];
+            var enabled = String(config.archetypes_enabled || '0') === '1';
+            var required = String(config.archetype_required || '0') === '1';
+            var multiple = String(config.multiple_archetypes_allowed || '0') === '1';
+
+            var byId = {};
+            nodes.select.innerHTML = '';
+            if (!multiple) {
+                nodes.select.appendChild(new Option('Seleziona un archetipo', ''));
+            }
+            for (var i = 0; i < list.length; i += 1) {
+                var row = list[i] || {};
+                var rowId = String(row.id || '').trim();
+                if (rowId === '') {
+                    continue;
+                }
+                byId[rowId] = row;
+                nodes.select.appendChild(new Option(String(row.name || 'Archetipo'), rowId));
+            }
+
+            nodes.field.style.display = enabled ? '' : 'none';
+            nodes.select.required = enabled && required;
+            nodes.select.multiple = enabled && multiple;
+
+            if (nodes.required) {
+                nodes.required.style.display = (enabled && required) ? '' : 'none';
+            }
+            if (nodes.label) {
+                var labelText = multiple ? 'Archetipi' : 'Archetipo';
+                nodes.label.childNodes[0].nodeValue = labelText + ' ';
+            }
+            if (nodes.hint) {
+                nodes.hint.textContent = multiple
+                    ? 'Puoi selezionare uno o piu archetipi.'
+                    : 'Seleziona un archetipo.';
+            }
+            if (!enabled) {
+                nodes.description.classList.add('d-none');
+                nodes.description.innerHTML = '';
+            }
+
+            form.__characterCreateArchetypesById = byId;
+            if (typeof nodes.select.__archetypesCreateOnChange === 'function') {
+                nodes.select.removeEventListener('change', nodes.select.__archetypesCreateOnChange);
+            }
+            nodes.select.__archetypesCreateOnChange = function () {
+                renderDescriptions(nodes, form.__characterCreateArchetypesById || {});
+            };
+            nodes.select.addEventListener('change', nodes.select.__archetypesCreateOnChange);
+            renderDescriptions(nodes, form.__characterCreateArchetypesById || {});
+        }).catch(function () {
+            showWarning('Impossibile caricare gli archetipi.');
+        });
+    }
+
+    document.addEventListener('character-create:before-show', function (event) {
+        var form = resolveForm(event);
+        if (!form) {
+            return;
+        }
+        hydrateFromApi(form);
+    });
+
+    document.addEventListener('character-create:collect-payload', function (event) {
+        var detail = asDetail(event);
+        var form = resolveForm(event);
+        if (!form || !detail.payload || typeof detail.payload !== 'object') {
+            return;
+        }
+        var nodes = fieldElements(form);
+        if (!nodes || !nodes.select || nodes.field.style.display === 'none') {
+            detail.payload.archetype_id = 0;
+            detail.payload.archetype_ids = [];
+            return;
+        }
+
+        var ids = selectedIds(nodes.select);
+        detail.payload.archetype_id = ids.length ? ids[0] : 0;
+        detail.payload.archetype_ids = ids;
+    });
+})();
+</script>

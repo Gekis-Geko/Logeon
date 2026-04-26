@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Services\FactionProviderRegistry;
 use Core\Database\DbAdapterFactory;
 use Core\Database\DbAdapterInterface;
 use Core\Http\AppError;
@@ -180,7 +181,7 @@ class NarrativeTagService
         } elseif ($entityType === self::ENTITY_SCENE) {
             $row = $this->firstPrepared('SELECT id FROM locations WHERE id = ? AND date_deleted IS NULL LIMIT 1', [$entityId]);
         } elseif ($entityType === self::ENTITY_FACTION) {
-            $row = $this->firstPrepared('SELECT id FROM factions WHERE id = ? LIMIT 1', [$entityId]);
+            $row = FactionProviderRegistry::existsById($entityId) ? (object) ['id' => $entityId] : null;
         }
 
         if (empty($row)) {
@@ -260,7 +261,7 @@ class NarrativeTagService
         }
 
         $isActiveFilter = $filters['is_active'] ?? '';
-        if ($isActiveFilter !== '' && $isActiveFilter !== null) {
+        if ($isActiveFilter !== '') {
             $active = (int) $isActiveFilter === 1 ? 1 : 0;
             $where[] = 't.is_active = ' . $active;
         } elseif (!$includeInactive) {
@@ -268,7 +269,7 @@ class NarrativeTagService
         }
 
         $chunks = explode('|', (string) $sort);
-        $sortField = in_array(($chunks[0] ?? ''), ['id', 'slug', 'label', 'category', 'is_active', 'date_created'], true)
+        $sortField = in_array($chunks[0], ['id', 'slug', 'label', 'category', 'is_active', 'date_created'], true)
             ? $chunks[0]
             : 'label';
         $sortDir = strtoupper((string) ($chunks[1] ?? 'ASC')) === 'DESC' ? 'DESC' : 'ASC';
@@ -819,23 +820,7 @@ class NarrativeTagService
                 );
             }
         } else {
-            if ($needle !== '') {
-                $like = '%' . $needle . '%';
-                $rows = $this->fetchPrepared(
-                    'SELECT f.id, f.name AS label, f.code AS secondary
-                     FROM factions f
-                     WHERE f.name LIKE ? OR f.code LIKE ?
-                     ORDER BY f.name ASC LIMIT ?',
-                    [$like, $like, $limit],
-                );
-            } else {
-                $rows = $this->fetchPrepared(
-                    'SELECT f.id, f.name AS label, f.code AS secondary
-                     FROM factions f
-                     ORDER BY f.name ASC LIMIT ?',
-                    [$limit],
-                );
-            }
+            return FactionProviderRegistry::search($needle, $limit);
         }
 
         $out = [];

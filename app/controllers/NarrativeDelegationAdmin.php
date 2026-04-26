@@ -3,7 +3,9 @@
 declare(strict_types=1);
 
 use App\Services\NarrativeCapabilityService;
+use App\Services\SettingsService;
 use Core\Http\ApiResponse;
+use Core\Http\AppError;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
 
@@ -11,6 +13,8 @@ class NarrativeDelegationAdmin
 {
     /** @var NarrativeCapabilityService|null */
     private $service = null;
+    /** @var SettingsService|null */
+    private $settingsService = null;
 
     private function requireAdmin(): void
     {
@@ -24,6 +28,25 @@ class NarrativeDelegationAdmin
         }
         $this->service = new NarrativeCapabilityService();
         return $this->service;
+    }
+
+    private function settingsService(): SettingsService
+    {
+        if ($this->settingsService instanceof SettingsService) {
+            return $this->settingsService;
+        }
+
+        $this->settingsService = new SettingsService();
+        return $this->settingsService;
+    }
+
+    private function requireDelegationEnabled(): void
+    {
+        $dataset = $this->settingsService()->getNarrativeDelegationDataset();
+        $enabled = (int) ($dataset['narrative_delegation_enabled'] ?? 0);
+        if ($enabled !== 1) {
+            throw AppError::notFound('Funzionalita non disponibile', [], 'narrative_delegation_disabled');
+        }
     }
 
     private function requestData(): object
@@ -40,6 +63,7 @@ class NarrativeDelegationAdmin
     public function listCapabilities(): void
     {
         $this->requireAdmin();
+        $this->requireDelegationEnabled();
         $rows = $this->service()->adminListCapabilities();
         ResponseEmitter::emit(ApiResponse::json(['dataset' => $rows]));
     }
@@ -51,6 +75,7 @@ class NarrativeDelegationAdmin
     public function listGrants(): void
     {
         $this->requireAdmin();
+        $this->requireDelegationEnabled();
 
         $request = RequestData::fromGlobals();
         $data = $request->postJson('data', [], true);
@@ -81,6 +106,7 @@ class NarrativeDelegationAdmin
     public function createGrant(): void
     {
         $this->requireAdmin();
+        $this->requireDelegationEnabled();
         $data = $this->requestData();
         $grant = $this->service()->adminCreateGrant((array) $data);
         ResponseEmitter::emit(ApiResponse::json(['status' => 'ok', 'grant' => $grant]));
@@ -89,6 +115,7 @@ class NarrativeDelegationAdmin
     public function updateGrant(): void
     {
         $this->requireAdmin();
+        $this->requireDelegationEnabled();
         $data = $this->requestData();
         $id = (int) ($data->id ?? 0);
         $grant = $this->service()->adminUpdateGrant($id, (array) $data);
@@ -98,6 +125,7 @@ class NarrativeDelegationAdmin
     public function deleteGrant(): void
     {
         $this->requireAdmin();
+        $this->requireDelegationEnabled();
         $data = $this->requestData();
         $id = (int) ($data->id ?? 0);
         $this->service()->adminDeleteGrant($id);

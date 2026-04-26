@@ -17,7 +17,7 @@ class SessionStore
 
     public static function set($key, $value): void
     {
-        static::ensureSessionArray();
+        self::ensureSessionArray();
         $_SESSION[$key] = $value;
     }
 
@@ -32,7 +32,7 @@ class SessionStore
 
     public static function has($key): bool
     {
-        if (!isset($_SESSION) || !is_array($_SESSION)) {
+        if (!isset($_SESSION)) {
             return false;
         }
 
@@ -57,7 +57,7 @@ class SessionStore
 
     private static function ensureSessionArray(): void
     {
-        if (!isset($_SESSION) || !is_array($_SESSION)) {
+        if (!isset($_SESSION)) {
             $_SESSION = [];
         }
     }

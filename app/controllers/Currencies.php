@@ -2,101 +2,98 @@
 
 declare(strict_types=1);
 
-use App\Models\Currency;
-
 use App\Services\CurrencyAdminService;
+use Core\AuthGuard;
+use Core\Http\ApiResponse;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
+use Core\Http\ResponseEmitter;
 
-use Core\Logging\LegacyLoggerAdapter;
-use Core\Logging\LoggerInterface;
-
-class Currencies extends Currency
+class Currencies
 {
-    /** @var LoggerInterface|null */
-    private $logger = null;
     /** @var CurrencyAdminService|null */
-    private $currencyAdminService = null;
+    private $service = null;
 
-    public function setLogger(LoggerInterface $logger = null)
+    public function setService(CurrencyAdminService $service = null): self
     {
-        $this->logger = $logger;
+        $this->service = $service;
         return $this;
     }
 
-    public function setCurrencyAdminService(CurrencyAdminService $currencyAdminService = null)
+    private function service(): CurrencyAdminService
     {
-        $this->currencyAdminService = $currencyAdminService;
-        return $this;
-    }
-
-    private function logger(): LoggerInterface
-    {
-        if ($this->logger instanceof LoggerInterface) {
-            return $this->logger;
+        if ($this->service instanceof CurrencyAdminService) {
+            return $this->service;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
-        return $this->logger;
+        $this->service = new CurrencyAdminService();
+        return $this->service;
     }
 
-    protected function trace($message, $context = false): void
+    private function requireAdmin(): void
     {
-        $this->logger()->trace($message, $context);
+        AuthGuard::api()->requireAbility('settings.manage', [], 'Operazione non autorizzata');
     }
 
-    private function currencyAdminService(): CurrencyAdminService
+    private function requestDataObject(): object
     {
-        if ($this->currencyAdminService instanceof CurrencyAdminService) {
-            return $this->currencyAdminService;
-        }
-
-        $this->currencyAdminService = new CurrencyAdminService();
-        return $this->currencyAdminService;
+        return InputValidator::postJsonObject(RequestData::fromGlobals(), 'data', true);
     }
 
-    private function requestDataObject()
-    {
-        $request = RequestData::fromGlobals();
-        return InputValidator::postJsonObject($request, 'data', true);
-    }
-
-    private function requireAdmin()
-    {
-        \Core\AuthGuard::api()->requireAbility('settings.manage');
-    }
-
-    public function list($echo = true)
+    public function list()
     {
         $this->requireAdmin();
-        return parent::list($echo);
+        $data = $this->requestDataObject();
+        ResponseEmitter::emit(ApiResponse::json($this->service()->list($data)));
+        return $this;
     }
 
     public function create()
     {
-        $this->trace('Richiamato il metodo: ' . __METHOD__);
         $this->requireAdmin();
+        $data = InputValidator::postJsonObject(
+            RequestData::fromGlobals(),
+            'data',
+            false,
+            'Dati mancanti',
+            'payload_missing',
+        );
 
-        $data = $this->requestDataObject();
-        $this->currencyAdminService()->create($data);
-
+        $dataset = $this->service()->create($data);
+        ResponseEmitter::emit(ApiResponse::json(['dataset' => $dataset]));
         return $this;
     }
 
     public function update()
     {
-        $this->trace('Richiamato il metodo: ' . __METHOD__);
         $this->requireAdmin();
+        $data = InputValidator::postJsonObject(
+            RequestData::fromGlobals(),
+            'data',
+            false,
+            'Dati mancanti',
+            'payload_missing',
+        );
 
-        $data = $this->requestDataObject();
-        $this->currencyAdminService()->update($data);
-
+        $dataset = $this->service()->update($data);
+        ResponseEmitter::emit(ApiResponse::json(['dataset' => $dataset]));
         return $this;
     }
 
-    public function delete($operator = '=')
+    public function delete()
     {
         $this->requireAdmin();
-        return parent::delete($operator);
+        $data = InputValidator::postJsonObject(
+            RequestData::fromGlobals(),
+            'data',
+            false,
+            'Dati mancanti',
+            'payload_missing',
+        );
+
+        $id = (int) ($data->id ?? 0);
+        $this->service()->delete($id);
+        ResponseEmitter::emit(ApiResponse::json(['success' => true]));
+        return $this;
     }
 }

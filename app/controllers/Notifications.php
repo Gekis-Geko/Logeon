@@ -131,7 +131,11 @@ class Notifications
             'pending_only' => (int) ($data->pending_only ?? 0),
         ];
 
-        $result = $this->service()->markAllRead($session['user_id'], $filters);
+        $result = $this->service()->markAllReadForRecipient(
+            $session['user_id'],
+            $session['character_id'] > 0 ? $session['character_id'] : null,
+            $filters,
+        );
         $this->emitJson(['success' => true, 'dataset' => $result]);
         return $this;
     }
@@ -166,7 +170,10 @@ class Notifications
     {
         $session = $this->requireSession();
         \Core\AuthGuard::releaseSession();
-        $count = $this->service()->getUnreadCount($session['user_id']);
+        $count = $this->service()->getUnreadCount(
+            $session['user_id'],
+            $session['character_id'] > 0 ? $session['character_id'] : null,
+        );
         $this->emitJson(['success' => true, 'unread_count' => $count]);
         return $this;
     }

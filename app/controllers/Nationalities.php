@@ -6,7 +6,7 @@ use App\Models\Nationality;
 
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
-use Core\Logging\LegacyLoggerAdapter;
+
 
 use Core\Logging\LoggerInterface;
 
@@ -27,7 +27,7 @@ class Nationalities extends Nationality
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -66,3 +66,5 @@ class Nationalities extends Nationality
     {
     }
 }
+
+

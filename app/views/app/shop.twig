@@ -64,6 +64,7 @@
             <div class="card-footer d-flex justify-content-between align-items-center">
                 <div class="d-flex align-items-center flex-wrap gap-2">
                     <span class="badge text-bg-dark" name="price"></span>
+                    {{ slot('shop.price.extra') }}
                     <span class="small text-muted" name="stock"></span>
                     <span class="small text-danger d-none" name="afford">Saldo insufficiente</span>
                 </div>

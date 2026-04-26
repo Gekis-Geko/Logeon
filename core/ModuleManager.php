@@ -73,6 +73,7 @@ class ModuleManager
             $manifest['_path'] = $dir;
             $manifest['_dir'] = $entry;
             $manifest['_manifest_path'] = $manifestPath;
+            $manifest['_class'] = $this->normalizeModuleClass($manifest['class'] ?? '');
             $manifest['_entrypoints'] = $this->normalizeEntrypoints($manifest['entrypoints'] ?? []);
             $manifest['_assets'] = $this->normalizeAssets($manifest['assets'] ?? []);
             $manifest['_menus'] = $this->normalizeMenus($manifest['menus'] ?? []);
@@ -95,6 +96,7 @@ class ModuleManager
         $manifests = $this->discover();
         $this->syncRuntimeArtifacts($manifests);
         $rows = $this->rowsByModuleId();
+        $this->healStaleCompatibilityErrors($manifests, $rows);
         $ids = array_unique(array_merge(array_keys($manifests), array_keys($rows)));
 
         $dataset = [];
@@ -130,6 +132,8 @@ class ModuleManager
                 ) ? 1 : 0,
                 'last_error' => is_object($row) ? (string) ($row->last_error ?? '') : '',
                 'directory' => (string) ($manifest['_dir'] ?? ''),
+                'class' => (string) ($manifest['_class'] ?? 'optional'),
+                'is_bundled' => ($manifest['_class'] ?? 'optional') === 'bundled' ? 1 : 0,
             ];
         }
 
@@ -152,6 +156,13 @@ class ModuleManager
         $purge = !empty($options['purge']);
         $discovered = $this->discover();
         $manifest = $discovered[$moduleId] ?? null;
+
+        if (is_array($manifest) && ($manifest['_class'] ?? 'optional') === 'bundled') {
+            return $this->errorResult(
+                'module_bundled_no_purge',
+                'I moduli bundled standard non supportano la disinstallazione. Disattiva il modulo per disabilitarne le funzionalita.',
+            );
+        }
 
         $row = $this->db->fetchOnePrepared(
             'SELECT id, status
@@ -600,6 +611,11 @@ class ModuleManager
         ];
     }
 
+    private function normalizeModuleClass(string $class): string
+    {
+        return $class === 'bundled' ? 'bundled' : 'optional';
+    }
+
     private function normalizeEntrypoints($entrypoints): array
     {
         if (!is_array($entrypoints)) {
@@ -659,7 +675,7 @@ class ModuleManager
         }
 
         $out = [];
-        foreach (['game', 'admin'] as $channel) {
+        foreach (['game', 'admin', 'public'] as $channel) {
             $channelCfg = $menus[$channel] ?? null;
             if (!is_array($channelCfg)) {
                 continue;
@@ -738,6 +754,50 @@ class ModuleManager
         }
 
         return $out;
+    }
+
+    private function healStaleCompatibilityErrors(array $manifests, array &$rows): void
+    {
+        foreach ($rows as $moduleId => $row) {
+            if (!is_object($row) || !isset($row->status)) {
+                continue;
+            }
+
+            if ((string) $row->status !== self::STATUS_ERROR) {
+                continue;
+            }
+
+            $lastError = trim((string) ($row->last_error ?? ''));
+            if ($lastError !== 'Modulo incompatibile con la versione corrente del core') {
+                continue;
+            }
+
+            $manifest = $manifests[$moduleId] ?? null;
+            if (!is_array($manifest)) {
+                continue;
+            }
+
+            $core = $manifest['_core'] ?? ['min' => '', 'max' => ''];
+            $min = (string) ($core['min'] ?? '');
+            $max = (string) ($core['max'] ?? '');
+            if (!$this->isCoreCompatible($min, $max)) {
+                continue;
+            }
+
+            $this->db->executePrepared(
+                'UPDATE sys_modules
+                 SET status = ?,
+                     last_error = NULL,
+                     date_updated = NOW()
+                 WHERE module_id = ?
+                   AND status = ?',
+                [self::STATUS_INACTIVE, (string) $moduleId, self::STATUS_ERROR],
+            );
+
+            $row->status = self::STATUS_INACTIVE;
+            $row->last_error = null;
+            $rows[$moduleId] = $row;
+        }
     }
 
     private function ensureInstalledRow(string $moduleId, array $manifest): void
@@ -1034,7 +1094,7 @@ class ModuleManager
                 }
                 $artifactScope = trim((string) ($artifact['scope'] ?? ''));
                 $payload = isset($artifact['payload']) ? json_encode($artifact['payload'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : '{}';
-                if (!is_string($payload) || $payload === '') {
+                if (!is_string($payload)) {
                     $payload = '{}';
                 }
                 $checksum = sha1($artifactType . '|' . $artifactKey . '|' . $artifactScope . '|' . $payload);
@@ -1159,9 +1219,18 @@ class ModuleManager
         return $artifacts;
     }
 
+    /** @return array<string,mixed> */
+    private function mysqlConfig(): array
+    {
+        if (!defined('DB')) {
+            return [];
+        }
+        return (array) DB['mysql'];
+    }
+
     private function openMysqli()
     {
-        $cfg = (defined('DB') && isset(DB['mysql']) && is_array(DB['mysql'])) ? DB['mysql'] : [];
+        $cfg = $this->mysqlConfig();
         $host = (string) ($cfg['host'] ?? 'localhost');
         $user = (string) ($cfg['user'] ?? 'root');
         $pwd = (string) ($cfg['pwd'] ?? '');

@@ -2,7 +2,6 @@
 
 use App\Services\AuthGoogleService;
 use App\Services\AuthService;
-use App\Services\NoveltyService;
 use App\Services\SystemEventService;
 use Core\AppContext;
 use Core\Hooks;
@@ -62,7 +61,7 @@ $route->get('/', function () use ($googleAuthBaseContext) {
     $newsFeed = [];
     $systemEventsFeed = [];
     try {
-        $newsFeed = (new NoveltyService($db))->listForHomepageFeed(6);
+        $newsFeed = Hooks::filter('novelty.homepage_feed', [], 6);
     } catch (\Throwable $e) {
         $newsFeed = [];
     }
@@ -114,23 +113,43 @@ $route->get('/auth/google/callback', function () {
     AuthGoogleService::handleCallback();
 });
 $route->get('/rules', function () use ($googleAuthBaseContext) {
+    $viewModes = (new \App\Services\SettingsService())->getDocsViewModes();
     return AppContext::templateRenderer()->render('rules.twig', [
         'google_auth' => $googleAuthBaseContext(),
+        'view_mode'   => $viewModes['rules_view_mode'],
     ]);
 });
 $route->apiPost('/rules/list', 'Rules@publicList');
 $route->get('/storyboard', function () use ($googleAuthBaseContext) {
+    $viewModes = (new \App\Services\SettingsService())->getDocsViewModes();
     return AppContext::templateRenderer()->render('storyboard.twig', [
         'google_auth' => $googleAuthBaseContext(),
+        'view_mode'   => $viewModes['storyboard_view_mode'],
     ]);
 });
 $route->apiPost('/storyboards/list', 'Storyboards@publicList');
 $route->get('/how-to-play', function () use ($googleAuthBaseContext) {
+    $viewModes = (new \App\Services\SettingsService())->getDocsViewModes();
     return AppContext::templateRenderer()->render('how_to_play.twig', [
         'google_auth' => $googleAuthBaseContext(),
+        'view_mode'   => $viewModes['how_to_play_view_mode'],
     ]);
 });
 $route->apiPost('/how-to-play/list', 'HowToPlays@publicList');
+$route->get('/archetypes', function () use ($googleAuthBaseContext) {
+    $viewModes = (new \App\Services\SettingsService())->getDocsViewModes();
+    return AppContext::templateRenderer()->render('public/archetypes.twig', [
+        'google_auth' => $googleAuthBaseContext(),
+        'view_mode'   => $viewModes['archetypes_view_mode'],
+    ]);
+});
+$route->get('/shared/chat-archive/{token}', function ($token) use ($googleAuthBaseContext) {
+    return AppContext::templateRenderer()->render('public/chat_archive_shared.twig', [
+        'google_auth'   => $googleAuthBaseContext(),
+        'archive_token' => $token,
+    ]);
+});
+
 $route->get('/reset-password/{token}', function ($token) use ($googleAuthBaseContext) {
     return AppContext::templateRenderer()->render('sys/reset_password.twig', [
         'token' => $token,

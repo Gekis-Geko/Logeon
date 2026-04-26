@@ -31,9 +31,6 @@ class TwigEnvironmentFactory
         $paths = is_array($viewsPath) ? $viewsPath : [$viewsPath];
         $loader = new \Twig\Loader\FilesystemLoader();
         foreach ($paths as $path) {
-            if (!is_string($path)) {
-                continue;
-            }
             $trimmed = trim($path);
             if ($trimmed === '') {
                 continue;

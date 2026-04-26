@@ -19,11 +19,13 @@
     {% set pilot_bundle_enabled = (CONFIG.debug|default(true) ? false : true) %}
 {% endif %}
 {% set pilot_bundle_version = APP.frontend.pilot_bundle_version|default('20260403') %}
-<script type="text/javascript" src="/assets/js/dist/admin-core.bundle.js?v={{ pilot_bundle_version }}"></script>
+<script type="module" src="/assets/js/dist/admin-core.bundle.js?v={{ pilot_bundle_version }}"></script>
 <script type="text/javascript">
     window.__APP_USE_PAGE_BUNDLES = {{ pilot_bundle_enabled ? 'true' : 'false' }};
 </script>
+{{ hook_scripts('admin')|raw }}
 {{ module_assets('admin')|raw }}
+<script type="module" src="/assets/js/dist/admin-bootstrap.bundle.js?v={{ pilot_bundle_version }}"></script>
 
 {% include 'sys/dialogs/general_confirm.twig' %}
 {% include 'sys/dialogs/general_dialog.twig' %}

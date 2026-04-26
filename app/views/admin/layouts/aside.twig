@@ -5,6 +5,25 @@
 {% set is_admin      = session('user_is_administrator') == 1 %}
 {% set is_moderator  = session('user_is_moderator') == 1 %}
 {% set is_master     = session('user_is_master') == 1 %}
+{% set narrative_delegation_enabled = (narrative_delegation_enabled|default(0)) == 1 %}
+
+{#
+  Build a section-key → items map for module entries whose section name matches a
+  hardcoded section already in this template.  Entries for unrecognised section names
+  are rendered as standalone blocks at the bottom of the sidebar.
+#}
+{% set _known_sec_keys = [
+    'utenti e personaggi', 'richieste e segnalazioni', 'oggetti',
+    'parametri ed entita',
+    'commercio', 'mondo e navigazione', 'narrativa', 'economia',
+    'gruppi e fazioni', 'comunicazione', 'documentazione', 'logs'
+] %}
+{% set _mod_sec = {} %}
+{% for _s in module_admin_sections %}
+    {% if _s.key in _known_sec_keys %}
+        {% set _mod_sec = _mod_sec|merge({(_s.key): _s.items}) %}
+    {% endif %}
+{% endfor %}
 
 <aside class="col-lg-3 col-xl-2 py-2 admin-aside">
     <div class="nav nav-pills justify-content-between admin-menu admin-menu-tools" aria-orientation="vertical">
@@ -43,14 +62,10 @@
             {% endif %}
             <a class="nav-link {{ admin_page == 'characters' ? 'active' : '' }}" href="/admin/characters">Personaggi</a>
             <a class="nav-link {{ admin_page == 'blacklist' ? 'active' : '' }}" href="/admin/blacklist">Blacklist</a>
-        </div>
-        {% endif %}
-
-        {% if is_superuser %}
-        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Parametri ed entita</h6>
-        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
-            <a class="nav-link {{ admin_page == 'archetypes' ? 'active' : '' }}" href="/admin/archetypes">Archetipi</a>
-            <a class="nav-link {{ admin_page == 'character-attributes' ? 'active' : '' }}" href="/admin/character-attributes">Attributi personaggio</a>
+            {% for _mi in _mod_sec['utenti e personaggi']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
@@ -59,6 +74,10 @@
         <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
             <a class="nav-link {{ admin_page == 'character-requests' ? 'active' : '' }}" href="/admin/character-requests">Richieste personaggio</a>
             <a class="nav-link {{ admin_page == 'message-reports' ? 'active' : '' }}" href="/admin/message-reports">Segnalazioni messaggi</a>
+            {% for _mi in _mod_sec['richieste e segnalazioni']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
@@ -70,20 +89,25 @@
             <a class="nav-link {{ admin_page in ['items-rarities', 'rarities'] ? 'active' : '' }}" href="/admin/items-rarities">Rarita oggetti</a>
             <a class="nav-link {{ admin_page == 'equipment-slots' ? 'active' : '' }}" href="/admin/equipment-slots">Slot equipaggiamento</a>
             <a class="nav-link {{ admin_page == 'item-equipment-rules' ? 'active' : '' }}" href="/admin/item-equipment-rules">Regole equipaggiamento</a>
+            {% for _mi in _mod_sec['oggetti']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
-        {% for module_section in module_admin_sections %}
-            <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> {{ module_section.title }}</h6>
-            <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
-                {% for menu_entry in module_section.items %}
-                    {% set module_page_active = (menu_entry.page is not empty and admin_page == menu_entry.page) %}
-                    <a class="nav-link {{ module_page_active ? 'active' : '' }}{% if menu_entry.class is not empty %} {{ menu_entry.class }}{% endif %}" href="{{ menu_entry.href }}"{% if menu_entry.target is not empty %} target="{{ menu_entry.target|e('html_attr') }}"{% endif %}{% if menu_entry.rel is not empty %} rel="{{ menu_entry.rel|e('html_attr') }}"{% endif %}>
-                        {% if menu_entry.icon is not empty %}<i class="{{ menu_entry.icon|e('html_attr') }} me-1"></i>{% endif %}{{ menu_entry.label }}
-                    </a>
-                {% endfor %}
-            </div>
-        {% endfor %}
+        {% if is_admin or is_superuser %}
+        {% set _parametri_items = _mod_sec['parametri ed entita']|default([]) %}
+        {% if _parametri_items is not empty %}
+        <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Parametri ed entita</h6>
+        <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+            {% for _mi in _parametri_items %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endif %}
 
         {% if is_admin or is_superuser %}
         <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Commercio</h6>
@@ -94,6 +118,10 @@
             {% endif %}
             <a class="nav-link {{ admin_page == 'shops' ? 'active' : '' }}" href="/admin/shops">Negozi</a>
             <a class="nav-link {{ admin_page in ['inventory-shop', 'inventory'] ? 'active' : '' }}" href="/admin/inventory-shop">Inventario negozi</a>
+            {% for _mi in _mod_sec['commercio']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
@@ -102,18 +130,17 @@
         <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
             <a class="nav-link {{ admin_page == 'maps' ? 'active' : '' }}" href="/admin/maps">Mappe</a>
             <a class="nav-link {{ admin_page == 'locations' ? 'active' : '' }}" href="/admin/locations">Luoghi</a>
-            <hr class="w-75 my-1" />
-            <a class="nav-link {{ admin_page in ['weather', 'weather-overview'] ? 'active' : '' }}" href="/admin/weather-overview">Panoramica meteo</a>
-            <a class="nav-link {{ admin_page == 'weather-catalogs' ? 'active' : '' }}" href="/admin/weather-catalogs">Cataloghi meteo</a>
-            <a class="nav-link {{ admin_page == 'weather-profiles' ? 'active' : '' }}" href="/admin/weather-profiles">Profili e assegnazioni</a>
-            <a class="nav-link {{ admin_page == 'weather-overrides' ? 'active' : '' }}" href="/admin/weather-overrides">Override e legacy</a>
+            <a class="nav-link {{ admin_page == 'location-position-tags' ? 'active' : '' }}" href="/admin/location-position-tags">Tag di posizione</a>
+            {% for _mi in _mod_sec['mondo e navigazione']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
         {% if is_master or is_moderator or is_admin or is_superuser %}
         <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Narrativa</h6>
         <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
-            <a class="nav-link {{ admin_page == 'quests' ? 'active' : '' }}" href="/admin/quests">Quest</a>
             <a class="nav-link {{ admin_page == 'narrative-events' ? 'active' : '' }}" href="/admin/narrative-events">Attivita recenti</a>
             <a class="nav-link {{ admin_page == 'system-events' ? 'active' : '' }}" href="/admin/system-events">Eventi di sistema</a>
             {% if is_superuser %}
@@ -126,9 +153,15 @@
             {% endif %}
             {% if is_superuser %}
             <hr class="w-75 my-1" />
+            {% if narrative_delegation_enabled %}
             <a class="nav-link {{ admin_page == 'narrative-delegation-grants' ? 'active' : '' }}" href="/admin/narrative-delegation-grants">Permessi narrativi</a>
+            {% endif %}
             <a class="nav-link {{ admin_page == 'narrative-npcs' ? 'active' : '' }}" href="/admin/narrative-npcs">PNG Leggeri</a>
             {% endif %}
+            {% for _mi in _mod_sec['narrativa']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
@@ -138,37 +171,39 @@
             <a class="nav-link {{ admin_page == 'jobs' ? 'active' : '' }}" href="/admin/jobs">Lavori</a>
             <a class="nav-link {{ admin_page == 'jobs-tasks' ? 'active' : '' }}" href="/admin/jobs-tasks">Compiti lavori</a>
             <a class="nav-link {{ admin_page == 'jobs-levels' ? 'active' : '' }}" href="/admin/jobs-levels">Livelli lavori</a>
+            {% for _mi in _mod_sec['economia']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
         {% if is_moderator or is_admin or is_superuser %}
         <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Gruppi e fazioni</h6>
         <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
-            {% if is_superuser %}
-            <a class="nav-link {{ admin_page == 'social-status' ? 'active' : '' }}" href="/admin/social-status">Stati sociali</a>
-            {% endif %}
             {% if is_admin or is_superuser %}
-            {% if is_superuser %}<hr class="w-75 my-1" />{% endif %}
             <a class="nav-link {{ admin_page == 'guilds' ? 'active' : '' }}" href="/admin/guilds">Gilde</a>
             <a class="nav-link {{ admin_page == 'guild-alignments' ? 'active' : '' }}" href="/admin/guild-alignments">Allineamento gilde</a>
             <a class="nav-link {{ admin_page in ['guilds-reqs', 'guild-reqs'] ? 'active' : '' }}" href="/admin/guilds-reqs">Requisiti gilde</a>
             <a class="nav-link {{ admin_page in ['guilds-locations', 'guild-locations'] ? 'active' : '' }}" href="/admin/guilds-locations">Luoghi gilde</a>
             {% endif %}
             <a class="nav-link {{ admin_page == 'guilds-events' ? 'active' : '' }}" href="/admin/guilds-events">Eventi gilde</a>
-            {% if is_superuser %}
-            <hr class="w-75 my-1" />
-            <a class="nav-link {{ admin_page == 'factions' ? 'active' : '' }}" href="/admin/factions">Fazioni</a>
-            {% endif %}
+            {% for _mi in _mod_sec['gruppi e fazioni']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
         {% if is_superuser %}
         <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> Comunicazione</h6>
         <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
-            <a class="nav-link {{ admin_page == 'news' ? 'active' : '' }}" href="/admin/news">News</a>
-            <hr class="w-75 my-1" />
             <a class="nav-link {{ admin_page == 'forums' ? 'active' : '' }}" href="/admin/forums">Forum</a>
             <a class="nav-link {{ admin_page == 'forums-types' ? 'active' : '' }}" href="/admin/forums-types">Categorie forum</a>
+            {% for _mi in _mod_sec['comunicazione']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
@@ -178,6 +213,10 @@
             <a class="nav-link {{ admin_page == 'storyboards' ? 'active' : '' }}" href="/admin/storyboards">Ambientazione</a>
             <a class="nav-link {{ admin_page == 'rules' ? 'active' : '' }}" href="/admin/rules">Regolamento</a>
             <a class="nav-link {{ admin_page == 'how-to-play' ? 'active' : '' }}" href="/admin/how-to-play">Come giocare</a>
+            {% for _mi in _mod_sec['documentazione']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
 
@@ -195,7 +234,23 @@
             <a class="nav-link {{ admin_page == 'logs-sys' ? 'active' : '' }}" href="/admin/logs-sys">Logs sistema</a>
             <a class="nav-link {{ admin_page == 'logs-narrative' ? 'active' : '' }}" href="/admin/logs-narrative">Log narrativi</a>
             {% endif %}
+            {% for _mi in _mod_sec['logs']|default([]) %}
+                {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+            {% endfor %}
         </div>
         {% endif %}
+
+        {% for _s in module_admin_sections %}
+            {% if _s.key not in _known_sec_keys %}
+            <h6 class="my-3 admin-menu-section"><i class="bi bi-chevron-double-right"></i> {{ _s.title }}</h6>
+            <div class="nav flex-column nav-pills admin-menu" aria-orientation="vertical">
+                {% for _mi in _s.items %}
+                    {% set _mi_active = _mi.page is not empty and admin_page == _mi.page %}
+                    <a class="nav-link {{ _mi_active ? 'active' : '' }}{% if _mi.class is not empty %} {{ _mi.class }}{% endif %}" href="{{ _mi.href }}"{% if _mi.target is not empty %} target="{{ _mi.target|e('html_attr') }}"{% endif %}{% if _mi.rel is not empty %} rel="{{ _mi.rel|e('html_attr') }}"{% endif %}>{% if _mi.icon is not empty %}<i class="{{ _mi.icon|e('html_attr') }} me-1"></i>{% endif %}{{ _mi.label }}</a>
+                {% endfor %}
+            </div>
+            {% endif %}
+        {% endfor %}
     </section>
 </aside>

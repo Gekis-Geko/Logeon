@@ -540,7 +540,7 @@ class NarrativeStateApplicationService
                 ans.state_id,
                 ans.stacks,
                 ans.intensity,
-                ans.applied_at,
+                ans.started_at    AS applied_at,
                 ans.expires_at,
                 ns.code,
                 ns.name,
@@ -558,7 +558,7 @@ class NarrativeStateApplicationService
                AND ans.status = "active"
                AND ns.is_active = 1
                AND ns.visible_to_players = 1
-             ORDER BY ns.priority DESC, ans.applied_at ASC',
+             ORDER BY ns.priority DESC, ans.started_at ASC',
             [$characterId],
         );
         return $rows ?: [];

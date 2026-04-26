@@ -209,7 +209,6 @@ class MessageReportService
                    AND (is_administrator = 1 OR is_moderator = 1)
                  LIMIT 50',
             );
-            $staffRows = is_array($staffRows) ? $staffRows : [];
 
             if (empty($staffRows)) {
                 return;
@@ -306,7 +305,7 @@ class MessageReportService
         }
 
         $chunks = explode('|', $sort);
-        $sortField = in_array(($chunks[0] ?? ''), ['id', 'created_at', 'status', 'priority', 'updated_at'], true)
+        $sortField = in_array($chunks[0], ['id', 'created_at', 'status', 'priority', 'updated_at'], true)
             ? 'mr.' . $chunks[0]
             : 'mr.created_at';
         $sortDir = strtoupper((string) ($chunks[1] ?? 'DESC')) === 'ASC' ? 'ASC' : 'DESC';
@@ -329,7 +328,6 @@ class MessageReportService
              LIMIT ? OFFSET ?',
             array_merge($params, [$limit, $offset]),
         );
-        $rows = is_array($rows) ? $rows : [];
 
         $dataset = [];
         foreach ($rows as $row) {

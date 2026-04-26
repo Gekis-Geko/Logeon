@@ -18,7 +18,6 @@ class AuthGuard
     ];
 
     private const STAFF_ABILITIES = [
-        'weather.manage.location',
         'location.invisible',
         'location.moderation',
     ];
@@ -43,49 +42,49 @@ class AuthGuard
 
     public static function setDbAdapter(DbAdapterInterface $adapter = null): void
     {
-        static::$dbAdapter = $adapter;
+        self::$dbAdapter = $adapter;
     }
 
     public static function setDbProvider(DbConnectionProviderInterface $provider = null): void
     {
-        static::$dbProvider = $provider;
+        self::$dbProvider = $provider;
     }
 
     public static function resetRuntimeState(): void
     {
-        static::$dbAdapter = null;
-        static::$dbProvider = null;
-        static::$session = null;
+        self::$dbAdapter = null;
+        self::$dbProvider = null;
+        self::$session = null;
     }
 
     private static function db(): DbAdapterInterface
     {
-        if (static::$dbAdapter instanceof DbAdapterInterface) {
-            return static::$dbAdapter;
+        if (self::$dbAdapter instanceof DbAdapterInterface) {
+            return self::$dbAdapter;
         }
 
-        if (static::$dbProvider instanceof DbConnectionProviderInterface) {
-            static::$dbAdapter = static::$dbProvider->connection();
-            return static::$dbAdapter;
+        if (self::$dbProvider instanceof DbConnectionProviderInterface) {
+            self::$dbAdapter = self::$dbProvider->connection();
+            return self::$dbAdapter;
         }
 
-        static::$dbAdapter = AppContext::dbProvider()->connection();
-        return static::$dbAdapter;
+        self::$dbAdapter = AppContext::dbProvider()->connection();
+        return self::$dbAdapter;
     }
 
     public static function setSession(SessionInterface $session = null): void
     {
-        static::$session = $session;
+        self::$session = $session;
     }
 
     private static function session(): SessionInterface
     {
-        if (static::$session instanceof SessionInterface) {
-            return static::$session;
+        if (self::$session instanceof SessionInterface) {
+            return self::$session;
         }
 
-        static::$session = AppContext::session();
-        return static::$session;
+        self::$session = AppContext::session();
+        return self::$session;
     }
 
     public static function api(): self
@@ -105,12 +104,12 @@ class AuthGuard
 
     public static function isAdmin(): bool
     {
-        return (static::getSessionFlag('user_is_administrator') === 1);
+        return (self::getSessionFlag('user_is_administrator') === 1);
     }
 
     public static function isSuperuser(): bool
     {
-        return (static::getSessionFlag('user_is_superuser') === 1);
+        return (self::getSessionFlag('user_is_superuser') === 1);
     }
 
     public static function isStaff(): bool
@@ -120,17 +119,17 @@ class AuthGuard
 
     public static function isModerator(): bool
     {
-        return (static::getSessionFlag('user_is_moderator') === 1);
+        return (self::getSessionFlag('user_is_moderator') === 1);
     }
 
     public static function isMaster(): bool
     {
-        return (static::getSessionFlag('user_is_master') === 1);
+        return (self::getSessionFlag('user_is_master') === 1);
     }
 
     public static function isAuthenticated(): bool
     {
-        return ((int) static::session()->get('user_id')) > 0;
+        return ((int) self::session()->get('user_id')) > 0;
     }
 
     /**
@@ -167,27 +166,30 @@ class AuthGuard
             return true;
         }
         $ownerUserId = (int) $ownerUserId;
-        $me = (int) static::session()->get('user_id');
+        $me = (int) self::session()->get('user_id');
 
         return $ownerUserId > 0 && $me > 0 && $ownerUserId === $me;
     }
 
     public static function can($ability, array $context = []): bool
     {
-        $ability = static::normalizeAbility($ability);
+        $ability = self::normalizeAbility($ability);
         if ($ability === '') {
             return false;
         }
 
-        if (in_array($ability, self::ADMIN_ABILITIES, true)) {
+        $adminAbilities = self::resolveAbilityList('auth.abilities.admin', self::ADMIN_ABILITIES);
+        if (in_array($ability, $adminAbilities, true)) {
             return static::isAdmin();
         }
 
-        if (in_array($ability, self::STAFF_ABILITIES, true)) {
+        $staffAbilities = self::resolveAbilityList('auth.abilities.staff', self::STAFF_ABILITIES);
+        if (in_array($ability, $staffAbilities, true)) {
             return static::isStaff();
         }
 
-        if (in_array($ability, self::AUTHENTICATED_ABILITIES, true)) {
+        $authenticatedAbilities = self::resolveAbilityList('auth.abilities.authenticated', self::AUTHENTICATED_ABILITIES);
+        if (in_array($ability, $authenticatedAbilities, true)) {
             return static::isAuthenticated();
         }
 
@@ -228,12 +230,12 @@ class AuthGuard
         }
 
         if ($invitePolicy === 2) {
-            throw AppError::validation(static::policyMessage($message, 'Questo personaggio non accetta inviti'));
+            throw AppError::validation(self::policyMessage($message, 'Questo personaggio non accetta inviti'));
         }
 
         if ($invitePolicy === 1) {
-            if (!static::hasSharedGuild($ownerCharacterId, $targetCharacterId)) {
-                throw AppError::validation(static::policyMessage($message, 'Questo personaggio accetta inviti solo dalla gilda'));
+            if (!self::hasSharedGuild($ownerCharacterId, $targetCharacterId)) {
+                throw AppError::validation(self::policyMessage($message, 'Questo personaggio accetta inviti solo dalla gilda'));
             }
         }
     }
@@ -245,12 +247,12 @@ class AuthGuard
         }
 
         if ($dmPolicy === 2) {
-            throw AppError::validation(static::policyMessage($message, 'Questo personaggio non accetta messaggi privati'));
+            throw AppError::validation(self::policyMessage($message, 'Questo personaggio non accetta messaggi privati'));
         }
 
         if ($dmPolicy === 1) {
-            if (!static::hasSharedGuild($senderCharacterId, $targetCharacterId)) {
-                throw AppError::validation(static::policyMessage($message, 'Questo personaggio accetta messaggi solo dai membri della stessa gilda'));
+            if (!self::hasSharedGuild($senderCharacterId, $targetCharacterId)) {
+                throw AppError::validation(self::policyMessage($message, 'Questo personaggio accetta messaggi solo dai membri della stessa gilda'));
             }
         }
     }
@@ -321,12 +323,12 @@ class AuthGuard
 
     private function getSessionValue($key)
     {
-        return static::session()->get((string) $key);
+        return self::session()->get((string) $key);
     }
 
     private static function getSessionFlag(string $key): int
     {
-        return (int) static::session()->get($key);
+        return (int) self::session()->get($key);
     }
 
     private static function normalizeAbility($ability): string
@@ -346,12 +348,41 @@ class AuthGuard
 
     private static function hasSharedGuild(int $sourceCharacterId, int $targetCharacterId): bool
     {
-        return static::sharedGuildCount($sourceCharacterId, $targetCharacterId) > 0;
+        return self::sharedGuildCount($sourceCharacterId, $targetCharacterId) > 0;
+    }
+
+    /**
+     * @param array<int,string> $defaults
+     * @return array<int,string>
+     */
+    private static function resolveAbilityList(string $hookName, array $defaults): array
+    {
+        if (!class_exists('\\Core\\Hooks')) {
+            return $defaults;
+        }
+
+        $filtered = \Core\Hooks::filter($hookName, $defaults);
+        if (!is_array($filtered)) {
+            return $defaults;
+        }
+
+        $result = [];
+        foreach ($filtered as $value) {
+            $ability = trim((string) $value);
+            if ($ability === '') {
+                continue;
+            }
+            if (!in_array($ability, $result, true)) {
+                $result[] = $ability;
+            }
+        }
+
+        return $result;
     }
 
     private static function sharedGuildCount(int $sourceCharacterId, int $targetCharacterId): int
     {
-        $shared = static::db()->fetchOnePrepared(
+        $shared = self::db()->fetchOnePrepared(
             'SELECT COUNT(*) AS tot
              FROM guild_members gm1
              INNER JOIN guild_members gm2 ON gm1.guild_id = gm2.guild_id

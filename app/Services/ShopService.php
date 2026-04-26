@@ -197,7 +197,7 @@ class ShopService
 
     public function getSellRatio(): float
     {
-        if (defined('APP') && isset(APP['shop']) && isset(APP['shop']['sell_ratio'])) {
+        if (defined('APP')) {
             return (float) APP['shop']['sell_ratio'];
         }
 
@@ -232,15 +232,7 @@ class ShopService
             return 0;
         }
 
-        $row = $this->firstPrepared(
-            'SELECT ss.shop_discount
-            FROM characters c
-            LEFT JOIN social_status ss ON c.socialstatus_id = ss.id
-            WHERE c.id = ?',
-            [$characterId],
-        );
-
-        $discount = (!empty($row) && isset($row->shop_discount)) ? (int) $row->shop_discount : 0;
+        $discount = (int) floor(SocialStatusProviderRegistry::getShopDiscount($characterId));
         if ($discount < 0) {
             $discount = 0;
         }
@@ -572,27 +564,9 @@ class ShopService
         throw AppError::validation((string) $message, [], $errorCode);
     }
 
-    private function failInsufficientFunds($balance, $total, $qty, $unitPrice, $currencyId, $account, $characterId = null, $shopItemId = null): void
+    private function failInsufficientFunds(): void
     {
-        $message = 'Fondi insufficienti';
-        $isDebug = (defined('CONFIG') && isset(CONFIG['debug']) && CONFIG['debug'] === true);
-        if ($isDebug) {
-            $message .= ' [saldo=' . (int) $balance
-                . ', totale=' . (int) $total
-                . ', qty=' . (int) $qty
-                . ', unit=' . (int) $unitPrice
-                . ', currency=' . (int) $currencyId
-                . ', account=' . (string) $account;
-            if ($characterId !== null) {
-                $message .= ', character=' . (int) $characterId;
-            }
-            if ($shopItemId !== null) {
-                $message .= ', shop_item=' . (int) $shopItemId;
-            }
-            $message .= ']';
-        }
-
-        $this->failValidation($message, 'insufficient_funds');
+        $this->failValidation('Fondi insufficienti', 'insufficient_funds');
     }
 
     public function buy($characterId, $data): array
@@ -705,7 +679,7 @@ class ShopService
 
                     $balanceBefore = (int) $character->money;
                     if ($balanceBefore < $total) {
-                        $this->failInsufficientFunds($balanceBefore, $total, $qty, $unitPrice, $currencyId, 'money', $characterId, $shopItemId);
+                        $this->failInsufficientFunds();
                     }
 
                     $this->execPrepared(
@@ -726,7 +700,7 @@ class ShopService
 
                     $balanceBefore = (!empty($wallet)) ? (int) $wallet->balance : 0;
                     if ($balanceBefore < $total) {
-                        $this->failInsufficientFunds($balanceBefore, $total, $qty, $unitPrice, $currencyId, 'wallet', $characterId, $shopItemId);
+                        $this->failInsufficientFunds();
                     }
 
                     $this->execPrepared(

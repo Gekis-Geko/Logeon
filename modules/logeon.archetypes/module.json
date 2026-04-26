@@ -1,0 +1,72 @@
+{
+  "id": "logeon.archetypes",
+  "name": "Logeon Archetypes",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo Archetipi: provider runtime agganciato via hook character.archetype.provider.",
+  "category": "gameplay",
+  "class": "bundled",
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "requires": [],
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "menus": {
+    "public": {
+      "navbar": [
+        {
+          "label": "Archetipi",
+          "href": "/archetypes",
+          "icon": "bi bi-person-badge",
+          "order": 30
+        }
+      ]
+    },
+    "game": {
+      "info_dropdown": [
+        {
+          "label": "Archetipi",
+          "href": "/game/archetypes",
+          "icon": "bi bi-person-badge",
+          "order": 220
+        }
+      ],
+      "info_offcanvas": [
+        {
+          "label": "Archetipi",
+          "href": "/game/archetypes",
+          "icon": "bi bi-person-badge",
+          "order": 220
+        }
+      ]
+    },
+    "admin": {
+      "aside": [
+        {
+          "label": "Archetipi",
+          "href": "/admin/archetypes",
+          "icon": "bi bi-person-badge",
+          "page": "archetypes",
+          "section": "Parametri ed entita",
+          "section_order": 20,
+          "order": 120
+        }
+      ]
+    }
+  },
+  "features": [
+    "character.archetype.provider.override"
+  ],
+  "assets": {
+    "admin": {
+      "js": ["dist/admin.js"]
+    },
+    "game": {
+      "js": ["dist/game.js"]
+    }
+  }
+}

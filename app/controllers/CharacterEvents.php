@@ -10,7 +10,7 @@ use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
 
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class CharacterEvents extends CharacterEvent
@@ -32,7 +32,7 @@ class CharacterEvents extends CharacterEvent
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -138,13 +138,11 @@ class CharacterEvents extends CharacterEvent
         $data = $this->requestDataObject();
 
         $character_id = InputValidator::integer($data, 'character_id', $me);
-        if (!$this->canManage($character_id, $me)) {
-            $this->failUnauthorized('Accesso non autorizzato', 'event_forbidden');
-        }
-
-        $rows = $this->eventService()->listByCharacter($character_id);
-
         $can_manage = $this->canManage($character_id, $me);
+        $rows = $can_manage
+            ? $this->eventService()->listByCharacter($character_id)
+            : $this->eventService()->listPublicByCharacter($character_id);
+
         if (!empty($rows)) {
             foreach ($rows as $row) {
                 $row->can_edit = $can_manage ? 1 : 0;
@@ -242,3 +240,5 @@ class CharacterEvents extends CharacterEvent
         ]));
     }
 }
+
+

@@ -10,7 +10,7 @@ use Core\Http\ApiResponse;
 use Core\Http\AppError;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\Models\ListQuery;
 use Core\Models\ModelAudit;
@@ -53,22 +53,22 @@ class Models
         return static::db()->query((string) $sql);
     }
 
-    public static function safe($value, $quotes = true)
+    public static function safe(mixed $value, bool $quotes = true): string|array
     {
         return static::db()->safe($value, $quotes);
     }
 
-    public static function ifNotNull($value, $altvalue = false)
+    public static function ifNotNull(mixed $value, mixed $altvalue = false): mixed
     {
         return static::db()->ifNotNull($value, $altvalue);
     }
 
-    public static function crypt($value)
+    public static function crypt(mixed $value): string
     {
         return static::db()->crypt($value);
     }
 
-    public static function decrypt($value, $alias = false)
+    public static function decrypt(mixed $value, mixed $alias = false): string
     {
         return static::db()->decrypt($value, $alias);
     }
@@ -198,7 +198,7 @@ class Models
             return static::$loggerAdapter;
         }
 
-        static::$loggerAdapter = new LegacyLoggerAdapter();
+        static::$loggerAdapter = \Core\AppContext::logger();
         return static::$loggerAdapter;
     }
 
@@ -211,7 +211,7 @@ class Models
     {
         $this->trace('Richiamato il metodo: ' . __METHOD__);
 
-        $field = (null == $field || $field === '') ? $this->primary_key : $field;
+        $field = (null == $field) ? $this->primary_key : $field;
         $field = $this->sanitizeIdentifier($field, $this->primary_key);
         if (strpos($field, '.') === false) {
             $field = $this->table . '.' . $field;
@@ -458,3 +458,5 @@ class Models
     }
 
 }
+
+

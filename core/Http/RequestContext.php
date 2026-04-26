@@ -28,10 +28,7 @@ class RequestContext
     public static function headers(): array
     {
         if (function_exists('getallheaders')) {
-            $headers = getallheaders();
-            if ($headers !== false && is_array($headers)) {
-                return $headers;
-            }
+            return getallheaders();
         }
 
         $server = static::server();

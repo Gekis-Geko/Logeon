@@ -196,7 +196,7 @@ class SystemEventService
         );
         $event['narrative_tag_ids'] = array_map(static function ($tag): int {
             return (int) ($tag['id'] ?? 0);
-        }, is_array($event['narrative_tags']) ? $event['narrative_tags'] : []);
+        }, $event['narrative_tags']);
         return $event;
     }
 
@@ -305,7 +305,7 @@ class SystemEventService
             $where[] = '(' . implode(' OR ', $visibilityClauses) . ')';
         }
 
-        $whereClause = ($where === []) ? '' : ('WHERE ' . implode(' AND ', $where));
+        $whereClause = 'WHERE ' . implode(' AND ', $where);
 
         $totalRow = $this->firstPrepared(
             'SELECT COUNT(*) AS n
@@ -479,7 +479,7 @@ class SystemEventService
 
         $allowedSortFields = ['id', 'title', 'type', 'status', 'visibility', 'show_on_homepage_feed', 'scope_type', 'participant_mode', 'starts_at', 'ends_at', 'date_created'];
         $sortChunks = explode('|', (string) $sort);
-        $sortField = in_array($sortChunks[0] ?? '', $allowedSortFields, true) ? $sortChunks[0] : 'id';
+        $sortField = in_array($sortChunks[0], $allowedSortFields, true) ? $sortChunks[0] : 'id';
         $sortDirection = (strtoupper($sortChunks[1] ?? 'DESC') === 'ASC') ? 'ASC' : 'DESC';
 
         $whereClause = empty($where) ? '' : ('WHERE ' . implode(' AND ', $where));
@@ -579,10 +579,10 @@ class SystemEventService
             ['none', 'daily', 'weekly', 'monthly'],
             'none',
         );
-        $nextRunAt = ($status === self::STATUS_SCHEDULED && $startsAt !== null) ? $startsAt : null;
+        $nextRunAt = ($status === self::STATUS_SCHEDULED) ? $startsAt : null;
 
         $metaJson = json_encode((array) ($data['meta_json'] ?? []), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        if (!is_string($metaJson) || $metaJson === '') {
+        if (!is_string($metaJson)) {
             $metaJson = '{}';
         }
 
@@ -730,7 +730,7 @@ class SystemEventService
 
         if (array_key_exists('meta_json', $data)) {
             $metaJson = json_encode((array) $data['meta_json'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            if (!is_string($metaJson) || $metaJson === '') {
+            if (!is_string($metaJson)) {
                 $metaJson = '{}';
             }
             $fields[] = 'meta_json = ?';

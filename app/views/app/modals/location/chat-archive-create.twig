@@ -1,0 +1,87 @@
+<div class="modal fade" id="chat-archive-create-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><i class="bi bi-archive me-2"></i>Nuovo salvataggio di giocata</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <div class="alert alert-warning small mb-0">
+                            Questa giocata e uno snapshot selezionato dall'autore e potrebbe non includere l'intera scena.
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label for="ca-loc-title" class="form-label">Titolo <span class="text-danger">*</span></label>
+                        <input type="text" id="ca-loc-title" class="form-control" maxlength="255" placeholder="Es. La notte alla Locanda del Gufo">
+                    </div>
+                    <div class="col-12">
+                        <label for="ca-loc-description" class="form-label">Note (opzionale)</label>
+                        <textarea id="ca-loc-description" class="form-control" rows="2" placeholder="Note personali sulla sessione..."></textarea>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="ca-loc-started-at" class="form-label">Da <span class="text-danger">*</span></label>
+                        <input type="datetime-local" id="ca-loc-started-at" class="form-control">
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label for="ca-loc-ended-at" class="form-label">A <span class="text-danger">*</span></label>
+                        <input type="datetime-local" id="ca-loc-ended-at" class="form-control">
+                    </div>
+
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label class="form-label mb-0">Partecipanti</label>
+                            <div class="text-muted small">
+                                <span id="ca-loc-participants-counter">0</span> / <span id="ca-loc-participants-total">0</span> selezionati
+                            </div>
+                        </div>
+                        <div id="ca-loc-participants-empty" class="text-muted small d-none">Carica i messaggi per scegliere i partecipanti da includere.</div>
+                        <div id="ca-loc-participants-list" class="chat-archive-picker-list border rounded d-none"></div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <label class="form-label mb-0">Messaggi da includere</label>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" data-action="ca-loc-load-messages">
+                                    <i class="bi bi-search me-1"></i>Carica messaggi
+                                </button>
+                                <button type="button" id="ca-loc-select-all-btn" class="btn btn-sm btn-outline-primary" data-action="ca-loc-select-all" disabled>
+                                    Seleziona tutti
+                                </button>
+                            </div>
+                        </div>
+                        <div id="ca-loc-messages-loading" class="text-muted small d-none">Caricamento messaggi...</div>
+                        <div id="ca-loc-messages-empty" class="text-muted small d-none">Nessun messaggio trovato nell'intervallo selezionato.</div>
+                        <div id="ca-loc-messages-list" class="chat-archive-picker-list border rounded"></div>
+                        <div class="text-muted small mt-1">
+                            <span id="ca-loc-messages-counter">0</span> / <span id="ca-loc-messages-total">0</span> messaggi selezionati
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div id="ca-loc-summary" class="alert alert-secondary d-none mb-0">
+                            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                <span id="ca-loc-summary-badge" class="badge text-bg-success">Completo</span>
+                                <span class="small text-muted">Anteprima trasparenza snapshot</span>
+                            </div>
+                            <div class="small">Messaggi inclusi: <span id="ca-loc-summary-messages-included">0</span> / <span id="ca-loc-summary-messages-total">0</span></div>
+                            <div class="small">Partecipanti inclusi: <span id="ca-loc-summary-participants-included">0</span> / <span id="ca-loc-summary-participants-total">0</span></div>
+                            <div id="ca-loc-summary-excluded-wrap" class="small mt-2 d-none">
+                                Partecipanti esclusi:
+                                <span id="ca-loc-summary-excluded" class="text-muted"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" data-action="ca-loc-save">
+                    <i class="bi bi-floppy me-1"></i>Salva giocata
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -54,11 +54,9 @@ class Themes
         );
 
         $map = [];
-        if (is_array($rows)) {
-            foreach ($rows as $row) {
-                if (!empty($row) && isset($row->key)) {
-                    $map[(string) $row->key] = isset($row->value) ? (string) $row->value : '';
-                }
+        foreach ($rows as $row) {
+            if (!empty($row) && isset($row->key)) {
+                $map[(string) $row->key] = isset($row->value) ? (string) $row->value : '';
             }
         }
 
@@ -169,7 +167,7 @@ class Themes
                     $parts[] = trim((string) $value);
                 }
             }
-            return ($parts === []) ? '-' : implode(' | ', $parts);
+            return implode(' | ', $parts);
         }
         return '-';
     }
@@ -196,8 +194,7 @@ class Themes
                     }
                 }
             }
-            if (is_array($entries)) {
-                foreach ($entries as $entry) {
+            foreach ($entries as $entry) {
                     $themeId = trim((string) $entry);
                     if ($themeId === '' || $themeId === '.' || $themeId === '..') {
                         continue;
@@ -252,17 +249,16 @@ class Themes
                         'errors' => array_values(array_unique($errors)),
                     ];
                 }
-            }
         }
 
         usort($dataset, static function ($a, $b) {
-            $aActive = (int) ($a['is_active'] ?? 0);
-            $bActive = (int) ($b['is_active'] ?? 0);
+            $aActive = (int) $a['is_active'];
+            $bActive = (int) $b['is_active'];
             if ($aActive !== $bActive) {
                 return ($aActive > $bActive) ? -1 : 1;
             }
-            $aName = strtolower((string) ($a['name'] ?? $a['id'] ?? ''));
-            $bName = strtolower((string) ($b['name'] ?? $b['id'] ?? ''));
+            $aName = strtolower($a['name'] !== '' ? $a['name'] : $a['id']);
+            $bName = strtolower($b['name'] !== '' ? $b['name'] : $b['id']);
             return strcmp($aName, $bName);
         });
 

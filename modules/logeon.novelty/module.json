@@ -1,0 +1,37 @@
+{
+  "id": "logeon.novelty",
+  "name": "Logeon Novelty",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo novelty/news: feed homepage e API news agganciati via runtime moduli.",
+  "category": "gameplay",
+  "class": "bundled",
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "requires": [],
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "News",
+          "href": "/admin/news",
+          "icon": "bi bi-megaphone",
+          "page": "news",
+          "section": "Comunicazione",
+          "section_order": 45,
+          "order": 100
+        }
+      ]
+    }
+  },
+  "features": [
+    "novelty.homepage_feed",
+    "novelty.routes"
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "logeon.attributes",
+  "name": "Logeon Attributes",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo Attributi personaggio: provider runtime e API attributi agganciati via hook.",
+  "category": "gameplay",
+  "class": "bundled",
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "requires": [],
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "assets": {
+    "admin": {
+      "js": ["dist/admin.js"]
+    }
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Attributi personaggio",
+          "href": "/admin/character-attributes",
+          "icon": "bi bi-sliders",
+          "page": "character-attributes",
+          "section": "Parametri ed entita",
+          "section_order": 20,
+          "order": 115
+        }
+      ]
+    }
+  },
+  "features": [
+    "attribute.provider.override",
+    "attributes.routes",
+    "attributes.admin.page"
+  ]
+}

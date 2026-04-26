@@ -121,7 +121,7 @@ class NarrativeDomainService
     private function toJson($value): string
     {
         $json = json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        if (!is_string($json) || $json === '') {
+        if (!is_string($json)) {
             return '{}';
         }
         return $json;

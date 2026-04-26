@@ -32,6 +32,8 @@ if (is_file($customBootstrap)) {
 }
 
 use App\Services\SystemEventService;
+use App\Services\FactionProviderRegistry;
+use App\Contracts\FactionProviderInterface;
 use Core\Database\DbAdapterFactory;
 use Core\Database\MysqliDbAdapter;
 
@@ -45,6 +47,52 @@ function seSmokeAssert(bool $condition, string $message): void
 function seSmokeStep(string $label): void
 {
     fwrite(STDOUT, "[STEP] {$label}\n");
+}
+
+final class SystemEventsSmokeFactionProvider implements FactionProviderInterface
+{
+    public function existsById(int $id): bool
+    {
+        return $id > 0;
+    }
+
+    public function getNameById(int $id): ?string
+    {
+        return $id > 0 ? 'Smoke Faction' : null;
+    }
+
+    /**
+     * @return array<int,array{id:int,label:string,secondary:string}>
+     */
+    public function search(string $needle, int $limit): array
+    {
+        return [];
+    }
+
+    public function getMembershipsForCharacter(int $characterId): array
+    {
+        return [];
+    }
+
+    public function getActiveCharacterIdsForFactions(array $factionIds): array
+    {
+        return [];
+    }
+
+    public function joinEventAsFaction(int $factionId, int $eventId, int $characterId): bool
+    {
+        return true;
+    }
+
+    public function leaveEventAsFaction(int $factionId, int $eventId, int $characterId): bool
+    {
+        return true;
+    }
+
+    public function inviteFactionToEvent(int $factionId, int $eventId, int $inviterCharacterId): bool
+    {
+        return true;
+    }
 }
 
 try {
@@ -70,6 +118,7 @@ try {
 
     $service = new SystemEventService($db);
     seSmokeAssert($service->isEnabled(), 'System events feature is disabled (sys_configs.system_events_enabled=0).');
+    FactionProviderRegistry::resetRuntimeState();
 
     $marker = 'smoke_se_' . date('Ymd_His') . '_' . mt_rand(1000, 9999);
     $createdIds = [];
@@ -130,6 +179,49 @@ try {
         seSmokeAssert(in_array((string) ($leave['status'] ?? ''), ['left', 'removed'], true), 'Leave participation failed.');
         $checks++;
 
+        seSmokeStep('faction participation provider fallback no-op');
+        $factionEvent = $service->create([
+            'title' => 'Smoke Faction Event ' . $marker,
+            'description' => 'Runtime smoke faction event.',
+            'type' => 'general',
+            'status' => 'scheduled',
+            'visibility' => 'public',
+            'scope_type' => 'global',
+            'scope_id' => 0,
+            'participant_mode' => 'faction',
+            'starts_at' => date('Y-m-d H:i:s', time() - 120),
+            'ends_at' => date('Y-m-d H:i:s', time() + 900),
+            'recurrence' => 'none',
+        ], $characterId);
+        $factionEventId = (int) ($factionEvent['id'] ?? 0);
+        seSmokeAssert($factionEventId > 0, 'Faction event creation failed.');
+        $createdIds[] = $factionEventId;
+
+        $factionId = 1;
+        $factionRow = $db->query('SELECT id FROM factions ORDER BY id ASC LIMIT 1')->first();
+        if (!empty($factionRow)) {
+            $candidateFactionId = (int) ($factionRow->id ?? 0);
+            if ($candidateFactionId > 0) {
+                $factionId = $candidateFactionId;
+            }
+        }
+
+        FactionProviderRegistry::resetRuntimeState();
+        $factionJoinNoOp = $service->joinParticipation($factionEventId, ['faction_id' => $factionId], $characterId, false);
+        seSmokeAssert((int) ($factionJoinNoOp['noop'] ?? 0) === 1, 'Faction join should be no-op with fallback provider.');
+        $factionRowsAfterNoOp = $service->listParticipations($factionEventId);
+        seSmokeAssert(count($factionRowsAfterNoOp) === 0, 'Fallback no-op must not create faction participation.');
+        $checks++;
+
+        seSmokeStep('faction participation provider override');
+        FactionProviderRegistry::setProvider(new SystemEventsSmokeFactionProvider());
+        $factionJoin = $service->joinParticipation($factionEventId, ['faction_id' => $factionId], $characterId, false);
+        seSmokeAssert((string) ($factionJoin['status'] ?? '') === 'joined', 'Faction join with provider override failed.');
+        $factionLeave = $service->leaveParticipation($factionEventId, ['faction_id' => $factionId], $characterId, false);
+        seSmokeAssert(in_array((string) ($factionLeave['status'] ?? ''), ['left', 'removed'], true), 'Faction leave with provider override failed.');
+        FactionProviderRegistry::resetRuntimeState();
+        $checks++;
+
         seSmokeStep('create recurring event and verify generated occurrence');
         $recurring = $service->create([
             'title' => 'Smoke Recurring ' . $marker,
@@ -171,6 +263,7 @@ try {
         seSmokeAssert((int) ($gameDetail['id'] ?? 0) === $eventId, 'Game detail failed for completed event.');
         $checks++;
     } finally {
+        FactionProviderRegistry::resetRuntimeState();
         foreach ($createdIds as $id) {
             try {
                 $service->delete((int) $id);

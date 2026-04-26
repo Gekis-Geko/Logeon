@@ -9,8 +9,21 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 // Costanti richieste da file core/app analizzati staticamente
 if (!defined('CONFIG')) {
-    define('CONFIG', [
-        'debug' => false,
+    /**
+     * @var array{
+     *   debug: bool,
+     *   cache: array{enabled: bool, ttl: int, dir: string},
+     *   dirs: array{base: string, core: string, views: string, assets: string, imgs: string, tmp: string},
+     *   password_length: int,
+     *   session_time_life: int,
+     *   location_chat_history_hours: int,
+     *   location_whisper_retention_hours: int,
+     *   inventory: array{capacity_max: int, stack_max: int},
+     *   chat_commands: array<mixed>,
+     * } $phpstanConfig
+     */
+    $phpstanConfig = [
+        'debug' => (bool) getenv('PHPSTAN_DEBUG_MODE'),
         'cache' => ['enabled' => false, 'ttl' => 0, 'dir' => '/tmp'],
         'dirs' => [
             'base' => '',
@@ -26,7 +39,8 @@ if (!defined('CONFIG')) {
         'location_whisper_retention_hours' => 24,
         'inventory' => ['capacity_max' => 30, 'stack_max' => 50],
         'chat_commands' => [],
-    ]);
+    ];
+    define('CONFIG', $phpstanConfig);
 }
 
 if (!defined('APP')) {

@@ -36,15 +36,15 @@ class HtmlSanitizer
 
     private static function normalizeAllowedTags($options = []): array
     {
-        $allowed = static::defaultAllowedTags();
+        $allowed = self::defaultAllowedTags();
         if (!empty($options['allowed_tags']) && is_array($options['allowed_tags'])) {
-            $allowed = static::normalizeAllowedTagList($options['allowed_tags']);
+            $allowed = self::normalizeAllowedTagList($options['allowed_tags']);
         }
         if (isset($options['allow_images']) && $options['allow_images'] === false) {
             unset($allowed['img']);
         }
 
-        return static::normalizeAllowedTagList($allowed);
+        return self::normalizeAllowedTagList($allowed);
     }
 
     public static function sanitize($html, $options = []): string
@@ -53,13 +53,13 @@ class HtmlSanitizer
             return '';
         }
 
-        $allowed = static::normalizeAllowedTags($options);
+        $allowed = self::normalizeAllowedTags($options);
         $html = (string) $html;
         $html = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $html);
         $html = preg_replace('#<style(.*?)>(.*?)</style>#is', '', $html);
 
         if (!class_exists('\DOMDocument')) {
-            return static::fallbackSanitize($html, $allowed);
+            return self::fallbackSanitize($html, $allowed);
         }
 
         $dom = new \DOMDocument('1.0', 'UTF-8');
@@ -74,10 +74,10 @@ class HtmlSanitizer
 
         $root = $dom->documentElement;
         if (!$root) {
-            return static::fallbackSanitize($html, $allowed);
+            return self::fallbackSanitize($html, $allowed);
         }
 
-        static::sanitizeNode($root, $allowed, $options);
+        self::sanitizeNode($root, $allowed, $options);
 
         $result = '';
         foreach ($root->childNodes as $child) {
@@ -106,12 +106,12 @@ class HtmlSanitizer
 
             $tag = strtolower($child->nodeName);
             if (!array_key_exists($tag, $allowed)) {
-                static::unwrapNode($child);
+                self::unwrapNode($child);
                 continue;
             }
 
-            static::sanitizeAttributes($child, $tag, $allowed, $options);
-            static::sanitizeNode($child, $allowed, $options);
+            self::sanitizeAttributes($child, $tag, $allowed, $options);
+            self::sanitizeNode($child, $allowed, $options);
         }
     }
 
@@ -153,7 +153,7 @@ class HtmlSanitizer
             }
 
             if ($name === 'href' || $name === 'src') {
-                $safeUrl = static::sanitizeUrl($value, $options);
+                $safeUrl = self::sanitizeUrl($value, $options);
                 if ($safeUrl === '') {
                     $toRemove[] = $name;
                 } else {

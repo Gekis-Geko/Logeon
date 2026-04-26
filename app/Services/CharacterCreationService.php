@@ -33,6 +33,17 @@ class CharacterCreationService
         $this->db->executePrepared($sql, $params);
     }
 
+    private function isArchetypeProviderContract($provider): bool
+    {
+        if (!is_object($provider)) {
+            return false;
+        }
+
+        return method_exists($provider, 'assignArchetype')
+            && method_exists($provider, 'clearCharacterArchetypes')
+            && method_exists($provider, 'validateSelectableArchetypes');
+    }
+
     // -------------------------------------------------------------------------
     // Character creation
     // -------------------------------------------------------------------------
@@ -45,7 +56,7 @@ class CharacterCreationService
      * @param  array<int> $archetypeIds        Validated archetype IDs to assign (may be empty).
      * @param  bool       $archetypeRequired   If true, rolls back character creation when archetype assignment fails.
      * @param  bool       $multipleAllowed     If true, assigns all IDs; otherwise only the first.
-     * @param  ArchetypeService $archetypeService  Service used to assign archetypes.
+     * @param  object|null $archetypeProvider Provider used to assign archetypes, null if module not active.
      */
     public function createCharacter(
         int $userId,
@@ -55,7 +66,7 @@ class CharacterCreationService
         array $archetypeIds,
         bool $archetypeRequired,
         bool $multipleAllowed,
-        ArchetypeService $archetypeService,
+        ?object $archetypeProvider,
     ): object {
         $this->validateMultiCharacterPolicy($userId);
 
@@ -70,24 +81,21 @@ class CharacterCreationService
             throw AppError::validation('Impossibile creare il personaggio', [], 'character_creation_failed');
         }
 
-        if (!empty($archetypeIds)) {
+        if (!empty($archetypeIds) && $this->isArchetypeProviderContract($archetypeProvider)) {
             try {
                 if ($multipleAllowed) {
                     foreach ($archetypeIds as $archetypeId) {
-                        $archetypeService->assignArchetype($characterId, (int) $archetypeId, true);
+                        $archetypeProvider->assignArchetype($characterId, (int) $archetypeId, true);
                     }
                 } else {
                     $firstArchetypeId = (int) ($archetypeIds[0] ?? 0);
                     if ($firstArchetypeId > 0) {
-                        $archetypeService->assignArchetype($characterId, $firstArchetypeId, false);
+                        $archetypeProvider->assignArchetype($characterId, $firstArchetypeId, false);
                     }
                 }
             } catch (\Throwable $e) {
                 if ($archetypeRequired) {
-                    $this->execPrepared(
-                        'DELETE FROM `character_archetypes` WHERE `character_id` = ?',
-                        [$characterId],
-                    );
+                    $archetypeProvider->clearCharacterArchetypes($characterId);
                     $this->execPrepared(
                         'DELETE FROM `characters` WHERE `id` = ? LIMIT 1',
                         [$characterId],
@@ -171,33 +179,12 @@ class CharacterCreationService
      * @param  array<int> $archetypeIds
      * @return array<int>
      */
-    public function validateSelectableArchetypes(array $archetypeIds): array
+    public function validateSelectableArchetypes(array $archetypeIds, object $archetypeProvider): array
     {
-        if (empty($archetypeIds)) {
-            return [];
+        if (!$this->isArchetypeProviderContract($archetypeProvider)) {
+            throw AppError::validation('Provider archetipi non disponibile', [], 'archetype_provider_missing');
         }
 
-        $placeholders = implode(',', array_fill(0, count($archetypeIds), '?'));
-        $selectableRows = $this->fetchPrepared(
-            'SELECT `id`
-             FROM `archetypes`
-             WHERE `is_active` = 1
-               AND `is_selectable` = 1
-               AND `id` IN (' . $placeholders . ')',
-            array_values(array_map('intval', $archetypeIds)),
-        );
-
-        $selectableIds = [];
-        foreach ($selectableRows as $row) {
-            $selectableIds[] = (int) ($row->id ?? 0);
-        }
-
-        foreach ($archetypeIds as $selectedId) {
-            if (!in_array((int) $selectedId, $selectableIds, true)) {
-                throw AppError::validation('Archetipo non selezionabile', [], 'archetype_not_selectable');
-            }
-        }
-
-        return $archetypeIds;
+        return $archetypeProvider->validateSelectableArchetypes($archetypeIds);
     }
 }

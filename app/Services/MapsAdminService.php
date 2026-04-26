@@ -108,7 +108,7 @@ class MapsAdminService
 
         $parts = explode('|', $sort);
         $allowedFields = ['id', 'name', 'position', 'render_mode', 'initial', 'mobile'];
-        $sortField = in_array($parts[0] ?? '', $allowedFields, true) ? ($parts[0] ?? 'position') : 'position';
+        $sortField = in_array($parts[0], $allowedFields, true) ? $parts[0] : 'position';
         $sortDir = strtoupper($parts[1] ?? 'ASC') === 'DESC' ? 'DESC' : 'ASC';
 
         $results = max(1, min(200, $results));
@@ -130,7 +130,7 @@ class MapsAdminService
         );
 
         return [
-            'dataset' => is_array($rows) ? $rows : [],
+            'dataset' => $rows,
             'properties' => [
                 'query' => ['name' => $nameLike],
                 'page' => $page,

@@ -49,7 +49,7 @@ class ShopInventoryAdminService
         ];
 
         $parts = explode('|', $raw);
-        $field = trim($parts[0] ?? '');
+        $field = trim($parts[0]);
         $dir = strtoupper(trim($parts[1] ?? 'ASC')) === 'DESC' ? 'DESC' : 'ASC';
         $col = $allowed[$field] ?? 'si.id';
 
@@ -61,9 +61,9 @@ class ShopInventoryAdminService
         $query = (isset($data->query) && is_object($data->query)) ? $data->query : (object) [];
         $shopId = isset($query->shop_id) ? (int) $query->shop_id : 0;
         $itemName = isset($query->item_name) ? trim((string) $query->item_name) : '';
-        $isActive = (isset($query->is_active) && $query->is_active !== '' && $query->is_active !== null)
+        $isActive = (isset($query->is_active) && $query->is_active !== '')
                        ? (int) $query->is_active : -1;
-        $isPromo = (isset($query->is_promo) && $query->is_promo !== '' && $query->is_promo !== null)
+        $isPromo = (isset($query->is_promo) && $query->is_promo !== '')
                        ? (int) $query->is_promo : -1;
 
         $page = max(1, (int) ($data->page ?? 1));

@@ -110,7 +110,7 @@
                     <li class="nav-item"><button class="nav-link" data-action="admin-edit-tab" data-tab="stats">Statistiche</button></li>
                     <li class="nav-item"><button class="nav-link" data-action="admin-edit-tab" data-tab="economy">Economia</button></li>
                     <li class="nav-item"><button class="nav-link" data-action="admin-edit-tab" data-tab="notes">Note master</button></li>
-                    <li class="nav-item"><button class="nav-link d-none" data-action="admin-edit-tab" data-tab="archetypes" data-role="admin-edit-tab-archetypes">Archetipi</button></li>
+                    {{ slot('admin.characters.edit.tabs') }}
                 </ul>
 
                 {# Tab: Identità fisica #}
@@ -185,14 +185,7 @@
                     </div>
                 </div>
 
-                {# Tab: Archetipi (shown only when archetypes_enabled = 1) #}
-                <div id="admin-edit-panel-archetypes" style="display:none;">
-                    <p class="text-muted small mb-3" data-role="admin-edit-archetypes-hint"></p>
-                    <div class="row g-2 mb-3" data-role="admin-edit-archetypes-list"></div>
-                    <div class="d-flex justify-content-end mt-3">
-                        <button type="button" class="btn btn-primary" data-action="admin-edit-save-archetypes">Salva archetipi</button>
-                    </div>
-                </div>
+                {{ slot('admin.characters.edit.panels') }}
             </div>
         </div>
     </div>

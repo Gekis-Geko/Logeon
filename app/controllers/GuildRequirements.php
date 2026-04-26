@@ -8,7 +8,7 @@ use App\Services\GuildRequirementAdminService;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class GuildRequirements extends GuildRequirement
@@ -36,7 +36,7 @@ class GuildRequirements extends GuildRequirement
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -100,3 +100,5 @@ class GuildRequirements extends GuildRequirement
         return parent::delete($operator);
     }
 }
+
+

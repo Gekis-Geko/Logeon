@@ -3,8 +3,7 @@
 declare(strict_types=1);
 
 use App\Services\ChatCommandService;
-use App\Services\ConflictService;
-use App\Services\ConflictSettingsService;
+use App\Services\ConflictChatBridgeService;
 use App\Services\CurrencyService;
 use App\Services\LocationDropService;
 use App\Services\LocationMessageService;
@@ -17,7 +16,7 @@ use Core\Http\AppError;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\RateLimiter;
 
@@ -29,8 +28,8 @@ class LocationMessages
     public const MAX_CHAT_LENGTH = 2000;
     public const MAX_WHISPER_LENGTH = 1000;
     private $commandService = null;
-    private $conflictService = null;
-    private $conflictSettingsService = null;
+    /** @var ConflictChatBridgeService|null */
+    private $conflictChatBridgeService = null;
     /** @var LocationMessageService|null */
     private $locationMessageService = null;
     /** @var LocationDropService|null */
@@ -56,15 +55,9 @@ class LocationMessages
         return $this;
     }
 
-    public function setConflictService(ConflictService $conflictService = null)
+    public function setConflictChatBridgeService(ConflictChatBridgeService $service = null)
     {
-        $this->conflictService = $conflictService;
-        return $this;
-    }
-
-    public function setConflictSettingsService(ConflictSettingsService $conflictSettingsService = null)
-    {
-        $this->conflictSettingsService = $conflictSettingsService;
+        $this->conflictChatBridgeService = $service;
         return $this;
     }
 
@@ -74,7 +67,7 @@ class LocationMessages
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -274,24 +267,14 @@ class LocationMessages
         return $this->commandService;
     }
 
-    private function conflictService(): ConflictService
+    private function conflictChatBridgeService(): ConflictChatBridgeService
     {
-        if ($this->conflictService instanceof ConflictService) {
-            return $this->conflictService;
+        if ($this->conflictChatBridgeService instanceof ConflictChatBridgeService) {
+            return $this->conflictChatBridgeService;
         }
 
-        $this->conflictService = new ConflictService();
-        return $this->conflictService;
-    }
-
-    private function conflictSettingsService(): ConflictSettingsService
-    {
-        if ($this->conflictSettingsService instanceof ConflictSettingsService) {
-            return $this->conflictSettingsService;
-        }
-
-        $this->conflictSettingsService = new ConflictSettingsService();
-        return $this->conflictSettingsService;
+        $this->conflictChatBridgeService = new ConflictChatBridgeService();
+        return $this->conflictChatBridgeService;
     }
 
     private function locationDropService(): LocationDropService
@@ -488,6 +471,13 @@ class LocationMessages
 
         $tagValue = property_exists($post, 'tag_position') ? $post->tag_position : null;
         $tag = $this->normalizeTag($tagValue);
+        $tagLabel   = property_exists($post, 'location_tag_label')   ? $this->normalizeTag($post->location_tag_label)   : null;
+        $tagDetail  = property_exists($post, 'location_tag_detail')  ? $this->normalizeTag($post->location_tag_detail)  : null;
+        $tagDisplay = property_exists($post, 'location_tag_display') ? $this->normalizeTag($post->location_tag_display) : null;
+        $tagId      = property_exists($post, 'location_tag_id')      ? (int) $post->location_tag_id : null;
+        if ($tagId !== null && $tagId <= 0) {
+            $tagId = null;
+        }
         $meta = json_encode(['raw' => $raw], JSON_UNESCAPED_UNICODE);
         $row = $this->locationMessageService()->insertMessage(
             $location_id,
@@ -497,6 +487,10 @@ class LocationMessages
             $meta,
             null,
             $tag,
+            $tagId,
+            $tagLabel,
+            $tagDetail,
+            $tagDisplay,
         );
         $row = $this->buildMessageResponse($row);
 
@@ -556,13 +550,13 @@ class LocationMessages
         $summary = $raw;
 
         if (preg_match('/^[@#](\d+)\\s+(.+)$/', $raw, $match)) {
-            $targetId = (int) ($match[1] ?? 0);
-            $summary = trim((string) ($match[2] ?? ''));
+            $targetId = (int) $match[1];
+            $summary = trim((string) $match[2]);
         } elseif (preg_match('/^(.+?)\\s+[@#](\\d+)$/', $raw, $match)) {
-            $summary = trim((string) ($match[1] ?? ''));
-            $targetId = (int) ($match[2] ?? 0);
+            $summary = trim((string) $match[1]);
+            $targetId = (int) $match[2];
         } elseif (preg_match('/^[@#](\\d+)$/', $raw, $match)) {
-            $targetId = (int) ($match[1] ?? 0);
+            $targetId = (int) $match[1];
             $summary = 'Proposta conflitto';
         }
 
@@ -629,74 +623,15 @@ class LocationMessages
             $summary = 'Proposta conflitto';
         }
 
-        $result = $this->conflictService()->proposeConflict([
-            'location_id' => (int) $location_id,
-            'target_id' => $targetId,
-            'summary' => $summary,
-            'conflict_origin' => 'chat',
-        ], (int) $character_id, \Core\AppContext::authContext()->isStaff());
+        $message = $this->conflictChatBridgeService()->buildProposalMessage(
+            (int) $location_id,
+            $targetId,
+            $summary,
+            (int) $character_id,
+            \Core\AppContext::authContext()->isStaff(),
+        );
 
-        $conflict = is_array($result) ? ($result['conflict'] ?? null) : null;
-        $conflictId = (int) ($conflict->id ?? 0);
-        $status = strtolower(trim((string) ($conflict->status ?? 'proposal')));
-        if ($status === '') {
-            $status = 'proposal';
-        }
-
-        $statusLabelMap = [
-            'proposal' => 'Proposta',
-            'open' => 'Aperto',
-            'active' => 'Attivo',
-            'awaiting_resolution' => 'In attesa',
-            'resolved' => 'Risolto',
-            'closed' => 'Chiuso',
-        ];
-        $statusLabel = $statusLabelMap[$status] ?? ucfirst($status);
-
-        $settings = $this->conflictSettingsService()->getSettings();
-        $compactEvents = ((int) ($settings['conflict_chat_compact_events'] ?? 1) === 1);
-
-        $header = 'Conflitto';
-        if ($conflictId > 0) {
-            $header .= ' #' . (int) $conflictId;
-        }
-
-        $summaryPreview = trim($summary);
-        $limit = 120;
-        if (function_exists('mb_strlen') && function_exists('mb_substr')) {
-            if (mb_strlen($summaryPreview) > $limit) {
-                $summaryPreview = mb_substr($summaryPreview, 0, $limit - 1) . '...';
-            }
-        } elseif (strlen($summaryPreview) > $limit) {
-            $summaryPreview = substr($summaryPreview, 0, $limit - 1) . '...';
-        }
-
-        if ($compactEvents) {
-            $body = '<div class="text-center">'
-                . '<p class="mb-1"><b>' . Filter::html($header) . '</b> '
-                . '<span class="badge text-bg-warning">' . Filter::html($statusLabel) . '</span></p>'
-                . ($summaryPreview !== '' ? ('<p class="small text-muted mb-0">' . Filter::html($summaryPreview) . '</p>') : '')
-                . '</div>';
-        } else {
-            $body = '<div class="text-center">'
-                . '<p class="mb-1"><b>' . Filter::html($header) . '</b> '
-                . '<span class="badge text-bg-warning">' . Filter::html($statusLabel) . '</span></p>'
-                . '<p class="mb-0">' . Filter::html($summary) . '</p>'
-                . '</div>';
-        }
-
-        $meta = json_encode([
-            'event_type' => 'conflict_proposal_created',
-            'command' => 'conflict',
-            'conflict_id' => $conflictId,
-            'status' => $status,
-            'location_id' => (int) $location_id,
-            'target_id' => $targetId > 0 ? $targetId : null,
-            'summary' => $summary,
-            'compact' => $compactEvents ? 1 : 0,
-        ], JSON_UNESCAPED_UNICODE);
-
-        return $this->insertSystemMessage($location_id, $body, $meta, $character_id, $echo);
+        return $this->insertSystemMessage($location_id, $message['body'], $message['meta'], $character_id, $echo);
     }
 
     private function sendSkillCommand($location_id, $args, $character_id, $echo = true)
@@ -1365,4 +1300,37 @@ class LocationMessages
 
         return $this->sendWhisperInternal($location_id, $recipient_id, $message, $character_id, $echo);
     }
+
+    public function archiveRange($echo = true)
+    {
+        $this->trace('Richiamato il metodo: ' . __METHOD__);
+        $character_id = $this->requireCharacter();
+
+        $post = $this->requestDataObject();
+        $location_id = $this->normalizeLocationId(InputValidator::integer($post, 'location_id', 0));
+        $this->ensureAccess($location_id, $character_id);
+
+        $startedAt = trim(InputValidator::string($post, 'started_at', ''));
+        $endedAt   = trim(InputValidator::string($post, 'ended_at', ''));
+
+        if ($startedAt === '' || $endedAt === '') {
+            throw \Core\Http\AppError::validation('Intervallo date obbligatorio', [], 'date_range_required');
+        }
+
+        $rows = $this->locationMessageService()->listMessagesByDateRange($location_id, $startedAt, $endedAt);
+
+        $dataset = [];
+        foreach ($rows as $row) {
+            $dataset[] = $this->buildMessageResponse($row);
+        }
+
+        $response = ['dataset' => $dataset];
+
+        if ($echo) {
+            $this->emitJson($response);
+        }
+        return $response;
+    }
 }
+
+

@@ -127,8 +127,7 @@ class NarrativeNpcService
         $rows = $this->db->fetchAllPrepared(
             'SELECT n.*,
                 CASE
-                    WHEN n.`group_type` = \'guild\'   THEN (SELECT g.`name` FROM `guilds`   g WHERE g.`id` = n.`group_id` LIMIT 1)
-                    WHEN n.`group_type` = \'faction\' THEN (SELECT f.`name` FROM `factions` f WHERE f.`id` = n.`group_id` LIMIT 1)
+                    WHEN n.`group_type` = \'guild\' THEN (SELECT g.`name` FROM `guilds` g WHERE g.`id` = n.`group_id` LIMIT 1)
                     ELSE NULL
                 END AS `group_name`
              FROM `narrative_npcs` n ' . $whereClause
@@ -136,6 +135,12 @@ class NarrativeNpcService
             . ' LIMIT ? OFFSET ?',
             array_merge($params, [$limit, $offset]),
         );
+
+        foreach ($rows as $row) {
+            if (isset($row->group_type) && $row->group_type === 'faction' && isset($row->group_id) && (int) $row->group_id > 0) {
+                $row->group_name = FactionProviderRegistry::getNameById((int) $row->group_id);
+            }
+        }
 
         return [
             'rows' => array_map([$this, 'rowToArray'], $rows),

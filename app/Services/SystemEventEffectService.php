@@ -58,10 +58,9 @@ class SystemEventEffectService
             [$eventId],
         );
 
-        $rows = is_array($rows) ? $rows : [];
         $out = [];
         foreach ($rows as $row) {
-            $out[] = $this->decodeRow(is_object($row) ? (array) $row : (is_array($row) ? $row : []));
+            $out[] = $this->decodeRow(is_object($row) ? (array) $row : $row);
         }
         return $out;
     }
@@ -88,7 +87,7 @@ class SystemEventEffectService
         $isEnabled = (int) ($data['is_enabled'] ?? 1) === 1 ? 1 : 0;
         $meta = $data['meta_json'] ?? [];
         $metaJson = json_encode(is_array($meta) ? $meta : (array) $meta, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        if (!is_string($metaJson) || $metaJson === '') {
+        if (!is_string($metaJson)) {
             $metaJson = '{}';
         }
 
@@ -183,7 +182,6 @@ class SystemEventEffectService
              WHERE system_event_id = ?',
             [$sourceEventId],
         );
-        $rows = is_array($rows) ? $rows : [];
         $count = 0;
         foreach ($rows as $row) {
             $data = [

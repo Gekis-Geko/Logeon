@@ -1,6 +1,5 @@
 <?php
 
-use App\Services\ArchetypeService;
 use App\Services\LocationService;
 use App\Services\MessagesService;
 use App\Services\NarrativeEventService;
@@ -131,8 +130,27 @@ $renderAdminPage = function ($page = 'dashboard') use ($presence) {
         $page = 'dashboard';
     }
 
+    $narrativeDelegationEnabled = false;
+    try {
+        $cfg = AppContext::dbProvider()->connection()->fetchOnePrepared(
+            "SELECT `value` FROM `sys_configs` WHERE `key` = 'narrative_delegation_enabled' LIMIT 1",
+            [],
+        );
+        $narrativeDelegationEnabled = !empty($cfg) && (string) ($cfg->value ?? '0') === '1';
+    } catch (\Throwable $e) {
+        $narrativeDelegationEnabled = false;
+    }
+
+    if (
+        ($page === 'narrative-delegation-grants' || $page === 'narrative-delegation')
+        && !$narrativeDelegationEnabled
+    ) {
+        throw AppError::notFound('Pagina non disponibile');
+    }
+
     return AppContext::templateRenderer()->render('admin/dashboard.twig', [
         'admin_page' => $page,
+        'narrative_delegation_enabled' => $narrativeDelegationEnabled ? 1 : 0,
     ]);
 };
 
@@ -179,16 +197,6 @@ $route->group('/game/settings', function ($route) use ($presence) {
         $presence->touchCharacter((int) $characterId);
 
         return AppContext::templateRenderer()->render('app/settings.twig');
-    });
-});
-
-$route->group('/game/quests', function ($route) use ($presence) {
-    $route->get('/history', function () use ($presence) {
-        $characterId = AuthGuard::html()->requireCharacter();
-
-        $presence->touchCharacter((int) $characterId);
-
-        return AppContext::templateRenderer()->render('app/quest_history.twig', ['character_id' => $characterId]);
     });
 });
 
@@ -386,6 +394,7 @@ $route->group('/game/anagrafica', function ($route) use ($db, $presence) {
                     c.date_created,
                     c.last_map,
                     c.last_location,
+                    c.socialstatus_id,
                     CASE
                         WHEN c.is_visible = 0 THEN 0
                         WHEN IFNULL(c.privacy_show_online, 1) = 0 THEN 0
@@ -395,12 +404,10 @@ $route->group('/game/anagrafica', function ($route) use ($db, $presence) {
                         THEN 1
                         ELSE 0
                     END AS is_online,
-                    ss.name AS socialstatus_name,
                     m.name AS map_name,
                     l.name AS location_name
              FROM characters c
              LEFT JOIN users u ON c.user_id = u.id
-              LEFT JOIN social_status ss ON c.socialstatus_id = ss.id
               LEFT JOIN maps m ON c.last_map = m.id
               LEFT JOIN locations l ON c.last_location = l.id
               ' . $whereSql . '
@@ -409,6 +416,17 @@ $route->group('/game/anagrafica', function ($route) use ($db, $presence) {
             array_merge($whereParams, [$offset, $results]),
         );
 
+        if (!empty($rows)) {
+            $statusMap = [];
+            foreach (\App\Services\SocialStatusProviderRegistry::listAll() as $s) {
+                $statusMap[(int) $s->id] = $s;
+            }
+            foreach ($rows as $row) {
+                $sid = (int) ($row->socialstatus_id ?? 0);
+                $row->socialstatus_name = isset($statusMap[$sid]) ? ($statusMap[$sid]->name ?? null) : null;
+            }
+        }
+
         return AppContext::templateRenderer()->render('app/anagrafica.twig', [
             'anagrafica_rows' => is_array($rows) ? $rows : [],
             'is_staff_viewer' => $viewerIsStaff,
@@ -416,26 +434,6 @@ $route->group('/game/anagrafica', function ($route) use ($db, $presence) {
             'page' => $page,
             'results' => $results,
             'total_count' => $totalCount,
-        ]);
-    });
-});
-
-$route->group('/game/archetypes', function ($route) use ($presence) {
-    $route->get('/', function () use ($presence) {
-        $guard = AuthGuard::html();
-        $characterId = (int) $guard->requireCharacter();
-        $presence->touchCharacter($characterId);
-
-        $archetypeService = new ArchetypeService();
-        $payload = $archetypeService->publicList();
-        $config = is_array($payload['config'] ?? null) ? $payload['config'] : [];
-        $rows = is_array($payload['dataset'] ?? null) ? $payload['dataset'] : [];
-        $enabled = (int) ($config['archetypes_enabled'] ?? 0) === 1;
-
-        return AppContext::templateRenderer()->render('app/archetypes.twig', [
-            'archetypes_enabled' => $enabled,
-            'archetypes_config' => $config,
-            'archetypes_rows' => $rows,
         ]);
     });
 });
@@ -488,14 +486,6 @@ $route->group('/game/guilds', function ($route) use ($presence) {
     });
 });
 
-$route->group('/game/factions', function ($route) use ($presence) {
-    $route->get('/', function () use ($presence) {
-        $characterId = AuthGuard::html()->requireCharacter();
-        $presence->touchCharacter((int) $characterId);
-        return AppContext::templateRenderer()->render('app/factions.twig');
-    });
-});
-
 $route->group('/game/shop', function ($route) use ($presence) {
     $route->get('/', function () use ($presence) {
         $characterId = AuthGuard::html()->requireCharacter();
@@ -521,6 +511,18 @@ $route->group('/game/bank', function ($route) use ($presence) {
         $presence->touchCharacter((int) $characterId);
 
         return AppContext::templateRenderer()->render('app/bank.twig');
+    });
+});
+
+$route->group('/game/chat-archives', function ($route) use ($presence) {
+    $route->get('/', function () use ($presence) {
+        $characterId = AuthGuard::html()->requireCharacter();
+
+        $presence->touchCharacter((int) $characterId);
+
+        return AppContext::templateRenderer()->render('app/chat_archives.twig', [
+            'app_page' => 'chat-archives',
+        ]);
     });
 });
 

@@ -28,9 +28,9 @@ class ResponseEmitter
      */
     public static function json(array $payload = [], int $status = 200, array $headers = [], int $jsonFlags = self::DEFAULT_JSON_FLAGS): array
     {
-        static::sendStatus($status);
-        static::sendHeader('Content-Type', 'application/json; charset=UTF-8');
-        static::sendHeaders($headers);
+        self::sendStatus($status);
+        self::sendHeader('Content-Type', 'application/json; charset=UTF-8');
+        self::sendHeaders($headers);
         $json = json_encode($payload, $jsonFlags);
         if ($json === false) {
             $retryFlags = $jsonFlags;
@@ -53,9 +53,9 @@ class ResponseEmitter
 
     public static function html(string $body, int $status = 200, array $headers = []): string
     {
-        static::sendStatus($status);
-        static::sendHeader('Content-Type', 'text/html; charset=UTF-8');
-        static::sendHeaders($headers);
+        self::sendStatus($status);
+        self::sendHeader('Content-Type', 'text/html; charset=UTF-8');
+        self::sendHeaders($headers);
 
         echo $body;
 
@@ -86,10 +86,10 @@ class ResponseEmitter
     private static function sendHeaders(array $headers): void
     {
         foreach ($headers as $name => $value) {
-            if (!is_string($name) || $name === '') {
+            if ($name === '') {
                 continue;
             }
-            static::sendHeader($name, (string) $value);
+            self::sendHeader($name, (string) $value);
         }
     }
 }

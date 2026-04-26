@@ -2379,17 +2379,15 @@ class InventoryService
                     $instParams[] = (int) $categoryId;
                 }
             }
-            if (!empty($query->search)) {
-                $term = trim((string) $query->search);
-                if ($term !== '') {
-                    $like = '%' . $term . '%';
-                    $stackWhere[] = '(i.name LIKE ? OR i.description LIKE ?)';
-                    $instWhere[] = '(i.name LIKE ? OR i.description LIKE ?)';
-                    $stackParams[] = $like;
-                    $stackParams[] = $like;
-                    $instParams[] = $like;
-                    $instParams[] = $like;
-                }
+            $term = trim((string) ($query->search ?? ''));
+            if ($term !== '') {
+                $like = '%' . $term . '%';
+                $stackWhere[] = '(i.name LIKE ? OR i.description LIKE ?)';
+                $instWhere[] = '(i.name LIKE ? OR i.description LIKE ?)';
+                $stackParams[] = $like;
+                $stackParams[] = $like;
+                $instParams[] = $like;
+                $instParams[] = $like;
             }
         }
         $stackWhereSql = implode(' AND ', $stackWhere);
@@ -2667,7 +2665,7 @@ class InventoryService
                 [$characterId, $instanceId],
             );
 
-            if ($incomingTwoHanded && $slotGroupKey !== '') {
+            if ($incomingTwoHanded) {
                 $groupInstanceIds = $this->equippedInstancesByGroupForUpdate($characterId, $slotGroupKey);
                 foreach ($groupInstanceIds as $groupInstanceId) {
                     if ($groupInstanceId > 0 && $groupInstanceId !== $instanceId) {
@@ -3228,13 +3226,13 @@ class InventoryService
             if (!isset($effectPayload['removes_state_id']) && isset($row->removes_state_id)) {
                 $effectPayload['removes_state_id'] = (int) $row->removes_state_id;
             }
-            if (!isset($effectPayload['state_intensity']) && isset($row->state_intensity) && $row->state_intensity !== null) {
+            if (!isset($effectPayload['state_intensity']) && isset($row->state_intensity)) {
                 $effectPayload['state_intensity'] = (float) $row->state_intensity;
             }
-            if (!isset($effectPayload['state_duration_value']) && isset($row->state_duration_value) && $row->state_duration_value !== null) {
+            if (!isset($effectPayload['state_duration_value']) && isset($row->state_duration_value)) {
                 $effectPayload['state_duration_value'] = (int) $row->state_duration_value;
             }
-            if (!isset($effectPayload['state_duration_unit']) && isset($row->state_duration_unit) && $row->state_duration_unit !== null) {
+            if (!isset($effectPayload['state_duration_unit']) && isset($row->state_duration_unit)) {
                 $effectPayload['state_duration_unit'] = (string) $row->state_duration_unit;
             }
             $effectResult = $this->applyItemEffect($characterId, $effectPayload);

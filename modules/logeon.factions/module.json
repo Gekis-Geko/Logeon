@@ -1,0 +1,67 @@
+{
+  "id": "logeon.factions",
+  "name": "Logeon Factions",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo Fazioni: provider runtime agganciato via hook faction.provider.",
+  "category": "gameplay",
+  "class": "bundled",
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "requires": [],
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "assets": {
+    "admin": {
+      "js": ["dist/admin.js"]
+    },
+    "game": {
+      "js": ["dist/game.js"]
+    }
+  },
+  "menus": {
+    "game": {
+      "organizations_dropdown": [
+        {
+          "label": "Fazioni",
+          "href": "/game/factions",
+          "icon": "bi bi-shield-shaded",
+          "order": 120
+        }
+      ],
+      "organizations_offcanvas": [
+        {
+          "label": "Fazioni",
+          "href": "/game/factions",
+          "icon": "bi bi-shield-shaded",
+          "order": 120
+        }
+      ]
+    },
+    "admin": {
+      "aside": [
+        {
+          "label": "Fazioni",
+          "href": "/admin/factions",
+          "icon": "bi bi-shield-shaded",
+          "page": "factions",
+          "section": "Gruppi e fazioni",
+          "section_order": 90,
+          "order": 250
+        }
+      ]
+    }
+  },
+  "features": [
+    "faction.provider.override",
+    "factions.routes",
+    "factions.admin.routes",
+    "factions.game.page",
+    "factions.twig.slots",
+    "factions.assets"
+  ]
+}

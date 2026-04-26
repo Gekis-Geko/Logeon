@@ -71,7 +71,7 @@ class LocationMessageService
     public function locationChatHistoryHours(): int
     {
         $configFallback = 3;
-        if (defined('CONFIG') && isset(CONFIG['location_chat_history_hours'])) {
+        if (defined('CONFIG')) {
             $configFallback = (int) CONFIG['location_chat_history_hours'];
         }
 
@@ -88,7 +88,7 @@ class LocationMessageService
     public function locationWhisperRetentionHours(): int
     {
         $configFallback = 24;
-        if (defined('CONFIG') && isset(CONFIG['location_whisper_retention_hours'])) {
+        if (defined('CONFIG')) {
             $configFallback = (int) CONFIG['location_whisper_retention_hours'];
         }
 
@@ -213,7 +213,7 @@ class LocationMessageService
         foreach ($wrappers as $wrapperPattern) {
             $match = [];
             if (preg_match($wrapperPattern, $value, $match)) {
-                return trim((string) ($match[1] ?? ''));
+                return trim((string) $match[1]);
             }
         }
 
@@ -918,7 +918,7 @@ class LocationMessageService
              LIMIT 100',
             [$locationId],
         );
-        return is_array($rows) ? $rows : [];
+        return $rows;
     }
 
     public function insertMessage(
@@ -929,6 +929,10 @@ class LocationMessageService
         $metaJson = null,
         $recipientId = null,
         $tagPosition = null,
+        $locationTagId = null,
+        $locationTagLabel = null,
+        $locationTagDetail = null,
+        $locationTagDisplay = null,
     ) {
         $locationId = (int) $locationId;
         $characterId = (int) $characterId;
@@ -936,8 +940,9 @@ class LocationMessageService
 
         $this->execPrepared(
             'INSERT INTO locations_messages
-            (location_id, character_id, type, recipient_id, tag_position, body, meta_json)
-            VALUES (?, ?, ?, ?, ?, ?, ?)',
+            (location_id, character_id, type, recipient_id, tag_position, body, meta_json,
+             location_tag_id, location_tag_label, location_tag_detail, location_tag_display)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 $locationId,
                 $characterId,
@@ -946,6 +951,10 @@ class LocationMessageService
                 ($tagPosition !== null && $tagPosition !== '' ? $tagPosition : null),
                 (string) $body,
                 ($metaJson !== null && $metaJson !== '' ? $metaJson : null),
+                ($locationTagId !== null ? (int) $locationTagId : null),
+                ($locationTagLabel !== null && $locationTagLabel !== '' ? $locationTagLabel : null),
+                ($locationTagDetail !== null && $locationTagDetail !== '' ? $locationTagDetail : null),
+                ($locationTagDisplay !== null && $locationTagDisplay !== '' ? $locationTagDisplay : null),
             ],
         );
         $lastId = $this->db->lastInsertId();
@@ -954,5 +963,31 @@ class LocationMessageService
         }
 
         return $this->fetchMessageById($lastId);
+    }
+
+    public function listMessagesByDateRange(int $locationId, string $startedAt, string $endedAt, int $limit = 500): array
+    {
+        if ($locationId <= 0) {
+            return [];
+        }
+        $limit = max(1, min(500, $limit));
+
+        $rows = $this->fetchPrepared(
+            'SELECT lm.id, lm.location_id, lm.character_id, lm.type, lm.body, lm.meta_json, lm.date_created,
+                    c.name AS character_name, c.surname AS character_surname,
+                    c.avatar AS character_avatar, c.gender AS character_gender
+             FROM locations_messages lm
+             JOIN characters c ON c.id = lm.character_id
+             WHERE lm.location_id = ?
+               AND lm.date_created >= ?
+               AND lm.date_created <= ?
+               AND lm.type <> 4
+               AND lm.recipient_id IS NULL
+             ORDER BY lm.id ASC
+             LIMIT ?',
+            [$locationId, $startedAt, $endedAt, $limit],
+        );
+
+        return $rows ?: [];
     }
 }

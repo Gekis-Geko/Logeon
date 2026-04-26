@@ -479,9 +479,6 @@ class SystemEventResolverService
         $endAt = $this->normalizeDateTime($event['ends_at'] ?? null);
 
         $referenceTs = $startAt !== null ? strtotime($startAt) : time();
-        if ($referenceTs === false) {
-            $referenceTs = time();
-        }
 
         if ($recurrence === 'daily') {
             $nextStartTs = strtotime('+1 day', $referenceTs);
@@ -489,9 +486,6 @@ class SystemEventResolverService
             $nextStartTs = strtotime('+1 week', $referenceTs);
         } else {
             $nextStartTs = strtotime('+1 month', $referenceTs);
-        }
-        if ($nextStartTs === false) {
-            return 0;
         }
         $nextStart = date('Y-m-d H:i:s', $nextStartTs);
 
@@ -510,7 +504,7 @@ class SystemEventResolverService
         $meta['generated_from_event_id'] = (int) $event['id'];
         $meta['generated_at'] = date('Y-m-d H:i:s');
         $metaJson = json_encode($meta, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        if (!is_string($metaJson) || $metaJson === '') {
+        if (!is_string($metaJson)) {
             $metaJson = '{}';
         }
 

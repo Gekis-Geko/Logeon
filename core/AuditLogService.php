@@ -14,17 +14,17 @@ class AuditLogService
 
     public static function setDbAdapter(DbAdapterInterface $adapter = null): void
     {
-        static::$dbAdapter = $adapter;
+        self::$dbAdapter = $adapter;
     }
 
     private static function db(): DbAdapterInterface
     {
-        if (static::$dbAdapter instanceof DbAdapterInterface) {
-            return static::$dbAdapter;
+        if (self::$dbAdapter instanceof DbAdapterInterface) {
+            return self::$dbAdapter;
         }
 
-        static::$dbAdapter = DbAdapterFactory::createFromConfig();
-        return static::$dbAdapter;
+        self::$dbAdapter = DbAdapterFactory::createFromConfig();
+        return self::$dbAdapter;
     }
 
     private static function getSessionValue($key)
@@ -34,12 +34,12 @@ class AuditLogService
 
     private static function getSessionAdminId(): int
     {
-        return (int) static::getSessionValue('admin_id');
+        return (int) self::getSessionValue('admin_id');
     }
 
     private static function getSessionUserId(): int
     {
-        return (int) static::getSessionValue('user_id');
+        return (int) self::getSessionValue('user_id');
     }
 
     private static function resolveAuthor($author = null)
@@ -48,12 +48,12 @@ class AuditLogService
             return (int) $author;
         }
 
-        $adminId = static::getSessionAdminId();
+        $adminId = self::getSessionAdminId();
         if ($adminId > 0) {
             return $adminId;
         }
 
-        $userId = static::getSessionUserId();
+        $userId = self::getSessionUserId();
         if ($userId > 0) {
             return $userId;
         }
@@ -69,11 +69,11 @@ class AuditLogService
             return false;
         }
 
-        $authorId = static::resolveAuthor($author);
+        $authorId = self::resolveAuthor($author);
         $payload = ($data === null) ? null : json_encode($data, JSON_UNESCAPED_UNICODE);
         $url = ($url === null || trim((string) $url) === '') ? '/audit/' . $module . '/' . $action : (string) $url;
 
-        static::db()->executePrepared(
+        self::db()->executePrepared(
             'INSERT INTO sys_logs (
                 author,
                 url,
@@ -107,13 +107,13 @@ class AuditLogService
         $module = $parts[0];
         $action = $parts[1] ?? 'event';
 
-        return static::write($module, $action, $data, $area, null, $author);
+        return self::write($module, $action, $data, $area, null, $author);
     }
 
     public static function writeFromUrl($url, $data = null, $author = null)
     {
         $url = (string) $url;
-        $authorId = static::resolveAuthor($author);
+        $authorId = self::resolveAuthor($author);
 
         $extra = explode('/', $url);
         $action = $extra[count($extra) - 1] ?? '';
@@ -129,7 +129,7 @@ class AuditLogService
 
         $payload = ($data === null) ? null : json_encode($data);
 
-        static::db()->executePrepared(
+        self::db()->executePrepared(
             'INSERT INTO sys_logs (
                 author,
                 url,

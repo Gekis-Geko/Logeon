@@ -17,42 +17,42 @@ class Csrf
 
     private static function getSessionToken()
     {
-        return static::getSessionValue(static::$session_key);
+        return self::getSessionValue(self::$session_key);
     }
 
     private static function setSessionToken($token): void
     {
-        static::setSessionValue(static::$session_key, $token);
+        self::setSessionValue(self::$session_key, $token);
     }
 
     private static function getSessionValue($key)
     {
-        return static::session()->get((string) $key);
+        return self::session()->get((string) $key);
     }
 
     private static function setSessionValue($key, $value): void
     {
-        static::session()->set((string) $key, $value);
+        self::session()->set((string) $key, $value);
     }
 
     public static function setSession(SessionInterface $session = null): void
     {
-        static::$session = $session;
+        self::$session = $session;
     }
 
     public static function resetRuntimeState(): void
     {
-        static::$session = null;
+        self::$session = null;
     }
 
     private static function session(): SessionInterface
     {
-        if (static::$session instanceof SessionInterface) {
-            return static::$session;
+        if (self::$session instanceof SessionInterface) {
+            return self::$session;
         }
 
-        static::$session = AppContext::session();
-        return static::$session;
+        self::$session = AppContext::session();
+        return self::$session;
     }
 
     private static function getServerValue(string $key, $default = null)
@@ -63,10 +63,10 @@ class Csrf
 
     public static function token(): string
     {
-        $token = static::getSessionToken();
+        $token = self::getSessionToken();
         if (empty($token)) {
             $token = bin2hex(random_bytes(32));
-            static::setSessionToken($token);
+            self::setSessionToken($token);
         }
 
         return $token;
@@ -74,12 +74,12 @@ class Csrf
 
     public static function validate(): bool
     {
-        $session_token = static::getSessionToken();
+        $session_token = self::getSessionToken();
         if (empty($session_token)) {
-            $session_token = static::token();
+            $session_token = self::token();
         }
 
-        $request_token = static::getRequestToken();
+        $request_token = self::getRequestToken();
         if (empty($request_token) || !hash_equals($session_token, $request_token)) {
             throw AppError::unauthorized('Token CSRF non valido.', [], 'csrf_invalid');
         }
@@ -90,7 +90,7 @@ class Csrf
     private static function getRequestToken(): ?string
     {
         $request = RequestData::fromGlobals();
-        $csrfHeader = static::getServerValue('HTTP_X_CSRF_TOKEN');
+        $csrfHeader = self::getServerValue('HTTP_X_CSRF_TOKEN');
         if (!empty($csrfHeader)) {
             return $csrfHeader;
         }

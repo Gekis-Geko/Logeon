@@ -18,7 +18,6 @@ class Router
     private $_namespace = '';
     private $_currentRouteOptions = [];
     private static $currentRouteOptions = [];
-    private $preRouteError = false;
     protected $__notFoundCallback;
 
     public function before($methods, $pattern, $fn)
@@ -184,11 +183,10 @@ class Router
 
     public function run($callback = null)
     {
-        $this->preRouteError = false;
         $this->_requestedMethod = $this->getRequestMethod();
         if (isset($this->_beforeRoutes[$this->_requestedMethod])) {
-            $this->handle($this->_beforeRoutes[$this->_requestedMethod]);
-            if ($this->preRouteError) {
+            $beforeRouteResult = $this->handle($this->_beforeRoutes[$this->_requestedMethod]);
+            if ($beforeRouteResult['hadError']) {
                 $server = RequestContext::server();
                 if (($server['REQUEST_METHOD'] ?? '') == 'HEAD') {
                     ob_end_clean();
@@ -199,7 +197,8 @@ class Router
 
         $numHandled = 0;
         if (isset($this->_afterRoutes[$this->_requestedMethod])) {
-            $numHandled = $this->handle($this->_afterRoutes[$this->_requestedMethod], true);
+            $afterRouteResult = $this->handle($this->_afterRoutes[$this->_requestedMethod], true);
+            $numHandled = $afterRouteResult['numHandled'];
         }
 
         if ($numHandled === 0) {
@@ -226,9 +225,13 @@ class Router
         $this->__notFoundCallback = $fn;
     }
 
+    /**
+     * @return array{numHandled: int, hadError: bool}
+     */
     private function handle($routes, $quitAfterRun = false)
     {
         $numHandled = 0;
+        $hadError = false;
         $uri = $this->getCurrentUri();
         foreach ($routes as $route) {
             // Route params must accept full URL-safe segments (e.g. "character-attributes").
@@ -236,7 +239,7 @@ class Router
             if (preg_match_all('#^' . $route['pattern'] . '$#', $uri, $matches, PREG_OFFSET_CAPTURE)) {
                 $matches = array_slice($matches, 1);
                 $params = array_map(function ($match, $index) use ($matches) {
-                    if (isset($matches[$index + 1]) && isset($matches[$index + 1][0]) && is_array($matches[$index + 1][0])) {
+                    if (isset($matches[$index + 1]) && isset($matches[$index + 1][0])) {
                         return trim(substr($match[0][0], 0, $matches[$index + 1][0][1] - $match[0][1]), '/');
                     } else {
                         return isset($match[0][0]) ? trim($match[0][0], '/') : null;
@@ -246,7 +249,10 @@ class Router
                 $this->_currentRouteOptions = isset($route['options']) && is_array($route['options']) ? $route['options'] : [];
                 self::$currentRouteOptions = $this->_currentRouteOptions;
                 try {
-                    $this->invoke($route['fn'], $params);
+                    $invokeSucceeded = $this->invoke($route['fn'], $params);
+                    if (!$invokeSucceeded) {
+                        $hadError = true;
+                    }
                 } finally {
                     $this->_currentRouteOptions = [];
                     self::$currentRouteOptions = [];
@@ -257,49 +263,119 @@ class Router
                 }
             }
         }
-        return $numHandled;
+        return [
+            'numHandled' => $numHandled,
+            'hadError' => $hadError,
+        ];
     }
 
-    private function invoke($fn, $params = [])
+    private function invoke($fn, $params = []): bool
     {
         try {
-            if (is_callable($fn)) {
-                call_user_func_array($fn, $params);
-                return;
+            $handler = $this->resolveHandler($fn);
+            if ($handler === null) {
+                return true;
             }
 
-            if (stripos($fn, '@') !== false) {
-                list($controller, $method) = explode('@', $fn);
-                if ($this->getNamespace() !== '') {
-                    $controller = $this->getNamespace() . '\\' . $controller;
-                }
-                if (class_exists($controller)) {
-                    if (call_user_func_array([new $controller(), $method], $params) === false) {
-                        if (forward_static_call_array([$controller, $method], $params) === false)
-                        ;
-                    }
-                }
-            }
+            $this->executeHandler($handler, $params);
+            return true;
         } catch (AppError $e) {
-            $this->preRouteError = true;
-            if ($this->shouldRespondJsonForAppError()) {
-                ErrorResponder::fromThrowable($e, false);
-                return;
-            }
-
-            ErrorResponder::fromThrowableHtml($e);
-            return;
+            $this->respondToThrowable($e, false);
+            return false;
         } catch (\Throwable $e) {
-            $this->preRouteError = true;
             $this->logUnhandledThrowable($e);
-            if ($this->shouldRespondJsonForAppError()) {
-                ErrorResponder::fromThrowable($e, true);
-                return;
-            }
+            $this->respondToThrowable($e, true);
+            return false;
+        }
+    }
 
-            ErrorResponder::fromThrowableHtml($e);
+    /**
+     * @param mixed $fn
+     * @return array{type: 'callable', callable: callable}|array{type: 'legacy_controller', controller: string, method: string}|null
+     */
+    private function resolveHandler($fn)
+    {
+        if (is_callable($fn)) {
+            return [
+                'type' => 'callable',
+                'callable' => $fn,
+            ];
+        }
+
+        if (!is_string($fn) || stripos($fn, '@') === false) {
+            return null;
+        }
+
+        list($controller, $method) = explode('@', $fn);
+        if ($this->getNamespace() !== '') {
+            $controller = $this->getNamespace() . '\\' . $controller;
+        }
+
+        if (!class_exists($controller)) {
+            return null;
+        }
+
+        return [
+            'type' => 'legacy_controller',
+            'controller' => $controller,
+            'method' => $method,
+        ];
+    }
+
+    /**
+     * @param array{type: 'callable', callable: callable}|array{type: 'legacy_controller', controller: string, method: string} $handler
+     */
+    private function executeHandler(array $handler, array $params): void
+    {
+        if ($handler['type'] === 'callable') {
+            call_user_func_array($handler['callable'], $params);
             return;
         }
+
+        $this->invokeLegacyControllerHandler($handler['controller'], $handler['method'], $params);
+    }
+
+    /**
+     * Legacy compatibility path:
+     * 1) invoke instance method
+     * 2) if it returns false, fallback to static invocation
+     *
+     * @param array<int,mixed> $params
+     */
+    private function invokeLegacyControllerHandler(string $controller, string $method, array $params): void
+    {
+        if (!method_exists($controller, $method)) {
+            return;
+        }
+
+        $instanceResult = call_user_func_array([new $controller(), $method], $params);
+        if ($instanceResult !== false) {
+            return;
+        }
+
+        $this->invokeLegacyControllerStaticFallback($controller, $method, $params);
+    }
+
+    /**
+     * @param array<int,mixed> $params
+     */
+    private function invokeLegacyControllerStaticFallback(string $controller, string $method, array $params): void
+    {
+        if (!is_callable([$controller, $method])) {
+            return;
+        }
+
+        forward_static_call_array([$controller, $method], $params);
+    }
+
+    private function respondToThrowable(\Throwable $e, bool $legacyOnUnknown): void
+    {
+        if ($this->shouldRespondJsonForErrors()) {
+            ErrorResponder::fromThrowable($e, $legacyOnUnknown);
+            return;
+        }
+
+        ErrorResponder::fromThrowableHtml($e);
     }
 
     private function logUnhandledThrowable(\Throwable $e): void
@@ -311,12 +387,27 @@ class Router
             . ':' . $e->getLine(),
         );
 
-        if (defined('CONFIG') && is_array(CONFIG) && !empty(CONFIG['debug'])) {
+        $config = $this->runtimeConfig();
+        if ($config !== null && !empty($config['debug'])) {
             error_log($e->getTraceAsString());
         }
     }
 
-    private function shouldRespondJsonForAppError()
+    /**
+     * @return array<string,mixed>|null
+     */
+    private function runtimeConfig(): ?array
+    {
+        if (!defined('CONFIG')) {
+            return null;
+        }
+
+        /** @var array<string,mixed> $config */
+        $config = constant('CONFIG');
+        return $config;
+    }
+
+    private function shouldRespondJsonForErrors()
     {
         return self::shouldRespondJson();
     }
@@ -324,7 +415,7 @@ class Router
     private function emitNotFound(): void
     {
         $error = AppError::notFound('Pagina non trovata');
-        if ($this->shouldRespondJsonForAppError()) {
+        if ($this->shouldRespondJsonForErrors()) {
             ErrorResponder::fromThrowable($error, false);
             return;
         }

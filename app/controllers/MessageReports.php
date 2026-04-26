@@ -8,7 +8,7 @@ use Core\Http\AppError;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 
 use Core\Logging\LoggerInterface;
 
@@ -30,7 +30,7 @@ class MessageReports
         if ($this->logger instanceof LoggerInterface) {
             return $this->logger;
         }
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -197,3 +197,5 @@ class MessageReports
         $this->emitJson(['status' => 'ok', 'dataset' => $report]);
     }
 }
+
+

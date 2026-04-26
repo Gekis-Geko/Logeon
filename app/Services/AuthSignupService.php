@@ -10,7 +10,7 @@ use Core\Http\ApiResponse;
 use Core\Http\RequestContext;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\RateLimiter;
 
@@ -26,7 +26,7 @@ class AuthSignupService
     public function __construct(DbAdapterInterface $db = null, LoggerInterface $logger = null)
     {
         $this->db = $db ?: DbAdapterFactory::createFromConfig();
-        $this->logger = $logger ?: new LegacyLoggerAdapter();
+        $this->logger = $logger ?: \Core\AppContext::logger();
     }
 
     private function firstPrepared(string $sql, array $params = [])
@@ -41,7 +41,7 @@ class AuthSignupService
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
+        if (defined('DB')) {
             return (string) DB['crypt_key'];
         }
 
@@ -76,11 +76,7 @@ class AuthSignupService
             return $this->usersColumnCache[$column];
         }
 
-        $dbName = DB['mysql']['db_name'] ?? '';
-        if ($dbName === '') {
-            $this->usersColumnCache[$column] = false;
-            return false;
-        }
+        $dbName = (string) DB['mysql']['db_name'];
 
         try {
             $row = $this->firstPrepared(
@@ -146,7 +142,7 @@ class AuthSignupService
             return false;
         }
 
-        $from = trim((string) (APP['support_email'] ?? ''));
+        $from = trim((string) APP['support_email']);
         $headers = [];
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=UTF-8';
@@ -169,7 +165,7 @@ class AuthSignupService
 
     private function absoluteUrl(string $path): string
     {
-        $rawHost = trim((string) (APP['baseurl'] ?? ''));
+        $rawHost = trim((string) APP['baseurl']);
         if ($rawHost === '') {
             $rawHost = trim((string) $this->getServerValue('HTTP_HOST', ''));
         }
@@ -398,7 +394,7 @@ class AuthSignupService
 
         if ($this->usersColumnExists('username')) {
             $parts = explode('@', $email);
-            $username = trim((string) ($parts[0] ?? 'Utente'));
+            $username = trim((string) $parts[0]);
             if ($username === '') {
                 $username = 'Utente';
             }
@@ -437,7 +433,7 @@ class AuthSignupService
         $verifyUrl = $this->absoluteUrl('/verify-email/' . $token);
         $mailSent = $this->dispatchMail(
             $email,
-            'Verifica il tuo account su ' . (string) (APP['name'] ?? 'Logeon'),
+            'Verifica il tuo account su ' . (string) APP['name'],
             '<h3>Conferma la tua email</h3>'
             . '<p>Per attivare il tuo account clicca sul link qui sotto:</p>'
             . '<p><a href="' . $verifyUrl . '">' . $verifyUrl . '</a></p>'
@@ -466,3 +462,5 @@ class AuthSignupService
         );
     }
 }
+
+

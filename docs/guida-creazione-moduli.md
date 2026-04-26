@@ -1,14 +1,14 @@
-# Guida Creazione Moduli
+﻿# Guida Creazione Moduli
 
-Ultimo aggiornamento: 2026-04-25
+Ultimo aggiornamento: 2026-04-26
 
 ## Scopo
 Creare un modulo Logeon **Classe B (Optional Third-party)** che:
 1. vive esclusivamente nella propria cartella `modules/<vendor.modulo>/`;
-2. non modifica mai `/app/` né `/core/`;
+2. non modifica mai `/app/` nÃ© `/core/`;
 3. si installa, disattiva e disinstalla senza lasciare codice residuo nel sistema.
 
-> **Nota — Classe A (Bundled Standard)**: i moduli estratti dal core (archetypes, attributes, factions, multi-currency, novelty, quests, social-status, weather) seguono regole diverse. Non supportano uninstall/purge e dichiarano `"class": "bundled"` nel manifest. Vedi `docs/adr/ADR-008-moduli-bundled-standard.md` e `docs/guida-sistema-moduli.md` (sezione *Tassonomia moduli*).
+> **Nota â€” Classe A (Bundled Standard)**: i moduli estratti dal core (archetypes, attributes, factions, multi-currency, novelty, quests, social-status, weather) seguono regole diverse. Non supportano uninstall/purge e dichiarano `"class": "bundled"` nel manifest. Questa guida si applica ai moduli Classe B; per il quadro completo vedi `docs/guida-sistema-moduli.md` (sezione *Tassonomia moduli*).
 
 ## Prerequisiti
 1. leggere `docs/guida-sistema-moduli.md`;
@@ -20,11 +20,11 @@ Creare un modulo Logeon **Classe B (Optional Third-party)** che:
 
 **Tutto il codice del modulo vive in `modules/<vendor.modulo>/`.**
 
-Controller, service, model, rotte, asset, migrazioni, template — tutto nella cartella del modulo.
+Controller, service, model, rotte, asset, migrazioni, template â€” tutto nella cartella del modulo.
 Nulla va creato in `/app/` o `/core/`.
 
 Se un modulo viene disinstallato e la sua cartella viene eliminata, non deve restare
-nessun file né riga di codice del modulo altrove nel progetto.
+nessun file nÃ© riga di codice del modulo altrove nel progetto.
 
 ---
 
@@ -32,23 +32,23 @@ nessun file né riga di codice del modulo altrove nel progetto.
 
 ```
 modules/<vendor.modulo>/
-├── module.json
-├── bootstrap.php
-├── routes.php
-├── src/
-│   ├── Controllers/
-│   ├── Services/
-│   ├── Models/
-│   └── Provider/
-├── migrations/
-│   ├── install.sql
-│   └── uninstall.sql
-├── assets/
-│   ├── js/
-│   └── css/
-├── views/
-└── docs/
-    └── README.md
+â”œâ”€â”€ module.json
+â”œâ”€â”€ bootstrap.php
+â”œâ”€â”€ routes.php
+â”œâ”€â”€ src/
+â”‚   â”œâ”€â”€ Controllers/
+â”‚   â”œâ”€â”€ Services/
+â”‚   â”œâ”€â”€ Models/
+â”‚   â””â”€â”€ Provider/
+â”œâ”€â”€ migrations/
+â”‚   â”œâ”€â”€ install.sql
+â”‚   â””â”€â”€ uninstall.sql
+â”œâ”€â”€ assets/
+â”‚   â”œâ”€â”€ js/
+â”‚   â””â”€â”€ css/
+â”œâ”€â”€ views/
+â””â”€â”€ docs/
+    â””â”€â”€ README.md
 ```
 
 ---
@@ -72,11 +72,64 @@ modules/<vendor.modulo>/
 
 Campi obbligatori: `id`, `name`, `version`, `vendor`, `compat`.
 
-Il campo `class` è omesso nei moduli Classe B (default `optional`). I moduli Classe A dichiarano `"class": "bundled"` e non vengono creati tramite questa guida.
+Il campo `class` Ã¨ omesso nei moduli Classe B (default `optional`). I moduli Classe A dichiarano `"class": "bundled"` e non vengono creati tramite questa guida.
 
 ---
 
-## `bootstrap.php` — autoloader e hook
+## Esempio concreto: modulo Bestiario
+
+Scenario: vuoi aggiungere una nuova entita `Creatura` gestita da un modulo separato, con una pagina admin per creare, modificare ed eliminare le creature del gioco.
+
+Struttura minima:
+1. id modulo: `acme.bestiary`
+2. tabella SQL: `bestiary_entries`
+3. pagina admin: `/admin/bestiary-creatures`
+4. menu sidebar: sezione `Documentazione` oppure una sezione standalone come `Bestiario`
+
+Manifest di esempio:
+
+```json
+{
+  "id": "acme.bestiary",
+  "name": "Bestiario",
+  "version": "1.0.0",
+  "vendor": "acme",
+  "description": "Gestione creature e schede bestiario.",
+  "dependencies": [],
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Creature",
+          "page": "bestiary-creatures",
+          "section": "Documentazione"
+        }
+      ]
+    }
+  }
+}
+```
+
+Tabella di esempio:
+
+```sql
+CREATE TABLE IF NOT EXISTS `bestiary_entries` (
+    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(120) NOT NULL,
+    `habitat` VARCHAR(120) NOT NULL DEFAULT '',
+    `threat_level` TINYINT UNSIGNED NOT NULL DEFAULT 1,
+    `description` TEXT NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+```
+
+---
+
+## `bootstrap.php` â€” autoloader e hook
 
 Il bootstrap fa due cose: registra l'autoloader PSR-4 del modulo e aggancia i propri
 handler agli hook del core.
@@ -109,9 +162,9 @@ Il namespace va in PascalCase anche se l'id del modulo usa kebab-case o dot-nota
 
 ---
 
-## `routes.php` — rotte del modulo
+## `routes.php` â€” rotte del modulo
 
-Le rotte del modulo vengono caricate da `ModuleRuntime` solo quando il modulo è attivo.
+Le rotte del modulo vengono caricate da `ModuleRuntime` solo quando il modulo Ã¨ attivo.
 Usare i metodi del Router core esattamente come in `app/routes/`.
 
 ```php
@@ -126,13 +179,13 @@ Router::post('/mio-modulo/endpoint', [
 ]);
 ```
 
-Le rotte del modulo non vanno aggiunte a `app/routes/api.php` né a `app/routes/game.php`.
+Le rotte del modulo non vanno aggiunte a `app/routes/api.php` nÃ© a `app/routes/game.php`.
 
 ---
 
 ## Comunicazione con il core: solo hook
 
-Il core non importa mai classi del modulo. Il canale di comunicazione è `Core\Hooks`.
+Il core non importa mai classi del modulo. Il canale di comunicazione Ã¨ `Core\Hooks`.
 
 Il core emette un hook e usa il risultato come dato generico.
 Il modulo registra un handler in `bootstrap.php` e restituisce la propria implementazione.
@@ -151,7 +204,7 @@ if ($provider !== null) {
 ```
 
 **Non aggiungere mai interfacce a `app/Contracts/`** per far funzionare un modulo.
-Se il core ha bisogno di un nuovo punto di estensione, il modo corretto è aggiungere
+Se il core ha bisogno di un nuovo punto di estensione, il modo corretto Ã¨ aggiungere
 un hook al core (modifica al core con PR dedicata), non aggiungere un'interfaccia da
 implementare fuori dal core.
 
@@ -176,7 +229,7 @@ ALTER TABLE `tabella_core`
 ```
 
 ### `uninstall.sql`
-Eseguito con `purge=1` alla disinstallazione. Deve rimuovere tutto ciò che `install.sql` ha creato.
+Eseguito con `purge=1` alla disinstallazione. Deve rimuovere tutto ciÃ² che `install.sql` ha creato.
 
 ```sql
 -- Rimuovi in ordine inverso rispetto all'install
@@ -237,11 +290,11 @@ Possono usare il DB adapter passato dalla rotta o dal controller, come nel resto
 5. Riutilizzare componenti UI esistenti (Datagrid, modali, SelectionGroup, Paginator) dove possibile.
 6. I nuovi file JS del modulo usano ESM (`import`/`export`).
 
-### Menu admin — `menus.admin.aside`
+### Menu admin â€” `menus.admin.aside`
 
 Il campo `section` determina il gruppo visuale nella sidebar admin.
 
-**Sezioni note (merge automatico)** — la voce viene aggiunta in coda al gruppo già
+**Sezioni note (merge automatico)** â€” la voce viene aggiunta in coda al gruppo giÃ 
 presente nell'interfaccia. Usare il nome esatto, rispettando maiuscole e spazi:
 
 | Nome sezione | Contesto tipico |
@@ -259,12 +312,12 @@ presente nell'interfaccia. Usare il nome esatto, rispettando maiuscole e spazi:
 | `Documentazione` | Ambientazione, regolamento |
 | `Logs` | Tutti i log operativi |
 
-**Nuova sezione standalone** — usare un nome diverso da tutti quelli sopra. Il gruppo
-comparirà in fondo alla sidebar, separato dalle sezioni core.
+**Nuova sezione standalone** â€” usare un nome diverso da tutti quelli sopra. Il gruppo
+comparirÃ  in fondo alla sidebar, separato dalle sezioni core.
 
 Il campo `page` identifica la pagina admin raggiungibile tramite `/admin/<page>`.
-Deve essere **univoco** e non coincidere con nessuna pagina già gestita dal core.
-Se coincide, la pagina del modulo non viene mai mostrata (il core ha la priorità).
+Deve essere **univoco** e non coincidere con nessuna pagina giÃ  gestita dal core.
+Se coincide, la pagina del modulo non viene mai mostrata (il core ha la prioritÃ ).
 Per evitare collisioni, prefissare il valore col nome del modulo: es. `weather-overview`,
 `social-status`, `archetypes`. Vedi il registro delle pagine riservate in
 `docs/guida-sistema-moduli.md` (sezione *Pagine admin riservate*).
@@ -303,19 +356,20 @@ I punti 6-8 si applicano esclusivamente ai moduli **Classe B (optional)**. I mod
 
 ## Anti-pattern da evitare
 
-1. **Creare file in `/app/` o `/core/`** per far funzionare il modulo — viola l'isolamento,
+1. **Creare file in `/app/` o `/core/`** per far funzionare il modulo â€” viola l'isolamento,
    lascia dead code alla disinstallazione.
-2. **Aggiungere interfacce a `app/Contracts/`** — il modulo non deve richiedere modifiche al core;
+2. **Aggiungere interfacce a `app/Contracts/`** â€” il modulo non deve richiedere modifiche al core;
    usare gli hook esistenti o richiedere un nuovo hook al core tramite PR dedicata.
-3. **Aggiungere rotte del modulo a `app/routes/api.php`** — le rotte del modulo vanno in `routes.php`
+3. **Aggiungere rotte del modulo a `app/routes/api.php`** â€” le rotte del modulo vanno in `routes.php`
    nella cartella del modulo.
-4. **Hardcode dell'id modulo nel core** — il core non deve sapere che un modulo specifico esiste.
-5. **Migrazioni distruttive senza `uninstall.sql`** — ogni `ALTER TABLE` o `CREATE TABLE` di un modulo Classe B deve avere il corrispondente rollback in `uninstall.sql`. I moduli Classe A non devono avere un `uninstall.sql` che tocca tabelle core.
-6. **Dipendenze circolari tra moduli** — modulo A non deve dipendere da modulo B se B dipende da A.
-7. **UI invasiva** — non modificare template core; usare gli slot menu e i propri template.
-8. **Nome `section` con variante grafica di una sezione esistente** — es. `"Gruppi E Fazioni"` invece
-   di `"Gruppi e fazioni"`. Il match è case-sensitive: la voce finirebbe in una sezione standalone
+4. **Hardcode dell'id modulo nel core** â€” il core non deve sapere che un modulo specifico esiste.
+5. **Migrazioni distruttive senza `uninstall.sql`** â€” ogni `ALTER TABLE` o `CREATE TABLE` di un modulo Classe B deve avere il corrispondente rollback in `uninstall.sql`. I moduli Classe A non devono avere un `uninstall.sql` che tocca tabelle core.
+6. **Dipendenze circolari tra moduli** â€” modulo A non deve dipendere da modulo B se B dipende da A.
+7. **UI invasiva** â€” non modificare template core; usare gli slot menu e i propri template.
+8. **Nome `section` con variante grafica di una sezione esistente** â€” es. `"Gruppi E Fazioni"` invece
+   di `"Gruppi e fazioni"`. Il match Ã¨ case-sensitive: la voce finirebbe in una sezione standalone
    duplicata invece di unirsi a quella hardcoded. Usare esattamente i nomi della tabella sopra.
-9. **Valore `page` che coincide con una pagina core riservata** — es. `"guilds"`, `"users"`, `"items"`.
+9. **Valore `page` che coincide con una pagina core riservata** â€” es. `"guilds"`, `"users"`, `"items"`.
    Il template `dashboard.twig` gestisce quelle pagine con branch `{% elseif %}` dedicati; la pagina
    del modulo non verrebbe mai mostrata. Consultare il registro in `docs/guida-sistema-moduli.md`.
+

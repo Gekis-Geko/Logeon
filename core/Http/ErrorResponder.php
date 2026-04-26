@@ -5,29 +5,9 @@ declare(strict_types=1);
 namespace Core\Http;
 
 use Core\AppContext;
-use Core\Logging\LegacyLoggerAdapter;
-use Core\Logging\LoggerInterface;
 
 class ErrorResponder
 {
-    /** @var LoggerInterface|null */
-    private static $logger = null;
-
-    public static function setLogger(LoggerInterface $logger = null): void
-    {
-        static::$logger = $logger;
-    }
-
-    private static function logger(): LoggerInterface
-    {
-        if (static::$logger instanceof LoggerInterface) {
-            return static::$logger;
-        }
-
-        static::$logger = new LegacyLoggerAdapter();
-        return static::$logger;
-    }
-
     public static function legacy(string $message): void
     {
         static::json($message, 400);
@@ -46,12 +26,12 @@ class ErrorResponder
 
     public static function html(string $message, int $status = 400): string
     {
-        $rendered = static::renderTwigErrorPage($message, $status);
+        $rendered = self::renderTwigErrorPage($message, $status);
         if (is_string($rendered) && $rendered !== '') {
             return ResponseEmitter::html($rendered, $status);
         }
 
-        $safeMessage = static::escapeHtml($message);
+        $safeMessage = self::escapeHtml($message);
         $title = ($status >= 500) ? 'Errore di sistema' : 'Errore';
 
         return ResponseEmitter::html(
@@ -73,7 +53,7 @@ class ErrorResponder
             return static::html($e->getMessage(), $e->status());
         }
 
-        if (CONFIG['debug']) {
+        if (self::isDebugMode()) {
             return static::html($e->getMessage(), 500);
         }
 
@@ -93,19 +73,24 @@ class ErrorResponder
             return static::json(
                 $e->getMessage(),
                 $e->status(),
-                static::withErrorCode($e->payload(), $e->errorCode()),
+                self::withErrorCode($e->payload(), $e->errorCode()),
             );
         }
 
         if ($legacyOnUnknown) {
             return static::json(
-                CONFIG['debug'] ? $e->getMessage() : 'Errore di sistema',
+                self::isDebugMode() ? $e->getMessage() : 'Errore di sistema',
                 500,
                 ['error_code' => 'system_error'],
             );
         }
 
         return static::json('Errore di sistema', 500, ['error_code' => 'system_error']);
+    }
+
+    private static function isDebugMode(): bool
+    {
+        return (bool) CONFIG['debug'];
     }
 
     private static function escapeHtml(string $value): string
@@ -115,7 +100,7 @@ class ErrorResponder
 
     private static function renderTwigErrorPage(string $message, int $status)
     {
-        $title = static::resolveErrorTitle($status);
+        $title = self::resolveErrorTitle($status);
 
         try {
             ob_start();
@@ -165,3 +150,5 @@ class ErrorResponder
         return $payload;
     }
 }
+
+

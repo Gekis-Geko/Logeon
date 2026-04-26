@@ -8,7 +8,7 @@ use App\Services\GuildAlignmentAdminService;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class GuildAlignments extends GuildAlignment
@@ -36,7 +36,7 @@ class GuildAlignments extends GuildAlignment
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -100,3 +100,5 @@ class GuildAlignments extends GuildAlignment
         return parent::delete($operator);
     }
 }
+
+

@@ -137,16 +137,23 @@ class JobService
 
         $rows = $this->fetchPrepared(
             'SELECT j.*,
-                l.name AS location_name,
-                rs.name AS required_status_name,
-                rs.min AS required_status_min
+                l.name AS location_name
              FROM jobs j
              LEFT JOIN locations l ON j.location_id = l.id
-             LEFT JOIN social_status rs ON j.min_socialstatus_id = rs.id
              ' . $where . '
              ORDER BY j.name ASC',
             $params,
         );
+
+        if (!empty($rows)) {
+            foreach ($rows as $row) {
+                $status = (int) ($row->min_socialstatus_id ?? 0) > 0
+                    ? SocialStatusProviderRegistry::getById((int) $row->min_socialstatus_id)
+                    : null;
+                $row->required_status_name = $status->name ?? null;
+                $row->required_status_min  = $status->min ?? null;
+            }
+        }
 
         return !empty($rows) ? $rows : [];
     }
@@ -159,14 +166,19 @@ class JobService
         }
 
         $row = $this->firstPrepared(
-            'SELECT j.*,
-                rs.name AS required_status_name,
-                rs.min AS required_status_min
+            'SELECT j.*
              FROM jobs j
-             LEFT JOIN social_status rs ON j.min_socialstatus_id = rs.id
              WHERE j.id = ? AND j.is_active = 1',
             [$jobId],
         );
+
+        if (!empty($row)) {
+            $status = (int) ($row->min_socialstatus_id ?? 0) > 0
+                ? SocialStatusProviderRegistry::getById((int) $row->min_socialstatus_id)
+                : null;
+            $row->required_status_name = $status->name ?? null;
+            $row->required_status_min  = $status->min ?? null;
+        }
 
         return !empty($row) ? $row : null;
     }
@@ -502,13 +514,13 @@ class JobService
         }
 
         if (!empty($job->min_socialstatus_id)) {
-            $requiredMin = $job->required_status_min ?? null;
-            if ($requiredMin !== null && $requiredMin !== '') {
-                if ((float) $character->fame < (float) $requiredMin) {
-                    $result['allowed'] = false;
-                    $result['reason'] = 'Stato sociale insufficiente';
-                }
-            } elseif ((int) $character->socialstatus_id !== (int) $job->min_socialstatus_id) {
+            $characterId = isset($character->id) ? (int) $character->id : 0;
+            $requiredStatusId = (int) $job->min_socialstatus_id;
+            $meetsStatus = SocialStatusProviderRegistry::meetsRequirement(
+                $characterId,
+                $requiredStatusId > 0 ? $requiredStatusId : null,
+            );
+            if (!$meetsStatus) {
                 $result['allowed'] = false;
                 $result['reason'] = 'Stato sociale insufficiente';
             }
@@ -767,10 +779,6 @@ class JobService
         }
 
         $taskIds = array_values(array_unique($taskIds));
-        if ($taskIds === []) {
-            return $tasks;
-        }
-
         $placeholders = implode(',', array_fill(0, count($taskIds), '?'));
         $choices = $this->fetchPrepared(
             'SELECT id, task_id, choice_code, label, pay, fame, points

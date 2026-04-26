@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use App\Models\Character;
-use App\Services\CharacterAttributesFacadeService;
+use App\Services\AttributeProviderRegistry;
 use App\Services\CharacterBondService;
 use App\Services\CharacterDirectoryService;
 use App\Services\CharacterProfileService;
@@ -17,7 +17,7 @@ use Core\Http\InputValidator;
 use Core\Http\RequestContext;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\SessionStore;
 
@@ -33,8 +33,6 @@ class Characters extends Character
     private $characterStateService = null;
     /** @var CharacterBondService|null */
     private $characterBondService = null;
-    /** @var CharacterAttributesFacadeService|null */
-    private $characterAttributesFacadeService = null;
 
     public function setLogger(LoggerInterface $logger = null)
     {
@@ -48,7 +46,7 @@ class Characters extends Character
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -73,12 +71,6 @@ class Characters extends Character
     public function setCharacterBondService(CharacterBondService $service = null)
     {
         $this->characterBondService = $service;
-        return $this;
-    }
-
-    public function setCharacterAttributesFacadeService(CharacterAttributesFacadeService $service = null)
-    {
-        $this->characterAttributesFacadeService = $service;
         return $this;
     }
 
@@ -120,16 +112,6 @@ class Characters extends Character
 
         $this->characterBondService = new CharacterBondService();
         return $this->characterBondService;
-    }
-
-    private function characterAttributesFacadeService(): CharacterAttributesFacadeService
-    {
-        if ($this->characterAttributesFacadeService instanceof CharacterAttributesFacadeService) {
-            return $this->characterAttributesFacadeService;
-        }
-
-        $this->characterAttributesFacadeService = new CharacterAttributesFacadeService();
-        return $this->characterAttributesFacadeService;
     }
 
     protected function trace($message, $context = false): void
@@ -257,7 +239,7 @@ class Characters extends Character
         $defaultDir = 'ASC';
 
         $parts = explode('|', (string) $raw);
-        $field = trim((string) ($parts[0] ?? ''));
+        $field = trim((string) $parts[0]);
         $dir = strtoupper(trim((string) ($parts[1] ?? $defaultDir)));
 
         if (!isset($map[$field])) {
@@ -348,7 +330,7 @@ class Characters extends Character
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
+        if (defined('DB')) {
             return (string) DB['crypt_key'];
         }
 
@@ -470,7 +452,7 @@ class Characters extends Character
                 }
             }
 
-            $dataset = $this->characterAttributesFacadeService()->decorateCharacterDataset($dataset);
+            AttributeProviderRegistry::decorateCharacterDataset($dataset, (int) ($dataset->id ?? 0));
         }
 
         $response['dataset'] = $dataset;
@@ -1954,3 +1936,5 @@ class Characters extends Character
     {
     }
 }
+
+

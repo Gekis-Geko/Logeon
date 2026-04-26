@@ -36,28 +36,11 @@ interface DbAdapterInterface
      */
     public function fetchAllPrepared(string $sql, array $params = []): array;
 
-    /**
-     * @param mixed $value
-     * @return mixed
-     */
-    public function safe($value, $quotes = true);
+    public function safe(mixed $value, bool $quotes = true): string|array;
 
-    /**
-     * @param mixed $value
-     * @return mixed
-     */
-    public function ifNotNull($value, $altvalue = false);
+    public function ifNotNull(mixed $value, mixed $altvalue = false): mixed;
 
-    /**
-     * @param mixed $value
-     * @return mixed
-     */
-    public function crypt($value);
+    public function crypt(mixed $value): string;
 
-    /**
-     * @param mixed $value
-     * @param mixed $alias
-     * @return mixed
-     */
-    public function decrypt($value, $alias = false);
+    public function decrypt(mixed $value, mixed $alias = false): string;
 }

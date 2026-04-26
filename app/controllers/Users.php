@@ -11,7 +11,7 @@ use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
 
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\SessionStore;
 
@@ -48,7 +48,7 @@ class Users extends User
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -162,12 +162,14 @@ class Users extends User
 
     private function requireSuperuser(): void
     {
+        $authContext = \Core\AppContext::authContext();
+
         if (!$this->userService()->isSuperuserFeatureAvailable()) {
             $this->requireSuperAdmin();
             return;
         }
 
-        if (\Core\AppContext::authContext()->isSuperuser()) {
+        if ($authContext->isSuperuser()) {
             return;
         }
 
@@ -178,9 +180,7 @@ class Users extends User
             return;
         }
 
-        if (!\Core\AppContext::authContext()->isSuperuser()) {
-            throw AppError::unauthorized('Operazione riservata al superuser');
-        }
+        throw AppError::unauthorized('Operazione riservata al superuser');
     }
 
     private function requireAdminOrModerator(): void
@@ -423,7 +423,7 @@ class Users extends User
 
     public static function sys_create()
     {
-        (new LegacyLoggerAdapter())->trace('Richiamato il metodo SYS: ' . __METHOD__);
+        (\Core\AppContext::logger())->trace('Richiamato il metodo SYS: ' . __METHOD__);
         (new UserService())->createSystemSeedUser();
 
         return;
@@ -476,3 +476,5 @@ class Users extends User
         }
     }
 }
+
+

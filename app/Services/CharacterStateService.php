@@ -7,6 +7,7 @@ namespace App\Services;
 use Core\Database\DbAdapterFactory;
 use Core\Database\DbAdapterInterface;
 use Core\Http\AppError;
+use Core\Hooks;
 
 class CharacterStateService
 {
@@ -33,40 +34,17 @@ class CharacterStateService
         return $this->db->executePrepared($sql, $params);
     }
 
-    public function resolveSocialStatusByFame($fame)
-    {
-        $value = (float) $fame;
-        return $this->firstPrepared(
-            'SELECT id, name, description, icon, min, max, shop_discount, unlock_home, quest_tier
-             FROM social_status
-             WHERE ? >= min AND ? <= max
-             ORDER BY min DESC
-             LIMIT 1',
-            [$value, $value],
-        );
-    }
-
     public function syncSocialStatus(int $characterId, $fame, $currentStatusId = null)
     {
         if ($characterId <= 0) {
             return null;
         }
 
-        $status = $this->resolveSocialStatusByFame($fame);
-        if (empty($status)) {
-            return null;
-        }
-
-        if ($currentStatusId === null || (int) $currentStatusId !== (int) $status->id) {
-            $this->execPrepared(
-                'UPDATE characters
-                 SET socialstatus_id = ?
-                 WHERE id = ?',
-                [(int) $status->id, $characterId],
-            );
-        }
-
-        return $status;
+        return SocialStatusProviderRegistry::syncForCharacter(
+            $characterId,
+            (float) $fame,
+            $currentStatusId !== null ? (int) $currentStatusId : null,
+        );
     }
 
     public function getLatestNameRequest(int $characterId)
@@ -144,13 +122,8 @@ class CharacterStateService
             throw AppError::validation('Dati mancanti', [], 'payload_missing');
         }
 
-        $status = $this->firstPrepared(
-            'SELECT id, min
-             FROM social_status
-             WHERE id = ?',
-            [$statusId],
-        );
-        if (empty($status)) {
+        $status = SocialStatusProviderRegistry::getById($statusId);
+        if ($status === null) {
             throw AppError::validation('Stato sociale non valido', [], 'social_status_invalid');
         }
 
@@ -193,13 +166,7 @@ class CharacterStateService
 
     public function listSocialStatuses(): array
     {
-        $rows = $this->fetchPrepared(
-            'SELECT id, name, min, max
-             FROM social_status
-             ORDER BY min ASC',
-        );
-
-        return !empty($rows) ? $rows : [];
+        return SocialStatusProviderRegistry::listAll();
     }
 
     public function getVisibility(int $characterId): int
@@ -345,6 +312,29 @@ class CharacterStateService
             [$characterId],
         );
 
-        return !empty($rows) ? $rows : [];
+        $wallets = !empty($rows) ? $rows : [];
+
+        if (!class_exists('\\Core\\Hooks')) {
+            return $wallets;
+        }
+
+        $extraWallets = Hooks::filter('currency.extra_wallets', [], $characterId);
+        if (!is_array($extraWallets) || empty($extraWallets)) {
+            return $wallets;
+        }
+
+        foreach ($extraWallets as $extraWallet) {
+            if (is_array($extraWallet)) {
+                $extraWallet = (object) $extraWallet;
+            }
+
+            if (!is_object($extraWallet)) {
+                continue;
+            }
+
+            $wallets[] = $extraWallet;
+        }
+
+        return $wallets;
     }
 }

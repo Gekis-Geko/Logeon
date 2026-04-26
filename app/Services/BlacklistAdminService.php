@@ -38,11 +38,7 @@ class BlacklistAdminService
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
-            return (string) DB['crypt_key'];
-        }
-
-        return '';
+        return (string) DB['crypt_key'];
     }
 
     private function quotedCryptKey(): string
@@ -105,7 +101,7 @@ class BlacklistAdminService
         $defaultDir = 'DESC';
 
         $parts = explode('|', (string) $raw);
-        $field = trim((string) ($parts[0] ?? ''));
+        $field = trim((string) $parts[0]);
         $dir = strtoupper(trim((string) ($parts[1] ?? $defaultDir)));
 
         if (!isset($map[$field])) {

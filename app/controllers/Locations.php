@@ -10,7 +10,7 @@ use Core\Http\AppError;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 use Core\RateLimiter;
@@ -42,7 +42,7 @@ class Locations extends Location
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -190,7 +190,7 @@ class Locations extends Location
             $orderByRaw = 'locations.id|ASC';
         }
         $orderParts = explode('|', $orderByRaw);
-        $orderFieldRaw = trim((string) ($orderParts[0] ?? 'locations.id'));
+        $orderFieldRaw = trim((string) $orderParts[0]);
         $orderDir = strtoupper(trim((string) ($orderParts[1] ?? 'ASC')));
         if ($orderDir !== 'DESC') {
             $orderDir = 'ASC';
@@ -282,7 +282,7 @@ class Locations extends Location
                 'orderBy' => $orderFieldRaw . '|' . $orderDir,
                 'tot' => (object) ['count' => $tot],
             ],
-            'dataset' => is_array($dataset) ? $dataset : [],
+            'dataset' => $dataset,
         ]));
 
         return $this;
@@ -591,3 +591,5 @@ class Locations extends Location
     }
 
 }
+
+

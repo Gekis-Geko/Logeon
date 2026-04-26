@@ -29,7 +29,7 @@ class LogSysAdminService
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
+        if (defined('DB')) {
             return (string) DB['crypt_key'];
         }
 

@@ -1,0 +1,49 @@
+{
+  "id": "logeon.quests",
+  "name": "Logeon Quests",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo Quest: trigger runtime e API missioni/admin.",
+  "category": "gameplay",
+  "class": "bundled",
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "requires": [],
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "assets": {
+    "admin": {
+      "js": ["dist/admin.js"]
+    },
+    "game": {
+      "js": ["dist/game.js"]
+    }
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Quest",
+          "href": "/admin/quests",
+          "icon": "bi bi-journal-check",
+          "page": "quests",
+          "section": "Narrativa",
+          "section_order": 50,
+          "order": 120
+        }
+      ]
+    }
+  },
+  "features": [
+    "quests.triggers",
+    "quests.routes",
+    "quests.admin.routes",
+    "quests.game.history.route",
+    "quests.twig.slots",
+    "quests.views"
+  ]
+}

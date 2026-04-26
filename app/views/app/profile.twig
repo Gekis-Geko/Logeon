@@ -3,8 +3,8 @@
 {% block content %}
 {% set is_owner = (character_id == session('character_id')) %}
 {% set is_staff = (session('user_is_administrator') == 1 or session('user_is_moderator') == 1 or session('user_is_master') == 1) %}
-{% set can_view_events = (is_owner or is_staff) %}
-{% set can_manage_events = can_view_events %}
+{% set can_view_events = true %}
+{% set can_manage_events = (is_owner or is_staff) %}
 {% set can_view_private_logs = (is_owner or is_staff) %}
 {% set can_view_session_logs = (session('user_is_administrator') == 1 or session('user_is_moderator') == 1) %}
 {% set can_view_registration_date = (is_owner or session('user_is_administrator') == 1 or session('user_is_moderator') == 1) %}
@@ -210,10 +210,7 @@
                 <div class="card mb-2">
                     <div class="card-body">
                         <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between align-items-center" data-archetype-item style="display:none;">
-                                <span name="archetype_label">Archetipo</span>
-                                <span name="archetype_icons" class="d-flex gap-1 flex-wrap justify-content-end"></span>
-                            </li>
+                            {{ slot('game.profile.summary.extra', {'character_id': character_id}) }}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 Stato sociale <img src="" name="socialstatus_icon" width="32" data-bs-toggle="tooltip" data-bs-title="">
                             </li>
@@ -236,6 +233,7 @@
                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                 <span><i class="bi bi-bank"></i> In banca</span> <span><b name="character_bank"></b> <i name="currency_name"></i></span>
                             </li>
+                            {{ slot('character.profile.wallets', {'character_id': character_id}) }}
                         </ul>
                     </div>
                 </div>
@@ -243,7 +241,7 @@
             </div>
             <div class="col-md-6 col-xl-4">
                 {% if can_view_events %}
-                <div class="card h-100 mh-100 overflow-auto" data-requires-match="any" data-requires-page-owner data-requires-staff>
+                <div class="card h-100 mh-100 overflow-auto">
                     <div class="card-header">
                         <h5>Diario</h5>
                     </div>
@@ -366,8 +364,13 @@
             </div>
             <div class="card-body">
                 <h5 class="card-title" name="title"></h5>
-                <p class="card-text" name="body"></p>
+                <div class="card-text" name="body"></div>
                 <p class="small text-muted mb-0" name="location"></p>
+                <div class="mt-3 d-none" name="archive_link_wrap">
+                    <a class="btn btn-sm btn-outline-secondary" name="archive_link" href="/game/chat-archives">
+                        Archivio collegato
+                    </a>
+                </div>
             </div>
             <div class="card-footer"><small>Ultima modifica: <b name="date_updated"></b></small></div>
         </div>
@@ -380,7 +383,7 @@
 {% if can_edit_profile_metrics %}
 {% include 'app/modals/profile/edit-health.twig' %}
 {% include 'app/modals/profile/assign-experience.twig' %}
-{% include 'app/modals/profile/edit-attributes.twig' %}
+{{ slot('game.profile.modals', {'character_id': character_id}) }}
 {% endif %}
 {% if can_view_private_logs %}
 {% include 'app/modals/profile/log-experience.twig' %}

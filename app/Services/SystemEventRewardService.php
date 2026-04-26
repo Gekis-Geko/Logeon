@@ -89,7 +89,7 @@ class SystemEventRewardService
         }
 
         $metaJson = json_encode($meta, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-        if (!is_string($metaJson) || $metaJson === '') {
+        if (!is_string($metaJson)) {
             $metaJson = '{}';
         }
 

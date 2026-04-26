@@ -264,10 +264,6 @@ class ItemService
         $sql .= ' ORDER BY sort_order ASC, id ASC';
         $rows = $this->fetchPrepared($sql);
 
-        if (!is_array($rows)) {
-            return [];
-        }
-
         return $rows;
     }
 

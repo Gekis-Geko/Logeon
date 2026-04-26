@@ -3,12 +3,13 @@
 declare(strict_types=1);
 
 use App\Services\MessagesService;
+use App\Services\NotificationService;
 use Core\Http\ApiResponse;
 use Core\Http\AppError;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\RateLimiter;
 
@@ -39,7 +40,7 @@ class Messages
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -135,6 +136,7 @@ class Messages
     {
         $this->trace('Richiamato il metodo: ' . __METHOD__);
         $me = \Core\AuthGuard::api()->requireCharacter();
+        \Core\AuthGuard::releaseSession();
         $data = $this->requestDataObject();
         $search = InputValidator::string($data, 'search', '');
         $dataset = $this->messagesService()->listThreads((int) $me, $search);
@@ -160,6 +162,7 @@ class Messages
     {
         $this->trace('Richiamato il metodo: ' . __METHOD__);
         $me = \Core\AuthGuard::api()->requireCharacter();
+        \Core\AuthGuard::releaseSession();
         $data = $this->requestDataObject();
 
         $thread_id = InputValidator::integer($data, 'thread_id', 0);
@@ -226,6 +229,7 @@ class Messages
     {
         $this->trace('Richiamato il metodo: ' . __METHOD__);
         $me = \Core\AuthGuard::api()->requireCharacter();
+        \Core\AuthGuard::releaseSession();
         $data = $this->requestDataObject();
 
         $thread_id = InputValidator::integer($data, 'thread_id', 0);
@@ -249,6 +253,7 @@ class Messages
 
         $me = \Core\AuthGuard::api()->requireCharacter();
         $this->enforceWritePermission();
+        \Core\AuthGuard::releaseSession();
         $data = $this->requestDataObject();
 
         $bodyRaw = property_exists($data, 'body') ? (string) $data->body : '';
@@ -301,6 +306,45 @@ class Messages
         }
 
         $message = $this->messagesService()->fetchMessageById((int) $messageId);
+        try {
+            $sender = $this->messagesService()->getCharacterNotificationTarget((int) $me);
+            $recipient = $this->messagesService()->getCharacterNotificationTarget((int) $other_id);
+            if (!empty($sender) && !empty($recipient) && (int) ($recipient->user_id ?? 0) > 0) {
+                $senderName = trim((string) ($sender->name ?? '') . ' ' . (string) ($sender->surname ?? ''));
+                if ($senderName === '') {
+                    $senderName = 'Qualcuno';
+                }
+
+                $excerpt = trim((string) $body);
+                if ($excerpt !== '') {
+                    if (function_exists('mb_substr')) {
+                        $excerpt = mb_substr($excerpt, 0, 120);
+                    } else {
+                        $excerpt = substr($excerpt, 0, 120);
+                    }
+                }
+
+                $notifService = new NotificationService();
+                $notifService->mergeOrCreateSystemUpdate(
+                    (int) $recipient->user_id,
+                    (int) $other_id,
+                    'direct_message:' . (int) $thread_id,
+                    'Nuovo messaggio da ' . $senderName,
+                    [
+                        'topic' => 'direct_message',
+                        'message' => $excerpt !== '' ? $excerpt : null,
+                        'actor_user_id' => (int) ($sender->user_id ?? 0),
+                        'actor_character_id' => (int) $me,
+                        'source_type' => 'direct_message',
+                        'source_id' => (int) $messageId,
+                        'action_url' => '/game/messages',
+                        'priority' => 'normal',
+                    ],
+                );
+            }
+        } catch (\Throwable $e) {
+            // fire-and-forget: non bloccare l'invio del messaggio
+        }
 
         $this->emitJson([
             'message' => $message,
@@ -308,3 +352,5 @@ class Messages
         ]);
     }
 }
+
+

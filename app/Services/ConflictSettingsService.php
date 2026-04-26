@@ -118,7 +118,7 @@ class ConflictSettingsService
      */
     public function updateSettings($payload): array
     {
-        $input = is_object($payload) ? (array) $payload : (is_array($payload) ? $payload : []);
+        $input = is_object($payload) ? (array) $payload : $payload;
         $current = $this->getSettings();
 
         $next = [

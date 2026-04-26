@@ -12,12 +12,11 @@ use Core\Http\ApiResponse;
 use Core\Http\RequestContext;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\RateLimiter;
 use Core\Router;
 use Core\SessionStore;
-use SysConfigs;
 
 class AuthSigninService
 {
@@ -31,7 +30,7 @@ class AuthSigninService
     public function __construct(DbAdapterInterface $db = null, LoggerInterface $logger = null)
     {
         $this->db = $db ?: DbAdapterFactory::createFromConfig();
-        $this->logger = $logger ?: new LegacyLoggerAdapter();
+        $this->logger = $logger ?: \Core\AppContext::logger();
     }
 
     private function firstPrepared(string $sql, array $params = [])
@@ -51,7 +50,7 @@ class AuthSigninService
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
+        if (defined('DB')) {
             return (string) DB['crypt_key'];
         }
 
@@ -270,11 +269,7 @@ class AuthSigninService
             return $this->superuserColumnExists;
         }
 
-        $dbName = DB['mysql']['db_name'] ?? '';
-        if ($dbName === '') {
-            $this->superuserColumnExists = false;
-            return false;
-        }
+        $dbName = (string) DB['mysql']['db_name'];
 
         $row = $this->firstPrepared(
             'SELECT 1 AS ok
@@ -395,10 +390,6 @@ class AuthSigninService
             [$userId],
         );
 
-        if (!is_array($rows)) {
-            return [];
-        }
-
         return $rows;
     }
 
@@ -428,7 +419,7 @@ class AuthSigninService
     {
         $character = $this->normalizeSigninCharacterPosition($character);
         $this->setSessionsCharacter($character);
-        $this->setConfigsSessions((new SysConfigs())->list(false)['dataset']);
+        $this->setConfigsSessions($this->listConfigsForSession());
 
         if (!empty($character->id)) {
             $this->setLastSignin('character', (int) $character->id);
@@ -437,6 +428,14 @@ class AuthSigninService
         AuditLogService::writeFromUrl(Router::currentUri(), ['user' => $user, 'character' => $character]);
 
         return ['status' => 'ok', 'user' => $user, 'character' => $character];
+    }
+
+    private function listConfigsForSession(): array
+    {
+        return $this->fetchPrepared(
+            'SELECT `key`, `value`
+             FROM sys_configs',
+        );
     }
 
     private function setConfigsSessions($configs): void
@@ -744,3 +743,5 @@ class AuthSigninService
         );
     }
 }
+
+

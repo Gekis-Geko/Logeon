@@ -293,13 +293,7 @@ class GuildService
 
     public function listRequirementSocialStatuses(): array
     {
-        $rows = $this->fetchPrepared(
-            'SELECT id, name
-             FROM social_status
-             ORDER BY name ASC, id ASC',
-        );
-
-        return !empty($rows) ? $rows : [];
+        return SocialStatusProviderRegistry::listAll();
     }
 
     public function listRequirementJobs(): array
@@ -401,7 +395,8 @@ class GuildService
                     $result['missing'][] = $req->label ?: ('Fama minima: ' . $value);
                 }
             } elseif ($type === 'min_socialstatus_id') {
-                if ((int) $character->socialstatus_id !== (int) $value) {
+                $requiredStatusId = is_numeric($value) ? (int) $value : null;
+                if (!SocialStatusProviderRegistry::meetsRequirement((int) $character->id, $requiredStatusId)) {
                     $result['allowed'] = false;
                     $result['missing'][] = $req->label ?: 'Stato sociale richiesto';
                 }

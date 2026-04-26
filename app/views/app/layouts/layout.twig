@@ -14,13 +14,15 @@
 {% block game_shell %}
     <section class="container-fluid ui-app-shell">
         {% block game_primary_navigation %}
-            {% include 'app/layouts/navbar.twig' %}
+        {% include 'app/layouts/navbar.twig' %}
         {% endblock %}
-        <script type="text/javascript" src="/assets/js/dist/game-core.bundle.js?v={{ pilot_bundle_version }}"></script>
+        <script type="module" src="/assets/js/dist/game-core.bundle.js?v={{ pilot_bundle_version }}"></script>
         <script type="text/javascript">
             window.__APP_USE_PAGE_BUNDLES = {{ pilot_bundle_enabled ? 'true' : 'false' }};
         </script>
+        {{ hook_scripts('game')|raw }}
         {{ module_assets('game')|raw }}
+        <script type="module" src="/assets/js/dist/game-bootstrap.bundle.js?v={{ pilot_bundle_version }}"></script>
         {% block game_tail_assets %}
             {{ theme_assets('game_js')|raw }}
         {% endblock %}

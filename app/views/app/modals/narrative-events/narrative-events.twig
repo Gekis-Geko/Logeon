@@ -13,9 +13,9 @@
                     <option value="conflict">Conflitti</option>
                     <option value="faction">Fazione</option>
                     <option value="system_event">Eventi</option>
-                    <option value="quest">Quest</option>
                     <option value="lifecycle">Ciclo vita</option>
                     <option value="manual">Manuale</option>
+                    {{ slot('game.narrative_events.source_filter_options') }}
                 </select>
                 <select id="narrative-events-tag-filter" class="form-select form-select-sm" style="width:auto;">
                     <option value="">Tutti i tag</option>
@@ -59,7 +59,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="narrative-event-create-description">Descrizione</label>
-                    <textarea class="form-control" id="narrative-event-create-description" rows="4" maxlength="2000" placeholder="Descrivi brevemente l'evento..."></textarea>
+                    <textarea class="form-control richtext-editor" id="narrative-event-create-description" rows="4" maxlength="2000" placeholder="Descrivi brevemente l'evento..."></textarea>
                 </div>
                 <div class="row g-3">
                     <div class="col-sm-6">

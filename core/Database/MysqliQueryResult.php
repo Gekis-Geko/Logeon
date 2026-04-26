@@ -6,21 +6,16 @@ namespace Core\Database;
 
 class MysqliQueryResult
 {
-    /** @var \mysqli_result|null */
-    private $result;
+    private ?\mysqli_result $result;
 
-    public function __construct($result = null)
+    public function __construct(?\mysqli_result $result = null)
     {
-        $this->result = ($result instanceof \mysqli_result) ? $result : null;
+        $this->result = $result;
     }
 
-    public function first()
+    public function first(): object|array
     {
-        if (!$this->result || !isset($this->result->num_rows)) {
-            return [];
-        }
-
-        if ($this->result->num_rows <= 0) {
+        if ($this->result === null || $this->result->num_rows <= 0) {
             return [];
         }
 
@@ -30,11 +25,7 @@ class MysqliQueryResult
 
     public function fetch(): array
     {
-        if (!$this->result || !isset($this->result->num_rows)) {
-            return [];
-        }
-
-        if ($this->result->num_rows <= 0) {
+        if ($this->result === null || $this->result->num_rows <= 0) {
             return [];
         }
 
@@ -48,7 +39,7 @@ class MysqliQueryResult
 
     public function count(): int
     {
-        if (!$this->result || !isset($this->result->num_rows)) {
+        if ($this->result === null) {
             return 0;
         }
 

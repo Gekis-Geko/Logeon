@@ -10,7 +10,7 @@ use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
 
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class CharacterLifecycle extends LifecyclePhaseDefinition
@@ -37,7 +37,7 @@ class CharacterLifecycle extends LifecyclePhaseDefinition
         if ($this->logger instanceof LoggerInterface) {
             return $this->logger;
         }
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -256,3 +256,5 @@ class CharacterLifecycle extends LifecyclePhaseDefinition
         return $response;
     }
 }
+
+

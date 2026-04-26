@@ -1,0 +1,42 @@
+{
+  "id": "logeon.social-status",
+  "name": "Logeon Social Status",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo Stati sociali: provider runtime e UI admin agganciati via hook.",
+  "category": "gameplay",
+  "class": "bundled",
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "requires": [],
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "assets": {
+    "admin": {
+      "js": ["dist/admin.js"]
+    }
+  },
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Stati sociali",
+          "href": "/admin/social-status",
+          "icon": "bi bi-person-badge",
+          "page": "social-status",
+          "section": "Parametri ed entita",
+          "section_order": 20,
+          "order": 140
+        }
+      ]
+    }
+  },
+  "features": [
+    "social_status.provider.override",
+    "social_status.admin.views"
+  ]
+}

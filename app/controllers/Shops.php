@@ -8,7 +8,7 @@ use App\Services\ShopAdminService;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class Shops extends Shop
@@ -36,7 +36,7 @@ class Shops extends Shop
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -100,3 +100,5 @@ class Shops extends Shop
         return parent::delete($operator);
     }
 }
+
+

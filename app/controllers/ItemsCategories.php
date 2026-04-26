@@ -8,7 +8,7 @@ use App\Services\ItemCategoryService;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class ItemsCategories extends ItemsCategory
@@ -36,7 +36,7 @@ class ItemsCategories extends ItemsCategory
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -100,3 +100,5 @@ class ItemsCategories extends ItemsCategory
         return parent::delete($operator);
     }
 }
+
+

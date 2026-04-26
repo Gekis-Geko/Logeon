@@ -50,12 +50,124 @@ class CharacterEventService
                 e.created_by_character_id,
                 e.date_created,
                 e.date_updated,
+                l.name AS location_name,
+                ca_first.id AS linked_archive_id,
+                ca_first.title AS linked_archive_title,
+                IFNULL(ca_count.linked_archives_count, 0) AS linked_archives_count
+            FROM character_events e
+            LEFT JOIN locations l ON e.location_id = l.id
+            LEFT JOIN character_chat_archives ca_first
+                ON ca_first.id = (
+                    SELECT ca2.id
+                    FROM character_chat_archives ca2
+                    WHERE ca2.diary_event_id = e.id
+                      AND ca2.deleted_at IS NULL
+                    ORDER BY ca2.created_at DESC, ca2.id DESC
+                    LIMIT 1
+                )
+            LEFT JOIN (
+                SELECT diary_event_id, COUNT(*) AS linked_archives_count
+                FROM character_chat_archives
+                WHERE diary_event_id IS NOT NULL
+                  AND deleted_at IS NULL
+                GROUP BY diary_event_id
+            ) ca_count ON ca_count.diary_event_id = e.id
+            WHERE e.character_id = ?
+            ORDER BY COALESCE(e.date_event, e.date_created) DESC, e.id DESC',
+            [$characterId],
+        );
+
+        return !empty($rows) ? $rows : [];
+    }
+
+    public function listPublicByCharacter(int $characterId): array
+    {
+        if ($characterId <= 0) {
+            return [];
+        }
+
+        $rows = $this->fetchPrepared(
+            'SELECT e.id,
+                e.character_id,
+                e.title,
+                e.body,
+                e.location_id,
+                e.date_event,
+                e.is_visible,
+                e.created_by_user_id,
+                e.created_by_character_id,
+                e.date_created,
+                e.date_updated,
+                l.name AS location_name,
+                ca_first.id AS linked_archive_id,
+                ca_first.title AS linked_archive_title,
+                IFNULL(ca_count.linked_archives_count, 0) AS linked_archives_count
+            FROM character_events e
+            LEFT JOIN locations l ON e.location_id = l.id
+            LEFT JOIN character_chat_archives ca_first
+                ON ca_first.id = (
+                    SELECT ca2.id
+                    FROM character_chat_archives ca2
+                    WHERE ca2.diary_event_id = e.id
+                      AND ca2.deleted_at IS NULL
+                    ORDER BY ca2.created_at DESC, ca2.id DESC
+                    LIMIT 1
+                )
+            LEFT JOIN (
+                SELECT diary_event_id, COUNT(*) AS linked_archives_count
+                FROM character_chat_archives
+                WHERE diary_event_id IS NOT NULL
+                  AND deleted_at IS NULL
+                GROUP BY diary_event_id
+            ) ca_count ON ca_count.diary_event_id = e.id
+            WHERE e.character_id = ?
+              AND e.is_visible = 1
+            ORDER BY COALESCE(e.date_event, e.date_created) DESC, e.id DESC',
+            [$characterId],
+        );
+
+        return !empty($rows) ? $rows : [];
+    }
+
+    public function searchByCharacterTitle(int $characterId, string $query, int $limit = 10): array
+    {
+        if ($characterId <= 0) {
+            return [];
+        }
+
+        $needle = trim($query);
+        if ($needle === '') {
+            return [];
+        }
+
+        if ($limit < 1) {
+            $limit = 1;
+        }
+        if ($limit > 20) {
+            $limit = 20;
+        }
+
+        $like = '%' . $needle . '%';
+
+        $rows = $this->fetchPrepared(
+            'SELECT e.id,
+                e.character_id,
+                e.title,
+                e.location_id,
+                e.date_event,
+                e.is_visible,
+                e.date_created,
                 l.name AS location_name
             FROM character_events e
             LEFT JOIN locations l ON e.location_id = l.id
             WHERE e.character_id = ?
-            ORDER BY COALESCE(e.date_event, e.date_created) DESC, e.id DESC',
-            [$characterId],
+              AND e.title LIKE ?
+            ORDER BY
+                CASE WHEN e.title = ? THEN 0 ELSE 1 END ASC,
+                COALESCE(e.date_event, e.date_created) DESC,
+                e.id DESC
+            LIMIT ' . (int) $limit,
+            [$characterId, $like, $needle],
         );
 
         return !empty($rows) ? $rows : [];

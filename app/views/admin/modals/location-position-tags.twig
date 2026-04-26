@@ -1,0 +1,57 @@
+<div class="modal fade" id="admin-location-position-tags-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tag di posizione</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="admin-location-position-tags-form" autocomplete="off">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="mb-3 position-relative">
+                        <label class="form-label fw-semibold">Location <span class="text-danger">*</span></label>
+                        <input type="hidden" name="location_id" value="">
+                        <input type="text" name="location_label" class="form-control" placeholder="Cerca location..." data-role="admin-lpt-modal-location-input">
+                        <div class="list-group mt-1 d-none position-absolute w-100" style="z-index:1050;" data-role="admin-lpt-modal-location-suggestions"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Nome <span class="text-danger">*</span></label>
+                        <input type="text" name="name" class="form-control" placeholder="es. Panchina, Tavolo 1, Ingresso" maxlength="80" required>
+                        <div class="form-text">Massimo 80 caratteri.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Descrizione breve</label>
+                        <input type="text" name="short_description" class="form-control" placeholder="Descrizione opzionale" maxlength="255">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Thumbnail (URL)</label>
+                        <input type="text" name="thumbnail" class="form-control" placeholder="URL immagine opzionale">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Stato</label>
+                        <select name="is_active" class="form-select">
+                            <option value="1">Attivo</option>
+                            <option value="0">Inattivo</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-sm btn-outline-danger d-none" data-action="admin-location-position-tag-delete">
+                    <i class="bi bi-trash me-1"></i>Elimina
+                </button>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                    <button type="button" class="btn btn-sm btn-primary" data-action="admin-location-position-tag-save">
+                        <i class="bi bi-check2 me-1"></i>Salva
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -45,7 +45,7 @@ class ForumAdminService
         ];
 
         $parts = explode('|', $raw);
-        $field = trim($parts[0] ?? '');
+        $field = trim($parts[0]);
         $dir = strtoupper(trim($parts[1] ?? 'ASC')) === 'DESC' ? 'DESC' : 'ASC';
         $col = $allowed[$field] ?? 'f.name';
 

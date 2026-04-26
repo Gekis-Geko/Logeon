@@ -1,0 +1,86 @@
+<div class="modal fade" id="admin-social-status-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="d-flex justify-content-end my-3 mx-4">
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+                <h4 class="display-6 text-center mt-3 mb-2">Stato sociale</h4>
+                <h6 class="text-center text-muted">Configura soglie di fama e privilegi associati.</h6>
+                <hr class="my-4" />
+
+                <form id="admin-social-status-form" class="row g-3">
+                    <input type="hidden" name="id" value="">
+
+                    <div class="col-12">
+                        <label class="form-label">Nome <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" name="name" maxlength="120" required>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Descrizione</label>
+                        <textarea class="form-control" name="description" rows="2" maxlength="500"></textarea>
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Icona</label>
+                        <div data-img-upload-wrap>
+                            <div class="btn-group btn-group-sm mb-2" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-img-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-img-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-img-tab-panel="link">
+                                <input type="text" class="form-control" name="icon" maxlength="255" placeholder="https://...">
+                            </div>
+                            <div data-img-tab-panel="upload" style="display:none">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="social_status_icon" style="cursor:pointer">
+                                    <i class="bi bi-image me-1"></i> Trascina qui l'immagine oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="social_status_icon">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: jpg, png, gif, webp, svg. Max 2 MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="social_status_icon">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="social_status_icon">Annulla</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <label class="form-label">Fama minima <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="min" value="0">
+                    </div>
+                    <div class="col-6">
+                        <label class="form-label">Fama massima <span class="text-danger">*</span></label>
+                        <input type="number" class="form-control" name="max" value="0">
+                    </div>
+
+                    <hr class="my-1">
+                    <p class="small text-muted mb-0">Privilegi</p>
+
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Sconto negozi (%)</label>
+                        <input type="number" class="form-control" name="shop_discount" min="0" max="100" value="0">
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Sblocca casa</label>
+                        <select class="form-select" name="unlock_home">
+                            <option value="0">No</option>
+                            <option value="1">Sì</option>
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <label class="form-label">Tier quest</label>
+                        <input type="number" class="form-control" name="quest_tier" min="0" value="0">
+                    </div>
+                </form>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <button type="button" class="btn btn-outline-danger d-none" data-action="admin-social-status-delete">Elimina</button>
+                    <button type="button" class="btn btn-primary" data-action="admin-social-status-save">Salva</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

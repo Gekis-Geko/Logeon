@@ -14,47 +14,47 @@ class AuthService
 
     public static function setDbAdapter(DbAdapterInterface $adapter = null): void
     {
-        static::$dbAdapter = $adapter;
+        self::$dbAdapter = $adapter;
     }
 
     private static function db(): DbAdapterInterface
     {
-        if (static::$dbAdapter instanceof DbAdapterInterface) {
-            return static::$dbAdapter;
+        if (self::$dbAdapter instanceof DbAdapterInterface) {
+            return self::$dbAdapter;
         }
 
-        static::$dbAdapter = DbAdapterFactory::createFromConfig();
-        return static::$dbAdapter;
+        self::$dbAdapter = DbAdapterFactory::createFromConfig();
+        return self::$dbAdapter;
     }
 
     private static function signinService(): AuthSigninService
     {
-        return new AuthSigninService(static::db());
+        return new AuthSigninService(self::db());
     }
 
     private static function signupService(): AuthSignupService
     {
-        return new AuthSignupService(static::db());
+        return new AuthSignupService(self::db());
     }
 
     private static function passwordResetService(): AuthPasswordResetService
     {
-        return new AuthPasswordResetService(static::db());
+        return new AuthPasswordResetService(self::db());
     }
 
     private static function passwordChangeService(): AuthPasswordChangeService
     {
-        return new AuthPasswordChangeService(static::db());
+        return new AuthPasswordChangeService(self::db());
     }
 
     public static function signin()
     {
-        return static::signinService()->signin();
+        return self::signinService()->signin();
     }
 
     public static function signup(): void
     {
-        static::signupService()->signup();
+        self::signupService()->signup();
     }
 
     /**
@@ -62,41 +62,41 @@ class AuthService
      */
     public static function verifyEmailToken(string $token): array
     {
-        return static::signupService()->verifyEmailToken($token);
+        return self::signupService()->verifyEmailToken($token);
     }
 
     public static function signinByUserId(int $userId, bool $emitResponse = false): array
     {
-        return static::signinService()->signinByUserId($userId, $emitResponse);
+        return self::signinService()->signinByUserId($userId, $emitResponse);
     }
 
     public static function signout()
     {
-        return static::signinService()->signout();
+        return self::signinService()->signout();
     }
 
     public static function signinCharactersList(bool $emitResponse = false): array
     {
-        return static::signinService()->listSigninCharactersForCurrentUser($emitResponse);
+        return self::signinService()->listSigninCharactersForCurrentUser($emitResponse);
     }
 
     public static function signinCharacterSelect(int $characterId, bool $emitResponse = false): array
     {
-        return static::signinService()->selectSigninCharacter($characterId, $emitResponse);
+        return self::signinService()->selectSigninCharacter($characterId, $emitResponse);
     }
 
     public static function resetPassword()
     {
-        return static::passwordResetService()->resetPassword();
+        return self::passwordResetService()->resetPassword();
     }
 
     public static function resetPasswordConfirm()
     {
-        return static::passwordResetService()->resetPasswordConfirm();
+        return self::passwordResetService()->resetPasswordConfirm();
     }
 
     public function changePassword($payload = null): void
     {
-        static::passwordChangeService()->changePassword($payload);
+        self::passwordChangeService()->changePassword($payload);
     }
 }

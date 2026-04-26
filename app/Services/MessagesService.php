@@ -283,6 +283,16 @@ class MessagesService
         );
     }
 
+    public function getCharacterNotificationTarget(int $characterId)
+    {
+        return $this->firstPrepared(
+            'SELECT id, user_id, name, surname
+             FROM characters
+             WHERE id = ?',
+            [$characterId],
+        );
+    }
+
     public function createThread(int $characterOne, int $characterTwo, string $subject): int
     {
         $this->execPrepared(

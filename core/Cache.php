@@ -8,52 +8,52 @@ class Cache
 {
     private static function enabled(): bool
     {
-        return (defined('CONFIG') && isset(CONFIG['cache']['enabled']) && CONFIG['cache']['enabled'] === true);
+        if (!defined('CONFIG')) {
+            return false;
+        }
+        return CONFIG['cache']['enabled'];
     }
 
     private static function dir(): string
     {
-        if (defined('CONFIG') && isset(CONFIG['cache']['dir']) && CONFIG['cache']['dir'] !== '') {
-            return (string) CONFIG['cache']['dir'];
+        if (!defined('CONFIG')) {
+            return __DIR__ . '/../tmp/cache';
         }
-        if (defined('CONFIG') && isset(CONFIG['dirs']['tmp'])) {
-            return (string) CONFIG['dirs']['tmp'] . '/cache';
-        }
-        return __DIR__ . '/../tmp/cache';
+        return (string) CONFIG['cache']['dir'];
     }
 
-    private static function ttl($ttl = null): int
+    private static function ttl(int|null $ttl = null): int
     {
         if ($ttl !== null && $ttl > 0) {
             return (int) $ttl;
         }
-        if (defined('CONFIG') && isset(CONFIG['cache']['ttl'])) {
-            return (int) CONFIG['cache']['ttl'];
+        if (!defined('CONFIG')) {
+            return 300;
         }
-        return 300;
+        return (int) CONFIG['cache']['ttl'];
     }
 
-    private static function path($key): string
+    private static function path(string $key): string
     {
         $hash = sha1((string) $key);
-        return rtrim(static::dir(), '/\\') . '/' . $hash . '.cache';
+        return rtrim(self::dir(), '/\\') . '/' . $hash . '.cache';
     }
 
     private static function ensureDir(): void
     {
-        $dir = static::dir();
+        $dir = self::dir();
         if (!is_dir($dir)) {
             @mkdir($dir, 0755, true);
         }
     }
 
-    public static function get($key)
+    public static function get(string $key): mixed
     {
-        if (!static::enabled()) {
+        if (!self::enabled()) {
             return null;
         }
 
-        $path = static::path($key);
+        $path = self::path($key);
         if (!file_exists($path)) {
             return null;
         }
@@ -63,7 +63,7 @@ class Cache
             return null;
         }
 
-        $payload = static::decodePayload($raw);
+        $payload = self::decodePayload($raw);
         if ($payload === null) {
             @unlink($path);
             return null;
@@ -77,30 +77,30 @@ class Cache
         return $payload['value'] ?? null;
     }
 
-    public static function set($key, $value, $ttl = null): bool
+    public static function set(string $key, mixed $value, int|null $ttl = null): bool
     {
-        if (!static::enabled()) {
+        if (!self::enabled()) {
             return false;
         }
 
-        static::ensureDir();
-        $exp = static::ttl($ttl);
+        self::ensureDir();
+        $exp = self::ttl($ttl);
         $payload = [
             'exp' => ($exp > 0) ? (time() + $exp) : 0,
             'value' => $value,
         ];
 
-        $path = static::path($key);
+        $path = self::path($key);
         return (bool) @file_put_contents($path, serialize($payload));
     }
 
-    public static function forget($key): bool
+    public static function forget(string $key): bool
     {
-        if (!static::enabled()) {
+        if (!self::enabled()) {
             return false;
         }
 
-        $path = static::path($key);
+        $path = self::path($key);
         if (file_exists($path)) {
             return @unlink($path);
         }

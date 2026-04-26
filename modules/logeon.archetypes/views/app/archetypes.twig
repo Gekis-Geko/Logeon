@@ -1,0 +1,67 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<div class="container">
+    <section id="archetypes-page" class="row ui-page">
+        <header class="mt-3">
+            <h4 class="display-6">Archetipi</h4>
+            <h6 class="mb-0">Consulta gli archetipi attivi e le regole di selezione in questa ambientazione.</h6>
+        </header>
+        <hr class="w-75 ms-2" />
+
+        <article class="mb-3 col-md-12 p-3 pt-0">
+            <div class="card">
+                <div class="card-body">
+                    {% if archetypes_enabled %}
+                        {% if archetypes_rows is not empty %}
+                            <div class="list-group list-group-flush border rounded">
+                                {% for row in archetypes_rows %}
+                                    <div class="list-group-item">
+                                        <div class="d-flex align-items-start gap-3">
+                                            {% if row.icon is not empty %}
+                                                <img src="{{ row.icon|e('html_attr') }}"
+                                                     alt="{{ row.name|default('Archetipo')|e('html_attr') }}"
+                                                     class="rounded border border-dark-subtle"
+                                                     style="width:64px;height:64px;object-fit:cover;">
+                                            {% else %}
+                                                <span class="d-inline-flex align-items-center justify-content-center rounded border border-dark-subtle"
+                                                      style="width:64px;height:64px;">
+                                                    <i class="bi bi-person-badge fs-4"></i>
+                                                </span>
+                                            {% endif %}
+
+                                            <div class="flex-grow-1">
+                                                <div class="d-flex align-items-center flex-wrap gap-2 mb-1">
+                                                    <h6 class="mb-0">{{ row.name|default('Archetipo') }}</h6>
+                                                    {% if row.slug is not empty %}
+                                                        <span class="badge text-bg-dark-subtle border border-dark-subtle">{{ row.slug }}</span>
+                                                    {% endif %}
+                                                </div>
+                                                {% if row.description is not empty %}
+                                                    <div class="small mb-2">{{ row.description|raw }}</div>
+                                                {% else %}
+                                                    <p class="small text-muted mb-2">Nessuna descrizione breve disponibile.</p>
+                                                {% endif %}
+                                                {% if row.lore_text is not empty %}
+                                                    <details class="small">
+                                                        <summary class="text-primary-emphasis">Approfondimento narrativo</summary>
+                                                        <div class="text-muted mt-2">{{ row.lore_text|raw }}</div>
+                                                    </details>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="small text-muted">Nessun archetipo attivo disponibile.</div>
+                        {% endif %}
+                    {% else %}
+                        <div class="alert alert-info mb-0">Il sistema archetipi e attualmente disattivato in questa istanza.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </article>
+    </section>
+</div>
+{% endblock %}

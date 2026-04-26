@@ -8,7 +8,7 @@ use Core\Http\AppError;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\SessionStore;
 
@@ -37,7 +37,7 @@ class LocationDrops
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -223,3 +223,5 @@ class LocationDrops
         ResponseEmitter::emit(ApiResponse::json(['status' => 'ok']));
     }
 }
+
+

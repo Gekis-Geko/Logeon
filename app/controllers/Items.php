@@ -11,7 +11,7 @@ use Core\Http\InputValidator;
 use Core\Http\RequestData;
 
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class Items extends Item
@@ -41,7 +41,7 @@ class Items extends Item
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -174,3 +174,5 @@ class Items extends Item
         return $this;
     }
 }
+
+

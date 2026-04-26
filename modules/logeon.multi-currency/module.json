@@ -1,0 +1,25 @@
+{
+  "id": "logeon.multi-currency",
+  "name": "Logeon Multi Currency",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo Valute multiple: estensione opzionale del sistema valuta core.",
+  "category": "gameplay",
+  "class": "bundled",
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "requires": [],
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "features": [
+    "currency.admin.crud",
+    "currency.extra_wallets",
+    "currency.available_list",
+    "twig.slot.character.profile.wallets",
+    "twig.slot.shop.price.extra"
+  ]
+}

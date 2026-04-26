@@ -36,12 +36,19 @@ if (is_file($customBootstrap)) {
     require_once $customBootstrap;
 }
 
-use App\Services\FactionService;
+$factionsModuleBootstrap = $root . '/modules/logeon.factions/bootstrap.php';
+if (!is_file($factionsModuleBootstrap)) {
+    fwrite(STDERR, "[FAIL] Missing factions module bootstrap: {$factionsModuleBootstrap}\n");
+    exit(1);
+}
+require_once $factionsModuleBootstrap;
+
 use App\Services\LifecycleService;
 use App\Services\NarrativeEventService;
 use Core\Database\DbAdapterFactory;
 use Core\Database\MysqliDbAdapter;
 use Core\Http\AppError;
+use Modules\Logeon\Factions\Services\FactionService;
 
 function coherenceSmokeAssert(bool $condition, string $message): void
 {

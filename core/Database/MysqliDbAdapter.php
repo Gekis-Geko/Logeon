@@ -13,7 +13,7 @@ class MysqliDbAdapter implements DbAdapterInterface
 
     public function __construct(array $config = [])
     {
-        $default = (defined('DB') && isset(DB['mysql']) && is_array(DB['mysql'])) ? DB['mysql'] : [];
+        $default = defined('DB') ? DB['mysql'] : [];
         $this->config = !empty($config) ? $config : $default;
     }
 
@@ -73,7 +73,7 @@ class MysqliDbAdapter implements DbAdapterInterface
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
+        if (defined('DB')) {
             return (string) DB['crypt_key'];
         }
 
@@ -130,7 +130,7 @@ class MysqliDbAdapter implements DbAdapterInterface
                 parent::__construct(null);
             }
 
-            public function first()
+            public function first(): object|array
             {
                 return $this->rows[0] ?? [];
             }
@@ -188,7 +188,7 @@ class MysqliDbAdapter implements DbAdapterInterface
         return (int) $link->insert_id;
     }
 
-    public function safe($value, $quotes = true)
+    public function safe(mixed $value, bool $quotes = true): string|array
     {
         if ($value === null) {
             return 'NULL';
@@ -214,7 +214,7 @@ class MysqliDbAdapter implements DbAdapterInterface
         return ($quotes) ? "'" . $escaped . "'" : $escaped;
     }
 
-    public function ifNotNull($value, $altvalue = false)
+    public function ifNotNull(mixed $value, mixed $altvalue = false): mixed
     {
         if (!isset($value)) {
             return 'NULL';
@@ -227,12 +227,12 @@ class MysqliDbAdapter implements DbAdapterInterface
         return $altvalue;
     }
 
-    public function crypt($value)
+    public function crypt(mixed $value): string
     {
         return ' AES_ENCRYPT(' . $this->safe($value) . ', "' . $this->cryptKey() . '") ';
     }
 
-    public function decrypt($value, $alias = false)
+    public function decrypt(mixed $value, mixed $alias = false): string
     {
         $as = '';
         if ($alias !== false && $alias !== null && trim((string) $alias) !== '') {
@@ -247,54 +247,58 @@ class MysqliDbAdapter implements DbAdapterInterface
 
     /**
      * @param array<int,mixed> $params
+     * @return array{0: \mysqli_stmt|null, 1: string, 2: int}
      */
-    private function prepareAndExecute(string $sql, array $params = []): \mysqli_stmt
+    private function tryPrepareExecute(string $sql, array $params): array
     {
-        $attempt = 0;
-        while ($attempt < 2) {
-            $link = $this->connect();
-            $stmt = $link->prepare($sql);
-            if (!$stmt instanceof \mysqli_stmt) {
-                $message = trim((string) $link->error);
-                if ($message === '') {
-                    $message = 'Errore database';
-                }
-
-                if ($this->shouldReconnect((int) $link->errno) && $attempt === 0) {
-                    self::$dbLink = null;
-                    $attempt++;
-                    continue;
-                }
-
-                throw new \RuntimeException($message);
-            }
-
-            if (!empty($params)) {
-                $this->bindParams($stmt, $params);
-            }
-
-            $ok = $stmt->execute();
-            if ($ok) {
-                return $stmt;
-            }
-
-            $message = trim((string) $stmt->error);
+        $link = $this->connect();
+        $stmt = $link->prepare($sql);
+        if (!$stmt instanceof \mysqli_stmt) {
+            $message = trim((string) $link->error);
             if ($message === '') {
                 $message = 'Errore database';
             }
-            $errno = (int) $stmt->errno;
-            $stmt->close();
+            return [null, $message, (int) $link->errno];
+        }
 
-            if ($this->shouldReconnect($errno) && $attempt === 0) {
-                self::$dbLink = null;
-                $attempt++;
-                continue;
-            }
+        if (!empty($params)) {
+            $this->bindParams($stmt, $params);
+        }
 
+        if ($stmt->execute()) {
+            return [$stmt, '', 0];
+        }
+
+        $message = trim((string) $stmt->error);
+        if ($message === '') {
+            $message = 'Errore database';
+        }
+        $errno = (int) $stmt->errno;
+        $stmt->close();
+        return [null, $message, $errno];
+    }
+
+    /**
+     * @param array<int,mixed> $params
+     */
+    private function prepareAndExecute(string $sql, array $params = []): \mysqli_stmt
+    {
+        [$stmt, $message, $errno] = $this->tryPrepareExecute($sql, $params);
+        if ($stmt instanceof \mysqli_stmt) {
+            return $stmt;
+        }
+
+        if (!$this->shouldReconnect($errno)) {
             throw new \RuntimeException($message);
         }
 
-        throw new \RuntimeException('Errore database');
+        self::$dbLink = null;
+        [$stmt, $message,] = $this->tryPrepareExecute($sql, $params);
+        if ($stmt instanceof \mysqli_stmt) {
+            return $stmt;
+        }
+
+        throw new \RuntimeException($message);
     }
 
     /**
@@ -361,10 +365,7 @@ class MysqliDbAdapter implements DbAdapterInterface
      */
     private function fetchRowsFromStatement(\mysqli_stmt $stmt): array
     {
-        $result = false;
-        if (method_exists($stmt, 'get_result')) {
-            $result = $stmt->get_result();
-        }
+        $result = $stmt->get_result();
 
         if ($result instanceof \mysqli_result) {
             $rows = [];

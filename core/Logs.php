@@ -23,18 +23,18 @@ class Logs
 
     public static function trace($str, $obj = false): void
     {
-        if (!static::shouldTrace()) {
+        if (!self::shouldTrace()) {
             return;
         }
 
-        if (!static::shouldTraceStack()) {
-            static::traceLite($str, $obj);
+        if (!self::shouldTraceStack()) {
+            self::traceLite($str, $obj);
             return;
         }
 
         $elem = [];
         $name = '';
-        $limit = static::traceStackLimit();
+        $limit = self::traceStackLimit();
         $stack = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, $limit);
         $total_logs = count($stack);
 
@@ -55,7 +55,7 @@ class Logs
 
         for ($i = 0; $i < $total_logs; $i++) {
             $e = $stack[$i];
-            $fn = $e['function'] ?? '';
+            $fn = $e['function'];
             if (in_array($fn, $ignored_functions, true)) {
                 continue;
             }
@@ -74,9 +74,7 @@ class Logs
             $elem[] = '<span>' . $class . ' -> ' . $fn . '(' . $line . ')</span>';
         }
 
-        if (is_array($elem)) {
-            $name = implode(' | ', $elem);
-        }
+        $name = implode(' | ', $elem);
 
         if (!is_array($str) && !is_object($str) && !$obj) {
             $string_to_log = '<small>(' . date('Y-m-d H:i:s') . ')</small> - ' . $name . ': ' . $str . '<br />';
@@ -85,13 +83,13 @@ class Logs
         }
 
         $string_to_log .= '<hr>';
-        static::write($string_to_log);
-        static::emitDebugIfNeeded($string_to_log);
+        self::write($string_to_log);
+        self::emitDebugIfNeeded($string_to_log);
     }
 
     public static function traceLite($str, $obj = false): void
     {
-        if (!static::shouldTrace()) {
+        if (!self::shouldTrace()) {
             return;
         }
 
@@ -102,36 +100,31 @@ class Logs
         }
 
         $string_to_log .= '<hr>';
-        static::write($string_to_log);
-        static::emitDebugIfNeeded($string_to_log);
+        self::write($string_to_log);
+        self::emitDebugIfNeeded($string_to_log);
     }
 
     private static function write($string_to_log): void
     {
-        static::$str_logger .= Filter::htmlEntities((string) $string_to_log);
+        self::$str_logger .= Filter::htmlEntities((string) $string_to_log);
     }
 
     private static function shouldTrace(): bool
     {
-        if (!defined('CONFIG') || !is_array(CONFIG)) {
-            return false;
+        $logs = self::logsConfig();
+        if (array_key_exists('trace', $logs)) {
+            return $logs['trace'] === true;
         }
 
-        if (isset(CONFIG['logs']) && is_array(CONFIG['logs']) && array_key_exists('trace', CONFIG['logs'])) {
-            return CONFIG['logs']['trace'] === true;
-        }
-
-        return isset(CONFIG['debug']) && CONFIG['debug'] === true;
+        $config = self::runtimeConfig();
+        return array_key_exists('debug', $config) && $config['debug'] === true;
     }
 
     private static function shouldTraceStack(): bool
     {
-        if (!defined('CONFIG') || !is_array(CONFIG)) {
-            return false;
-        }
-
-        if (isset(CONFIG['logs']) && is_array(CONFIG['logs']) && array_key_exists('trace_stack', CONFIG['logs'])) {
-            return CONFIG['logs']['trace_stack'] === true;
+        $logs = self::logsConfig();
+        if (array_key_exists('trace_stack', $logs)) {
+            return $logs['trace_stack'] === true;
         }
 
         return false;
@@ -139,8 +132,9 @@ class Logs
 
     private static function traceStackLimit(): int
     {
-        if (isset(CONFIG['logs']) && is_array(CONFIG['logs']) && array_key_exists('trace_stack_limit', CONFIG['logs'])) {
-            $limit = (int) CONFIG['logs']['trace_stack_limit'];
+        $logs = self::logsConfig();
+        if (array_key_exists('trace_stack_limit', $logs)) {
+            $limit = (int) $logs['trace_stack_limit'];
             if ($limit > 0) {
                 return $limit;
             }
@@ -151,20 +145,43 @@ class Logs
 
     private static function shouldEchoCli(): bool
     {
-        if (PHP_SAPI !== 'cli' || static::isAjaxRequest()) {
-            return false;
-        }
-        if (!defined('CONFIG') || !is_array(CONFIG)) {
-            return false;
-        }
-        if (!isset(CONFIG['logs']) || !is_array(CONFIG['logs'])) {
-            return false;
-        }
-        if (!array_key_exists('echo_cli', CONFIG['logs'])) {
+        if (PHP_SAPI !== 'cli' || self::isAjaxRequest()) {
             return false;
         }
 
-        return CONFIG['logs']['echo_cli'] === true;
+        $logs = self::logsConfig();
+        if (!array_key_exists('echo_cli', $logs)) {
+            return false;
+        }
+
+        return $logs['echo_cli'] === true;
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private static function runtimeConfig(): array
+    {
+        if (!defined('CONFIG')) {
+            return [];
+        }
+
+        /** @var array<string,mixed> $config */
+        $config = constant('CONFIG');
+        return $config;
+    }
+
+    /**
+     * @return array<string,mixed>
+     */
+    private static function logsConfig(): array
+    {
+        $config = self::runtimeConfig();
+        if (!array_key_exists('logs', $config) || !is_array($config['logs'])) {
+            return [];
+        }
+
+        return $config['logs'];
     }
 
     private static function asCliText(string $html): string
@@ -176,12 +193,12 @@ class Logs
 
     private static function emitDebugIfNeeded(string $chunk = ''): void
     {
-        if (!static::shouldEchoCli()) {
+        if (!self::shouldEchoCli()) {
             return;
         }
 
-        $payload = $chunk !== '' ? $chunk : (string) static::$str_logger;
-        $line = static::asCliText($payload);
+        $payload = $chunk !== '' ? $chunk : (string) self::$str_logger;
+        $line = self::asCliText($payload);
         if ($line === '') {
             return;
         }
@@ -191,7 +208,7 @@ class Logs
 
     public function read()
     {
-        return static::$str_logger;
+        return self::$str_logger;
     }
 
     public static function getMicrotime()
@@ -203,14 +220,14 @@ class Logs
     public function sendLogMail($extra = null)
     {
         if ($extra !== null) {
-            static::trace($extra);
+            self::trace($extra);
         }
         //mail($this->email, 'DEBUG ' . $this->send_log_subject, $this->str_logger, 'Content-type:text/html;charset=UTF-8\r\n');
     }
 
     public static function error($str): void
     {
-        static::traceLite('Errore: ' . $str);
+        self::traceLite('Errore: ' . $str);
         throw AppError::validation((string) $str);
     }
 
@@ -238,10 +255,10 @@ class Logs
 
         $request = RequestContext::request();
         $str_request = empty($request) ? '' : '<h5>Richiesta</h5><pre>' . print_r($request, 1) . '</pre><hr>';
-        $body = $header . $str_request . '<h4>Log</h4><p>' . static::$str_logger . '</p><hr>';
+        $body = $header . $str_request . '<h4>Log</h4><p>' . self::$str_logger . '</p><hr>';
 
-        static::write($body);
-        static::emitDebugIfNeeded($body);
+        self::write($body);
+        self::emitDebugIfNeeded($body);
 
         throw new \RuntimeException('Si e verificato un errore di sistema.');
     }

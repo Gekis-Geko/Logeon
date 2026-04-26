@@ -1,8 +1,8 @@
 <div data-admin-page="settings">
-    <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3 mt-3">
         <header>
-            <h4 class="display-6 mb-1">Impostazioni</h4>
-            <h6 class="mb-0">Configura i parametri runtime della piattaforma</h6>
+            <h4 class="mb-1">Impostazioni</h4>
+            <p class="text-muted mb-0">Configura i parametri runtime della piattaforma</p>
         </header>
         <div class="d-flex gap-2">
             <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-settings-reload">
@@ -14,268 +14,388 @@
     <div id="admin-settings-alert" class="alert d-none mb-3" role="alert"></div>
 
     <form id="admin-settings-form" autocomplete="off" novalidate>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-cloud-upload me-2"></i>File &amp; Upload</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-4">
-                        <label for="s-upload-max-mb" class="form-label mb-1">Dimensione massima file <span class="text-muted small">(MB)</span></label>
-                        <input id="s-upload-max-mb" name="upload_max_mb" type="number" class="form-control" min="1" max="1024" placeholder="5">
-                        <div class="form-text">Limite per i file generici. Min 1 — Max 1024.</div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <label for="s-upload-max-concurrency" class="form-label mb-1">Caricamenti simultanei</label>
-                        <input id="s-upload-max-concurrency" name="upload_max_concurrency" type="number" class="form-control" min="1" max="10" placeholder="3">
-                        <div class="form-text">Upload paralleli consentiti. Min 1 — Max 10.</div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <label for="s-upload-max-avatar-mb" class="form-label mb-1">Dimensione massima avatar <span class="text-muted small">(MB)</span></label>
-                        <input id="s-upload-max-avatar-mb" name="upload_max_avatar_mb" type="number" class="form-control" min="1" max="1024" placeholder="2">
-                        <div class="form-text">Limite per le immagini avatar. Min 1 — Max 1024.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-bag me-2"></i>Inventario</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-6">
-                        <label for="s-inventory-capacity-max" class="form-label mb-1">Capacità massima inventario <span class="text-muted small">(slot)</span></label>
-                        <input id="s-inventory-capacity-max" name="inventory_capacity_max" type="number" class="form-control" min="1" max="9999" placeholder="30">
-                        <div class="form-text">Numero massimo di slot nell'inventario del personaggio. Min 1.</div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <label for="s-inventory-stack-max" class="form-label mb-1">Stack massimo per oggetto</label>
-                        <input id="s-inventory-stack-max" name="inventory_stack_max" type="number" class="form-control" min="1" max="9999" placeholder="50">
-                        <div class="form-text">Quantità massima ammassabile per oggetto stackabile. Min 1.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-chat-dots me-2"></i>Chat &amp; Messaggi</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-6">
-                        <label for="s-chat-history-hours" class="form-label mb-1">Storico chat location <span class="text-muted small">(ore)</span></label>
-                        <input id="s-chat-history-hours" name="location_chat_history_hours" type="number" class="form-control" min="1" max="24" placeholder="3">
-                        <div class="form-text">Quante ore di messaggi vengono mostrate nella chat location. Min 1 — Max 24.</div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <label for="s-whisper-retention-hours" class="form-label mb-1">Retention sussurri <span class="text-muted small">(ore)</span></label>
-                        <input id="s-whisper-retention-hours" name="location_whisper_retention_hours" type="number" class="form-control" min="1" max="168" placeholder="24">
-                        <div class="form-text">Per quante ore vengono conservati i sussurri privati. Min 1 — Max 168.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-person-check me-2"></i>Disponibilità &amp; Presenza</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-4">
-                        <label for="s-availability-idle" class="form-label mb-1">Minuti di inattività <span class="text-muted small">(idle)</span></label>
-                        <input id="s-availability-idle" name="availability_idle_minutes" type="number" class="form-control" min="1" max="120" placeholder="20">
-                        <div class="form-text">Dopo quanti minuti un utente diventa "inattivo". Min 1 — Max 120.</div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <label class="form-label mb-1">Toast accessi online</label>
-                        <input type="hidden" id="s-onlines-toast" name="onlines_auto_toast" value="0">
-                        <div class="form-text mt-1">Mostra una notifica quando un utente entra online.</div>
-                    </div>
-                    <div class="col-12 col-md-4">
-                        <label class="form-label mb-1">Ripristina posizione al login</label>
-                        <input type="hidden" id="s-presence-resume" name="presence_resume_last_position_on_signin" value="0">
-                        <div class="form-text mt-1">Riporta il personaggio all'ultima location visitata al login.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-map me-2"></i>Mappe</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-4">
-                        <label class="form-label mb-1">Modalità visualizzazione mappe</label>
-                        <input type="hidden" id="s-maps-view-mode" name="maps_view_mode" value="cards">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-door-open me-2"></i>Inviti ai luoghi</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-6">
-                        <label for="s-invite-expiry" class="form-label mb-1">Scadenza inviti <span class="text-muted small">(ore)</span></label>
-                        <input id="s-invite-expiry" name="location_invite_expiry_hours" type="number" class="form-control" min="0" max="720" placeholder="48">
-                        <div class="form-text">Ore prima che un invito a un luogo scada. 0 = mai. Max 720.</div>
-                    </div>
-                    <div class="col-12 col-md-6">
-                        <label for="s-invite-max" class="form-label mb-1">Max inviti attivi per personaggio</label>
-                        <input id="s-invite-max" name="location_invite_max_active" type="number" class="form-control" min="0" max="100" placeholder="10">
-                        <div class="form-text">Numero massimo di inviti attivi contemporaneamente. Max 100.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-shield-lock me-2"></i>Rate Limiting</h6>
-            </div>
-            <div class="card-body">
-                <h6 class="text-muted small mb-2">Autenticazione — Login</h6>
-                <div class="row g-3 mb-3">
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-signin-limit" class="form-label mb-1">Tentativi max</label>
-                        <input id="s-rate-signin-limit" name="rate_auth_signin_limit" type="number" class="form-control" min="1" max="100" placeholder="10">
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-signin-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
-                        <input id="s-rate-signin-window" name="rate_auth_signin_window_seconds" type="number" class="form-control" min="10" max="3600" placeholder="300">
-                    </div>
-                </div>
-                <h6 class="text-muted small mb-2">Autenticazione — Reset password</h6>
-                <div class="row g-3 mb-3">
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-reset-limit" class="form-label mb-1">Tentativi max</label>
-                        <input id="s-rate-reset-limit" name="rate_auth_reset_limit" type="number" class="form-control" min="1" max="50" placeholder="5">
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-reset-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
-                        <input id="s-rate-reset-window" name="rate_auth_reset_window_seconds" type="number" class="form-control" min="30" max="86400" placeholder="900">
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-reset-confirm-limit" class="form-label mb-1">Conferma — max</label>
-                        <input id="s-rate-reset-confirm-limit" name="rate_auth_reset_confirm_limit" type="number" class="form-control" min="1" max="100" placeholder="10">
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-reset-confirm-window" class="form-label mb-1">Conferma — finestra <span class="text-muted small">(sec)</span></label>
-                        <input id="s-rate-reset-confirm-window" name="rate_auth_reset_confirm_window_seconds" type="number" class="form-control" min="30" max="86400" placeholder="900">
-                    </div>
-                </div>
-                <h6 class="text-muted small mb-2">Messaggi privati (DM)</h6>
-                <div class="row g-3 mb-3">
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-dm-limit" class="form-label mb-1">Invii max</label>
-                        <input id="s-rate-dm-limit" name="rate_dm_send_limit" type="number" class="form-control" min="1" max="60" placeholder="8">
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-dm-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
-                        <input id="s-rate-dm-window" name="rate_dm_send_window_seconds" type="number" class="form-control" min="1" max="600" placeholder="30">
-                    </div>
-                </div>
-                <h6 class="text-muted small mb-2">Chat location</h6>
-                <div class="row g-3 mb-3">
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-chat-limit" class="form-label mb-1">Messaggi max</label>
-                        <input id="s-rate-chat-limit" name="rate_location_chat_limit" type="number" class="form-control" min="1" max="100" placeholder="12">
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-chat-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
-                        <input id="s-rate-chat-window" name="rate_location_chat_window_seconds" type="number" class="form-control" min="1" max="300" placeholder="15">
-                    </div>
-                </div>
-                <h6 class="text-muted small mb-2">Sussurri location</h6>
-                <div class="row g-3">
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-whisper-limit" class="form-label mb-1">Invii max</label>
-                        <input id="s-rate-whisper-limit" name="rate_location_whisper_limit" type="number" class="form-control" min="1" max="60" placeholder="6">
-                    </div>
-                    <div class="col-6 col-md-3">
-                        <label for="s-rate-whisper-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
-                        <input id="s-rate-whisper-window" name="rate_location_whisper_window_seconds" type="number" class="form-control" min="1" max="300" placeholder="20">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-people me-2"></i>Personaggi multipli</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-4">
-                        <label class="form-label mb-1">Abilita personaggi multipli</label>
-                        <input type="hidden" id="s-multi-character-enabled" name="multi_character_enabled" value="0">
-                        <div class="form-text mt-1">Se attivo, un account puo avere piu personaggi associati.</div>
-                    </div>
-                    <div class="col-12 col-md-4 d-none" id="admin-settings-multi-character-max-wrap">
-                        <label for="s-multi-character-max-per-user" class="form-label mb-1">Numero massimo per account</label>
-                        <input id="s-multi-character-max-per-user" name="multi_character_max_per_user" type="number" class="form-control" min="1" max="10" placeholder="3">
-                        <div class="form-text">Min 1 â€” Max 10 personaggi per utenza.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-google me-2"></i>Accesso con Google</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-4">
-                        <label class="form-label mb-1">Google OAuth</label>
-                        <input type="hidden" id="s-auth-google-enabled" name="auth_google_enabled" value="0">
-                        <div class="form-text mt-1">Se attivo, login e registrazione possono usare Google.</div>
-                    </div>
-                    <div class="col-12">
-                        <div id="admin-settings-google-oauth-config" class="row g-3 d-none">
-                            <div class="col-12 col-lg-4">
-                                <label for="s-auth-google-client-id" class="form-label mb-1">Client ID</label>
-                                <input id="s-auth-google-client-id" name="auth_google_client_id" type="text" class="form-control" maxlength="1024" placeholder="Google OAuth Client ID">
+        <div class="accordion" id="admin-settings-accordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="admin-settings-heading-platform">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-platform" aria-expanded="true" aria-controls="admin-settings-collapse-platform">
+                        <i class="bi bi-sliders me-2"></i>Piattaforma e accessi
+                    </button>
+                </h2>
+                <div id="admin-settings-collapse-platform" class="accordion-collapse collapse show" aria-labelledby="admin-settings-heading-platform">
+                    <div class="accordion-body">
+                        <div class="row g-4">
+                            <div class="col-12 col-xl-6">
+                                <div class="border rounded-3 p-3 h-100">
+                                    <div class="mb-3">
+                                        <h6 class="mb-1"><i class="bi bi-people me-2"></i>Personaggi multipli</h6>
+                                        <p class="text-muted small mb-0">Gestisci la possibilita di associare piu personaggi allo stesso account.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label mb-1">Abilita personaggi multipli</label>
+                                            <input type="hidden" id="s-multi-character-enabled" name="multi_character_enabled" value="0">
+                                            <div class="form-text mt-1">Se attivo, un account puo avere piu personaggi associati.</div>
+                                        </div>
+                                        <div class="col-12 col-md-6 d-none" id="admin-settings-multi-character-max-wrap">
+                                            <label for="s-multi-character-max-per-user" class="form-label mb-1">Numero massimo per account</label>
+                                            <input id="s-multi-character-max-per-user" name="multi_character_max_per_user" type="number" class="form-control" min="1" max="10" placeholder="3">
+                                            <div class="form-text">Min 1 - Max 10 personaggi per utenza.</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-12 col-lg-4">
-                                <label for="s-auth-google-client-secret" class="form-label mb-1">Client Secret</label>
-                                <input id="s-auth-google-client-secret" name="auth_google_client_secret" type="text" class="form-control" maxlength="2048" placeholder="Google OAuth Client Secret">
+                            <div class="col-12 col-xl-6">
+                                <div class="border rounded-3 p-3 h-100">
+                                    <div class="mb-3">
+                                        <h6 class="mb-1"><i class="bi bi-person-raised-hand me-2"></i>Delega narrativa</h6>
+                                        <p class="text-muted small mb-0">Controlla se i ruoli delegati possono intervenire con eventi narrativi.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label class="form-label mb-1">Abilita delega narrativa</label>
+                                            <input type="hidden" id="s-nd-enabled" name="narrative_delegation_enabled" value="0">
+                                            <div class="form-text mt-1">Permette a ruoli delegati di creare eventi narrativi.</div>
+                                        </div>
+                                        <div class="col-12 col-md-6 d-none" id="admin-settings-nd-level-wrap">
+                                            <label for="s-nd-level" class="form-label mb-1">Livello massimo di impatto</label>
+                                            <select id="s-nd-level" name="narrative_delegation_level" class="form-select">
+                                                <option value="0">0 - Zero impatto</option>
+                                                <option value="1">1 - Impatto limitato</option>
+                                                <option value="2">2 - Alto impatto</option>
+                                            </select>
+                                            <div class="form-text">Livello massimo consentito ai delegati.</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col-12 col-lg-4">
-                                <label for="s-auth-google-redirect-uri" class="form-label mb-1">Redirect URI <span class="text-muted small">(opzionale)</span></label>
-                                <input id="s-auth-google-redirect-uri" name="auth_google_redirect_uri" type="url" class="form-control" maxlength="2048" placeholder="https://tuo-dominio.it/auth/google/callback">
-                                <div class="form-text">Lascia vuoto per usare automaticamente <code>/auth/google/callback</code> sul dominio corrente.</div>
+                            <div class="col-12">
+                                <hr class="my-0">
+                            </div>
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3">
+                                    <div class="mb-3">
+                                        <h6 class="mb-1"><i class="bi bi-google me-2"></i>Accesso con Google</h6>
+                                        <p class="text-muted small mb-0">Abilita Google OAuth e configura le credenziali solo quando serve.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-lg-4">
+                                            <label class="form-label mb-1">Google OAuth</label>
+                                            <input type="hidden" id="s-auth-google-enabled" name="auth_google_enabled" value="0">
+                                            <div class="form-text mt-1">Se attivo, login e registrazione possono usare Google.</div>
+                                        </div>
+                                        <div class="col-12 col-lg-8">
+                                            <div id="admin-settings-google-oauth-config" class="row g-3 d-none">
+                                                <div class="col-12 col-xl-4">
+                                                    <label for="s-auth-google-client-id" class="form-label mb-1">Client ID</label>
+                                                    <input id="s-auth-google-client-id" name="auth_google_client_id" type="text" class="form-control" maxlength="1024" placeholder="Google OAuth Client ID">
+                                                </div>
+                                                <div class="col-12 col-xl-4">
+                                                    <label for="s-auth-google-client-secret" class="form-label mb-1">Client Secret</label>
+                                                    <input id="s-auth-google-client-secret" name="auth_google_client_secret" type="text" class="form-control" maxlength="2048" placeholder="Google OAuth Client Secret">
+                                                </div>
+                                                <div class="col-12 col-xl-4">
+                                                    <label for="s-auth-google-redirect-uri" class="form-label mb-1">Redirect URI <span class="text-muted small">(opzionale)</span></label>
+                                                    <input id="s-auth-google-redirect-uri" name="auth_google_redirect_uri" type="url" class="form-control" maxlength="2048" placeholder="https://tuo-dominio.it/auth/google/callback">
+                                                    <div class="form-text">Lascia vuoto per usare automaticamente <code>/auth/google/callback</code> sul dominio corrente.</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="admin-settings-heading-gameplay">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-gameplay" aria-expanded="false" aria-controls="admin-settings-collapse-gameplay">
+                        <i class="bi bi-controller me-2"></i>Gioco, presenza e inventario
+                    </button>
+                </h2>
+                <div id="admin-settings-collapse-gameplay" class="accordion-collapse collapse" aria-labelledby="admin-settings-heading-gameplay">
+                    <div class="accordion-body">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3">
+                                    <div class="mb-3">
+                                        <h6 class="mb-1"><i class="bi bi-bag me-2"></i>Inventario</h6>
+                                        <p class="text-muted small mb-0">Definisci capienza e quantita massima gestibile per singolo oggetto.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label for="s-inventory-capacity-max" class="form-label mb-1">Capacita massima inventario <span class="text-muted small">(slot)</span></label>
+                                            <input id="s-inventory-capacity-max" name="inventory_capacity_max" type="number" class="form-control" min="1" max="9999" placeholder="30">
+                                            <div class="form-text">Numero massimo di slot nell'inventario del personaggio. Min 1.</div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="s-inventory-stack-max" class="form-label mb-1">Stack massimo per oggetto</label>
+                                            <input id="s-inventory-stack-max" name="inventory_stack_max" type="number" class="form-control" min="1" max="9999" placeholder="50">
+                                            <div class="form-text">Quantita massima ammassabile per oggetto stackabile. Min 1.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <hr class="my-0">
+                            </div>
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3">
+                                    <div class="mb-3">
+                                        <h6 class="mb-1"><i class="bi bi-person-check me-2"></i>Disponibilita e presenza</h6>
+                                        <p class="text-muted small mb-0">Controlla visibilita online, stato idle e ripristino della posizione.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-4">
+                                            <label for="s-availability-idle" class="form-label mb-1">Minuti di inattivita <span class="text-muted small">(idle)</span></label>
+                                            <input id="s-availability-idle" name="availability_idle_minutes" type="number" class="form-control" min="1" max="120" placeholder="20">
+                                            <div class="form-text">Dopo quanti minuti un utente diventa "inattivo". Min 1 - Max 120.</div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label mb-1">Toast accessi online</label>
+                                            <input type="hidden" id="s-onlines-toast" name="onlines_auto_toast" value="0">
+                                            <div class="form-text mt-1">Mostra una notifica quando un utente entra online.</div>
+                                        </div>
+                                        <div class="col-12 col-md-4">
+                                            <label class="form-label mb-1">Ripristina posizione al login</label>
+                                            <input type="hidden" id="s-presence-resume" name="presence_resume_last_position_on_signin" value="0">
+                                            <div class="form-text mt-1">Riporta il personaggio all'ultima location visitata al login.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <hr class="my-0">
+                            </div>
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3">
+                                    <div class="mb-3">
+                                        <h6 class="mb-1"><i class="bi bi-door-open me-2"></i>Inviti ai luoghi</h6>
+                                        <p class="text-muted small mb-0">Definisci durata e numero massimo di inviti aperti per personaggio.</p>
+                                    </div>
+                                    <div class="row g-3">
+                                        <div class="col-12 col-md-6">
+                                            <label for="s-invite-expiry" class="form-label mb-1">Scadenza inviti <span class="text-muted small">(ore)</span></label>
+                                            <input id="s-invite-expiry" name="location_invite_expiry_hours" type="number" class="form-control" min="0" max="720" placeholder="48">
+                                            <div class="form-text">Ore prima che un invito a un luogo scada. 0 = mai. Max 720.</div>
+                                        </div>
+                                        <div class="col-12 col-md-6">
+                                            <label for="s-invite-max" class="form-label mb-1">Max inviti attivi per personaggio</label>
+                                            <input id="s-invite-max" name="location_invite_max_active" type="number" class="form-control" min="0" max="100" placeholder="10">
+                                            <div class="form-text">Numero massimo di inviti attivi contemporaneamente. Max 100.</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="admin-settings-heading-chat">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-chat" aria-expanded="false" aria-controls="admin-settings-collapse-chat">
+                        <i class="bi bi-chat-dots me-2"></i>Chat e messaggistica
+                    </button>
+                </h2>
+                <div id="admin-settings-collapse-chat" class="accordion-collapse collapse" aria-labelledby="admin-settings-heading-chat">
+                    <div class="accordion-body">
+                        <div class="border rounded-3 p-3">
+                            <div class="row g-3">
+                                <div class="col-12 col-md-6">
+                                    <label for="s-chat-history-hours" class="form-label mb-1">Storico chat location <span class="text-muted small">(ore)</span></label>
+                                    <input id="s-chat-history-hours" name="location_chat_history_hours" type="number" class="form-control" min="1" max="24" placeholder="3">
+                                    <div class="form-text">Quante ore di messaggi vengono mostrate nella chat location. Min 1 - Max 24.</div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <label for="s-whisper-retention-hours" class="form-label mb-1">Retention sussurri <span class="text-muted small">(ore)</span></label>
+                                    <input id="s-whisper-retention-hours" name="location_whisper_retention_hours" type="number" class="form-control" min="1" max="168" placeholder="24">
+                                    <div class="form-text">Per quante ore vengono conservati i sussurri privati. Min 1 - Max 168.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="admin-settings-heading-upload">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-upload" aria-expanded="false" aria-controls="admin-settings-collapse-upload">
+                        <i class="bi bi-cloud-upload me-2"></i>File e upload
+                    </button>
+                </h2>
+                <div id="admin-settings-collapse-upload" class="accordion-collapse collapse" aria-labelledby="admin-settings-heading-upload">
+                    <div class="accordion-body">
+                        <div class="border rounded-3 p-3">
+                            <div class="row g-3">
+                                <div class="col-12 col-md-4">
+                                    <label for="s-upload-max-mb" class="form-label mb-1">Dimensione massima file <span class="text-muted small">(MB)</span></label>
+                                    <input id="s-upload-max-mb" name="upload_max_mb" type="number" class="form-control" min="1" max="1024" placeholder="5">
+                                    <div class="form-text">Limite per i file generici. Min 1 - Max 1024.</div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="s-upload-max-concurrency" class="form-label mb-1">Caricamenti simultanei</label>
+                                    <input id="s-upload-max-concurrency" name="upload_max_concurrency" type="number" class="form-control" min="1" max="10" placeholder="3">
+                                    <div class="form-text">Upload paralleli consentiti. Min 1 - Max 10.</div>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="s-upload-max-avatar-mb" class="form-label mb-1">Dimensione massima avatar <span class="text-muted small">(MB)</span></label>
+                                    <input id="s-upload-max-avatar-mb" name="upload_max_avatar_mb" type="number" class="form-control" min="1" max="1024" placeholder="2">
+                                    <div class="form-text">Limite per le immagini avatar. Min 1 - Max 1024.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="admin-settings-heading-rates">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-rates" aria-expanded="false" aria-controls="admin-settings-collapse-rates">
+                        <i class="bi bi-shield-lock me-2"></i>Rate limiting
+                    </button>
+                </h2>
+                <div id="admin-settings-collapse-rates" class="accordion-collapse collapse" aria-labelledby="admin-settings-heading-rates">
+                    <div class="accordion-body">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3 h-100">
+                                <h6 class="text-muted small mb-2">Autenticazione - Login</h6>
+                                <div class="row g-3">
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-signin-limit" class="form-label mb-1">Tentativi max</label>
+                                        <input id="s-rate-signin-limit" name="rate_auth_signin_limit" type="number" class="form-control" min="1" max="100" placeholder="10">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-signin-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
+                                        <input id="s-rate-signin-window" name="rate_auth_signin_window_seconds" type="number" class="form-control" min="10" max="3600" placeholder="300">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3 h-100">
+                                <h6 class="text-muted small mb-2">Autenticazione - Reset password</h6>
+                                <div class="row g-3">
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-reset-limit" class="form-label mb-1">Tentativi max</label>
+                                        <input id="s-rate-reset-limit" name="rate_auth_reset_limit" type="number" class="form-control" min="1" max="50" placeholder="5">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-reset-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
+                                        <input id="s-rate-reset-window" name="rate_auth_reset_window_seconds" type="number" class="form-control" min="30" max="86400" placeholder="900">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-reset-confirm-limit" class="form-label mb-1">Conferma - max</label>
+                                        <input id="s-rate-reset-confirm-limit" name="rate_auth_reset_confirm_limit" type="number" class="form-control" min="1" max="100" placeholder="10">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-reset-confirm-window" class="form-label mb-1">Conferma - finestra <span class="text-muted small">(sec)</span></label>
+                                        <input id="s-rate-reset-confirm-window" name="rate_auth_reset_confirm_window_seconds" type="number" class="form-control" min="30" max="86400" placeholder="900">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3 h-100">
+                                <h6 class="text-muted small mb-2">Messaggi privati (DM)</h6>
+                                <div class="row g-3">
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-dm-limit" class="form-label mb-1">Invii max</label>
+                                        <input id="s-rate-dm-limit" name="rate_dm_send_limit" type="number" class="form-control" min="1" max="60" placeholder="8">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-dm-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
+                                        <input id="s-rate-dm-window" name="rate_dm_send_window_seconds" type="number" class="form-control" min="1" max="600" placeholder="30">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3 h-100">
+                                <h6 class="text-muted small mb-2">Chat location</h6>
+                                <div class="row g-3">
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-chat-limit" class="form-label mb-1">Messaggi max</label>
+                                        <input id="s-rate-chat-limit" name="rate_location_chat_limit" type="number" class="form-control" min="1" max="100" placeholder="12">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-chat-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
+                                        <input id="s-rate-chat-window" name="rate_location_chat_window_seconds" type="number" class="form-control" min="1" max="300" placeholder="15">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3 h-100">
+                                <h6 class="text-muted small mb-2">Sussurri location</h6>
+                                <div class="row g-3">
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-whisper-limit" class="form-label mb-1">Invii max</label>
+                                        <input id="s-rate-whisper-limit" name="rate_location_whisper_limit" type="number" class="form-control" min="1" max="60" placeholder="6">
+                                    </div>
+                                    <div class="col-6 col-md-3">
+                                        <label for="s-rate-whisper-window" class="form-label mb-1">Finestra <span class="text-muted small">(sec)</span></label>
+                                        <input id="s-rate-whisper-window" name="rate_location_whisper_window_seconds" type="number" class="form-control" min="1" max="300" placeholder="20">
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="admin-settings-heading-docs">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-docs" aria-expanded="false" aria-controls="admin-settings-collapse-docs">
+                        <i class="bi bi-book me-2"></i>Documentazione pubblica
+                    </button>
+                </h2>
+                <div id="admin-settings-collapse-docs" class="accordion-collapse collapse" aria-labelledby="admin-settings-heading-docs">
+                    <div class="accordion-body">
+                        <div class="border rounded-3 p-3">
+                            <p class="text-muted small mb-3">Scegli la modalita di visualizzazione per ciascuna sezione documentazione. <strong>Navigazione</strong> mostra un menu laterale con i capitoli; <strong>Pagina continua</strong> presenta tutto il contenuto in un'unica pagina scorrevole senza menu.</p>
+                            <div class="row g-3">
+                                <div class="col-12 col-md-4">
+                                    <label for="s-storyboard-view-mode" class="form-label mb-1">Ambientazione</label>
+                                    <select id="s-storyboard-view-mode" name="storyboard_view_mode" class="form-select">
+                                        <option value="navigation">Navigazione (menu laterale)</option>
+                                        <option value="monolithic">Pagina continua</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="s-rules-view-mode" class="form-label mb-1">Regolamento</label>
+                                    <select id="s-rules-view-mode" name="rules_view_mode" class="form-select">
+                                        <option value="navigation">Navigazione (menu laterale)</option>
+                                        <option value="monolithic">Pagina continua</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label for="s-how-to-play-view-mode" class="form-label mb-1">Come giocare</label>
+                                    <select id="s-how-to-play-view-mode" name="how_to_play_view_mode" class="form-select">
+                                        <option value="navigation">Navigazione (menu laterale)</option>
+                                        <option value="monolithic">Pagina continua</option>
+                                    </select>
+                                </div>
+                                {% if module_active('logeon.archetypes') %}
+                                <div class="col-12 col-md-4">
+                                    <label for="s-archetypes-view-mode" class="form-label mb-1">Archetipi</label>
+                                    <select id="s-archetypes-view-mode" name="archetypes_view_mode" class="form-select">
+                                        <option value="navigation">Navigazione (menu laterale)</option>
+                                        <option value="monolithic">Pagina continua</option>
+                                    </select>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card mb-3">
-            <div class="card-header">
-                <h6 class="mb-0"><i class="bi bi-person-raised-hand me-2"></i>Delega Narrativa</h6>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-12 col-md-4">
-                        <label class="form-label mb-1">Abilita delega narrativa</label>
-                        <input type="hidden" id="s-nd-enabled" name="narrative_delegation_enabled" value="0">
-                        <div class="form-text mt-1">Permette a ruoli delegati di creare eventi narrativi.</div>
-                    </div>
-                    <div class="col-12 col-md-4 d-none" id="admin-settings-nd-level-wrap">
-                        <label for="s-nd-level" class="form-label mb-1">Livello massimo di impatto</label>
-                        <select id="s-nd-level" name="narrative_delegation_level" class="form-select">
-                            <option value="0">0 — Zero impatto</option>
-                            <option value="1">1 — Impatto limitato</option>
-                            <option value="2">2 — Alto impatto</option>
-                        </select>
-                        <div class="form-text">Livello massimo consentito ai delegati.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="d-flex justify-content-end gap-2 mb-4">
+
+        <div class="d-flex justify-content-end gap-2 mt-4 mb-4">
             <button type="button" class="btn btn-outline-secondary" data-action="admin-settings-reload">
                 <i class="bi bi-arrow-counterclockwise me-1"></i>Ripristina
             </button>
@@ -283,133 +403,137 @@
                 <i class="bi bi-floppy me-1"></i>Salva impostazioni
             </button>
         </div>
-
     </form>
-    <div class="card mb-3" id="admin-settings-sounds-card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="mb-0"><i class="bi bi-volume-up me-2"></i>Suoni</h6>
-        </div>
-        <div class="card-body">
-            <p class="small text-muted mb-4">
-                Configura i suoni di notifica. Incolla il link diretto a un file audio oppure carica un file.<br>
-                Ogni suono viene riprodotto <strong>una sola volta per sessione</strong> di pagina: per riascoltarlo ricarica la pagina.<br>
-                Il <strong>Globale</strong> viene riprodotto solo quando arrivano avvisi di <strong>due o più tipi contemporaneamente</strong>.
-            </p>
-            <div class="row g-4" id="admin-settings-sounds-rows">
 
-                <div class="col-12 col-md-6" data-sound-row="dm">
-                    <label class="form-label mb-1">Messaggi privati</label>
-                    <div class="btn-group btn-group-sm mb-2 ms-3" role="group">
-                        <button type="button" class="btn btn-outline-primary active" data-sound-tab-btn="link">Incolla link</button>
-                        <button type="button" class="btn btn-outline-primary" data-sound-tab-btn="upload">Carica file</button>
-                    </div>
-                    <div data-sound-tab-panel="link">
-                        <div class="input-group">
-                            <input type="url" class="form-control" id="admin-sound-dm" data-sound-type="dm" placeholder="https://esempio.com/suono.mp3" maxlength="512">
-                            <button type="button" class="btn btn-outline-secondary" data-sound-test="dm" title="Ascolta"><i class="bi bi-play-fill"></i></button>
-                            <button type="button" class="btn btn-outline-danger" data-sound-clear="dm" title="Rimuovi"><i class="bi bi-x-lg"></i></button>
-                        </div>
-                    </div>
-                    <div data-sound-tab-panel="upload" style="display:none;">
-                        <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="sound_dm" style="cursor:pointer;">
-                            <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
-                            <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="sound_dm">scegli file</button>
-                        </div>
-                        <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="sound_dm">10</span> MB.</div>
-                        <div class="progress mt-2 d-none" data-upload-progress="sound_dm">
-                            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="sound_dm">Annulla</button>
-                    </div>
-                    <div class="form-text mt-1">Suono per i messaggi privati in arrivo.</div>
-                </div>
-
-                <div class="col-12 col-md-6" data-sound-row="notifications">
-                    <label class="form-label mb-1">Notifiche</label>
-                    <div class="btn-group btn-group-sm mb-2 ms-3" role="group">
-                        <button type="button" class="btn btn-outline-primary active" data-sound-tab-btn="link">Incolla link</button>
-                        <button type="button" class="btn btn-outline-primary" data-sound-tab-btn="upload">Carica file</button>
-                    </div>
-                    <div data-sound-tab-panel="link">
-                        <div class="input-group">
-                            <input type="url" class="form-control" id="admin-sound-notifications" data-sound-type="notifications" placeholder="https://esempio.com/suono.mp3" maxlength="512">
-                            <button type="button" class="btn btn-outline-secondary" data-sound-test="notifications" title="Ascolta"><i class="bi bi-play-fill"></i></button>
-                            <button type="button" class="btn btn-outline-danger" data-sound-clear="notifications" title="Rimuovi"><i class="bi bi-x-lg"></i></button>
-                        </div>
-                    </div>
-                    <div data-sound-tab-panel="upload" style="display:none;">
-                        <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="sound_notifications" style="cursor:pointer;">
-                            <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
-                            <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="sound_notifications">scegli file</button>
-                        </div>
-                        <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="sound_notifications">10</span> MB.</div>
-                        <div class="progress mt-2 d-none" data-upload-progress="sound_notifications">
-                            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="sound_notifications">Annulla</button>
-                    </div>
-                    <div class="form-text mt-1">Suono per le notifiche in arrivo.</div>
-                </div>
-
-                <div class="col-12 col-md-6" data-sound-row="whispers">
-                    <label class="form-label mb-1">Sussurri</label>
-                    <div class="btn-group btn-group-sm mb-2  ms-3" role="group">
-                        <button type="button" class="btn btn-outline-primary active" data-sound-tab-btn="link">Incolla link</button>
-                        <button type="button" class="btn btn-outline-primary" data-sound-tab-btn="upload">Carica file</button>
-                    </div>
-                    <div data-sound-tab-panel="link">
-                        <div class="input-group">
-                            <input type="url" class="form-control" id="admin-sound-whispers" data-sound-type="whispers" placeholder="https://esempio.com/suono.mp3" maxlength="512">
-                            <button type="button" class="btn btn-outline-secondary" data-sound-test="whispers" title="Ascolta"><i class="bi bi-play-fill"></i></button>
-                            <button type="button" class="btn btn-outline-danger" data-sound-clear="whispers" title="Rimuovi"><i class="bi bi-x-lg"></i></button>
-                        </div>
-                    </div>
-                    <div data-sound-tab-panel="upload" style="display:none;">
-                        <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="sound_whispers" style="cursor:pointer;">
-                            <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
-                            <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="sound_whispers">scegli file</button>
-                        </div>
-                        <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="sound_whispers">10</span> MB.</div>
-                        <div class="progress mt-2 d-none" data-upload-progress="sound_whispers">
-                            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="sound_whispers">Annulla</button>
-                    </div>
-                    <div class="form-text mt-1">Suono per i sussurri in arrivo nella location.</div>
-                </div>
-
-                <div class="col-12 col-md-6" data-sound-row="global">
-                    <label class="form-label mb-1">Globale <span class="badge text-bg-secondary ms-1">multi-avviso</span></label>
-                    <div class="btn-group btn-group-sm mb-2 ms-3" role="group">
-                        <button type="button" class="btn btn-outline-primary active" data-sound-tab-btn="link">Incolla link</button>
-                        <button type="button" class="btn btn-outline-primary" data-sound-tab-btn="upload">Carica file</button>
-                    </div>
-                    <div data-sound-tab-panel="link">
-                        <div class="input-group">
-                            <input type="url" class="form-control" id="admin-sound-global" data-sound-type="global" placeholder="https://esempio.com/suono.mp3" maxlength="512">
-                            <button type="button" class="btn btn-outline-secondary" data-sound-test="global" title="Ascolta"><i class="bi bi-play-fill"></i></button>
-                            <button type="button" class="btn btn-outline-danger" data-sound-clear="global" title="Rimuovi"><i class="bi bi-x-lg"></i></button>
-                        </div>
-                    </div>
-                    <div data-sound-tab-panel="upload" style="display:none;">
-                        <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="sound_global" style="cursor:pointer;">
-                            <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
-                            <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="sound_global">scegli file</button>
-                        </div>
-                        <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="sound_global">10</span> MB.</div>
-                        <div class="progress mt-2 d-none" data-upload-progress="sound_global">
-                            <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
-                        </div>
-                        <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="sound_global">Annulla</button>
-                    </div>
-                    <div class="form-text mt-1">Riprodotto quando due o più tipi di avviso arrivano contemporaneamente.</div>
-                </div>
-
-            </div>
-            <div class="d-flex justify-content-end mt-3">
-                <button type="button" class="btn btn-primary" id="admin-sounds-save">
-                    <i class="bi bi-floppy me-1"></i>Salva suoni
+    <div class="accordion mb-3" id="admin-settings-audio-accordion">
+        <div class="accordion-item" id="admin-settings-sounds-card">
+            <h2 class="accordion-header" id="admin-settings-heading-audio">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-audio" aria-expanded="false" aria-controls="admin-settings-collapse-audio">
+                    <i class="bi bi-volume-up me-2"></i>Suoni
                 </button>
+            </h2>
+            <div id="admin-settings-collapse-audio" class="accordion-collapse collapse" aria-labelledby="admin-settings-heading-audio">
+                <div class="accordion-body">
+                    <p class="small text-muted mb-4">
+                        Configura i suoni di notifica. Incolla il link diretto a un file audio oppure carica un file.<br>
+                        Ogni suono viene riprodotto <strong>una sola volta per sessione</strong> di pagina: per riascoltarlo ricarica la pagina.<br>
+                        Il <strong>Globale</strong> viene riprodotto solo quando arrivano avvisi di <strong>due o piu tipi contemporaneamente</strong>.
+                    </p>
+                    <div class="row g-4" id="admin-settings-sounds-rows">
+                        <div class="col-12 col-md-6" data-sound-row="dm">
+                            <label class="form-label mb-1">Messaggi privati</label>
+                            <div class="btn-group btn-group-sm mb-2 ms-3" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-sound-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-sound-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-sound-tab-panel="link">
+                                <div class="input-group">
+                                    <input type="url" class="form-control" id="admin-sound-dm" data-sound-type="dm" placeholder="https://esempio.com/suono.mp3" maxlength="512">
+                                    <button type="button" class="btn btn-outline-secondary" data-sound-test="dm" title="Ascolta"><i class="bi bi-play-fill"></i></button>
+                                    <button type="button" class="btn btn-outline-danger" data-sound-clear="dm" title="Rimuovi"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                            <div data-sound-tab-panel="upload" style="display:none;">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="sound_dm" style="cursor:pointer;">
+                                    <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="sound_dm">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="sound_dm">10</span> MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="sound_dm">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="sound_dm">Annulla</button>
+                            </div>
+                            <div class="form-text mt-1">Suono per i messaggi privati in arrivo.</div>
+                        </div>
+
+                        <div class="col-12 col-md-6" data-sound-row="notifications">
+                            <label class="form-label mb-1">Notifiche</label>
+                            <div class="btn-group btn-group-sm mb-2 ms-3" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-sound-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-sound-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-sound-tab-panel="link">
+                                <div class="input-group">
+                                    <input type="url" class="form-control" id="admin-sound-notifications" data-sound-type="notifications" placeholder="https://esempio.com/suono.mp3" maxlength="512">
+                                    <button type="button" class="btn btn-outline-secondary" data-sound-test="notifications" title="Ascolta"><i class="bi bi-play-fill"></i></button>
+                                    <button type="button" class="btn btn-outline-danger" data-sound-clear="notifications" title="Rimuovi"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                            <div data-sound-tab-panel="upload" style="display:none;">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="sound_notifications" style="cursor:pointer;">
+                                    <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="sound_notifications">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="sound_notifications">10</span> MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="sound_notifications">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="sound_notifications">Annulla</button>
+                            </div>
+                            <div class="form-text mt-1">Suono per le notifiche in arrivo.</div>
+                        </div>
+
+                        <div class="col-12 col-md-6" data-sound-row="whispers">
+                            <label class="form-label mb-1">Sussurri</label>
+                            <div class="btn-group btn-group-sm mb-2 ms-3" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-sound-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-sound-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-sound-tab-panel="link">
+                                <div class="input-group">
+                                    <input type="url" class="form-control" id="admin-sound-whispers" data-sound-type="whispers" placeholder="https://esempio.com/suono.mp3" maxlength="512">
+                                    <button type="button" class="btn btn-outline-secondary" data-sound-test="whispers" title="Ascolta"><i class="bi bi-play-fill"></i></button>
+                                    <button type="button" class="btn btn-outline-danger" data-sound-clear="whispers" title="Rimuovi"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                            <div data-sound-tab-panel="upload" style="display:none;">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="sound_whispers" style="cursor:pointer;">
+                                    <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="sound_whispers">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="sound_whispers">10</span> MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="sound_whispers">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="sound_whispers">Annulla</button>
+                            </div>
+                            <div class="form-text mt-1">Suono per i sussurri in arrivo nella location.</div>
+                        </div>
+
+                        <div class="col-12 col-md-6" data-sound-row="global">
+                            <label class="form-label mb-1">Globale <span class="badge text-bg-secondary ms-1">multi-avviso</span></label>
+                            <div class="btn-group btn-group-sm mb-2 ms-3" role="group">
+                                <button type="button" class="btn btn-outline-primary active" data-sound-tab-btn="link">Incolla link</button>
+                                <button type="button" class="btn btn-outline-primary" data-sound-tab-btn="upload">Carica file</button>
+                            </div>
+                            <div data-sound-tab-panel="link">
+                                <div class="input-group">
+                                    <input type="url" class="form-control" id="admin-sound-global" data-sound-type="global" placeholder="https://esempio.com/suono.mp3" maxlength="512">
+                                    <button type="button" class="btn btn-outline-secondary" data-sound-test="global" title="Ascolta"><i class="bi bi-play-fill"></i></button>
+                                    <button type="button" class="btn btn-outline-danger" data-sound-clear="global" title="Rimuovi"><i class="bi bi-x-lg"></i></button>
+                                </div>
+                            </div>
+                            <div data-sound-tab-panel="upload" style="display:none;">
+                                <div class="border rounded p-3 text-center text-muted mb-2" data-upload-drop="sound_global" style="cursor:pointer;">
+                                    <i class="bi bi-music-note-beamed me-1"></i> Trascina qui il file audio oppure
+                                    <button type="button" class="btn btn-sm btn-outline-primary ms-2" data-upload-target="sound_global">scegli file</button>
+                                </div>
+                                <div class="form-text">Formati: mp3, ogg, wav, m4a, aac, webm. Limite: <span data-upload-max-label="sound_global">10</span> MB.</div>
+                                <div class="progress mt-2 d-none" data-upload-progress="sound_global">
+                                    <div class="progress-bar" role="progressbar" style="width: 0%;">0%</div>
+                                </div>
+                                <button type="button" class="btn btn-sm btn-outline-danger mt-2 d-none" data-upload-cancel="sound_global">Annulla</button>
+                            </div>
+                            <div class="form-text mt-1">Riprodotto quando due o piu tipi di avviso arrivano contemporaneamente.</div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                        <button type="button" class="btn btn-primary" id="admin-sounds-save">
+                            <i class="bi bi-floppy me-1"></i>Salva suoni
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -15,17 +15,17 @@ class CurrencyLogs
 
     public static function setDbAdapter(DbAdapterInterface $adapter = null): void
     {
-        static::$dbAdapter = $adapter;
+        self::$dbAdapter = $adapter;
     }
 
     private static function db(): DbAdapterInterface
     {
-        if (static::$dbAdapter instanceof DbAdapterInterface) {
-            return static::$dbAdapter;
+        if (self::$dbAdapter instanceof DbAdapterInterface) {
+            return self::$dbAdapter;
         }
 
-        static::$dbAdapter = DbAdapterFactory::createFromConfig();
-        return static::$dbAdapter;
+        self::$dbAdapter = DbAdapterFactory::createFromConfig();
+        return self::$dbAdapter;
     }
 
     public static function getDefaultCurrencyId()
@@ -34,7 +34,7 @@ class CurrencyLogs
             return self::$defaultCurrencyId;
         }
 
-        $row = static::db()->fetchOnePrepared(
+        $row = self::db()->fetchOnePrepared(
             'SELECT id
              FROM currencies
              WHERE is_default = 1
@@ -58,7 +58,7 @@ class CurrencyLogs
             $metaJson = json_encode($meta);
         }
 
-        static::db()->executePrepared(
+        self::db()->executePrepared(
             'INSERT INTO currency_logs (
                 character_id,
                 currency_id,

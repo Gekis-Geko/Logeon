@@ -7,7 +7,7 @@ use App\Models\ForumType;
 use App\Services\ForumTypeAdminService;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
-use Core\Logging\LegacyLoggerAdapter;
+
 
 use Core\Logging\LoggerInterface;
 
@@ -30,7 +30,7 @@ class ForumsTypes extends ForumType
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -131,3 +131,5 @@ class ForumsTypes extends ForumType
         \Core\Http\ResponseEmitter::json(['ok' => true]);
     }
 }
+
+

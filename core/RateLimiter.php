@@ -21,26 +21,26 @@ class RateLimiter
 
     public static function setDbAdapter(DbAdapterInterface $adapter = null): void
     {
-        static::$dbAdapter = $adapter;
+        self::$dbAdapter = $adapter;
     }
 
     public static function setDbProvider(DbConnectionProviderInterface $provider = null): void
     {
-        static::$dbProvider = $provider;
+        self::$dbProvider = $provider;
     }
 
     public static function resetRuntimeState(): void
     {
-        static::$configCache = [];
-        static::$dbAdapter = null;
-        static::$dbProvider = null;
-        static::$session = null;
+        self::$configCache = [];
+        self::$dbAdapter = null;
+        self::$dbProvider = null;
+        self::$session = null;
     }
 
     public static function invalidateConfigCache($key = null): void
     {
         if ($key === null) {
-            static::$configCache = [];
+            self::$configCache = [];
             return;
         }
 
@@ -49,49 +49,49 @@ class RateLimiter
             return;
         }
 
-        if (array_key_exists($name, static::$configCache)) {
-            unset(static::$configCache[$name]);
+        if (array_key_exists($name, self::$configCache)) {
+            unset(self::$configCache[$name]);
         }
     }
 
     private static function db(): DbAdapterInterface
     {
-        if (static::$dbAdapter instanceof DbAdapterInterface) {
-            return static::$dbAdapter;
+        if (self::$dbAdapter instanceof DbAdapterInterface) {
+            return self::$dbAdapter;
         }
 
-        if (static::$dbProvider instanceof DbConnectionProviderInterface) {
-            static::$dbAdapter = static::$dbProvider->connection();
-            return static::$dbAdapter;
+        if (self::$dbProvider instanceof DbConnectionProviderInterface) {
+            self::$dbAdapter = self::$dbProvider->connection();
+            return self::$dbAdapter;
         }
 
-        static::$dbAdapter = AppContext::dbProvider()->connection();
-        return static::$dbAdapter;
+        self::$dbAdapter = AppContext::dbProvider()->connection();
+        return self::$dbAdapter;
     }
 
     public static function setSession(SessionInterface $session = null): void
     {
-        static::$session = $session;
+        self::$session = $session;
     }
 
     private static function session(): SessionInterface
     {
-        if (static::$session instanceof SessionInterface) {
-            return static::$session;
+        if (self::$session instanceof SessionInterface) {
+            return self::$session;
         }
 
-        static::$session = AppContext::session();
-        return static::$session;
+        self::$session = AppContext::session();
+        return self::$session;
     }
 
     private static function getSessionValue($key)
     {
-        return static::session()->get((string) $key);
+        return self::session()->get((string) $key);
     }
 
     private static function setSessionValue($key, $value): void
     {
-        static::session()->set((string) $key, $value);
+        self::session()->set((string) $key, $value);
     }
 
     private static function getServerValue(string $key, $default = null)
@@ -102,7 +102,7 @@ class RateLimiter
 
     private static function now(): int
     {
-        $requestTime = (int) static::getServerValue('REQUEST_TIME', 0);
+        $requestTime = (int) self::getServerValue('REQUEST_TIME', 0);
         if ($requestTime > 0) {
             return $requestTime;
         }
@@ -112,7 +112,7 @@ class RateLimiter
 
     private static function getStore(): array
     {
-        $store = static::getSessionValue(static::SESSION_KEY);
+        $store = self::getSessionValue(self::SESSION_KEY);
         if (!is_array($store)) {
             $store = [];
         }
@@ -122,7 +122,7 @@ class RateLimiter
 
     private static function setStore(array $store): void
     {
-        static::setSessionValue(static::SESSION_KEY, $store);
+        self::setSessionValue(self::SESSION_KEY, $store);
     }
 
     private static function resolveIdentifier($identifier = ''): string
@@ -132,23 +132,23 @@ class RateLimiter
             return $identifier;
         }
 
-        $userId = static::getSessionUserId();
+        $userId = self::getSessionUserId();
         if ($userId > 0) {
             return 'user:' . $userId;
         }
 
-        $ip = (string) static::getServerValue('REMOTE_ADDR', '0.0.0.0');
+        $ip = (string) self::getServerValue('REMOTE_ADDR', '0.0.0.0');
         return 'ip:' . $ip;
     }
 
     private static function getSessionUserId(): int
     {
-        return (int) static::getSessionValue('user_id');
+        return (int) self::getSessionValue('user_id');
     }
 
     private static function key($bucket, $identifier = ''): string
     {
-        return trim((string) $bucket) . '|' . static::resolveIdentifier($identifier);
+        return trim((string) $bucket) . '|' . self::resolveIdentifier($identifier);
     }
 
     private static function pruneExpiredStore(array $store, int $now): array
@@ -176,10 +176,10 @@ class RateLimiter
     {
         $limit = max(1, (int) $limit);
         $windowSeconds = max(1, (int) $windowSeconds);
-        $key = static::key($bucket, $identifier);
-        $now = static::now();
+        $key = self::key($bucket, $identifier);
+        $now = self::now();
 
-        $store = static::pruneExpiredStore(static::getStore(), $now);
+        $store = self::pruneExpiredStore(self::getStore(), $now);
         $entry = $store[$key] ?? [
             'count' => 0,
             'reset_at' => $now + $windowSeconds,
@@ -192,7 +192,7 @@ class RateLimiter
 
         $entry['count'] = (int) $entry['count'] + 1;
         $store[$key] = $entry;
-        static::setStore($store);
+        self::setStore($store);
 
         $allowed = ((int) $entry['count'] <= $limit);
         $remaining = max(0, $limit - (int) $entry['count']);
@@ -212,10 +212,10 @@ class RateLimiter
     {
         $limit = max(1, (int) $limit);
         $windowSeconds = max(1, (int) $windowSeconds);
-        $key = static::key($bucket, $identifier);
-        $now = static::now();
+        $key = self::key($bucket, $identifier);
+        $now = self::now();
 
-        $store = static::pruneExpiredStore(static::getStore(), $now);
+        $store = self::pruneExpiredStore(self::getStore(), $now);
         $entry = $store[$key] ?? null;
         if ($entry === null || !isset($entry['reset_at']) || (int) $entry['reset_at'] <= $now) {
             return [
@@ -245,17 +245,17 @@ class RateLimiter
 
     public static function clear($bucket, $identifier = ''): void
     {
-        $key = static::key($bucket, $identifier);
-        $store = static::pruneExpiredStore(static::getStore(), static::now());
+        $key = self::key($bucket, $identifier);
+        $store = self::pruneExpiredStore(self::getStore(), self::now());
         if (array_key_exists($key, $store)) {
             unset($store[$key]);
-            static::setStore($store);
+            self::setStore($store);
         }
     }
 
     public static function clearAll(): void
     {
-        static::setStore([]);
+        self::setStore([]);
     }
 
     public static function getConfigInt($key, $default, $min = null, $max = null): int
@@ -263,21 +263,21 @@ class RateLimiter
         $default = (int) $default;
         $value = null;
 
-        $sessionValue = static::getSessionValue('config_' . $key);
+        $sessionValue = self::getSessionValue('config_' . $key);
         if ($sessionValue !== null && $sessionValue !== '') {
             $value = (int) $sessionValue;
         } else {
-            if (!array_key_exists($key, static::$configCache)) {
-                $row = static::db()->fetchOnePrepared(
+            if (!array_key_exists($key, self::$configCache)) {
+                $row = self::db()->fetchOnePrepared(
                     'SELECT `value`
                      FROM sys_configs
                      WHERE `key` = ?
                      LIMIT 1',
                     [$key],
                 );
-                static::$configCache[$key] = (!empty($row) && isset($row->value)) ? (int) $row->value : null;
+                self::$configCache[$key] = (!empty($row) && isset($row->value)) ? (int) $row->value : null;
             }
-            $value = static::$configCache[$key];
+            $value = self::$configCache[$key];
         }
 
         if ($value === null) {
@@ -303,8 +303,8 @@ class RateLimiter
             ];
         }
 
-        $limit = static::getConfigInt('rate_' . $prefix . '_limit', $defaultLimit, $minLimit, $maxLimit);
-        $window = static::getConfigInt('rate_' . $prefix . '_window_seconds', $defaultWindow, $minWindow, $maxWindow);
+        $limit = self::getConfigInt('rate_' . $prefix . '_limit', $defaultLimit, $minLimit, $maxLimit);
+        $window = self::getConfigInt('rate_' . $prefix . '_window_seconds', $defaultWindow, $minWindow, $maxWindow);
 
         return [
             'limit' => (int) $limit,

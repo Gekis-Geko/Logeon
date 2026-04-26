@@ -22,72 +22,72 @@ class FeatureFlags
 
     public static function setDbAdapter(DbAdapterInterface $adapter = null): void
     {
-        static::$dbAdapter = $adapter;
+        self::$dbAdapter = $adapter;
     }
 
     public static function setDbProvider(DbConnectionProviderInterface $provider = null): void
     {
-        static::$dbProvider = $provider;
+        self::$dbProvider = $provider;
     }
 
     public static function setSession(SessionInterface $session = null): void
     {
-        static::$session = $session;
+        self::$session = $session;
     }
 
     public static function setConfig(ConfigRepositoryInterface $config = null): void
     {
-        static::$config = $config;
+        self::$config = $config;
     }
 
     private static function db(): DbAdapterInterface
     {
-        if (static::$dbAdapter instanceof DbAdapterInterface) {
-            return static::$dbAdapter;
+        if (self::$dbAdapter instanceof DbAdapterInterface) {
+            return self::$dbAdapter;
         }
 
-        if (static::$dbProvider instanceof DbConnectionProviderInterface) {
-            static::$dbAdapter = static::$dbProvider->connection();
-            return static::$dbAdapter;
+        if (self::$dbProvider instanceof DbConnectionProviderInterface) {
+            self::$dbAdapter = self::$dbProvider->connection();
+            return self::$dbAdapter;
         }
 
-        static::$dbAdapter = AppContext::dbProvider()->connection();
-        return static::$dbAdapter;
+        self::$dbAdapter = AppContext::dbProvider()->connection();
+        return self::$dbAdapter;
     }
 
     private static function session(): SessionInterface
     {
-        if (static::$session instanceof SessionInterface) {
-            return static::$session;
+        if (self::$session instanceof SessionInterface) {
+            return self::$session;
         }
 
-        static::$session = AppContext::session();
-        return static::$session;
+        self::$session = AppContext::session();
+        return self::$session;
     }
 
     private static function config(): ConfigRepositoryInterface
     {
-        if (static::$config instanceof ConfigRepositoryInterface) {
-            return static::$config;
+        if (self::$config instanceof ConfigRepositoryInterface) {
+            return self::$config;
         }
 
-        static::$config = AppContext::config();
-        return static::$config;
+        self::$config = AppContext::config();
+        return self::$config;
     }
 
     private static function getSessionValue($key)
     {
-        return static::session()->get((string) $key);
+        return self::session()->get((string) $key);
     }
 
     private static function setSessionValue($key, $value): void
     {
-        static::session()->set((string) $key, $value);
+        self::session()->set((string) $key, $value);
     }
 
     private static function configSessionPrefix(): string
     {
-        $prefix = trim((string) static::config()->get('CONFIG.feature_flags.session_prefix', 'config_'));
+        $prefix = trim((string) self::config()->get('CONFIG.feature_flags.session_prefix', 'config_'));
         if ($prefix === '') {
             return 'config_';
         }
@@ -97,12 +97,12 @@ class FeatureFlags
 
     private static function getSessionConfigValue(string $key)
     {
-        return static::getSessionValue(static::configSessionPrefix() . $key);
+        return self::getSessionValue(self::configSessionPrefix() . $key);
     }
 
     private static function setSessionConfigValue(string $key, $value): void
     {
-        static::setSessionValue(static::configSessionPrefix() . $key, $value);
+        self::setSessionValue(self::configSessionPrefix() . $key, $value);
     }
 
     private static function normalizeKey($key): string
@@ -134,11 +134,11 @@ class FeatureFlags
 
     public static function all($forceReload = false): array
     {
-        if ($forceReload !== true && is_array(static::$cache)) {
-            return static::$cache;
+        if ($forceReload !== true && is_array(self::$cache)) {
+            return self::$cache;
         }
 
-        $rows = static::db()->fetchAllPrepared(
+        $rows = self::db()->fetchAllPrepared(
             "SELECT `key`, `value`
              FROM sys_configs
              WHERE `key` LIKE 'feature\\_%' ESCAPE '\\\\'",
@@ -147,48 +147,48 @@ class FeatureFlags
         $dataset = [];
         if (!empty($rows)) {
             foreach ($rows as $row) {
-                $dataset[$row->key] = static::parseBool($row->value, false);
+                $dataset[$row->key] = self::parseBool($row->value, false);
             }
         }
 
-        static::$cache = $dataset;
-        return static::$cache;
+        self::$cache = $dataset;
+        return self::$cache;
     }
 
     public static function get($key, $default = null): bool
     {
-        $dbKey = static::normalizeKey($key);
+        $dbKey = self::normalizeKey($key);
         if ($dbKey === '') {
-            return static::parseBool($default, false);
+            return self::parseBool($default, false);
         }
 
-        $sessionValue = static::getSessionConfigValue($dbKey);
+        $sessionValue = self::getSessionConfigValue($dbKey);
         if ($sessionValue !== null && $sessionValue !== '') {
-            return static::parseBool($sessionValue, $default);
+            return self::parseBool($sessionValue, $default);
         }
 
-        $flags = static::all();
+        $flags = self::all();
         if (array_key_exists($dbKey, $flags)) {
             return (bool) $flags[$dbKey];
         }
 
-        return static::parseBool($default, false);
+        return self::parseBool($default, false);
     }
 
     public static function isEnabled($key, $default = false): bool
     {
-        return static::parseBool(static::get($key, $default), $default);
+        return self::parseBool(self::get($key, $default), $default);
     }
 
     public static function set($key, $enabled = true): bool
     {
-        $dbKey = static::normalizeKey($key);
+        $dbKey = self::normalizeKey($key);
         if ($dbKey === '') {
             return false;
         }
 
-        $value = static::parseBool($enabled, false) ? 1 : 0;
-        $db = static::db();
+        $value = self::parseBool($enabled, false) ? 1 : 0;
+        $db = self::db();
         $db->executePrepared(
             'INSERT INTO sys_configs (`key`, `value`, `type`)
              VALUES (?, ?, "number")
@@ -196,11 +196,11 @@ class FeatureFlags
             [$dbKey, (string) $value],
         );
 
-        static::setSessionConfigValue($dbKey, (string) $value);
-        if (!is_array(static::$cache)) {
-            static::$cache = [];
+        self::setSessionConfigValue($dbKey, (string) $value);
+        if (!is_array(self::$cache)) {
+            self::$cache = [];
         }
-        static::$cache[$dbKey] = ($value === 1);
+        self::$cache[$dbKey] = ($value === 1);
 
         return true;
     }
@@ -212,7 +212,7 @@ class FeatureFlags
         }
 
         foreach ($flags as $key => $enabled) {
-            static::set($key, $enabled);
+            self::set($key, $enabled);
         }
 
         return true;
@@ -221,69 +221,69 @@ class FeatureFlags
     public static function invalidate($key = null): void
     {
         if ($key === null) {
-            static::$cache = null;
+            self::$cache = null;
             return;
         }
 
-        $dbKey = static::normalizeKey($key);
+        $dbKey = self::normalizeKey($key);
         if ($dbKey === '') {
             return;
         }
 
-        if (is_array(static::$cache) && array_key_exists($dbKey, static::$cache)) {
-            unset(static::$cache[$dbKey]);
+        if (is_array(self::$cache) && array_key_exists($dbKey, self::$cache)) {
+            unset(self::$cache[$dbKey]);
         }
     }
 
     public static function resetRuntimeState(): void
     {
-        static::$cache = null;
-        static::$dbAdapter = null;
-        static::$dbProvider = null;
-        static::$session = null;
-        static::$config = null;
+        self::$cache = null;
+        self::$dbAdapter = null;
+        self::$dbProvider = null;
+        self::$session = null;
+        self::$config = null;
     }
 
     public static function invalidateMany($prefix = null): void
     {
         if ($prefix === null || trim((string) $prefix) === '') {
-            static::$cache = null;
+            self::$cache = null;
             return;
         }
 
-        $prefix = static::normalizeKey($prefix);
+        $prefix = self::normalizeKey($prefix);
         if ($prefix === '') {
             return;
         }
 
-        if (!is_array(static::$cache)) {
+        if (!is_array(self::$cache)) {
             return;
         }
 
-        foreach (array_keys(static::$cache) as $key) {
+        foreach (array_keys(self::$cache) as $key) {
             if (strpos($key, $prefix) === 0) {
-                unset(static::$cache[$key]);
+                unset(self::$cache[$key]);
             }
         }
     }
 
     public static function isEnabledStrict($key, $default = false): bool
     {
-        $dbKey = static::normalizeKey($key);
+        $dbKey = self::normalizeKey($key);
         if ($dbKey === '') {
-            return static::parseBool($default, false);
+            return self::parseBool($default, false);
         }
 
-        $sessionValue = static::getSessionConfigValue($dbKey);
+        $sessionValue = self::getSessionConfigValue($dbKey);
         if ($sessionValue !== null && $sessionValue !== '') {
-            return static::parseBool($sessionValue, $default);
+            return self::parseBool($sessionValue, $default);
         }
 
-        $flags = static::all();
+        $flags = self::all();
         if (array_key_exists($dbKey, $flags)) {
             return (bool) $flags[$dbKey];
         }
 
-        return static::parseBool($default, false);
+        return self::parseBool($default, false);
     }
 }

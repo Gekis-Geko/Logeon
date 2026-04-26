@@ -34,7 +34,7 @@ class UserService
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
+        if (defined('DB')) {
             return (string) DB['crypt_key'];
         }
 
@@ -72,7 +72,7 @@ class UserService
         $defaultDir = 'DESC';
 
         $parts = explode('|', (string) $raw);
-        $field = trim((string) ($parts[0] ?? ''));
+        $field = trim((string) $parts[0]);
         $dir = strtoupper(trim((string) ($parts[1] ?? $defaultDir)));
 
         if (!isset($map[$field])) {
@@ -167,20 +167,14 @@ class UserService
             return $this->restrictionColumnExists;
         }
 
-        $dbName = DB['mysql']['db_name'] ?? '';
-        if ($dbName === '') {
-            $this->restrictionColumnExists = false;
-            return false;
-        }
-
         $row = $this->firstPrepared(
             'SELECT 1 AS ok
              FROM information_schema.COLUMNS
-             WHERE TABLE_SCHEMA = ?
+             WHERE TABLE_SCHEMA = DATABASE()
                AND TABLE_NAME = ?
                AND COLUMN_NAME = ?
              LIMIT 1',
-            [$dbName, 'users', 'is_restricted'],
+            ['users', 'is_restricted'],
         );
 
         $this->restrictionColumnExists = !empty($row);
@@ -193,20 +187,14 @@ class UserService
             return $this->superuserColumnExists;
         }
 
-        $dbName = DB['mysql']['db_name'] ?? '';
-        if ($dbName === '') {
-            $this->superuserColumnExists = false;
-            return false;
-        }
-
         $row = $this->firstPrepared(
             'SELECT 1 AS ok
              FROM information_schema.COLUMNS
-             WHERE TABLE_SCHEMA = ?
+             WHERE TABLE_SCHEMA = DATABASE()
                AND TABLE_NAME = ?
                AND COLUMN_NAME = ?
              LIMIT 1',
-            [$dbName, 'users', 'is_superuser'],
+            ['users', 'is_superuser'],
         );
 
         $this->superuserColumnExists = !empty($row);
@@ -250,10 +238,7 @@ class UserService
 
     public function generateRandomPassword(): string
     {
-        $length = (int) (CONFIG['password_length'] ?? 8);
-        if ($length <= 0) {
-            $length = 8;
-        }
+        $length = (int) CONFIG['password_length'];
 
         do {
             $password = bin2hex(random_bytes($length));

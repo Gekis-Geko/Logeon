@@ -1,6 +1,6 @@
 # Guida Sistema Moduli
 
-Ultimo aggiornamento: 2026-04-25
+Ultimo aggiornamento: 2026-04-26
 
 ## Scopo
 Questa guida descrive come Logeon gestisce i moduli:
@@ -147,7 +147,7 @@ Moduli aggiuntivi con schema completamente additivo: nessuna colonna nelle tabel
 - **Ciclo di vita supportato**: install / activate / deactivate / uninstall / purge.
 - **Identificazione**: nessun campo `class` in `module.json` (default `optional`).
 
-La guida `docs/guida-creazione-moduli.md` e valida per i moduli Classe B. Per i moduli Classe A vedi `docs/adr/ADR-008-moduli-bundled-standard.md`.
+La guida `docs/guida-creazione-moduli.md` e valida per i moduli Classe B. I moduli Classe A usano lo stesso sistema di rilevamento e attivazione, ma non supportano uninstall/purge.
 
 ---
 
@@ -164,6 +164,16 @@ La guida `docs/guida-creazione-moduli.md` e valida per i moduli Classe B. Per i 
 La transizione da `detected` a `installed` avviene alla prima attivazione.
 La disattivazione porta da `active` a `inactive` senza perdita dati.
 La disinstallazione rimuove lo stato DB; con `purge=1` esegue anche `uninstall.sql`.
+
+### Esempio concreto di lifecycle
+
+Supponiamo di avere il modulo `acme.bestiary` nella cartella `modules/acme.bestiary/`.
+
+1. Copi la cartella nel progetto: il modulo compare come `detected`.
+2. Attivi il modulo da `/admin/modules`: il sistema applica `install.sql` e lo stato passa a `active`.
+3. Crei una creatura dalla pagina `/admin/bestiary-creatures`, per esempio `Lupo delle Nebbie`.
+4. Disattivi il modulo: il menu scompare e le rotte non vengono piu caricate, ma i record di `bestiary_entries` restano nel database.
+5. Esegui uninstall con `purge=1` (solo Classe B): il sistema rimuove stato e schema del modulo, riportando il database allo stato precedente.
 
 ---
 
@@ -334,4 +344,3 @@ Convenzione consigliata: prefissare il `page` col nome del modulo per garantire 
 9. Test attivazione → feature operative → disattivazione senza regressioni core → reinstallazione.
 10. Per moduli Classe B: test uninstall purge + verifica DB pulito.
 11. Documentazione modulo in `docs/README.md` separata dai doc core.
-

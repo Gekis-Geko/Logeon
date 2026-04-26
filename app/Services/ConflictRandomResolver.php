@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Contracts\ConflictResolverInterface;
+use App\Services\AttributeProviderRegistry;
 use Core\Database\DbAdapterFactory;
 use Core\Database\DbAdapterInterface;
 use Core\Http\AppError;
@@ -33,20 +34,12 @@ class ConflictRandomResolver implements ConflictResolverInterface
     private $db;
     /** @var ConflictSettingsService */
     private $settings;
-    /** @var bool|null */
-    private $attributesEnabled = null;
-
     public function __construct(
         DbAdapterInterface $db = null,
         ConflictSettingsService $settings = null,
     ) {
         $this->db = $db ?: DbAdapterFactory::createFromConfig();
         $this->settings = $settings ?: new ConflictSettingsService($this->db);
-    }
-
-    private function firstPrepared(string $sql, array $params = [])
-    {
-        return $this->db->fetchOnePrepared($sql, $params);
     }
 
     private function execPrepared(string $sql, array $params = []): void
@@ -304,77 +297,12 @@ class ConflictRandomResolver implements ConflictResolverInterface
 
     private function resolveAttributeModifier(int $characterId, string $attributeSlug): float
     {
-        $characterId = (int) $characterId;
         $attributeSlug = trim($attributeSlug);
         if ($characterId <= 0 || $attributeSlug === '') {
             return 0.0;
         }
-        if (!$this->isCharacterAttributesEnabled()) {
-            return 0.0;
-        }
 
-        $row = $this->firstPrepared(
-            'SELECT cav.effective_value
-             FROM character_attribute_values cav
-             INNER JOIN character_attribute_definitions cad ON cad.id = cav.attribute_id
-             WHERE cav.character_id = ?
-               AND cad.slug = ?
-               AND cad.is_active = 1
-             LIMIT 1',
-            [$characterId, $attributeSlug],
-        );
-
-        if (empty($row) || !isset($row->effective_value) || $row->effective_value === null) {
-            return 0.0;
-        }
-
-        return $this->normalizeNumber($row->effective_value);
-    }
-
-    private function isCharacterAttributesEnabled(): bool
-    {
-        if ($this->attributesEnabled !== null) {
-            return $this->attributesEnabled;
-        }
-
-        $this->attributesEnabled = false;
-        if (!$this->tableExists('character_attribute_values') || !$this->tableExists('character_attribute_definitions')) {
-            return false;
-        }
-
-        $row = $this->firstPrepared(
-            'SELECT value
-             FROM sys_configs
-             WHERE `key` = ?
-             LIMIT 1',
-            ['character_attributes_enabled'],
-        );
-
-        if (!empty($row) && isset($row->value) && (int) $row->value === 1) {
-            $this->attributesEnabled = true;
-        }
-
-        return $this->attributesEnabled;
-    }
-
-    private function tableExists(string $table): bool
-    {
-        $table = trim($table);
-        if ($table === '' || preg_match('/^[A-Za-z0-9_]+$/', $table) !== 1) {
-            return false;
-        }
-        try {
-            $row = $this->firstPrepared(
-                'SELECT COUNT(*) AS n
-                 FROM information_schema.tables
-                 WHERE table_schema = DATABASE()
-                   AND table_name = ?',
-                [$table],
-            );
-            return ((int) ($row->n ?? 0)) > 0;
-        } catch (\Throwable $e) {
-            return false;
-        }
+        return AttributeProviderRegistry::getAttributeModifier($characterId, $attributeSlug);
     }
 
     /**

@@ -1,0 +1,68 @@
+{
+  "id": "logeon.weather",
+  "name": "Logeon Weather",
+  "version": "0.1.0",
+  "vendor": "Logeon",
+  "description": "Modulo Meteo avanzato: provider runtime agganciato via hook weather.provider.",
+  "category": "gameplay",
+  "class": "bundled",
+  "compat": {
+    "min": "0.8.0",
+    "max": ""
+  },
+  "requires": [],
+  "entrypoints": {
+    "bootstrap": "bootstrap.php",
+    "routes": "routes.php"
+  },
+  "features": [
+    "weather.provider.override"
+  ],
+  "menus": {
+    "admin": {
+      "aside": [
+        {
+          "label": "Panoramica meteo",
+          "href": "/admin/weather-overview",
+          "icon": "bi bi-cloud-sun",
+          "page": "weather-overview",
+          "section": "Meteo",
+          "section_order": 30,
+          "order": 100
+        },
+        {
+          "label": "Cataloghi meteo",
+          "href": "/admin/weather-catalogs",
+          "icon": "bi bi-collection",
+          "page": "weather-catalogs",
+          "section": "Meteo",
+          "section_order": 30,
+          "order": 110
+        },
+        {
+          "label": "Profili e assegnazioni",
+          "href": "/admin/weather-profiles",
+          "icon": "bi bi-diagram-3",
+          "page": "weather-profiles",
+          "section": "Meteo",
+          "section_order": 30,
+          "order": 120
+        },
+        {
+          "label": "Override e legacy",
+          "href": "/admin/weather-overrides",
+          "icon": "bi bi-sliders",
+          "page": "weather-overrides",
+          "section": "Meteo",
+          "section_order": 30,
+          "order": 130
+        }
+      ]
+    }
+  },
+  "assets": {
+    "admin": {
+      "js": ["dist/admin.js"]
+    }
+  }
+}

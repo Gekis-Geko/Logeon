@@ -9,7 +9,14 @@
         </div>
     </header>
     <div class="container my-5">
-        <div class="row docs-page" id="how-to-play-page">
+        {% if view_mode == 'monolithic' %}
+        <div class="docs-page docs-page--monolithic" id="how-to-play-page" data-view-mode="monolithic">
+            <div class="card card-body">
+                <div data-role="docs-content"></div>
+            </div>
+        </div>
+        {% else %}
+        <div class="row docs-page" id="how-to-play-page" data-view-mode="navigation">
             <div class="col-4 col-lg-3">
                 <div class="mb-3">
                     <input type="text" class="form-control form-control-sm" data-role="docs-filter" placeholder="Cerca guida...">
@@ -22,10 +29,10 @@
                 </div>
             </div>
         </div>
+        {% endif %}
     </div>
 </main>
 
 {% include 'sys/modals/license.twig' %}
 
 {% endblock %}
-

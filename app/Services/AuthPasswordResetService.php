@@ -11,7 +11,7 @@ use Core\Http\AppError;
 use Core\Http\RequestContext;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\RateLimiter;
 
@@ -25,7 +25,7 @@ class AuthPasswordResetService
     public function __construct(DbAdapterInterface $db = null, LoggerInterface $logger = null)
     {
         $this->db = $db ?: DbAdapterFactory::createFromConfig();
-        $this->logger = $logger ?: new LegacyLoggerAdapter();
+        $this->logger = $logger ?: \Core\AppContext::logger();
     }
 
     private function firstPrepared(string $sql, array $params = [])
@@ -40,7 +40,7 @@ class AuthPasswordResetService
 
     private function cryptKey(): string
     {
-        if (defined('DB') && isset(DB['crypt_key'])) {
+        if (defined('DB')) {
             return (string) DB['crypt_key'];
         }
 
@@ -80,7 +80,7 @@ class AuthPasswordResetService
 
     private function absoluteUrl(string $path): string
     {
-        $rawHost = trim((string) (APP['baseurl'] ?? ''));
+        $rawHost = trim((string) APP['baseurl']);
         if ($rawHost === '') {
             $rawHost = trim((string) $this->getServerValue('HTTP_HOST', ''));
         }
@@ -98,7 +98,7 @@ class AuthPasswordResetService
             return false;
         }
 
-        $from = trim((string) (APP['support_email'] ?? ''));
+        $from = trim((string) APP['support_email']);
         $headers = [];
         $headers[] = 'MIME-Version: 1.0';
         $headers[] = 'Content-type: text/html; charset=UTF-8';
@@ -264,3 +264,5 @@ class AuthPasswordResetService
         );
     }
 }
+
+

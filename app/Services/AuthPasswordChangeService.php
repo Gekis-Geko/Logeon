@@ -8,7 +8,7 @@ use Core\Database\DbAdapterFactory;
 use Core\Database\DbAdapterInterface;
 use Core\Http\AppError;
 use Core\Http\RequestData;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 use Core\SessionStore;
 
@@ -22,7 +22,7 @@ class AuthPasswordChangeService
     public function __construct(DbAdapterInterface $db = null, LoggerInterface $logger = null)
     {
         $this->db = $db ?: DbAdapterFactory::createFromConfig();
-        $this->logger = $logger ?: new LegacyLoggerAdapter();
+        $this->logger = $logger ?: \Core\AppContext::logger();
     }
 
     private function firstPrepared(string $sql, array $params = [])
@@ -174,3 +174,5 @@ class AuthPasswordChangeService
         );
     }
 }
+
+

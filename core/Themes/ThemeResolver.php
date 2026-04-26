@@ -87,7 +87,7 @@ class ThemeResolver
 
         $manifestPath = $themePath . '/theme.json';
         $manifest = $this->readThemeManifest($manifestPath);
-        if ((bool) ($manifest['valid'] ?? false) !== true) {
+        if (!$manifest['valid']) {
             $invalid = $this->emptyThemeRuntime();
             $invalid['errors'][] = 'theme_manifest_invalid';
             $invalid['id'] = $themeId;
@@ -182,14 +182,11 @@ class ThemeResolver
 
     private function appThemeConfig(): array
     {
-        if (!defined('APP') || !is_array(APP)) {
+        if (!defined('APP')) {
             return [];
         }
-        $theme = APP['theme'] ?? null;
-        if (!is_array($theme)) {
-            return [];
-        }
-        return $theme;
+        $theme = APP['theme'];
+        return (array) $theme;
     }
 
     private function appBool(string $key, bool $fallback): bool

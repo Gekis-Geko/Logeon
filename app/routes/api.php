@@ -62,6 +62,7 @@ $route->group('/location', function ($route) {
     $route->apiPost('/invite/respond', 'Locations@respondInvite');
     $route->apiPost('/invite/owner-updates', 'Locations@inviteUpdates');
     $route->apiPost('/messages/list', 'LocationMessages@list');
+    $route->apiPost('/messages/archive-range', 'LocationMessages@archiveRange');
     $route->apiPost('/messages/send', 'LocationMessages@send');
     $route->apiPost('/whispers/list', 'LocationMessages@whispers');
     $route->apiPost('/whispers/threads', 'LocationMessages@whispersThreads');
@@ -71,6 +72,7 @@ $route->group('/location', function ($route) {
     $route->apiPost('/drops/list', 'LocationDrops@list');
     $route->apiPost('/drops/drop', 'LocationDrops@drop');
     $route->apiPost('/drops/pick', 'LocationDrops@pickup');
+    $route->apiPost('/position-tags/list', 'LocationPositionTags@list');
 });
 
 $route->group('/shop', function ($route) {
@@ -85,6 +87,19 @@ $route->group('/bank', function ($route) {
     $route->apiPost('/deposit', 'Bank@deposit');
     $route->apiPost('/withdraw', 'Bank@withdraw');
     $route->apiPost('/transfer', 'Bank@transfer');
+});
+
+$route->apiPost('/get/weather', 'Weathers@weather');
+
+$route->group('/weather', function ($route) {
+    $route->apiPost('/options', 'Weathers@options');
+    $route->apiPost('/global/set', 'Weathers@setGlobal');
+    $route->apiPost('/global/clear', 'Weathers@clearGlobal');
+    $route->apiPost('/world/options', 'Weathers@worldOptions');
+    $route->apiPost('/world/set', 'Weathers@setWorld');
+    $route->apiPost('/world/clear', 'Weathers@clearWorld');
+    $route->apiPost('/location/set', 'Weathers@setLocation');
+    $route->apiPost('/location/clear', 'Weathers@clearLocation');
 });
 
 $route->group('/admin', function ($route) {
@@ -116,25 +131,15 @@ $route->group('/admin', function ($route) {
     $route->apiPost('/items/update', 'Items@update');
     $route->apiPost('/items/delete', 'Items@adminDelete');
 
-    $route->apiPost('/equipment-slots/list', 'EquipmentSlots@list');
-    $route->apiPost('/equipment-slots/create', 'EquipmentSlots@create');
-    $route->apiPost('/equipment-slots/update', 'EquipmentSlots@update');
-    $route->apiPost('/equipment-slots/delete', 'EquipmentSlots@delete');
-
-    $route->apiPost('/item-equipment-rules/list', 'ItemEquipmentRules@list');
-    $route->apiPost('/item-equipment-rules/create', 'ItemEquipmentRules@create');
-    $route->apiPost('/item-equipment-rules/update', 'ItemEquipmentRules@update');
-    $route->apiPost('/item-equipment-rules/delete', 'ItemEquipmentRules@delete');
-
     $route->apiPost('/categories/list', 'ItemsCategories@list');
     $route->apiPost('/categories/create', 'ItemsCategories@create');
     $route->apiPost('/categories/update', 'ItemsCategories@update');
     $route->apiPost('/categories/delete', 'ItemsCategories@delete');
 
-    $route->apiPost('/currencies/list', 'Currencies@list');
-    $route->apiPost('/currencies/create', 'Currencies@create');
-    $route->apiPost('/currencies/update', 'Currencies@update');
-    $route->apiPost('/currencies/delete', 'Currencies@delete');
+    $route->apiPost('/core-currencies/list', 'Currencies@list');
+    $route->apiPost('/core-currencies/create', 'Currencies@create');
+    $route->apiPost('/core-currencies/update', 'Currencies@update');
+    $route->apiPost('/core-currencies/delete', 'Currencies@delete');
 
     $route->apiPost('/shops/list', 'Shops@list');
     $route->apiPost('/shops/create', 'Shops@create');
@@ -158,6 +163,11 @@ $route->group('/admin', function ($route) {
     $route->apiPost('/locations/delete', 'Locations@adminDelete');
     $route->apiPost('/locations/update', 'Locations@adminUpdate');
 
+    $route->apiPost('/location-position-tags/list', 'LocationPositionTags@adminList');
+    $route->apiPost('/location-position-tags/create', 'LocationPositionTags@adminCreate');
+    $route->apiPost('/location-position-tags/update', 'LocationPositionTags@adminUpdate');
+    $route->apiPost('/location-position-tags/delete', 'LocationPositionTags@adminDelete');
+
     $route->apiPost('/storyboards/list', 'Storyboards@list');
     $route->apiPost('/storyboards/create', 'Storyboards@create');
     $route->apiPost('/storyboards/update', 'Storyboards@update');
@@ -173,12 +183,6 @@ $route->group('/admin', function ($route) {
     $route->apiPost('/how-to-play/update', 'HowToPlays@update');
     $route->apiPost('/how-to-play/delete', 'HowToPlays@delete');
 
-    $route->apiPost('/characters/social-status', 'Characters@setSocialStatus');
-    $route->apiPost('/social-status/list', 'Characters@listSocialStatus');
-    $route->apiPost('/social-status/admin-list', 'SocialStatuses@adminList');
-    $route->apiPost('/social-status/create', 'SocialStatuses@adminCreate');
-    $route->apiPost('/social-status/update', 'SocialStatuses@adminUpdate');
-    $route->apiPost('/social-status/delete', 'SocialStatuses@adminDelete');
     $route->apiPost('/characters/name-requests/list', 'Characters@listNameRequests');
     $route->apiPost('/characters/loanface-requests/list', 'Characters@listLoanfaceRequests');
     $route->apiPost('/characters/identity-requests/list', 'Characters@listIdentityRequests');
@@ -249,11 +253,6 @@ $route->group('/admin', function ($route) {
     $route->apiPost('/guild-role-locations/update', 'GuildRoleLocations@update');
     $route->apiPost('/guild-role-locations/delete', 'GuildRoleLocations@delete');
 
-    $route->apiPost('/news/list', 'Novelties@adminList');
-    $route->apiPost('/news/create', 'Novelties@create');
-    $route->apiPost('/news/update', 'Novelties@update');
-    $route->apiPost('/news/delete', 'Novelties@adminDelete');
-
     $route->apiPost('/forums/list', 'Forums@adminList');
     $route->apiPost('/forums/types-list', 'Forums@adminTypesList');
     $route->apiPost('/forums/create', 'Forums@adminCreate');
@@ -290,18 +289,6 @@ $route->group('/admin', function ($route) {
     $route->apiPost('/themes/activate', 'Themes@activate');
     $route->apiPost('/themes/deactivate', 'Themes@deactivate');
 
-    $route->apiPost('/character-attributes/settings/get', 'CharacterAttributes@adminSettingsGet');
-    $route->apiPost('/character-attributes/settings/update', 'CharacterAttributes@adminSettingsUpdate');
-    $route->apiPost('/character-attributes/definitions/list', 'CharacterAttributes@adminDefinitionsList');
-    $route->apiPost('/character-attributes/definitions/create', 'CharacterAttributes@adminDefinitionsCreate');
-    $route->apiPost('/character-attributes/definitions/update', 'CharacterAttributes@adminDefinitionsUpdate');
-    $route->apiPost('/character-attributes/definitions/deactivate', 'CharacterAttributes@adminDefinitionsDeactivate');
-    $route->apiPost('/character-attributes/definitions/reorder', 'CharacterAttributes@adminDefinitionsReorder');
-    $route->apiPost('/character-attributes/rules/get', 'CharacterAttributes@adminRulesGet');
-    $route->apiPost('/character-attributes/rules/upsert', 'CharacterAttributes@adminRulesUpsert');
-    $route->apiPost('/character-attributes/rules/delete', 'CharacterAttributes@adminRulesDelete');
-    $route->apiPost('/character-attributes/recompute', 'CharacterAttributes@adminRecompute');
-
     $route->apiPost('/logs/conflicts/list', 'AdminLogs@listConflicts');
     $route->apiPost('/logs/currency/list', 'AdminLogs@listCurrency');
     $route->apiPost('/logs/experience/list', 'AdminLogs@listExperience');
@@ -311,16 +298,6 @@ $route->group('/admin', function ($route) {
     $route->apiPost('/logs/location-access/list', 'AdminLogs@listLocationAccess');
     $route->apiPost('/logs/sys/list', 'AdminLogs@listSys');
     $route->apiPost('/logs/narrative/list', 'AdminLogs@listNarrative');
-
-    $route->apiPost('/archetypes/list', 'Archetypes@adminList');
-    $route->apiPost('/archetypes/create', 'Archetypes@adminCreate');
-    $route->apiPost('/archetypes/update', 'Archetypes@adminUpdate');
-    $route->apiPost('/archetypes/delete', 'Archetypes@adminDelete');
-    $route->apiPost('/archetypes/config/get', 'Archetypes@adminConfigGet');
-    $route->apiPost('/archetypes/config/update', 'Archetypes@adminConfigUpdate');
-    $route->apiPost('/archetypes/character/list', 'Archetypes@adminCharacterArchetypes');
-    $route->apiPost('/archetypes/character/assign', 'Archetypes@adminAssignArchetype');
-    $route->apiPost('/archetypes/character/remove', 'Archetypes@adminRemoveArchetype');
 
     $route->apiPost('/message-reports/list', 'MessageReports@adminList');
     $route->apiPost('/message-reports/get', 'MessageReports@adminGet');
@@ -348,6 +325,19 @@ $route->group('/events', function ($route) {
     $route->apiPost('/update', 'CharacterEvents@update');
     $route->apiPost('/delete', 'CharacterEvents@delete');
 });
+
+$route->group('/chat-archives', function ($route) {
+    $route->apiPost('/list',       'ChatArchives@list');
+    $route->apiPost('/get',        'ChatArchives@get');
+    $route->apiPost('/create',     'ChatArchives@create');
+    $route->apiPost('/update',     'ChatArchives@update');
+    $route->apiPost('/delete',     'ChatArchives@delete');
+    $route->apiPost('/public/set', 'ChatArchives@setPublic');
+    $route->apiPost('/diary/link', 'ChatArchives@linkDiary');
+    $route->apiPost('/diary/search', 'ChatArchives@searchDiaryEvents');
+});
+
+$route->apiPost('/shared/chat-archive/load', 'ChatArchivesPublic@show');
 
 $route->group('/conflicts', function ($route) {
     $route->apiPost('/list', 'Conflicts@list');
@@ -415,16 +405,8 @@ $route->group('/profile', function ($route) {
     $route->apiPost('/master-notes/update', 'Characters@updateMasterNotes');
     $route->apiPost('/health/update', 'Characters@updateHealth');
     $route->apiPost('/experience/assign', 'Characters@assignExperience');
-    $route->apiPost('/attributes/list', 'CharacterAttributes@profileList');
-    $route->apiPost('/attributes/update-values', 'CharacterAttributes@profileUpdateValues');
-    $route->apiPost('/attributes/recompute', 'CharacterAttributes@profileRecompute');
 });
-$route->apiPost('/character/create', 'Archetypes@createCharacter');
-
-$route->group('/archetypes', function ($route) {
-    $route->apiPost('/list', 'Archetypes@publicList');
-    $route->apiPost('/my', 'Archetypes@characterArchetypes');
-});
+$route->apiPost('/character/create', 'CharacterCreation@createCharacter');
 
 $route->group('/narrative-tags', function ($route) {
     $route->apiPost('/entity', 'NarrativeTags@entityTags');
@@ -432,7 +414,6 @@ $route->group('/narrative-tags', function ($route) {
 
 $route->group('/list', function ($route) {
     $route->apiPost('/nationalities', 'Nationalities@list');
-    $route->apiPost('/archetypes', 'Archetypes@publicList');
     $route->apiPost('/narrative-tags', 'NarrativeTags@publicList');
     $route->apiPost('/maps', 'Maps@list');
     $route->apiPost('/locations', 'Locations@list');
@@ -442,64 +423,15 @@ $route->group('/list', function ($route) {
     $route->apiPost('/characters/search', 'Characters@search');
     $route->apiPost('/forum-types', 'ForumsTypes@list');
     $route->apiPost('/forum', 'Forums@list');
-    $route->apiPost('/news', 'Novelties@list');
     $route->apiPost('/forum/threads', 'Threads@list');
     $route->apiPost('/items', 'Items@list');
 });
 
 $route->group('/get', function ($route) {
-    $route->apiPost('/weather', 'Weathers@weather');
     $route->apiPost('/profile', 'Characters@getByID');
     $route->apiPost('/bag', 'Characters@getByID');
     $route->apiPost('/forum', 'Forums@getByID');
     $route->apiPost('/forum/thread', 'Threads@getByID');
-});
-
-$route->group('/weather', function ($route) {
-    $route->apiPost('/options', 'Weathers@options');
-    $route->apiPost('/global/set', 'Weathers@setGlobal');
-    $route->apiPost('/global/clear', 'Weathers@clearGlobal');
-    $route->apiPost('/world/options', 'Weathers@worldOptions');
-    $route->apiPost('/world/set', 'Weathers@setWorld');
-    $route->apiPost('/world/clear', 'Weathers@clearWorld');
-    $route->apiPost('/location/set', 'Weathers@setLocation');
-    $route->apiPost('/location/clear', 'Weathers@clearLocation');
-    // Climate area management (requires settings.manage)
-    $route->apiPost('/climate-areas', 'Weathers@climateAreaList');
-    $route->apiPost('/climate-areas/create', 'Weathers@climateAreaCreate');
-    $route->apiPost('/climate-areas/update', 'Weathers@climateAreaUpdate');
-    $route->apiPost('/climate-areas/delete', 'Weathers@climateAreaDelete');
-    $route->apiPost('/climate-areas/assign', 'Weathers@climateAreaAssign');
-
-    // Weather & Climate v2 core domain
-    $route->apiPost('/types', 'Weathers@weatherTypeList');
-    $route->apiPost('/types/create', 'Weathers@weatherTypeCreate');
-    $route->apiPost('/types/update', 'Weathers@weatherTypeUpdate');
-    $route->apiPost('/types/delete', 'Weathers@weatherTypeDelete');
-
-    $route->apiPost('/seasons', 'Weathers@seasonList');
-    $route->apiPost('/seasons/create', 'Weathers@seasonCreate');
-    $route->apiPost('/seasons/update', 'Weathers@seasonUpdate');
-    $route->apiPost('/seasons/delete', 'Weathers@seasonDelete');
-
-    $route->apiPost('/zones', 'Weathers@climateZoneList');
-    $route->apiPost('/zones/create', 'Weathers@climateZoneCreate');
-    $route->apiPost('/zones/update', 'Weathers@climateZoneUpdate');
-    $route->apiPost('/zones/delete', 'Weathers@climateZoneDelete');
-
-    $route->apiPost('/profiles', 'Weathers@profileList');
-    $route->apiPost('/profiles/upsert', 'Weathers@profileUpsert');
-    $route->apiPost('/profiles/delete', 'Weathers@profileDelete');
-    $route->apiPost('/profiles/weights', 'Weathers@profileWeightsList');
-    $route->apiPost('/profiles/weights/sync', 'Weathers@profileWeightsSync');
-
-    $route->apiPost('/assignments', 'Weathers@assignmentList');
-    $route->apiPost('/assignments/upsert', 'Weathers@assignmentUpsert');
-    $route->apiPost('/assignments/delete', 'Weathers@assignmentDelete');
-
-    $route->apiPost('/overrides', 'Weathers@weatherOverrideList');
-    $route->apiPost('/overrides/upsert', 'Weathers@weatherOverrideUpsert');
-    $route->apiPost('/overrides/delete', 'Weathers@weatherOverrideDelete');
 });
 
 $route->group('/narrative-states', function ($route) {
@@ -507,6 +439,7 @@ $route->group('/narrative-states', function ($route) {
     $route->apiPost('/apply', 'NarrativeStates@apply');
     $route->apiPost('/remove', 'NarrativeStates@remove');
     $route->apiPost('/my-states', 'NarrativeStates@myStates');
+    $route->apiGet('/my-states', 'NarrativeStates@myStates');
 });
 
 $route->group('/admin/narrative-states', function ($route) {
@@ -561,20 +494,6 @@ $route->group('/system-events', function ($route) {
     $route->apiPost('/participation/leave', 'SystemEvents@participationLeave');
 });
 
-$route->group('/quests', function ($route) {
-    $route->apiPost('/list', 'Quests@list');
-    $route->apiPost('/get', 'Quests@get');
-    $route->apiPost('/history/list', 'Quests@historyList');
-    $route->apiPost('/history/get', 'Quests@historyGet');
-    $route->apiPost('/participation/join', 'Quests@participationJoin');
-    $route->apiPost('/participation/leave', 'Quests@participationLeave');
-    $route->apiPost('/staff/instances/list', 'Quests@staffInstancesList');
-    $route->apiPost('/staff/step/confirm', 'Quests@staffStepConfirm');
-    $route->apiPost('/staff/instance/status-set', 'Quests@staffInstanceStatusSet');
-    $route->apiPost('/staff/instance/force-progress', 'Quests@staffInstanceForceProgress');
-    $route->apiPost('/staff/closure/get', 'Quests@staffClosureGet');
-    $route->apiPost('/staff/closure/finalize', 'Quests@staffClosureFinalize');
-});
 
 $route->group('/admin/system-events', function ($route) {
     $route->apiPost('/list', 'AdminSystemEvents@list');
@@ -594,42 +513,6 @@ $route->group('/admin/system-events', function ($route) {
     $route->apiPost('/maintenance/run', 'AdminSystemEvents@maintenanceRun');
 });
 
-$route->group('/admin/quests', function ($route) {
-    $route->apiPost('/definitions/list', 'AdminQuests@definitionsList');
-    $route->apiPost('/definitions/create', 'AdminQuests@definitionsCreate');
-    $route->apiPost('/definitions/update', 'AdminQuests@definitionsUpdate');
-    $route->apiPost('/definitions/publish', 'AdminQuests@definitionsPublish');
-    $route->apiPost('/definitions/archive', 'AdminQuests@definitionsArchive');
-    $route->apiPost('/definitions/delete', 'AdminQuests@definitionsDelete');
-    $route->apiPost('/definitions/reorder', 'AdminQuests@definitionsReorder');
-    $route->apiPost('/steps/list', 'AdminQuests@stepsList');
-    $route->apiPost('/steps/upsert', 'AdminQuests@stepsUpsert');
-    $route->apiPost('/steps/delete', 'AdminQuests@stepsDelete');
-    $route->apiPost('/steps/reorder', 'AdminQuests@stepsReorder');
-    $route->apiPost('/conditions/list', 'AdminQuests@conditionsList');
-    $route->apiPost('/conditions/upsert', 'AdminQuests@conditionsUpsert');
-    $route->apiPost('/conditions/delete', 'AdminQuests@conditionsDelete');
-    $route->apiPost('/outcomes/list', 'AdminQuests@outcomesList');
-    $route->apiPost('/outcomes/upsert', 'AdminQuests@outcomesUpsert');
-    $route->apiPost('/outcomes/delete', 'AdminQuests@outcomesDelete');
-    $route->apiPost('/instances/list', 'AdminQuests@instancesList');
-    $route->apiPost('/instances/get', 'AdminQuests@instancesGet');
-    $route->apiPost('/instances/assign', 'AdminQuests@instancesAssign');
-    $route->apiPost('/instances/status/set', 'AdminQuests@instancesStatusSet');
-    $route->apiPost('/instances/step/set', 'AdminQuests@instancesStepSet');
-    $route->apiPost('/closures/list', 'AdminQuests@closuresList');
-    $route->apiPost('/closures/get', 'AdminQuests@closuresGet');
-    $route->apiPost('/closures/upsert', 'AdminQuests@closuresUpsert');
-    $route->apiPost('/rewards/list', 'AdminQuests@rewardsList');
-    $route->apiPost('/rewards/assign', 'AdminQuests@rewardsAssign');
-    $route->apiPost('/rewards/remove', 'AdminQuests@rewardsRemove');
-    $route->apiPost('/links/list', 'AdminQuests@linksList');
-    $route->apiPost('/links/upsert', 'AdminQuests@linksUpsert');
-    $route->apiPost('/links/delete', 'AdminQuests@linksDelete');
-    $route->apiPost('/logs/list', 'AdminQuests@logsList');
-    $route->apiPost('/maintenance/run', 'AdminQuests@maintenanceRun');
-});
-
 $route->group('/lifecycle', function ($route) {
     $route->apiPost('/current', 'CharacterLifecycle@currentPhase');
     $route->apiPost('/history', 'CharacterLifecycle@history');
@@ -643,38 +526,6 @@ $route->group('/admin/lifecycle', function ($route) {
     $route->apiPost('/characters/current', 'CharacterLifecycle@adminCurrentPhase');
     $route->apiPost('/characters/history', 'CharacterLifecycle@adminHistory');
     $route->apiPost('/characters/transition', 'CharacterLifecycle@adminTransition');
-});
-
-$route->group('/factions', function ($route) {
-    $route->apiPost('/list', 'Factions@list');
-    $route->apiPost('/get', 'Factions@get');
-    $route->apiPost('/my', 'Factions@myFactions');
-    $route->apiPost('/members', 'Factions@getFactionMembers');
-    $route->apiPost('/relations', 'Factions@getFactionRelations');
-    $route->apiPost('/leave', 'Factions@leaveFaction');
-    $route->apiPost('/join-request/send', 'Factions@sendJoinRequest');
-    $route->apiPost('/join-request/withdraw', 'Factions@withdrawJoinRequest');
-    $route->apiPost('/join-request/my', 'Factions@myJoinRequests');
-    $route->apiPost('/leader/requests', 'Factions@leaderListJoinRequests');
-    $route->apiPost('/leader/request/review', 'Factions@reviewJoinRequest');
-    $route->apiPost('/leader/invite', 'Factions@leaderInviteMember');
-    $route->apiPost('/leader/expel', 'Factions@leaderExpelMember');
-    $route->apiPost('/leader/relation', 'Factions@leaderProposeRelation');
-});
-
-$route->group('/admin/factions', function ($route) {
-    $route->apiPost('/list', 'Factions@adminList');
-    $route->apiPost('/get', 'Factions@adminGet');
-    $route->apiPost('/create', 'Factions@adminCreate');
-    $route->apiPost('/update', 'Factions@adminUpdate');
-    $route->apiPost('/delete', 'Factions@adminDelete');
-    $route->apiPost('/members/list', 'Factions@adminMemberList');
-    $route->apiPost('/members/add', 'Factions@adminMemberAdd');
-    $route->apiPost('/members/update', 'Factions@adminMemberUpdate');
-    $route->apiPost('/members/remove', 'Factions@adminMemberRemove');
-    $route->apiPost('/relations/list', 'Factions@adminRelationList');
-    $route->apiPost('/relations/set', 'Factions@adminRelationSet');
-    $route->apiPost('/relations/remove', 'Factions@adminRelationRemove');
 });
 
 $route->group('/notifications', function ($route) {

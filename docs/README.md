@@ -1,6 +1,6 @@
 # Indice Documentazione Logeon
 
-Ultimo aggiornamento: 2026-04-24
+Ultimo aggiornamento: 2026-04-26
 
 ## Scopo
 Indice unico della documentazione pubblica, pronta per pubblicazione su GitBook.
@@ -29,21 +29,20 @@ Usa come indice principale `docs/SUMMARY.md` e trascrivi solo le pagine elencate
 6. `docs/guida-upgrade-versioni.md`
 7. `docs/guida-backup-ripristino.md`
 8. `docs/guida-troubleshooting.md`
-9. `docs/guida-architettura-frontend.md`
-10. `docs/guida-permessi-ui-attributi.md`
-11. `docs/guida-autenticazione-sessioni.md`
-12. `docs/matrice-ruoli-permessi.md`
-13. `docs/guida-sistema-moduli.md`
-14. `docs/guida-creazione-moduli.md`
-15. `docs/guida-intensita-quest.md`
-16. `docs/changelog.md`
+9. `docs/guida-build-release.md`
+10. `docs/guida-architettura-frontend.md`
+11. `docs/guida-permessi-ui-attributi.md`
+12. `docs/guida-autenticazione-sessioni.md`
+13. `docs/matrice-ruoli-permessi.md`
+14. `docs/guida-sistema-moduli.md`
+15. `docs/guida-creazione-moduli.md`
+16. `docs/guida-intensita-quest.md`
+17. `docs/changelog.md`
 
-## Aggiornamenti recenti (2026-04-24)
-1. `docs/adr/ADR-008-moduli-bundled-standard.md`: nuova ADR - tassonomia Classe A (bundled, solo activate/deactivate) e Classe B (optional, ciclo completo). Guard `module_bundled_no_purge` in `ModuleManager::uninstall()`. Campo `"class": "bundled"` in tutti gli 8 `module.json` bundled.
-2. `docs/guida-sistema-moduli.md`, `docs/guida-creazione-moduli.md`, `CONTRIBUTING.md`, `docs/guida-contributori.md`: aggiornati con tassonomia Classe A/B, error code `module_bundled_no_purge`, scope uninstall/purge solo Classe B.
-3. `docs/contratti-api-backend.md`: aggiunto `module_bundled_no_purge` agli error code moduli.
-4. `docs/interno/piano-esm-migration.md`: Step 5-8 completati - moduli JS isolati, feature/module/core convertiti a ESM, script `type="module"` e `import()` lazy attivi, build con splitting e chunk condivisi.
-5. `docs/constraints/07-REGISTRO-RESIDUI-TECNICI.md`: aggiunto residuo deferred `LEFT JOIN social_status` in modelli core.
+## Aggiornamenti recenti (2026-04-26)
+1. `README.md`, `CONTRIBUTING.md` e `docs/guida-build-release.md`: allineati al pacchetto `source-dev`, che ora include `scripts/`, sorgenti Sass e le guide operative utili a sviluppatori e contributori.
+2. `dist/release/README.md`: note packaging aggiornate con esempi pratici per generare il pacchetto `ready` o il pacchetto `source-dev`.
+3. `docs/guida-sistema-moduli.md` e `docs/guida-creazione-moduli.md`: rese piu autosufficienti con esempi concreti di lifecycle, manifest e creazione modulo.
 
 ## Aggiornamenti recenti (2026-04-23)
 1. `CONTRIBUTING.md`: aggiunte policy Git/PR ufficiali, naming branch/commit, lifecycle review/merge, Definition of Done e esempi concreti di stile codice (PHP/JS/Twig).

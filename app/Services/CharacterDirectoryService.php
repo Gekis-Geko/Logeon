@@ -129,18 +129,16 @@ class CharacterDirectoryService
                 characters.availability,
                 characters.avatar,
                 characters.online_status,
+                characters.socialstatus_id,
                 characters.last_location AS location_id,
                 characters.last_map AS map_id,
                 locations.name AS location_name,
                 maps.name AS map_name,
-                maps.icon AS map_icon,
-                social_status.name AS socialstatus_name,
-                social_status.icon AS socialstatus_icon
+                maps.icon AS map_icon
             FROM characters
                 LEFT JOIN users ON characters.user_id = users.id
                 LEFT JOIN locations ON characters.last_location = locations.id
                 LEFT JOIN maps ON characters.last_map = maps.id
-                LEFT JOIN social_status ON socialstatus_id = social_status.id
             WHERE characters.date_last_signin > characters.date_last_signout
                 AND DATE_ADD(characters.date_last_seed, INTERVAL 15 MINUTE) > NOW()
                 AND ' . $visibilityClause . '
@@ -150,6 +148,17 @@ class CharacterDirectoryService
 
         if (empty($rows)) {
             return [];
+        }
+
+        $statusMap = [];
+        foreach (SocialStatusProviderRegistry::listAll() as $s) {
+            $statusMap[(int) $s->id] = $s;
+        }
+        foreach ($rows as $row) {
+            $sid = (int) ($row->socialstatus_id ?? 0);
+            $s = $statusMap[$sid] ?? null;
+            $row->socialstatus_name = $s->name ?? null;
+            $row->socialstatus_icon = $s->icon ?? null;
         }
 
         return $this->applyLocationVisibilityForViewer($rows, (int) $viewer['character_id']);

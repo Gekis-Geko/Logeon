@@ -116,6 +116,18 @@ $themesAvailable = coreSmokeTableExists($db, 'sys_configs');
 $suite = [
     'DB runtime' => $root . '/scripts/php/smoke-core-db-runtime.php',
     'Auth/Session runtime' => $root . '/scripts/php/smoke-core-auth-runtime.php',
+    'Archetypes provider runtime' => $root . '/scripts/php/smoke-archetypes-provider-runtime.php',
+    'Attributes provider runtime' => $root . '/scripts/php/smoke-attributes-provider-runtime.php',
+    'Social status provider runtime' => $root . '/scripts/php/smoke-social-status-provider-runtime.php',
+    'Social status module cutover runtime' => $root . '/scripts/php/smoke-social-status-module-cutover-runtime.php',
+    'Factions provider runtime' => $root . '/scripts/php/smoke-factions-provider-runtime.php',
+    'Factions module cutover runtime' => $root . '/scripts/php/smoke-factions-module-cutover-runtime.php',
+    'Attributes module cutover runtime' => $root . '/scripts/php/smoke-attributes-module-cutover-runtime.php',
+    'Multi-currency module cutover runtime' => $root . '/scripts/php/smoke-multi-currency-module-cutover-runtime.php',
+    'Weather provider runtime' => $root . '/scripts/php/smoke-weather-provider-runtime.php',
+    'Weather module cutover runtime' => $root . '/scripts/php/smoke-weather-module-cutover-runtime.php',
+    'Novelty module cutover runtime' => $root . '/scripts/php/smoke-novelty-module-cutover-runtime.php',
+    'Quests module cutover runtime' => $root . '/scripts/php/smoke-quests-module-cutover-runtime.php',
 ];
 
 $skipped = [];

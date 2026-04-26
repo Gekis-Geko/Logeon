@@ -28,59 +28,59 @@ class SessionGuard
 
     public static function setDbAdapter(DbAdapterInterface $adapter = null): void
     {
-        static::$dbAdapter = $adapter;
+        self::$dbAdapter = $adapter;
     }
 
     public static function setDbProvider(DbConnectionProviderInterface $provider = null): void
     {
-        static::$dbProvider = $provider;
+        self::$dbProvider = $provider;
     }
 
     public static function resetRuntimeState(): void
     {
-        static::$dbAdapter = null;
-        static::$dbProvider = null;
-        static::$session = null;
+        self::$dbAdapter = null;
+        self::$dbProvider = null;
+        self::$session = null;
     }
 
     private static function db(): DbAdapterInterface
     {
-        if (static::$dbAdapter instanceof DbAdapterInterface) {
-            return static::$dbAdapter;
+        if (self::$dbAdapter instanceof DbAdapterInterface) {
+            return self::$dbAdapter;
         }
 
-        if (static::$dbProvider instanceof DbConnectionProviderInterface) {
-            static::$dbAdapter = static::$dbProvider->connection();
-            return static::$dbAdapter;
+        if (self::$dbProvider instanceof DbConnectionProviderInterface) {
+            self::$dbAdapter = self::$dbProvider->connection();
+            return self::$dbAdapter;
         }
 
-        static::$dbAdapter = AppContext::dbProvider()->connection();
-        return static::$dbAdapter;
+        self::$dbAdapter = AppContext::dbProvider()->connection();
+        return self::$dbAdapter;
     }
 
     public static function setSession(SessionInterface $session = null): void
     {
-        static::$session = $session;
+        self::$session = $session;
     }
 
     private static function session(): SessionInterface
     {
-        if (static::$session instanceof SessionInterface) {
-            return static::$session;
+        if (self::$session instanceof SessionInterface) {
+            return self::$session;
         }
 
-        static::$session = AppContext::session();
-        return static::$session;
+        self::$session = AppContext::session();
+        return self::$session;
     }
 
     private function getSessionValue($key)
     {
-        return static::session()->get((string) $key);
+        return self::session()->get((string) $key);
     }
 
     private function setSessionValue($key, $value): void
     {
-        static::session()->set((string) $key, $value);
+        self::session()->set((string) $key, $value);
     }
 
     private function getServerValue(string $key, $default = null)
@@ -95,7 +95,7 @@ class SessionGuard
         if ($timeoutSeconds !== null && (int) $timeoutSeconds > 0) {
             $this->timeoutSeconds = (int) $timeoutSeconds;
         } else {
-            $this->timeoutSeconds = (int) (defined('CONFIG') && isset(CONFIG['chat_commands'])) ? CONFIG['session_time_life'] : 5400;
+            $this->timeoutSeconds = defined('CONFIG') ? (int) CONFIG['session_time_life'] : 5400;
         }
     }
 
@@ -210,7 +210,7 @@ class SessionGuard
 
     private function getCurrentSessionVersion(int $userId): ?int
     {
-        $row = static::db()->fetchOnePrepared(
+        $row = self::db()->fetchOnePrepared(
             'SELECT session_version
              FROM users
              WHERE id = ?

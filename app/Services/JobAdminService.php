@@ -50,11 +50,51 @@ class JobAdminService
         ];
 
         $parts = explode('|', $raw);
-        $field = trim($parts[0] ?? '');
+        $field = trim($parts[0]);
         $dir = strtoupper(trim($parts[1] ?? 'ASC')) === 'DESC' ? 'DESC' : 'ASC';
         $col = $allowed[$field] ?? 'j.id';
 
         return $col . ' ' . $dir;
+    }
+
+    /**
+     * @return array<int,string>
+     */
+    private function socialStatusNamesById(): array
+    {
+        $map = [];
+        $rows = SocialStatusProviderRegistry::listAll();
+        foreach ($rows as $row) {
+            $id = isset($row->id) ? (int) $row->id : 0;
+            $name = isset($row->name) ? trim((string) $row->name) : '';
+
+            if ($id > 0) {
+                $map[$id] = $name;
+            }
+        }
+
+        return $map;
+    }
+
+    /**
+     * @param array<int,object> $rows
+     * @return array<int,object>
+     */
+    private function decorateRowsWithSocialStatusName(array $rows): array
+    {
+        if (empty($rows)) {
+            return [];
+        }
+
+        $namesById = $this->socialStatusNamesById();
+        foreach ($rows as $row) {
+            $statusId = isset($row->min_socialstatus_id) ? (int) $row->min_socialstatus_id : 0;
+            $row->social_status_name = $statusId > 0 && isset($namesById[$statusId])
+                ? $namesById[$statusId]
+                : null;
+        }
+
+        return $rows;
     }
 
     public function list(object $data): array
@@ -100,16 +140,15 @@ class JobAdminService
         $rows = $this->fetchPrepared(
             'SELECT j.id, j.name, j.description, j.icon, j.location_id, j.min_socialstatus_id,
                     j.base_pay, j.daily_tasks, j.is_active, j.date_created,
-                    l.name AS location_name,
-                    ss.name AS social_status_name
+                    l.name AS location_name
              FROM jobs j
              LEFT JOIN locations l ON j.location_id = l.id
-             LEFT JOIN social_status ss ON j.min_socialstatus_id = ss.id
              ' . $whereClause . '
              ORDER BY ' . $orderBy . '
              LIMIT ? OFFSET ?',
             array_merge($params, [$resultsPage, $offset]),
         );
+        $rows = $this->decorateRowsWithSocialStatusName($rows);
 
         return [
             'dataset' => $rows ?: [],

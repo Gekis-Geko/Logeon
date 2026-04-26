@@ -33,7 +33,7 @@ class InventoryCapacityService
 
     private function getConfigInt(string $section, string $key, int $fallback): int
     {
-        if (!defined('CONFIG') || !is_array(CONFIG)) {
+        if (!defined('CONFIG')) {
             return $fallback;
         }
 

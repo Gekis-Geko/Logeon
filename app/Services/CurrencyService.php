@@ -7,6 +7,7 @@ namespace App\Services;
 use Core\CurrencyLogs;
 use Core\Database\DbAdapterFactory;
 use Core\Database\DbAdapterInterface;
+use Core\Hooks;
 
 class CurrencyService
 {
@@ -70,6 +71,22 @@ class CurrencyService
              WHERE is_active = 1
             ORDER BY is_default DESC, name ASC',
         );
+    }
+
+    public function listAvailable(): array
+    {
+        $defaultCurrency = $this->getDefaultCurrency();
+        if (empty($defaultCurrency)) {
+            return [];
+        }
+
+        $available = [$defaultCurrency];
+        if (!class_exists('\\Core\\Hooks')) {
+            return $available;
+        }
+
+        $filtered = Hooks::filter('currency.available_list', $available);
+        return is_array($filtered) ? $filtered : $available;
     }
 
     public function getCharacterBalances($characterId)

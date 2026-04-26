@@ -82,7 +82,7 @@ class ListQuery
 
         if (!is_array($orderBy)) {
             $parts = explode('|', (string) $orderBy);
-            $field = call_user_func($this->sanitizeIdentifier, $parts[0] ?? '', $this->primaryKey);
+            $field = call_user_func($this->sanitizeIdentifier, $parts[0], $this->primaryKey);
             $dir = strtoupper($parts[1] ?? 'ASC');
             if (!in_array($dir, ['ASC', 'DESC'], true)) {
                 $dir = 'ASC';
@@ -94,19 +94,12 @@ class ListQuery
             ];
         }
 
-        if (count($orderBy) === 0) {
-            return [
-                'raw' => $defaultField . '|ASC',
-                'sql' => ' ORDER BY ' . $defaultField . ' ASC',
-            ];
-        }
-
         $order = ' ORDER BY ';
         $n = 1;
         $total = count($orderBy);
         foreach ($orderBy as $Order) {
             $explode = explode('|', (string) $Order);
-            $field = call_user_func($this->sanitizeIdentifier, $explode[0] ?? '', $this->primaryKey);
+            $field = call_user_func($this->sanitizeIdentifier, $explode[0], $this->primaryKey);
             $dir = strtoupper($explode[1] ?? 'ASC');
             if (!in_array($dir, ['ASC', 'DESC'], true)) {
                 $dir = 'ASC';

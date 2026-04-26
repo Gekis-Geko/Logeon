@@ -52,10 +52,10 @@ class RequestData
     public static function readGlobals(): array
     {
         return [
-            'get' => is_array($_GET) ? $_GET : [],
-            'post' => is_array($_POST) ? $_POST : [],
-            'request' => is_array($_REQUEST) ? $_REQUEST : [],
-            'server' => is_array($_SERVER) ? $_SERVER : [],
+            'get' => $_GET,
+            'post' => $_POST,
+            'request' => $_REQUEST,
+            'server' => $_SERVER,
         ];
     }
 

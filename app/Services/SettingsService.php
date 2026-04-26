@@ -98,13 +98,38 @@ class SettingsService
         return $map[$message] ?? 'validation_error';
     }
 
+    /**
+     * @return array<string, mixed>
+     */
+    private function appConfig(): array
+    {
+        if (!defined('APP')) {
+            return [];
+        }
+
+        return constant('APP');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function runtimeConfig(): array
+    {
+        if (!defined('CONFIG')) {
+            return [];
+        }
+
+        return constant('CONFIG');
+    }
+
     public function getUploadDataset(): array
     {
-        $appOauth = (defined('APP') && isset(APP['oauth_google']) && is_array(APP['oauth_google']))
-            ? APP['oauth_google']
-            : [];
+        $appConfig = $this->appConfig();
+        $appOauthRaw = $appConfig['oauth_google'] ?? [];
+        $appOauth = is_array($appOauthRaw) ? $appOauthRaw : [];
 
-        $appOauthEnabled = (($appOauth['enabled'] ?? false) === true || (string) ($appOauth['enabled'] ?? '') === '1') ? 1 : 0;
+        $appOauthEnabledRaw = $appOauth['enabled'] ?? false;
+        $appOauthEnabled = ($appOauthEnabledRaw === true || (string) $appOauthEnabledRaw === '1') ? 1 : 0;
         $appOauthClientId = trim((string) ($appOauth['client_id'] ?? ''));
         $appOauthClientSecret = trim((string) ($appOauth['client_secret'] ?? ''));
         $appOauthRedirectUri = trim((string) ($appOauth['redirect_uri'] ?? ''));
@@ -118,7 +143,6 @@ class SettingsService
             'multi_character_max_per_user' => 1,
             'availability_idle_minutes' => 20,
             'onlines_auto_toast' => 0,
-            'maps_view_mode' => 'cards',
             'presence_resume_last_position_on_signin' => 0,
             'location_invite_expiry_hours' => 48,
             'location_invite_max_active' => 10,
@@ -134,6 +158,10 @@ class SettingsService
             'rate_location_chat_window_seconds' => 15,
             'rate_location_whisper_limit' => 6,
             'rate_location_whisper_window_seconds' => 20,
+            'storyboard_view_mode' => 'navigation',
+            'rules_view_mode' => 'navigation',
+            'how_to_play_view_mode' => 'navigation',
+            'archetypes_view_mode' => 'navigation',
             'auth_google_enabled' => $appOauthEnabled,
             'auth_google_client_id' => $appOauthClientId,
             'auth_google_client_secret' => $appOauthClientSecret,
@@ -156,7 +184,6 @@ class SettingsService
             "SELECT `key`, `value` FROM sys_configs WHERE `key` IN (
                 'availability_idle_minutes',
                 'onlines_auto_toast',
-                'maps_view_mode',
                 'presence_resume_last_position_on_signin',
                 'presence_restore_last_position_on_signin',
                 'location_invite_expiry_hours',
@@ -178,7 +205,11 @@ class SettingsService
                 'auth_google_client_secret',
                 'auth_google_redirect_uri',
                 'multi_character_enabled',
-                'multi_character_max_per_user'
+                'multi_character_max_per_user',
+                'storyboard_view_mode',
+                'rules_view_mode',
+                'how_to_play_view_mode',
+                'archetypes_view_mode'
             )",
         );
 
@@ -200,10 +231,13 @@ class SettingsService
                     continue;
                 }
                 if (
-                    $row->key === 'maps_view_mode'
-                    || $row->key === 'auth_google_client_id'
+                    $row->key === 'auth_google_client_id'
                     || $row->key === 'auth_google_client_secret'
                     || $row->key === 'auth_google_redirect_uri'
+                    || $row->key === 'storyboard_view_mode'
+                    || $row->key === 'rules_view_mode'
+                    || $row->key === 'how_to_play_view_mode'
+                    || $row->key === 'archetypes_view_mode'
                 ) {
                     $dataset[$row->key] = (string) $row->value;
                     continue;
@@ -234,7 +268,6 @@ class SettingsService
         }
 
         $dataset['onlines_auto_toast'] = ((int) $dataset['onlines_auto_toast'] === 1) ? 1 : 0;
-        $dataset['maps_view_mode'] = ((string) $dataset['maps_view_mode'] === 'visual') ? 'visual' : 'cards';
         $dataset['presence_resume_last_position_on_signin'] = ((int) $dataset['presence_resume_last_position_on_signin'] === 1) ? 1 : 0;
         $dataset['multi_character_enabled'] = ((int) ($dataset['multi_character_enabled'] ?? 0) === 1) ? 1 : 0;
         $dataset['multi_character_max_per_user'] = (int) ($dataset['multi_character_max_per_user'] ?? 1);
@@ -248,6 +281,16 @@ class SettingsService
         $dataset['auth_google_client_id'] = trim((string) ($dataset['auth_google_client_id'] ?? ''));
         $dataset['auth_google_client_secret'] = trim((string) ($dataset['auth_google_client_secret'] ?? ''));
         $dataset['auth_google_redirect_uri'] = trim((string) ($dataset['auth_google_redirect_uri'] ?? ''));
+
+        $allowedViewModes = ['navigation', 'monolithic'];
+        $dataset['storyboard_view_mode'] = in_array($dataset['storyboard_view_mode'] ?? '', $allowedViewModes, true)
+            ? $dataset['storyboard_view_mode'] : 'navigation';
+        $dataset['rules_view_mode'] = in_array($dataset['rules_view_mode'] ?? '', $allowedViewModes, true)
+            ? $dataset['rules_view_mode'] : 'navigation';
+        $dataset['how_to_play_view_mode'] = in_array($dataset['how_to_play_view_mode'] ?? '', $allowedViewModes, true)
+            ? $dataset['how_to_play_view_mode'] : 'navigation';
+        $dataset['archetypes_view_mode'] = in_array($dataset['archetypes_view_mode'] ?? '', $allowedViewModes, true)
+            ? $dataset['archetypes_view_mode'] : 'navigation';
 
         if ((int) $dataset['location_invite_expiry_hours'] < 0) {
             $dataset['location_invite_expiry_hours'] = 48;
@@ -336,11 +379,6 @@ class SettingsService
         $autoToast = isset($data['onlines_auto_toast']) ? (int) $data['onlines_auto_toast'] : 0;
         $autoToast = ($autoToast === 1) ? 1 : 0;
 
-        $mapsViewMode = isset($data['maps_view_mode']) ? (string) $data['maps_view_mode'] : 'cards';
-        if ($mapsViewMode !== 'visual') {
-            $mapsViewMode = 'cards';
-        }
-
         $inviteExpiry = isset($data['location_invite_expiry_hours']) ? (int) $data['location_invite_expiry_hours'] : 48;
         if ($inviteExpiry < 0 || $inviteExpiry > 720) {
             $this->failValidation('Valore scadenza inviti non valido');
@@ -428,7 +466,6 @@ class SettingsService
 
         $this->upsertSysConfig('availability_idle_minutes', (string) $idleMinutes, 'number');
         $this->upsertSysConfig('onlines_auto_toast', (string) $autoToast, 'number');
-        $this->upsertSysConfig('maps_view_mode', (string) $mapsViewMode, 'string');
         $this->upsertSysConfig('location_invite_expiry_hours', (string) $inviteExpiry, 'number');
         $this->upsertSysConfig('location_invite_max_active', (string) $inviteMaxActive, 'number');
         $this->upsertSysConfig('presence_resume_last_position_on_signin', (string) $presenceResumeOnSignin, 'number');
@@ -452,7 +489,6 @@ class SettingsService
             'upload_max_avatar_mb' => $avatar,
             'availability_idle_minutes' => $idleMinutes,
             'onlines_auto_toast' => $autoToast,
-            'maps_view_mode' => $mapsViewMode,
             'presence_resume_last_position_on_signin' => $presenceResumeOnSignin,
             'location_invite_expiry_hours' => $inviteExpiry,
             'location_invite_max_active' => $inviteMaxActive,
@@ -479,7 +515,6 @@ class SettingsService
     {
         SessionStore::set('config_availability_idle_minutes', (int) $dataset['availability_idle_minutes']);
         SessionStore::set('config_onlines_auto_toast', (int) $dataset['onlines_auto_toast']);
-        SessionStore::set('config_maps_view_mode', (string) $dataset['maps_view_mode']);
         SessionStore::set('config_presence_resume_last_position_on_signin', (int) $dataset['presence_resume_last_position_on_signin']);
         SessionStore::set('config_location_invite_expiry_hours', (int) $dataset['location_invite_expiry_hours']);
         SessionStore::set('config_location_invite_max_active', (int) $dataset['location_invite_max_active']);
@@ -497,6 +532,34 @@ class SettingsService
         SessionStore::set('config_rate_location_whisper_window_seconds', (int) $dataset['rate_location_whisper_window_seconds']);
         SessionStore::set('config_multi_character_enabled', (int) ($dataset['multi_character_enabled'] ?? 0));
         SessionStore::set('config_multi_character_max_per_user', (int) ($dataset['multi_character_max_per_user'] ?? 1));
+    }
+
+    // ─── Docs View Modes ─────────────────────────────────────────────────────
+
+    /**
+     * @return array{storyboard_view_mode: string, rules_view_mode: string, how_to_play_view_mode: string, archetypes_view_mode: string}
+     */
+    public function getDocsViewModes(): array
+    {
+        $allowed = ['navigation', 'monolithic'];
+        $defaults = [
+            'storyboard_view_mode'  => 'navigation',
+            'rules_view_mode'       => 'navigation',
+            'how_to_play_view_mode' => 'navigation',
+            'archetypes_view_mode'  => 'navigation',
+        ];
+
+        $rows = $this->fetchPrepared(
+            "SELECT `key`, `value` FROM sys_configs WHERE `key` IN ('storyboard_view_mode', 'rules_view_mode', 'how_to_play_view_mode', 'archetypes_view_mode')",
+        );
+
+        foreach ($rows as $row) {
+            if (isset($defaults[$row->key]) && in_array($row->value, $allowed, true)) {
+                $defaults[$row->key] = $row->value;
+            }
+        }
+
+        return $defaults;
     }
 
     // ─── Admin Settings Page ─────────────────────────────────────────────────
@@ -536,16 +599,19 @@ class SettingsService
     public function getAdminSettingsDataset(): array
     {
         $base = $this->getUploadDataset();
+        $runtimeConfig = $this->runtimeConfig();
+        $inventoryConfigRaw = $runtimeConfig['inventory'] ?? [];
+        $inventoryConfig = is_array($inventoryConfigRaw) ? $inventoryConfigRaw : [];
 
         // Legge da sys_settings con fallback a config
-        $inventoryCapacityFallback = defined('CONFIG') && isset(CONFIG['inventory']['capacity_max'])
-            ? (int) CONFIG['inventory']['capacity_max'] : 30;
-        $inventoryStackFallback = defined('CONFIG') && isset(CONFIG['inventory']['stack_max'])
-            ? (int) CONFIG['inventory']['stack_max'] : 50;
-        $chatHistoryFallback = defined('CONFIG') && isset(CONFIG['location_chat_history_hours'])
-            ? (int) CONFIG['location_chat_history_hours'] : 3;
-        $whisperRetentionFallback = defined('CONFIG') && isset(CONFIG['location_whisper_retention_hours'])
-            ? (int) CONFIG['location_whisper_retention_hours'] : 24;
+        $inventoryCapacityFallback = isset($inventoryConfig['capacity_max'])
+            ? (int) $inventoryConfig['capacity_max'] : 30;
+        $inventoryStackFallback = isset($inventoryConfig['stack_max'])
+            ? (int) $inventoryConfig['stack_max'] : 50;
+        $chatHistoryFallback = isset($runtimeConfig['location_chat_history_hours'])
+            ? (int) $runtimeConfig['location_chat_history_hours'] : 3;
+        $whisperRetentionFallback = isset($runtimeConfig['location_whisper_retention_hours'])
+            ? (int) $runtimeConfig['location_whisper_retention_hours'] : 24;
 
         $inventoryCapacity = $this->getSettingInt('inventory_capacity_max', $inventoryCapacityFallback);
         $inventoryStack = $this->getSettingInt('inventory_stack_max', $inventoryStackFallback);
@@ -659,6 +725,24 @@ class SettingsService
         $dataset['multi_character_enabled'] = $multiCharacterEnabled;
         $dataset['multi_character_max_per_user'] = $multiCharacterMaxPerUser;
 
+        $allowedViewModes = ['navigation', 'monolithic'];
+        $storyboardViewMode = in_array($payload['storyboard_view_mode'] ?? '', $allowedViewModes, true)
+            ? $payload['storyboard_view_mode'] : 'navigation';
+        $rulesViewMode = in_array($payload['rules_view_mode'] ?? '', $allowedViewModes, true)
+            ? $payload['rules_view_mode'] : 'navigation';
+        $howToPlayViewMode = in_array($payload['how_to_play_view_mode'] ?? '', $allowedViewModes, true)
+            ? $payload['how_to_play_view_mode'] : 'navigation';
+        $archetypesViewMode = in_array($payload['archetypes_view_mode'] ?? '', $allowedViewModes, true)
+            ? $payload['archetypes_view_mode'] : 'navigation';
+        $this->upsertSysConfig('storyboard_view_mode', $storyboardViewMode, 'string');
+        $this->upsertSysConfig('rules_view_mode', $rulesViewMode, 'string');
+        $this->upsertSysConfig('how_to_play_view_mode', $howToPlayViewMode, 'string');
+        $this->upsertSysConfig('archetypes_view_mode', $archetypesViewMode, 'string');
+        $dataset['storyboard_view_mode'] = $storyboardViewMode;
+        $dataset['rules_view_mode'] = $rulesViewMode;
+        $dataset['how_to_play_view_mode'] = $howToPlayViewMode;
+        $dataset['archetypes_view_mode'] = $archetypesViewMode;
+
         $ndEnabled = isset($payload['narrative_delegation_enabled']) ? (int) $payload['narrative_delegation_enabled'] : 0;
         $ndEnabled = ($ndEnabled === 1) ? 1 : 0;
         $ndLevel = isset($payload['narrative_delegation_level']) ? (int) $payload['narrative_delegation_level'] : 0;
@@ -669,6 +753,8 @@ class SettingsService
         $this->upsertSysConfig('narrative_delegation_level', (string) $ndLevel, 'number');
         $dataset['narrative_delegation_enabled'] = $ndEnabled;
         $dataset['narrative_delegation_level'] = $ndLevel;
+        SessionStore::set('config_narrative_delegation_enabled', $ndEnabled);
+        SessionStore::set('config_narrative_delegation_level', $ndLevel);
 
         return $dataset;
     }

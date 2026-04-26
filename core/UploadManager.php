@@ -18,6 +18,7 @@ class UploadManager
     protected static $cleanup_hours = 24;
     protected static $target_limits_mb = [
         'avatar' => 2,
+        'richtext_image' => 5,
         'background_music_url' => 10,
         'sound_dm' => 10,
         'sound_notifications' => 10,
@@ -40,6 +41,7 @@ class UploadManager
     ];
     protected static $target_allowed_mime = [
         'avatar' => ['image/jpeg', 'image/png', 'image/gif'],
+        'richtext_image' => ['image/jpeg', 'image/png', 'image/gif'],
         'background_music_url' => ['audio/mpeg', 'audio/mp3', 'audio/ogg', 'audio/wav', 'audio/x-wav', 'audio/aac', 'audio/mp4', 'audio/x-m4a', 'audio/webm'],
         'sound_dm' => ['audio/mpeg', 'audio/mp3', 'audio/ogg', 'audio/wav', 'audio/x-wav', 'audio/aac', 'audio/mp4', 'audio/x-m4a', 'audio/webm'],
         'sound_notifications' => ['audio/mpeg', 'audio/mp3', 'audio/ogg', 'audio/wav', 'audio/x-wav', 'audio/aac', 'audio/mp4', 'audio/x-m4a', 'audio/webm'],
@@ -51,32 +53,32 @@ class UploadManager
 
     public static function setDbAdapter(DbAdapterInterface $adapter = null): void
     {
-        static::$dbAdapter = $adapter;
+        self::$dbAdapter = $adapter;
     }
 
     private static function db(): DbAdapterInterface
     {
-        if (static::$dbAdapter instanceof DbAdapterInterface) {
-            return static::$dbAdapter;
+        if (self::$dbAdapter instanceof DbAdapterInterface) {
+            return self::$dbAdapter;
         }
 
-        static::$dbAdapter = DbAdapterFactory::createFromConfig();
-        return static::$dbAdapter;
+        self::$dbAdapter = DbAdapterFactory::createFromConfig();
+        return self::$dbAdapter;
     }
 
     public static function setPaths(UploadPaths $paths = null): void
     {
-        static::$paths = $paths;
+        self::$paths = $paths;
     }
 
     private static function paths(): UploadPaths
     {
-        if (static::$paths instanceof UploadPaths) {
-            return static::$paths;
+        if (self::$paths instanceof UploadPaths) {
+            return self::$paths;
         }
 
-        static::$paths = new UploadPaths();
-        return static::$paths;
+        self::$paths = new UploadPaths();
+        return self::$paths;
     }
 
     public static function execute(RequestData $request = null)
@@ -184,7 +186,7 @@ class UploadManager
 
         $token = static::generateToken();
 
-        $db = static::db();
+        $db = self::db();
         $db->executePrepared(
             'INSERT INTO uploads (
                 token, user_id, character_id, file_name, file_size, mime_type, file_hash,
@@ -264,14 +266,14 @@ class UploadManager
         @rename($chunk_path . '.partial', $chunk_path);
 
         if (intval($chunk->received) === 0) {
-            static::db()->executePrepared(
+            self::db()->executePrepared(
                 'UPDATE upload_chunks
                  SET received = 1,
                      received_bytes = ?
                  WHERE id = ?',
                 [strlen($chunk_data), (int) $chunk->id],
             );
-            static::db()->executePrepared(
+            self::db()->executePrepared(
                 'UPDATE uploads
                  SET chunks_received = chunks_received + 1
                  WHERE id = ?',
@@ -305,7 +307,7 @@ class UploadManager
 
         $received = static::getReceivedCount($upload->id);
         if ($received != intval($upload->chunks_received)) {
-            static::db()->executePrepared(
+            self::db()->executePrepared(
                 'UPDATE uploads
                  SET chunks_received = ?
                  WHERE id = ?',
@@ -345,7 +347,7 @@ class UploadManager
                 @unlink($finalPath);
             }
             static::cleanupChunks($upload->id);
-            static::db()->executePrepared(
+            self::db()->executePrepared(
                 'DELETE FROM uploads WHERE id = ?',
                 [(int) $upload->id],
             );
@@ -362,7 +364,7 @@ class UploadManager
         }
         $data = $request->postJson('data', [], true);
         $target = isset($data['target']) ? trim($data['target']) : '';
-        $allowed_targets = ['avatar', 'background_music_url', 'sound_dm', 'sound_notifications', 'sound_whispers', 'sound_global'];
+        $allowed_targets = ['avatar', 'richtext_image', 'background_music_url', 'sound_dm', 'sound_notifications', 'sound_whispers', 'sound_global'];
         if (!in_array($target, $allowed_targets)) {
             static::failValidation('Target non valido');
         }
@@ -381,7 +383,7 @@ class UploadManager
             $candidateComplete = static::normalizeFsPath(static::getCompleteDir() . '/' . $upload->token . '_' . $upload->file_hash . '.complete');
             if ($candidateComplete !== '' && file_exists($candidateComplete)) {
                 $final_path = $candidateComplete;
-                static::db()->executePrepared(
+                self::db()->executePrepared(
                     'UPDATE uploads SET final_path = ? WHERE id = ?',
                     [$final_path, (int) $upload->id],
                 );
@@ -415,7 +417,7 @@ class UploadManager
             if (empty($user_id)) {
                 static::failValidation('Utente non valido');
             }
-            $audioDir = static::paths()->userAudioDir((int) $user_id);
+            $audioDir = self::paths()->userAudioDir((int) $user_id);
             static::ensureDir($audioDir);
 
             // Elimina i file audio precedenti dell'utente in questa cartella
@@ -442,7 +444,7 @@ class UploadManager
                 static::failValidation('Errore salvataggio file');
             }
 
-            static::db()->executePrepared(
+            self::db()->executePrepared(
                 'UPDATE uploads
                  SET status = 2,
                      final_path = ?,
@@ -452,9 +454,9 @@ class UploadManager
             );
             static::cleanupChunks($upload->id);
 
-            $url = static::paths()->publicUrlFromPath($dest);
+            $url = self::paths()->publicUrlFromPath($dest);
             if ($url === null) {
-                $url = static::paths()->userAudioPublicUrl((int) $user_id, $filename);
+                $url = self::paths()->userAudioPublicUrl((int) $user_id, $filename);
             }
 
             return static::response([
@@ -467,7 +469,7 @@ class UploadManager
             if (empty($user_id)) {
                 static::failValidation('Utente non valido');
             }
-            $audioDir = static::paths()->userAudioDir((int) $user_id);
+            $audioDir = self::paths()->userAudioDir((int) $user_id);
             static::ensureDir($audioDir);
 
             // Delete only the previous file for this specific sound type
@@ -498,7 +500,7 @@ class UploadManager
                 static::failValidation('Errore salvataggio file');
             }
 
-            static::db()->executePrepared(
+            self::db()->executePrepared(
                 'UPDATE uploads
                  SET status = 2,
                      final_path = ?,
@@ -508,9 +510,9 @@ class UploadManager
             );
             static::cleanupChunks($upload->id);
 
-            $url = static::paths()->publicUrlFromPath($dest);
+            $url = self::paths()->publicUrlFromPath($dest);
             if ($url === null) {
-                $url = static::paths()->userAudioPublicUrl((int) $user_id, $filename);
+                $url = self::paths()->userAudioPublicUrl((int) $user_id, $filename);
             }
 
             return static::response([
@@ -524,7 +526,7 @@ class UploadManager
             static::failValidation('Personaggio non valido');
         }
 
-        $publicBase = static::paths()->characterUploadDir((int) $character_id);
+        $publicBase = self::paths()->characterUploadDir((int) $character_id);
         static::ensureDir($publicBase);
         $filename = $target . '_' . $upload->file_hash . '_' . $token . '.' . $ext;
         $dest = static::normalizeFsPath($publicBase . '/' . $filename);
@@ -533,7 +535,7 @@ class UploadManager
             static::failValidation('Errore salvataggio file');
         }
 
-        static::db()->executePrepared(
+        self::db()->executePrepared(
             'UPDATE uploads
              SET status = 2,
                  final_path = ?,
@@ -543,9 +545,9 @@ class UploadManager
         );
         static::cleanupChunks($upload->id);
 
-        $url = static::paths()->publicUrlFromPath($dest);
+        $url = self::paths()->publicUrlFromPath($dest);
         if ($url === null) {
-            $url = static::paths()->characterPublicUrl((int) $character_id, $filename);
+            $url = self::paths()->characterPublicUrl((int) $character_id, $filename);
         }
 
         return static::response([
@@ -556,7 +558,7 @@ class UploadManager
 
     protected static function getUploadByToken($token)
     {
-        return static::db()->fetchOnePrepared(
+        return self::db()->fetchOnePrepared(
             'SELECT * FROM uploads WHERE token = ? LIMIT 1',
             [(string) $token],
         );
@@ -567,7 +569,7 @@ class UploadManager
         if (empty($character_id)) {
             return null;
         }
-        return static::db()->fetchOnePrepared(
+        return self::db()->fetchOnePrepared(
             'SELECT token, final_path
              FROM uploads
              WHERE file_hash = ?
@@ -582,7 +584,7 @@ class UploadManager
 
     protected static function getUploadById($id)
     {
-        return static::db()->fetchOnePrepared(
+        return self::db()->fetchOnePrepared(
             'SELECT * FROM uploads WHERE id = ? LIMIT 1',
             [(int) $id],
         );
@@ -590,7 +592,7 @@ class UploadManager
 
     protected static function getChunk($upload_id, $chunk_id)
     {
-        return static::db()->fetchOnePrepared(
+        return self::db()->fetchOnePrepared(
             'SELECT *
              FROM upload_chunks
              WHERE upload_id = ?
@@ -602,7 +604,7 @@ class UploadManager
 
     protected static function getReceivedCount($upload_id)
     {
-        $row = static::db()->fetchOnePrepared(
+        $row = self::db()->fetchOnePrepared(
             'SELECT COUNT(*) AS total
              FROM upload_chunks
              WHERE upload_id = ?
@@ -617,7 +619,7 @@ class UploadManager
         $storedFinalPath = static::normalizeFsPath($upload->final_path ?? '');
         if (intval($upload->status) >= 1 && $storedFinalPath !== '' && file_exists($storedFinalPath)) {
             if ($storedFinalPath !== ($upload->final_path ?? '')) {
-                static::db()->executePrepared(
+                self::db()->executePrepared(
                     'UPDATE uploads SET final_path = ? WHERE id = ?',
                     [$storedFinalPath, (int) $upload->id],
                 );
@@ -628,7 +630,7 @@ class UploadManager
         if (intval($upload->status) >= 1) {
             $candidateComplete = static::normalizeFsPath(static::getCompleteDir() . '/' . $upload->token . '_' . $upload->file_hash . '.complete');
             if ($candidateComplete !== '' && file_exists($candidateComplete)) {
-                static::db()->executePrepared(
+                self::db()->executePrepared(
                     'UPDATE uploads
                      SET status = 1,
                          final_path = ?,
@@ -648,7 +650,7 @@ class UploadManager
         if (file_exists($final_path)) {
             $hash = hash_file('sha256', $final_path);
             if ($hash === $upload->file_hash) {
-                static::db()->executePrepared(
+                self::db()->executePrepared(
                     'UPDATE uploads
                      SET status = 1,
                          final_path = ?,
@@ -688,7 +690,7 @@ class UploadManager
             static::failValidation('Hash file non valido');
         }
 
-        static::db()->executePrepared(
+        self::db()->executePrepared(
             'UPDATE uploads
              SET status = 1,
                  final_path = ?,
@@ -708,17 +710,17 @@ class UploadManager
 
     protected static function getBaseDir()
     {
-        return static::paths()->baseTmpDir();
+        return self::paths()->baseTmpDir();
     }
 
     protected static function normalizeFsPath($path)
     {
-        return static::paths()->normalizePath((string) $path);
+        return self::paths()->normalizePath((string) $path);
     }
 
     protected static function getMaxFileSize()
     {
-        $row = static::db()->fetchOnePrepared(
+        $row = self::db()->fetchOnePrepared(
             'SELECT value FROM sys_settings WHERE `key` = ? LIMIT 1',
             ['upload_max_mb'],
         );
@@ -737,12 +739,14 @@ class UploadManager
         $key = null;
         if ($target === 'avatar') {
             $key = 'upload_max_avatar_mb';
+        } elseif ($target === 'richtext_image') {
+            $key = null;
         } elseif ($target === 'background_music_url' || strncmp($target, 'sound_', 6) === 0) {
             $key = 'upload_max_audio_mb';
         }
         $mb = null;
         if ($key) {
-            $row = static::db()->fetchOnePrepared(
+            $row = self::db()->fetchOnePrepared(
                 'SELECT value FROM sys_settings WHERE `key` = ? LIMIT 1',
                 [$key],
             );
@@ -769,7 +773,7 @@ class UploadManager
             return;
         }
         $cutoff = date('Y-m-d H:i:s', time() - ($hours * 3600));
-        $rows = static::db()->fetchAllPrepared(
+        $rows = self::db()->fetchAllPrepared(
             'SELECT id, token, final_path
              FROM uploads
              WHERE status < 2
@@ -790,7 +794,7 @@ class UploadManager
                 @unlink($finalPath);
             }
             static::cleanupChunks($row->id);
-            static::db()->executePrepared(
+            self::db()->executePrepared(
                 'DELETE FROM uploads WHERE id = ?',
                 [(int) $row->id],
             );
@@ -799,7 +803,7 @@ class UploadManager
 
     protected static function cleanupChunks($upload_id)
     {
-        static::db()->executePrepared(
+        self::db()->executePrepared(
             'DELETE FROM upload_chunks WHERE upload_id = ?',
             [(int) $upload_id],
         );
@@ -807,17 +811,17 @@ class UploadManager
 
     protected static function getChunkDir($token)
     {
-        return static::paths()->chunksDir($token);
+        return self::paths()->chunksDir($token);
     }
 
     protected static function getCompleteDir()
     {
-        return static::paths()->completeDir();
+        return self::paths()->completeDir();
     }
 
     protected static function getPublicUrlFromPath($path)
     {
-        return static::paths()->publicUrlFromPath((string) $path);
+        return self::paths()->publicUrlFromPath((string) $path);
     }
 
     protected static function ensureDir($path)

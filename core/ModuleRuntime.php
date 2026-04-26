@@ -151,7 +151,7 @@ class ModuleRuntime
                 if ($url === '') {
                     continue;
                 }
-                $tags[] = '<script type="text/javascript" src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '"></script>';
+                $tags[] = '<script type="module" src="' . htmlspecialchars($url, ENT_QUOTES, 'UTF-8') . '"></script>';
             }
         }
 
@@ -166,7 +166,8 @@ class ModuleRuntime
     {
         $channel = strtolower(trim($channel));
         $slot = trim($slot);
-        if (($channel !== 'game' && $channel !== 'admin') || $slot === '') {
+        $allowedChannels = ['game', 'admin', 'public'];
+        if (!in_array($channel, $allowedChannels, true) || $slot === '') {
             return [];
         }
 
@@ -226,11 +227,11 @@ class ModuleRuntime
         }
 
         usort($entries, function ($a, $b) {
-            $cmp = ((int) ($a['order'] ?? 0)) <=> ((int) ($b['order'] ?? 0));
+            $cmp = (int) $a['order'] <=> (int) $b['order'];
             if ($cmp !== 0) {
                 return $cmp;
             }
-            return strcasecmp((string) ($a['label'] ?? ''), (string) ($b['label'] ?? ''));
+            return strcasecmp((string) $a['label'], (string) $b['label']);
         });
 
         return $entries;
@@ -267,24 +268,24 @@ class ModuleRuntime
         }
 
         foreach ($sections as $key => $group) {
-            $items = is_array($group['items'] ?? null) ? $group['items'] : [];
+            $items = $group['items'];
             usort($items, function ($a, $b) {
-                $cmp = ((int) ($a['order'] ?? 0)) <=> ((int) ($b['order'] ?? 0));
+                $cmp = (int) $a['order'] <=> (int) $b['order'];
                 if ($cmp !== 0) {
                     return $cmp;
                 }
-                return strcasecmp((string) ($a['label'] ?? ''), (string) ($b['label'] ?? ''));
+                return strcasecmp((string) $a['label'], (string) $b['label']);
             });
             $sections[$key]['items'] = $items;
         }
 
         $rows = array_values($sections);
         usort($rows, function ($a, $b) {
-            $cmp = ((int) ($a['order'] ?? 0)) <=> ((int) ($b['order'] ?? 0));
+            $cmp = (int) $a['order'] <=> (int) $b['order'];
             if ($cmp !== 0) {
                 return $cmp;
             }
-            return strcasecmp((string) ($a['title'] ?? ''), (string) ($b['title'] ?? ''));
+            return strcasecmp((string) $a['title'], (string) $b['title']);
         });
 
         return $rows;

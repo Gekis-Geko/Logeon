@@ -30,13 +30,13 @@ class Redirect
 
     private static function send(string $url, int $code = 301): void
     {
-        if (static::shouldRespondJson()) {
-            ResponseEmitter::emit(ApiResponse::json(static::redirectPayload($url)));
+        if (self::shouldRespondJson()) {
+            ResponseEmitter::emit(ApiResponse::json(self::redirectPayload($url)));
             return;
         }
 
         if (headers_sent()) {
-            $safe = static::escapeUrl($url);
+            $safe = self::escapeUrl($url);
             echo '<script>location.href="' . $safe . '";</script>';
             echo '<noscript><meta http-equiv="refresh" content="0;url=' . $safe . '"></noscript>';
             return;
@@ -47,14 +47,14 @@ class Redirect
 
     public static function route(string $route): void
     {
-        static::send($route, 301);
+        self::send($route, 301);
 
         return;
     }
 
     public static function url(string $url): void
     {
-        static::send($url, 301);
+        self::send($url, 301);
 
         return;
     }
@@ -63,7 +63,7 @@ class Redirect
     {
         $server = RequestContext::server();
         $ref = isset($server['HTTP_REFERER']) ? $server['HTTP_REFERER'] : '/';
-        static::send($ref, 301);
+        self::send($ref, 301);
 
         return;
     }

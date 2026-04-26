@@ -143,34 +143,22 @@
             {% include 'admin/pages/currencies.twig' %}
         {% elseif current_page == 'shops' %}
             {% include 'admin/pages/shops.twig' %}
-        {% elseif current_page == 'character-attributes' %}
-            {% include 'admin/pages/character-attributes.twig' %}
         {% elseif current_page == 'conflicts' %}
             {% include 'admin/pages/conflicts.twig' %}
         {% elseif current_page == 'narrative-events' %}
             {% include 'admin/pages/narrative-events.twig' %}
         {% elseif current_page == 'narrative-states' %}
             {% include 'admin/pages/narrative-states.twig' %}
-        {% elseif current_page == 'quests' %}
-            {% include 'admin/pages/quests.twig' %}
         {% elseif current_page == 'system-events' %}
             {% include 'admin/pages/system-events.twig' %}
         {% elseif current_page == 'character-lifecycle' %}
             {% include 'admin/pages/character-lifecycle.twig' %}
-        {% elseif current_page == 'factions' %}
-            {% include 'admin/pages/factions.twig' %}
-        {% elseif current_page in ['weather', 'weather-overview'] %}
-            {% include 'admin/pages/weather-overview.twig' %}
-        {% elseif current_page == 'weather-catalogs' %}
-            {% include 'admin/pages/weather-catalogs.twig' %}
-        {% elseif current_page == 'weather-profiles' %}
-            {% include 'admin/pages/weather-profiles.twig' %}
-        {% elseif current_page == 'weather-overrides' %}
-            {% include 'admin/pages/weather-overrides.twig' %}
         {% elseif current_page == 'character-requests' %}
             {% include 'admin/pages/character-requests.twig' %}
         {% elseif current_page == 'locations' %}
             {% include 'admin/pages/locations.twig' %}
+        {% elseif current_page == 'location-position-tags' %}
+            {% include 'admin/pages/location-position-tags.twig' %}
         {% elseif current_page == 'inventory-shop' %}
             {% include 'admin/pages/shop-inventory.twig' %}
         {% elseif current_page == 'jobs' %}
@@ -179,8 +167,6 @@
             {% include 'admin/pages/jobs-tasks.twig' %}
         {% elseif current_page == 'jobs-levels' %}
             {% include 'admin/pages/jobs-levels.twig' %}
-        {% elseif current_page == 'social-status' %}
-            {% include 'admin/pages/social-status.twig' %}
         {% elseif current_page == 'guilds' %}
             {% include 'admin/pages/guilds.twig' %}
         {% elseif current_page == 'guild-alignments' %}
@@ -191,8 +177,6 @@
             {% include 'admin/pages/guilds-locations.twig' %}
         {% elseif current_page == 'guilds-events' %}
             {% include 'admin/pages/guilds-events.twig' %}
-        {% elseif current_page == 'news' %}
-            {% include 'admin/pages/news.twig' %}
         {% elseif current_page == 'forums' %}
             {% include 'admin/pages/forums.twig' %}
         {% elseif current_page == 'forums-types' %}
@@ -215,8 +199,6 @@
             {% include 'admin/pages/item-equipment-rules.twig' %}
         {% elseif current_page == 'settings' %}
             {% include 'admin/pages/settings.twig' %}
-        {% elseif current_page == 'archetypes' %}
-            {% include 'admin/pages/archetypes.twig' %}
         {% elseif current_page == 'narrative-tags' %}
             {% include 'admin/pages/narrative-tags.twig' %}
         {% elseif current_page == 'narrative-delegation' %}
@@ -334,17 +316,22 @@
 
             <div id="grid-admin-modules"></div>
         {% else %}
-            {% set module_page_slot = module_slot('admin.dashboard.' ~ current_page) %}
-            {% if module_page_slot is not empty %}
-                {{ module_page_slot }}
+            {% set hook_page_slot = slot('admin.dashboard.' ~ current_page, {'admin_page': current_page}) %}
+            {% if hook_page_slot is not empty %}
+                {{ hook_page_slot|raw }}
             {% else %}
-                <header class="mt-3 mb-3">
-                    <h4 class="display-6">{{ current_page|replace({'-': ' '})|title }}</h4>
-                    <h6>Sezione pronta nella navigazione. Contenuti dettagliati in implementazione.</h6>
-                </header>
-                <div class="alert alert-info mb-0">
-                    Questa sezione al momento usa il nuovo shell di admin e route dedicata. I pannelli CRUD arrivano nel prossimo step.
-                </div>
+                {% set module_page_slot = module_slot('admin.dashboard.' ~ current_page) %}
+                {% if module_page_slot is not empty %}
+                    {{ module_page_slot|raw }}
+                {% else %}
+                    <header class="mt-3 mb-3">
+                        <h4 class="display-6">{{ current_page|replace({'-': ' '})|title }}</h4>
+                        <h6>Sezione pronta nella navigazione. Contenuti dettagliati in implementazione.</h6>
+                    </header>
+                    <div class="alert alert-info mb-0">
+                        Questa sezione al momento usa il nuovo shell di admin e route dedicata. I pannelli CRUD arrivano nel prossimo step.
+                    </div>
+                {% endif %}
             {% endif %}
         {% endif %}
     </div>

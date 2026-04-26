@@ -27,7 +27,7 @@ class AppError extends \RuntimeException
 
         $this->status = $status;
         $this->payload = $payload;
-        $this->errorCode = static::normalizeErrorCode($errorCode, $payload);
+        $this->errorCode = self::normalizeErrorCode($errorCode, $payload);
         if ($this->errorCode !== '' && !array_key_exists('error_code', $this->payload)) {
             $this->payload['error_code'] = $this->errorCode;
         }

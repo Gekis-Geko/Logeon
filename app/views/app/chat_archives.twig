@@ -1,0 +1,105 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<main class="container">
+    <section id="chat-archives-page" class="row ui-page pb-3">
+        <header class="mb-2">
+            <h4 class="display-6 mb-0">Archivi di giocata</h4>
+            <p class="text-muted small mb-0">I tuoi snapshot permanenti delle sessioni di chat. Crea nuovi snapshot direttamente dalla chat in location.</p>
+        </header>
+        <hr class="w-100" />
+
+        <div class="col-12">
+            <div id="chat-archives-loading" class="text-muted small py-3 d-none">Caricamento archivi...</div>
+            <div id="chat-archives-empty" class="text-muted small py-3 d-none">
+                <i class="bi bi-archive fs-4 d-block mb-2"></i>
+                Nessun archivio salvato. Puoi creare uno snapshot dalla chat in location usando il pulsante <strong>Snapshot di giocata</strong>.
+            </div>
+            <div id="chat-archives-list" class="d-flex flex-column gap-2"></div>
+        </div>
+    </section>
+</main>
+
+<!-- Modal: Visualizza snapshot -->
+<div class="modal fade" id="chat-archives-view-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="ca-view-title">Snapshot</h5>
+                    <div class="text-muted small" id="ca-view-meta"></div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-3 border-bottom">
+                    <div id="ca-view-disclaimer" class="alert alert-warning small mb-2">
+                        Questa giocata e uno snapshot selezionato dall'autore e potrebbe non includere l'intera scena.
+                    </div>
+                    <div id="ca-view-summary" class="d-flex flex-wrap gap-2 small text-muted"></div>
+                    <div id="ca-view-excluded-wrap" class="small text-muted mt-2 d-none">
+                        Partecipanti esclusi:
+                        <span id="ca-view-excluded-participants"></span>
+                    </div>
+                    <div id="ca-view-created-by" class="small text-muted mt-1 d-none"></div>
+                </div>
+                <div id="ca-view-messages" class="chat-archive-messages"></div>
+            </div>
+            <div class="modal-footer flex-wrap gap-2 justify-content-between">
+                <div class="d-flex gap-2 align-items-center flex-wrap">
+                    <div class="mb-0">
+                        <input type="hidden" id="ca-view-public-toggle" name="ca_view_public_toggle" value="0">
+                    </div>
+                    <div id="ca-view-public-url-wrap" class="d-none d-flex align-items-center gap-1">
+                        <input type="text" id="ca-view-public-url" class="form-control form-control-sm chat-archive-public-url" readonly>
+                        <button type="button" class="btn btn-sm btn-outline-secondary" data-action="ca-copy-public-url">
+                            <i class="bi bi-clipboard"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Chiudi</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Modifica titolo/note -->
+<div class="modal fade" id="chat-archives-edit-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modifica archivio</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="ca-edit-id">
+                <div class="mb-3">
+                    <label for="ca-edit-title" class="form-label">Titolo</label>
+                    <input type="text" id="ca-edit-title" class="form-control" maxlength="255">
+                </div>
+                <div class="mb-3">
+                    <label for="ca-edit-description" class="form-label">Note</label>
+                    <textarea id="ca-edit-description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="mb-0">
+                    <label for="ca-edit-diary-event-search" class="form-label">Evento diario collegato</label>
+                    <input type="hidden" id="ca-edit-diary-event-id" value="0">
+                    <div class="input-group">
+                        <input type="text" id="ca-edit-diary-event-search" class="form-control" placeholder="Cerca per titolo evento">
+                        <button type="button" class="btn btn-outline-secondary" data-action="ca-edit-diary-clear">Scollega</button>
+                    </div>
+                    <div id="ca-edit-diary-event-selected" class="form-text d-none"></div>
+                    <div id="ca-edit-diary-event-suggestions" class="list-group chat-archive-diary-suggestions d-none mt-2"></div>
+                    <div class="form-text">Cerca l'avvenimento del diario per titolo e selezionalo dalla lista.</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                <button type="button" class="btn btn-primary" data-action="chat-archives-edit-save">
+                    <i class="bi bi-floppy me-1"></i>Salva
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -15,7 +15,7 @@ use Core\Http\AppError;
 use Core\Http\InputValidator;
 use Core\Http\RequestData;
 use Core\Http\ResponseEmitter;
-use Core\Logging\LegacyLoggerAdapter;
+
 use Core\Logging\LoggerInterface;
 
 class Guilds extends Guild
@@ -51,7 +51,7 @@ class Guilds extends Guild
             return $this->logger;
         }
 
-        $this->logger = new LegacyLoggerAdapter();
+        $this->logger = \Core\AppContext::logger();
         return $this->logger;
     }
 
@@ -1284,3 +1284,5 @@ class Guilds extends Guild
         ResponseEmitter::emit(ApiResponse::json(['status' => 'ok']));
     }
 }
+
+

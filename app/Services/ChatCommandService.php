@@ -122,9 +122,7 @@ class ChatCommandService
             return $this->catalogCache;
         }
 
-        $source = (defined('CONFIG') && isset(CONFIG['chat_commands']) && is_array(CONFIG['chat_commands']))
-            ? CONFIG['chat_commands']
-            : $this->defaultCatalog();
+        $source = defined('CONFIG') ? CONFIG['chat_commands'] : $this->defaultCatalog();
 
         $out = [];
         foreach ($source as $row) {

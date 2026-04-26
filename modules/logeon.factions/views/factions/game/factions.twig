@@ -1,0 +1,58 @@
+{% extends theme_shell('game', 'app/layouts/layout.twig') %}
+
+{% block content %}
+<main class="container ui-page pb-3" id="factions-page" data-game-page="factions">
+    <section class="row g-4">
+        <header class="col-12">
+            <h4 class="display-6 mt-3">Fazioni</h4>
+            <h6>Scegli una fazione, esprimi il tuo volere e i tuoi ideali.</h6>
+        </header>
+        <hr class="w-75 ms-2" />
+
+        <div class="col-12 col-lg-4">
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Le mie fazioni</span>
+                    <i class="bi bi-person-badge text-muted"></i>
+                </div>
+                <div class="card-body p-0">
+                    <div id="my-factions-loading" class="text-center py-3 text-muted small">Caricamento...</div>
+                    <div id="my-factions-empty" class="text-center py-3 text-muted small d-none">Non appartieni a nessuna fazione.</div>
+                    <div id="my-factions-list" class="list-group list-group-flush"></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Le mie richieste di adesione</span>
+                    <i class="bi bi-envelope text-muted"></i>
+                </div>
+                <div class="card-body p-0">
+                    <div id="my-join-requests-loading" class="text-center py-3 text-muted small">Caricamento...</div>
+                    <div id="my-join-requests-empty" class="text-center py-3 text-muted small d-none">Nessuna richiesta inviata.</div>
+                    <div id="my-join-requests-list" class="list-group list-group-flush"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-8">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span class="fw-bold">Fazioni pubbliche</span>
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-action="factions-reload">
+                        <i class="bi bi-arrow-clockwise"></i>
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <div id="factions-loading" class="text-center py-3 text-muted small">Caricamento...</div>
+                    <div id="factions-empty" class="text-center py-3 text-muted small d-none">Nessuna fazione pubblica disponibile.</div>
+                    <div id="factions-list" class="list-group list-group-flush"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% include 'factions/game/modals/factions.twig' %}
+    {% include 'factions/game/modals/join_request.twig' %}
+</main>
+{% endblock %}

@@ -415,7 +415,7 @@ class CharacterProfileService
         }
 
         $parts = explode('|', $raw, 2);
-        $field = strtolower(trim((string) ($parts[0] ?? '')));
+        $field = strtolower(trim((string) $parts[0]));
         if ($field === '' || !array_key_exists($field, $allowedFields)) {
             $field = $defaultField;
         }
@@ -575,9 +575,6 @@ class CharacterProfileService
         }
         if ($value === 'manual') {
             return 'manuale';
-        }
-        if ($value === 'quest') {
-            return 'quest';
         }
         if ($value === '') {
             return '-';

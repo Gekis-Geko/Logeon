@@ -102,29 +102,17 @@ class InstallerService
 
     private function beginTransaction(\mysqli $mysqli): bool
     {
-        if (method_exists($mysqli, 'begin_transaction')) {
-            return (bool) $mysqli->begin_transaction();
-        }
-
-        return (bool) $mysqli->query('START TRANSACTION');
+        return (bool) $mysqli->begin_transaction();
     }
 
     private function commitTransaction(\mysqli $mysqli): bool
     {
-        if (method_exists($mysqli, 'commit')) {
-            return (bool) $mysqli->commit();
-        }
-
-        return (bool) $mysqli->query('COMMIT');
+        return (bool) $mysqli->commit();
     }
 
     private function rollbackTransaction(\mysqli $mysqli): bool
     {
-        if (method_exists($mysqli, 'rollback')) {
-            return (bool) $mysqli->rollback();
-        }
-
-        return (bool) $mysqli->query('ROLLBACK');
+        return (bool) $mysqli->rollback();
     }
 
     private function hasUsersTable(\mysqli $mysqli, string $dbName): bool
@@ -157,6 +145,23 @@ class InstallerService
         $stmt->close();
 
         return ((int) $found) === 1;
+    }
+
+    /** @return array<string,mixed> */
+    private function dbConfig(): array
+    {
+        if (!defined('DB')) {
+            return [];
+        }
+        return (array) DB;
+    }
+
+    /** @return array<string,mixed> */
+    private function mysqlConfig(): array
+    {
+        $db = $this->dbConfig();
+        $raw = $db['mysql'] ?? null;
+        return is_array($raw) ? $raw : [];
     }
 
     public function isInstalled()
@@ -477,12 +482,11 @@ class InstallerService
             $gender = 1;
         }
 
-        if (!defined('DB') || empty(DB['mysql']) || empty(DB['crypt_key'])) {
+        $dbCfg = $this->mysqlConfig();
+        $cryptKey = (string) ($this->dbConfig()['crypt_key'] ?? '');
+        if (empty($dbCfg) || $cryptKey === '') {
             return ['ok' => false, 'error' => 'Configurazione DB non disponibile. Completa prima lo step 3.'];
         }
-
-        $dbCfg = DB['mysql'];
-        $cryptKey = (string) DB['crypt_key'];
 
         $mysqli = @$this->createMysqli(
             (string) ($dbCfg['host'] ?? 'localhost'),
@@ -513,12 +517,17 @@ class InstallerService
             return ['ok' => false, 'error' => 'Verifica superuser fallita: ' . $error];
         }
 
-        $existingSuperusers = 0;
-        $checkStmt->bind_result($existingSuperusers);
-        $checkStmt->fetch();
+        $checkResult = $checkStmt->get_result();
         $checkStmt->close();
 
-        if ((int) $existingSuperusers > 0) {
+        $existingSuperusers = 0;
+        if ($checkResult !== false) {
+            $row = $checkResult->fetch_row();
+            $existingSuperusers = is_array($row) ? (int) ($row[0] ?? 0) : 0;
+            $checkResult->free();
+        }
+
+        if ($existingSuperusers > 0) {
             $mysqli->close();
             return ['ok' => false, 'error' => 'Esiste gia un account superuser. Impossibile crearne un secondo.'];
         }
@@ -648,11 +657,11 @@ class InstallerService
 
     private function detectLegacyInstall()
     {
-        if (!defined('DB') || !isset(DB['mysql']) || !is_array(DB['mysql'])) {
+        $mysql = $this->mysqlConfig();
+        if (empty($mysql)) {
             return false;
         }
 
-        $mysql = DB['mysql'];
         $host = (string) ($mysql['host'] ?? '');
         $user = (string) ($mysql['user'] ?? '');
         $pwd = (string) ($mysql['pwd'] ?? '');

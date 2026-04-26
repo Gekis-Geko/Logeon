@@ -253,7 +253,7 @@ class NarrativeStateService
         }
 
         $visibleFilter = $filters['visible_to_players'] ?? '';
-        if ($visibleFilter !== '' && $visibleFilter !== null) {
+        if ($visibleFilter !== '') {
             $where[] = 'visible_to_players = ?';
             $params[] = $this->normalizeBool($visibleFilter, 0);
         }
