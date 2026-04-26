@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-12T15:58:06.234Z",
+  "generated_at": "2026-04-24T12:14:43.571Z",
   "generated_by": "scripts/build/check-window-globals.mjs",
   "purpose": "Registro ufficiale temporaneo delle API globali su window/globalWindow.",
   "entries": [
@@ -9,7 +9,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/admin.feature-loader.esm.js",
         "assets/js/app/features/admin/AdminImageUploader.js"
       ]
     },
@@ -46,7 +45,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/AppFacade.js"
       ]
     },
@@ -76,8 +74,8 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/admin.feature-loader.esm.js",
-        "assets/js/app/core/esm/game.feature-loader.esm.js"
+        "assets/js/app/core/admin.feature-loader.js",
+        "assets/js/app/core/game.feature-loader.js"
       ]
     },
     {
@@ -114,6 +112,15 @@
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
         "assets/js/components/ConfigStore.js"
+      ]
+    },
+    {
+      "name": "__coreWeatherFeatureLoaded",
+      "owner": "core-runtime",
+      "remove_by": "phase-4",
+      "todo": "Migrare da global window API a import espliciti e registry runtime.",
+      "files": [
+        "assets/js/app/features/game/WeatherCore.js"
       ]
     },
     {
@@ -338,7 +345,7 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/game.ui.js"
+        "assets/js/app/features/game/WeatherCore.js"
       ]
     },
     {
@@ -353,7 +360,6 @@
         "assets/js/app/core/system.pages.js",
         "assets/js/app/features/admin/MessageReports.js",
         "assets/js/app/features/admin/NarrativeTags.js",
-        "assets/js/app/features/admin/Quests.js",
         "assets/js/app/features/admin/Settings.js",
         "assets/js/app/features/admin/SystemEvents.js",
         "assets/js/app/features/admin/Users.js",
@@ -366,26 +372,9 @@
         "assets/js/components/RadioGroup.js",
         "assets/js/components/SelectionGroup.js",
         "assets/js/components/SwitchGroup.js",
+        "assets/js/components/TipTapEditor.js",
         "assets/js/components/Toast.js",
         "assets/js/services/Request.js"
-      ]
-    },
-    {
-      "name": "AdminArchetypes",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/features/admin/Archetypes.js"
-      ]
-    },
-    {
-      "name": "AdminArchetypesModuleFactory",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/modules/admin/ArchetypesModule.js"
       ]
     },
     {
@@ -404,24 +393,6 @@
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
         "assets/js/app/modules/admin/BlacklistModule.js"
-      ]
-    },
-    {
-      "name": "AdminCharacterAttributes",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/features/admin/CharacterAttributes.js"
-      ]
-    },
-    {
-      "name": "AdminCharacterAttributesModuleFactory",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/modules/admin/CharacterAttributesModule.js"
       ]
     },
     {
@@ -533,31 +504,12 @@
       ]
     },
     {
-      "name": "AdminFactions",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/features/admin/Factions.js"
-      ]
-    },
-    {
-      "name": "AdminFactionsModuleFactory",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/modules/admin/FactionsModule.js"
-      ]
-    },
-    {
       "name": "AdminFeatureLoader",
       "owner": "admin-runtime",
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/admin.feature-loader.js",
-        "assets/js/app/core/esm/admin.feature-loader.esm.js"
+        "assets/js/app/core/admin.feature-loader.js"
       ]
     },
     {
@@ -1191,31 +1143,12 @@
       ]
     },
     {
-      "name": "AdminQuests",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/features/admin/Quests.js"
-      ]
-    },
-    {
-      "name": "AdminQuestsModuleFactory",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/modules/admin/QuestsModule.js"
-      ]
-    },
-    {
       "name": "AdminRegistry",
       "owner": "admin-runtime",
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/admin.registry.js",
-        "assets/js/app/core/esm/admin.registry.esm.js"
+        "assets/js/app/core/admin.registry.js"
       ]
     },
     {
@@ -1242,8 +1175,7 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/admin.runtime.js",
-        "assets/js/app/core/esm/admin.runtime.esm.js"
+        "assets/js/app/core/admin.runtime.js"
       ]
     },
     {
@@ -1298,24 +1230,6 @@
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
         "assets/js/app/modules/admin/ShopsModule.js"
-      ]
-    },
-    {
-      "name": "AdminSocialStatus",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/features/admin/SocialStatus.js"
-      ]
-    },
-    {
-      "name": "AdminSocialStatusModuleFactory",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/modules/admin/SocialStatusModule.js"
       ]
     },
     {
@@ -1382,24 +1296,6 @@
       ]
     },
     {
-      "name": "AdminWeather",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/features/admin/Weather.js"
-      ]
-    },
-    {
-      "name": "AdminWeatherModuleFactory",
-      "owner": "admin-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/modules/admin/WeatherModule.js"
-      ]
-    },
-    {
       "name": "Anagrafica",
       "owner": "game-runtime",
       "remove_by": "phase-4",
@@ -1415,7 +1311,6 @@
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
         "assets/js/app/App.js",
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/AppCore.js",
         "assets/js/app/features/game/AppFacade.js"
       ]
@@ -1560,6 +1455,7 @@
         "assets/js/app/core/admin.page.js",
         "assets/js/app/core/game.globals.js",
         "assets/js/app/features/game/LocationsPage.js",
+        "assets/js/app/features/game/WeatherCore.js",
         "assets/js/app/features/public/HomeFeedPage.js"
       ]
     },
@@ -1682,7 +1578,6 @@
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
         "assets/js/app/core/Context.js",
-        "assets/js/app/features/game/FactionsPage.js",
         "assets/js/components/Dialog.js",
         "assets/js/components/Modal.js",
         "assets/js/components/Navbar.js",
@@ -1777,15 +1672,6 @@
       ]
     },
     {
-      "name": "FactionsModuleFactory",
-      "owner": "core-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/modules/game/FactionsModule.js"
-      ]
-    },
-    {
       "name": "forgotPasswordModal",
       "owner": "core-runtime",
       "remove_by": "phase-4",
@@ -1831,7 +1717,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/AppLifecycle.js"
       ]
     },
@@ -1900,16 +1785,6 @@
       ]
     },
     {
-      "name": "GameFactionsPage",
-      "owner": "game-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/features/game/FactionsPage.js",
-        "assets/js/app/modules/game/FactionsModule.js"
-      ]
-    },
-    {
       "name": "GameFeatureError",
       "owner": "game-runtime",
       "remove_by": "phase-4",
@@ -1924,7 +1799,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/core/game.feature-loader.js"
       ]
     },
@@ -2042,7 +1916,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/location/LocationChatPage.js"
       ]
     },
@@ -2061,7 +1934,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/location/LocationDropsPage.js"
       ]
     },
@@ -2080,7 +1952,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/core/game.globals.js",
         "assets/js/app/features/game/location/LocationInvitesPage.js"
       ]
@@ -2091,7 +1962,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/location/LocationPage.js"
       ]
     },
@@ -2110,7 +1980,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/location/LocationSidebarPage.js"
       ]
     },
@@ -2138,7 +2007,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/location/LocationWhispersPage.js"
       ]
     },
@@ -2184,7 +2052,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/core/game.globals.js",
         "assets/js/app/core/game.modals.js",
         "assets/js/app/features/game/MessagesModal.js",
@@ -2207,7 +2074,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/NarrativeEventsPage.js",
         "assets/js/app/modules/game/NarrativeEventsModule.js"
       ]
@@ -2236,7 +2102,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/core/game.modals.js",
         "assets/js/app/features/game/NewsPage.js",
         "assets/js/app/modules/game/NewsModule.js"
@@ -2257,7 +2122,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/core/game.ui.js",
         "assets/js/app/features/game/OnlinesPage.js"
       ]
@@ -2309,32 +2173,11 @@
       ]
     },
     {
-      "name": "GameQuestHistoryPage",
-      "owner": "game-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/features/game/QuestHistoryPage.js"
-      ]
-    },
-    {
-      "name": "GameQuestsPage",
-      "owner": "game-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
-        "assets/js/app/features/game/QuestsPage.js",
-        "assets/js/app/modules/game/QuestsModule.js"
-      ]
-    },
-    {
       "name": "GameRegistry",
       "owner": "game-runtime",
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.registry.esm.js",
         "assets/js/app/core/game.registry.js"
       ]
     },
@@ -2344,7 +2187,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.runtime.esm.js",
         "assets/js/app/core/game.runtime.js"
       ]
     },
@@ -2390,7 +2232,6 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
         "assets/js/app/features/game/SystemEventsPage.js",
         "assets/js/app/modules/game/SystemEventsModule.js"
       ]
@@ -2428,7 +2269,7 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/modules/game/WeatherModule.js"
+        "assets/js/app/features/game/WeatherCore.js"
       ]
     },
     {
@@ -2437,8 +2278,7 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/esm/game.feature-loader.esm.js",
-        "assets/js/app/features/game/WeatherPage.js"
+        "assets/js/app/features/game/WeatherCore.js"
       ]
     },
     {
@@ -2447,7 +2287,7 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/features/game/WeatherPage.js"
+        "assets/js/app/features/game/WeatherCore.js"
       ]
     },
     {
@@ -2578,8 +2418,7 @@
         "assets/js/app/core/game.globals.js",
         "assets/js/app/core/game.ui.js",
         "assets/js/app/features/game/AppLifecycle.js",
-        "assets/js/app/features/game/OnlinesPage.js",
-        "assets/js/app/features/game/ProfilePage.js"
+        "assets/js/app/features/game/OnlinesPage.js"
       ]
     },
     {
@@ -2606,7 +2445,8 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/system.header.js"
+        "assets/js/app/core/system.header.js",
+        "assets/js/app/features/game/location/LocationSidebarPage.js"
       ]
     },
     {
@@ -2684,7 +2524,7 @@
       ]
     },
     {
-      "name": "LocationWeatherStaff",
+      "name": "LocationWhispers",
       "owner": "core-runtime",
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
@@ -2693,12 +2533,13 @@
       ]
     },
     {
-      "name": "LocationWhispers",
+      "name": "LogeonModuleEndpoints",
       "owner": "core-runtime",
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
-        "assets/js/app/core/game.page.js"
+        "assets/js/app/core/system.header.js",
+        "assets/js/app/modules/game/NewsModule.js"
       ]
     },
     {
@@ -2847,24 +2688,6 @@
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
         "assets/js/app/core/game.page.js"
-      ]
-    },
-    {
-      "name": "QuestHistory",
-      "owner": "core-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/core/game.page.js"
-      ]
-    },
-    {
-      "name": "QuestsModuleFactory",
-      "owner": "core-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/modules/game/QuestsModule.js"
       ]
     },
     {
@@ -3121,6 +2944,15 @@
       ]
     },
     {
+      "name": "TipTapEditor",
+      "owner": "ui-core",
+      "remove_by": "phase-4",
+      "todo": "Migrare da global window API a import espliciti e registry runtime.",
+      "files": [
+        "assets/js/components/TipTapEditor.js"
+      ]
+    },
+    {
       "name": "Toast",
       "owner": "core-runtime",
       "remove_by": "phase-4",
@@ -3167,6 +2999,7 @@
       "remove_by": "phase-4",
       "todo": "Migrare da global window API a import espliciti e registry runtime.",
       "files": [
+        "assets/js/components/TipTapEditor.js",
         "assets/js/components/Uploader.js"
       ]
     },
@@ -3189,15 +3022,6 @@
       "files": [
         "assets/js/app/features/game/BankPage.js",
         "assets/js/components/utils/Utils.js"
-      ]
-    },
-    {
-      "name": "Weather",
-      "owner": "core-runtime",
-      "remove_by": "phase-4",
-      "todo": "Migrare da global window API a import espliciti e registry runtime.",
-      "files": [
-        "assets/js/app/core/game.page.js"
       ]
     }
   ]

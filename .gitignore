@@ -6,7 +6,6 @@ vendor/
 # ============================================================
 # Dipendenze frontend (librerie terze parti)
 # ============================================================
-assets/vendor/
 node_modules/
 
 # ============================================================
@@ -29,19 +28,6 @@ assets/imgs/uploads/
 # ============================================================
 configs/db.php
 configs/instaled.php
-
-# ============================================================
-# File descrittivi
-# ============================================================
-logeon-presentation.md
-docs/piano-rimozione-bootstrap.md
-docs/logeon-module-governance-system.md
-
-# ============================================================
-# Artifact release (build locale)
-# ============================================================
-dist/release/staging/
-dist/release/*.zip
 
 # ============================================================
 # File IDE e editor

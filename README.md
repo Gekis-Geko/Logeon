@@ -2,7 +2,7 @@
 
 Motore open-source per giochi play-by-chat con backend PHP/Twig e runtime frontend modulare.
 
-Ultimo aggiornamento: 2026-04-03
+Ultimo aggiornamento: 2026-04-26
 
 ## Scopo del progetto
 Logeon ti permette di costruire un gioco browser RPG/PbC con:
@@ -66,6 +66,14 @@ Dettagli aggiornati: `docs/README.md`.
 2. MySQL/MariaDB
 3. Composer
 4. ambiente web locale (XAMPP o equivalente)
+
+## Pacchetti release
+1. `logeon-core-ready.zip`: pacchetto pronto per il deploy, adatto a un server dove vuoi pubblicare subito l'applicazione.
+2. `logeon-core-source-dev.zip`: pacchetto sorgente per sviluppo e contributi, include `scripts/`, sorgenti Sass e guide operative in `docs/`.
+3. Esempio deploy:
+   - `powershell -ExecutionPolicy Bypass -File scripts/release/build-core-zip.ps1 -Variant ready`
+4. Esempio handoff a un collaboratore:
+   - `powershell -ExecutionPolicy Bypass -File scripts/release/build-core-zip.ps1 -Variant source-dev`
 
 ## Installazione rapida
 1. Clona il repository in webroot.
@@ -147,15 +155,19 @@ File ad alto rischio (toccarli solo con refactor mirato):
 6. guida sistema moduli: `docs/guida-sistema-moduli.md`
 7. guida runtime DB e schema: `docs/guida-runtime-db-schema.md`
 8. contratti API backend: `docs/contratti-api-backend.md`
+9. guida build release: `docs/guida-build-release.md`
 
 ## Sviluppo CSS/Sass
-1. CSS compilato: `assets/css/framework.css`
-2. override custom: `assets/css/style.css`
-3. sorgente Sass: `assets/sass/framework.scss`
+1. CSS compilati: `assets/css/style.css`, `assets/css/framework.css`, `assets/css/admin.css`
+2. override custom riservato ai creatori di gioco: `assets/css/custom.css`
+3. sorgenti Sass: `assets/sass/style.scss`, `assets/sass/framework.scss`, `assets/sass/admin.scss`
 4. regola di progetto: `assets/sass/*` e la fonte; `assets/css/*` e output compilato
-5. evita modifiche manuali dirette ai file compilati quando possibile
-6. applica le modifiche stilistiche nei file Sass e poi ricompila
-7. build one-shot:
-   `sass.cmd assets/sass/framework.scss assets/css/framework.css --style=expanded --no-source-map`
-8. watch:
-   `sass.cmd --watch assets/sass/framework.scss:assets/css/framework.css --style=expanded --no-source-map`
+5. `assets/css/custom.css` resta vuoto e non va usato per stili core del progetto
+6. evita modifiche manuali dirette ai file compilati quando possibile
+7. applica le modifiche stilistiche nei file Sass e poi ricompila
+8. build one-shot:
+   `sass.cmd --load-path=assets/vendor/bootstrap-5.3.8/scss assets/sass/style.scss assets/css/style.css --style=expanded --source-map`
+   `sass.cmd assets/sass/framework.scss assets/css/framework.css --style=expanded --source-map`
+   `sass.cmd assets/sass/admin.scss assets/css/admin.css --style=expanded --source-map`
+9. watch:
+   `sass.cmd --load-path=assets/vendor/bootstrap-5.3.8/scss --watch assets/sass/style.scss:assets/css/style.css assets/sass/framework.scss:assets/css/framework.css assets/sass/admin.scss:assets/css/admin.css --style=expanded --source-map`

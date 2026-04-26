@@ -3,106 +3,136 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root = process.cwd();
-const outdir = path.join(root, 'assets', 'js', 'dist');
+const appOutdir = path.join(root, 'assets', 'js', 'dist');
 const metafileDir = path.join(root, 'tmp', 'build-meta');
 const isWatch = process.argv.includes('--watch');
 const isRelease = process.argv.includes('--release');
 
-fs.mkdirSync(outdir, { recursive: true });
-fs.mkdirSync(metafileDir, { recursive: true });
+function ensureDir(dir) {
+  fs.mkdirSync(dir, { recursive: true });
+}
 
-const targets = [
-  {
-    name: 'runtime-core',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'runtime-core.entry.js'),
-    outfile: path.join(outdir, 'runtime-core.bundle.js'),
-    metafile: path.join(metafileDir, 'runtime-core.meta.json')
-  },
-  {
-    name: 'public-core',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'public-core.entry.js'),
-    outfile: path.join(outdir, 'public-core.bundle.js'),
-    metafile: path.join(metafileDir, 'public-core.meta.json')
-  },
-  {
-    name: 'game-core',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'game-core.entry.js'),
-    outfile: path.join(outdir, 'game-core.bundle.js'),
-    metafile: path.join(metafileDir, 'game-core.meta.json')
-  },
-  {
-    name: 'admin-core',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'admin-core.entry.js'),
-    outfile: path.join(outdir, 'admin-core.bundle.js'),
-    metafile: path.join(metafileDir, 'admin-core.meta.json')
-  },
-  {
-    name: 'game-home',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'game-home.entry.js'),
-    outfile: path.join(outdir, 'game-home.bundle.js'),
-    metafile: path.join(metafileDir, 'game-home.meta.json')
-  },
-  {
-    name: 'game-location',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'game-location.entry.js'),
-    outfile: path.join(outdir, 'game-location.bundle.js'),
-    metafile: path.join(metafileDir, 'game-location.meta.json')
-  },
-  {
-    name: 'game-community',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'game-community.entry.js'),
-    outfile: path.join(outdir, 'game-community.bundle.js'),
-    metafile: path.join(metafileDir, 'game-community.meta.json')
-  },
-  {
-    name: 'game-character',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'game-character.entry.js'),
-    outfile: path.join(outdir, 'game-character.bundle.js'),
-    metafile: path.join(metafileDir, 'game-character.meta.json')
-  },
-  {
-    name: 'game-world',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'game-world.entry.js'),
-    outfile: path.join(outdir, 'game-world.bundle.js'),
-    metafile: path.join(metafileDir, 'game-world.meta.json')
-  },
-  {
-    name: 'admin-priority',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'admin-priority.entry.js'),
-    outfile: path.join(outdir, 'admin-priority.bundle.js'),
-    metafile: path.join(metafileDir, 'admin-priority.meta.json')
-  },
-  {
-    name: 'admin-weather',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'admin-weather.entry.js'),
-    outfile: path.join(outdir, 'admin-weather.bundle.js'),
-    metafile: path.join(metafileDir, 'admin-weather.meta.json')
-  },
-  {
-    name: 'admin-governance',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'admin-governance.entry.js'),
-    outfile: path.join(outdir, 'admin-governance.bundle.js'),
-    metafile: path.join(metafileDir, 'admin-governance.meta.json')
-  },
-  {
-    name: 'admin-economy-content',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'admin-economy-content.entry.js'),
-    outfile: path.join(outdir, 'admin-economy-content.bundle.js'),
-    metafile: path.join(metafileDir, 'admin-economy-content.meta.json')
-  },
-  {
-    name: 'admin-narrative',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'admin-narrative.entry.js'),
-    outfile: path.join(outdir, 'admin-narrative.bundle.js'),
-    metafile: path.join(metafileDir, 'admin-narrative.meta.json')
-  },
-  {
-    name: 'admin-logs',
-    entry: path.join(root, 'assets', 'js', 'app', 'entries', 'admin-logs.entry.js'),
-    outfile: path.join(outdir, 'admin-logs.bundle.js'),
-    metafile: path.join(metafileDir, 'admin-logs.meta.json')
+function toPosix(value) {
+  return String(value || '').replace(/\\/g, '/');
+}
+
+function resetDir(dir) {
+  fs.rmSync(dir, { recursive: true, force: true });
+  ensureDir(dir);
+}
+
+resetDir(metafileDir);
+ensureDir(appOutdir);
+
+function cleanupBuildOutputs(outdir) {
+  if (!fs.existsSync(outdir)) {
+    ensureDir(outdir);
+    return;
   }
-];
+
+  const entries = fs.readdirSync(outdir, { withFileTypes: true });
+  for (const entry of entries) {
+    const abs = path.join(outdir, entry.name);
+    if (entry.isDirectory()) {
+      if (entry.name === 'chunks') {
+        fs.rmSync(abs, { recursive: true, force: true });
+      }
+      continue;
+    }
+    if (!entry.isFile()) {
+      continue;
+    }
+    if (entry.name.endsWith('.js') || entry.name.endsWith('.js.map')) {
+      fs.rmSync(abs, { force: true });
+    }
+  }
+}
+
+function createAppBuildGroup() {
+  const entryPoints = {
+    'runtime-core': path.join(root, 'assets', 'js', 'app', 'entries', 'runtime-core.entry.js'),
+    'public-core': path.join(root, 'assets', 'js', 'app', 'entries', 'public-core.entry.js'),
+    'game-core': path.join(root, 'assets', 'js', 'app', 'entries', 'game-core.entry.js'),
+    'admin-core': path.join(root, 'assets', 'js', 'app', 'entries', 'admin-core.entry.js'),
+    'game-home': path.join(root, 'assets', 'js', 'app', 'entries', 'game-home.entry.js'),
+    'game-location': path.join(root, 'assets', 'js', 'app', 'entries', 'game-location.entry.js'),
+    'game-community': path.join(root, 'assets', 'js', 'app', 'entries', 'game-community.entry.js'),
+    'game-character': path.join(root, 'assets', 'js', 'app', 'entries', 'game-character.entry.js'),
+    'game-world': path.join(root, 'assets', 'js', 'app', 'entries', 'game-world.entry.js'),
+    'admin-priority': path.join(root, 'assets', 'js', 'app', 'entries', 'admin-priority.entry.js'),
+    'admin-governance': path.join(root, 'assets', 'js', 'app', 'entries', 'admin-governance.entry.js'),
+    'admin-economy-content': path.join(root, 'assets', 'js', 'app', 'entries', 'admin-economy-content.entry.js'),
+    'admin-narrative': path.join(root, 'assets', 'js', 'app', 'entries', 'admin-narrative.entry.js'),
+    'admin-logs': path.join(root, 'assets', 'js', 'app', 'entries', 'admin-logs.entry.js'),
+    'admin-bootstrap': path.join(root, 'assets', 'js', 'app', 'core', 'bootstrap.admin.js'),
+    'game-bootstrap': path.join(root, 'assets', 'js', 'app', 'core', 'bootstrap.game.js')
+  };
+
+  return {
+    name: 'app',
+    outdir: appOutdir,
+    entryPoints,
+    entryNames: '[name].bundle',
+    metafile: path.join(metafileDir, 'app.meta.json')
+  };
+}
+
+function discoverModuleBuildGroups() {
+  const modulesDir = path.join(root, 'modules');
+  const discovered = [];
+  if (!fs.existsSync(modulesDir)) { return discovered; }
+  const entries = fs.readdirSync(modulesDir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (!entry.isDirectory()) { continue; }
+    const manifestPath = path.join(modulesDir, entry.name, 'module.json');
+    if (!fs.existsSync(manifestPath)) { continue; }
+    let manifest;
+    try { manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8')); } catch { continue; }
+    const assets = manifest.assets || {};
+    const id = manifest.id || entry.name;
+    const moduleDir = path.join(modulesDir, entry.name);
+    const moduleMetaDir = path.join(metafileDir, 'modules', entry.name);
+    const moduleDistDir = path.join(moduleDir, 'dist');
+    const entryPoints = {};
+
+    ensureDir(moduleDistDir);
+    ensureDir(moduleMetaDir);
+
+    const adminJs = assets.admin && Array.isArray(assets.admin.js) && assets.admin.js[0];
+    if (adminJs) {
+      const entryFile = path.join(moduleDir, 'assets', 'js', 'index.admin.js');
+      if (fs.existsSync(entryFile)) {
+        const entryName = toPosix(path.relative('dist', String(adminJs || ''))).replace(/\.js$/i, '');
+        if (entryName && !entryName.startsWith('..')) {
+          entryPoints[entryName] = entryFile;
+        }
+      }
+    }
+    const gameJs = assets.game && Array.isArray(assets.game.js) && assets.game.js[0];
+    if (gameJs) {
+      const entryFile = path.join(moduleDir, 'assets', 'js', 'index.game.js');
+      if (fs.existsSync(entryFile)) {
+        const entryName = toPosix(path.relative('dist', String(gameJs || ''))).replace(/\.js$/i, '');
+        if (entryName && !entryName.startsWith('..')) {
+          entryPoints[entryName] = entryFile;
+        }
+      }
+    }
+
+    if (Object.keys(entryPoints).length === 0) {
+      continue;
+    }
+
+    discovered.push({
+      name: `module:${id}`,
+      outdir: moduleDistDir,
+      entryPoints,
+      entryNames: '[name]',
+      metafile: path.join(moduleMetaDir, 'frontend.meta.json')
+    });
+  }
+  return discovered;
+}
 
 function prettyBytes(bytes) {
   const value = Number(bytes) || 0;
@@ -112,44 +142,70 @@ function prettyBytes(bytes) {
   return `${(kb / 1024).toFixed(2)} MB`;
 }
 
-function getBuildOptions(target) {
+function getBuildOptions(group) {
   return {
-    entryPoints: [target.entry],
-    outfile: target.outfile,
+    entryPoints: group.entryPoints,
+    outdir: group.outdir,
     bundle: true,
-    format: 'iife',
+    format: 'esm',
+    splitting: true,
     platform: 'browser',
-    target: ['es2018'],
+    target: ['es2020'],
     sourcemap: !isRelease,
     minify: true,
     legalComments: 'none',
     metafile: true,
-    charset: 'utf8'
+    charset: 'utf8',
+    entryNames: group.entryNames || '[name]',
+    chunkNames: 'chunks/[name]-[hash]',
+    assetNames: 'assets/[name]-[hash]'
   };
 }
 
-function printOutput(target) {
-  const stats = fs.statSync(target.outfile);
-  console.log(`[build] ${target.name}: ${prettyBytes(stats.size)} -> ${path.relative(root, target.outfile)}`);
+function writeMetafile(group, result) {
+  if (!result.metafile) {
+    return;
+  }
+  ensureDir(path.dirname(group.metafile));
+  fs.writeFileSync(group.metafile, JSON.stringify(result.metafile, null, 2), 'utf8');
+}
+
+function printGroupOutputs(group, result) {
+  const outputs = result.metafile ? Object.entries(result.metafile.outputs) : [];
+  const entryOutputs = outputs
+    .filter(([, meta]) => !!meta.entryPoint)
+    .sort((a, b) => String(a[0]).localeCompare(String(b[0])));
+
+  for (const [outfile] of entryOutputs) {
+    const stats = fs.statSync(outfile);
+    console.log(`[build] ${group.name}:${path.basename(outfile)}: ${prettyBytes(stats.size)} -> ${path.relative(root, outfile)}`);
+  }
+
+  const chunkCount = outputs.filter(([outfile, meta]) => !meta.entryPoint && outfile.endsWith('.js')).length;
+  if (chunkCount > 0) {
+    console.log(`[build] ${group.name}: shared chunks ${chunkCount}`);
+  }
 }
 
 async function runBuildOnce() {
   console.log(`[build] mode: ${isRelease ? 'release' : 'pilot'}`);
-  for (const target of targets) {
-    const result = await build(getBuildOptions(target));
-    if (result.metafile) {
-      fs.writeFileSync(target.metafile, JSON.stringify(result.metafile, null, 2), 'utf8');
-    }
-    printOutput(target);
+  const allGroups = [createAppBuildGroup(), ...discoverModuleBuildGroups()];
+  for (const group of allGroups) {
+    cleanupBuildOutputs(group.outdir);
+    const result = await build(getBuildOptions(group));
+    writeMetafile(group, result);
+    printGroupOutputs(group, result);
   }
 }
 
 async function runWatch() {
   console.log('[watch] frontend pilot build started');
-  for (const target of targets) {
-    const ctx = await context(getBuildOptions(target));
+  const allGroups = [createAppBuildGroup(), ...discoverModuleBuildGroups()];
+  for (const group of allGroups) {
+    cleanupBuildOutputs(group.outdir);
+    const ctx = await context(getBuildOptions(group));
     await ctx.watch();
-    console.log(`[watch] ${target.name}: watching ${path.relative(root, target.entry)}`);
+    console.log(`[watch] ${group.name}: watching ${Object.keys(group.entryPoints).length} entry points`);
   }
 }
 

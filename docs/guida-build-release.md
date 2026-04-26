@@ -1,5 +1,7 @@
 # Guida: Build pacchetti di release
 
+Ultimo aggiornamento: 2026-04-26
+
 ## Cosa fa lo script
 
 `scripts/release/build-core-zip.ps1` genera uno o due archivi `.zip` pronti per il deploy di Logeon, escludendo automaticamente file sensibili, cache, upload e dipendenze di sviluppo.
@@ -64,7 +66,6 @@ Lo script esclude sempre:
 | Variabili d'ambiente | `.env`, `.env.*` |
 | Dati di sviluppo/VCS | `.git/`, `.claude/`, `.pr/` |
 | Dipendenze Node | `node_modules/` |
-| Tooling interno build/runtime checks | `scripts/` |
 | Output di build | `dist/` |
 | Cache e upload | `tmp/cache/`, `tmp/twig-cache/`, `tmp/uploads/`, `tmp/uploader/`, `tmp/build-meta/`, `assets/imgs/uploads/` |
 | Log | `logs/`, file `*.log` |
@@ -75,17 +76,50 @@ Regole specifiche per variante:
 1. `ready`:
    - include `vendor/`;
    - esclude `assets/sass/`;
-   - esclude `docs/interno/`;
+   - esclude `scripts/`;
    - esclude i sorgenti JS runtime (`assets/js/app/`, `assets/js/components/`, `assets/js/services/`);
    - mantiene il runtime tramite bundle `assets/js/dist/*.bundle.js`;
    - esegue smoke automatico dist-only JS su staging prima dello zip finale;
    - esclude file di repo come `.gitignore`, `.gitlab-ci.yml`, `.gitattributes`, `.editorconfig`.
 2. `source-dev`:
    - esclude `vendor/`;
-   - esclude `scripts/`;
+   - include `scripts/`;
    - include `assets/sass/`;
-   - include `docs/interno/`;
+   - include le guide operative in `docs/` utili a setup, debug e contributi;
    - include i file di repo utili ai contributori (es. `.gitignore`).
+
+## Esempi pratici
+
+### Esempio 1: pacchetto per pubblicare subito il gioco
+
+Scenario: vuoi caricare Logeon su un hosting PHP gia pronto e non vuoi eseguire `composer install` sul server.
+
+Comando:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/release/build-core-zip.ps1 -Variant ready
+```
+
+Risultato:
+1. ottieni `dist/release/logeon-core-ready.zip`;
+2. il pacchetto include `vendor/`;
+3. il runtime frontend usa direttamente i bundle in `assets/js/dist/`.
+
+### Esempio 2: pacchetto per un collaboratore che deve fare debug
+
+Scenario: devi passare il progetto a un collaboratore che deve eseguire smoke test, leggere le guide e rigenerare asset.
+
+Comando:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/release/build-core-zip.ps1 -Variant source-dev
+```
+
+Risultato:
+1. ottieni `dist/release/logeon-core-source-dev.zip`;
+2. il pacchetto include `scripts/` per smoke e tooling CLI;
+3. il pacchetto include i sorgenti Sass e le guide operative in `docs/`;
+4. il destinatario esegue `composer install` dopo l'estrazione.
 
 ---
 

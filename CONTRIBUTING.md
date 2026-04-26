@@ -1,6 +1,6 @@
 # Contributing to Logeon
 
-Ultimo aggiornamento: 2026-04-23
+Ultimo aggiornamento: 2026-04-26
 
 Grazie per il contributo.
 Questo documento definisce il processo ufficiale per sviluppare, revisionare e integrare codice nel repository.
@@ -36,6 +36,10 @@ Questo documento definisce il processo ufficiale per sviluppare, revisionare e i
    - il core espone extension points
    - il modulo si aggancia agli extension points
    - il core non dipende da namespace, route o template del modulo
+8. Tassonomia moduli (vedi `docs/guida-sistema-moduli.md`):
+   - Classe A (bundled): moduli distribuiti con Logeon, estratti dal core — solo activate/deactivate, uninstall non supportato
+   - Classe B (optional): moduli additivi di terze parti — ciclo di vita completo (install/activate/deactivate/uninstall/purge)
+   - i nuovi moduli scritti da contributori sono Classe B; non dichiarare `"class": "bundled"` senza approvazione esplicita nel core
 
 ## 4. Workflow Git ufficiale
 Logeon usa branch brevi e pull request piccole.
@@ -276,7 +280,8 @@ Una PR e considerata pronta al merge se:
 1. documenti attivi in `docs/`
 2. evitare archivi storici locali: una guida aggiornata per argomento
 3. ogni guida deve includere `Ultimo aggiornamento`
-4. se aggiorni questo file, verifica coerenza con `docs/guida-contributori.md` e `docs/README.md`
+4. ogni guida pubblica deve essere autosufficiente: usare esempi concreti, spiegare i passaggi operativi direttamente nel testo ed evitare rimandi a materiali non pubblicati
+5. se aggiorni questo file, verifica coerenza con `docs/guida-contributori.md` e `docs/README.md`
 
 ## 14. Collegamenti rapidi
 1. `README.md`

@@ -1,0 +1,21 @@
+parameters:
+    level: 4
+    paths:
+        - app/Services
+        - app/controllers
+        - core
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    excludePaths:
+        - app/views
+        - app/routes
+        - vendor
+        - node_modules
+        - assets
+        - scripts
+        - tmp
+        - core/plugins
+    ignoreErrors:
+        - '#Call to an undefined method Core\\Models#'
+    reportUnmatchedIgnoredErrors: false
+    inferPrivatePropertyTypeFromConstructor: true
