@@ -224,6 +224,7 @@
 }
 
 #location-page .chat-message .chat-body {
+    font-size: 0.9rem;
     white-space: pre-wrap;
     line-height: 1.55;
 }
@@ -267,12 +268,6 @@
 }
 
 /* Settings: hierarchy and danger zone readability */
-#settings-page .accordion-body > .row > [class*="col-"] > .border {
-    border-color: var(--swd-border) !important;
-    border-radius: 12px !important;
-    background: var(--lf-surface-alt);
-}
-
 #settings-page [data-delete-status],
 #settings-page [data-name-request-status] {
     line-height: 1.4;

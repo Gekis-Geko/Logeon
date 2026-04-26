@@ -33,6 +33,7 @@ import '../../components/SwitchGroup.js';
 import '../../components/Toast.js';
 import '../../components/SlideShow.js';
 import '../../components/Uploader.js';
+import '../../components/TipTapEditor.js';
 
 import '../core/system.header.js';
 import '../core/system.dialogs.js';

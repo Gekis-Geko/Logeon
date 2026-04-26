@@ -420,15 +420,15 @@ function Search(extension) {
     return Object.assign({}, base, extension || {});
 }
 
-(function () {
-    var instance = Search();
+if (typeof window !== 'undefined') {
     window.Search = Search;
 
+    var _searchAutoInit = Search();
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function () {
-            instance.init();
+            _searchAutoInit.init();
         });
     } else {
-        instance.init();
+        _searchAutoInit.init();
     }
-})();
+}

@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createCharacterLifecycleModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminCharacterLifecycle !== 'undefined'
-                    && window.AdminCharacterLifecycle
-                    && typeof window.AdminCharacterLifecycle.init === 'function') {
-                    window.AdminCharacterLifecycle.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createCharacterLifecycleModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminCharacterLifecycle !== 'undefined'
+                && globalWindow.AdminCharacterLifecycle
+                && typeof globalWindow.AdminCharacterLifecycle.init === 'function') {
+                globalWindow.AdminCharacterLifecycle.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminCharacterLifecycleModuleFactory = createCharacterLifecycleModule;
-})(window);
+globalWindow.AdminCharacterLifecycleModuleFactory = createCharacterLifecycleModule;
+export { createCharacterLifecycleModule as AdminCharacterLifecycleModuleFactory };
+export default createCharacterLifecycleModule;
+

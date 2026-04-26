@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminRulesModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminRules !== 'undefined'
-                    && window.AdminRules
-                    && typeof window.AdminRules.init === 'function') {
-                    window.AdminRules.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminRulesModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminRules !== 'undefined'
+                && globalWindow.AdminRules
+                && typeof globalWindow.AdminRules.init === 'function') {
+                globalWindow.AdminRules.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminRulesModuleFactory = createAdminRulesModule;
-})(window);
+globalWindow.AdminRulesModuleFactory = createAdminRulesModule;
+export { createAdminRulesModule as AdminRulesModuleFactory };
+export default createAdminRulesModule;
+

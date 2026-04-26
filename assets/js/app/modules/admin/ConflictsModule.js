@@ -1,29 +1,30 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createConflictsModule() {
-        return {
-            ctx: null,
-            options: {},
+function createConflictsModule() {
+    return {
+        ctx: null,
+        options: {},
 
-            mount: function (ctx, options) {
-                this.ctx = ctx || null;
-                this.options = options || {};
+        mount: function (ctx, options) {
+            this.ctx = ctx || null;
+            this.options = options || {};
 
-                if (
-                    typeof window.AdminConflicts !== 'undefined'
-                    && window.AdminConflicts
-                    && typeof window.AdminConflicts.init === 'function'
-                ) {
-                    window.AdminConflicts.init();
-                }
+            if (
+                typeof globalWindow.AdminConflicts !== 'undefined'
+                && globalWindow.AdminConflicts
+                && typeof globalWindow.AdminConflicts.init === 'function'
+            ) {
+                globalWindow.AdminConflicts.init();
+            }
 
-                return this;
-            },
+            return this;
+        },
 
-            unmount: function () {}
-        };
-    }
+        unmount: function () {}
+    };
+}
 
-    window.AdminConflictsModuleFactory = createConflictsModule;
-})(window);
+globalWindow.AdminConflictsModuleFactory = createConflictsModule;
+export { createConflictsModule as AdminConflictsModuleFactory };
+export default createConflictsModule;
+

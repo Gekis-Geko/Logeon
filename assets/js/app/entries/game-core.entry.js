@@ -2,7 +2,6 @@ import '../core/Context.js';
 import '../core/ModuleRegistry.js';
 import '../core/AppBootstrap.js';
 import '../core/RuntimeBootstrap.js';
-import '../core/esm/legacy-window-bridge.esm.js';
 
 import '../modules/game/NotificationsModule.js';
 import '../modules/game/NewsModule.js';
@@ -11,7 +10,6 @@ import '../modules/game/ForumModule.js';
 import '../modules/game/ProfileModule.js';
 import '../modules/game/PresenceModule.js';
 import '../modules/game/OnlinesModule.js';
-import '../modules/game/WeatherModule.js';
 import '../modules/game/ShopModule.js';
 import '../modules/game/BankModule.js';
 import '../modules/game/MapsModule.js';
@@ -24,10 +22,8 @@ import '../modules/game/location/ChatModule.js';
 import '../modules/game/location/WhispersModule.js';
 import '../modules/game/location/DropsModule.js';
 import '../modules/game/location/InvitesModule.js';
-import '../modules/game/QuestsModule.js';
 import '../modules/game/NarrativeEventsModule.js';
 import '../modules/game/SystemEventsModule.js';
-import '../modules/game/FactionsModule.js';
 import '../modules/game/LifecycleModule.js';
 import '../modules/game/NarrativeStatesModule.js';
 
@@ -38,14 +34,14 @@ import '../features/game/AppLifecycle.js';
 import '../features/game/AppSounds.js';
 import '../features/game/OnlinesPage.js';
 
-import '../core/esm/game.feature-loader.esm.js';
-import '../core/esm/game.registry.esm.js';
+import '../core/game.feature-loader.js';
+import '../core/game.registry.js';
 import '../core/game.globals.js';
 import '../core/game.modals.js';
 import '../core/game.ui.js';
 import '../core/game.page.js';
-import '../core/esm/game.runtime.esm.js';
-import '../core/bootstrap.game.js';
+import '../features/game/WeatherCore.js';
+import '../core/game.runtime.js';
 
 
 

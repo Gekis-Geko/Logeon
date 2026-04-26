@@ -1,24 +1,25 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function NotificationsModuleFactory() {
-        return {
-            mount: function (ctx, options) {
-                if (typeof window.NotificationsPage !== 'undefined'
-                    && window.NotificationsPage
-                    && typeof window.NotificationsPage.init === 'function') {
-                    window.NotificationsPage.init(ctx, options);
-                }
-            },
-            unmount: function () {
-                if (typeof window.NotificationsPage !== 'undefined'
-                    && window.NotificationsPage
-                    && typeof window.NotificationsPage.destroy === 'function') {
-                    window.NotificationsPage.destroy();
-                }
+function NotificationsModuleFactory() {
+    return {
+        mount: function (ctx, options) {
+            if (typeof globalWindow.NotificationsPage !== 'undefined'
+                && globalWindow.NotificationsPage
+                && typeof globalWindow.NotificationsPage.init === 'function') {
+                globalWindow.NotificationsPage.init(ctx, options);
             }
-        };
-    }
+        },
+        unmount: function () {
+            if (typeof globalWindow.NotificationsPage !== 'undefined'
+                && globalWindow.NotificationsPage
+                && typeof globalWindow.NotificationsPage.destroy === 'function') {
+                globalWindow.NotificationsPage.destroy();
+            }
+        }
+    };
+}
 
-    window.NotificationsModuleFactory = NotificationsModuleFactory;
-})(window);
+globalWindow.NotificationsModuleFactory = NotificationsModuleFactory;
+export { NotificationsModuleFactory as NotificationsModuleFactory };
+export default NotificationsModuleFactory;
+

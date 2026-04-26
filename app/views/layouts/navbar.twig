@@ -7,6 +7,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainAsideCanvas" aria-controls="mainAsideCanvas" aria-label="Apri menu">
             <span class="navbar-toggler-icon"></span>
         </button>
+        {% set public_navbar_module_entries = module_menu_entries('public', 'navbar') %}
         <div class="collapse navbar-collapse" id="homeNavbarContent">
             <ul class="navbar-nav text-center ml-5">
                 <li class="nav-item mx-xl-2 my-2 my-xl-0" data-ref="rules">
@@ -24,6 +25,13 @@
                         <span class="bi bi-book me-2"></span> Come giocare
                     </a>
                 </li>
+                {% for menu_entry in public_navbar_module_entries %}
+                <li class="nav-item mx-xl-2 my-2 my-xl-0">
+                    <a class="nav-link" href="{{ menu_entry.href }}">
+                        {% if menu_entry.icon is not empty %}<span class="{{ menu_entry.icon }} me-2"></span>{% endif %}{{ menu_entry.label }}
+                    </a>
+                </li>
+                {% endfor %}
             </ul>
             <div class="navbar-nav text-center ml-auto">
                 <button class="btn btn-light" type="button" data-action="open-signin-modal">

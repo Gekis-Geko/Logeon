@@ -1,25 +1,26 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createMapsModule() {
-        return {
-            ctx: null,
-            options: {},
+function createMapsModule() {
+    return {
+        ctx: null,
+        options: {},
 
-            mount: function (ctx, options) {
-                this.ctx = ctx || null;
-                this.options = options || {};
+        mount: function (ctx, options) {
+            this.ctx = ctx || null;
+            this.options = options || {};
 
-                if (typeof window.AdminMaps !== 'undefined' && window.AdminMaps && typeof window.AdminMaps.init === 'function') {
-                    window.AdminMaps.init();
-                }
+            if (typeof globalWindow.AdminMaps !== 'undefined' && globalWindow.AdminMaps && typeof globalWindow.AdminMaps.init === 'function') {
+                globalWindow.AdminMaps.init();
+            }
 
-                return this;
-            },
+            return this;
+        },
 
-            unmount: function () {}
-        };
-    }
+        unmount: function () {}
+    };
+}
 
-    window.AdminMapsModuleFactory = createMapsModule;
-})(window);
+globalWindow.AdminMapsModuleFactory = createMapsModule;
+export { createMapsModule as AdminMapsModuleFactory };
+export default createMapsModule;
+

@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminGuildLocationsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminGuildLocations !== 'undefined'
-                    && window.AdminGuildLocations
-                    && typeof window.AdminGuildLocations.init === 'function') {
-                    window.AdminGuildLocations.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminGuildLocationsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminGuildLocations !== 'undefined'
+                && globalWindow.AdminGuildLocations
+                && typeof globalWindow.AdminGuildLocations.init === 'function') {
+                globalWindow.AdminGuildLocations.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminGuildLocationsModuleFactory = createAdminGuildLocationsModule;
-})(window);
+globalWindow.AdminGuildLocationsModuleFactory = createAdminGuildLocationsModule;
+export { createAdminGuildLocationsModule as AdminGuildLocationsModuleFactory };
+export default createAdminGuildLocationsModule;
+

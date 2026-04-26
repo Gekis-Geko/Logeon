@@ -1,174 +1,153 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function restartRuntime(options) {
-        if (window.RuntimeBootstrap && typeof window.RuntimeBootstrap.restartGameRuntime === 'function') {
-            return window.RuntimeBootstrap.restartGameRuntime(options || {}) === true;
-        }
-        return false;
+function restartRuntime(options) {
+    if (globalWindow.RuntimeBootstrap && typeof globalWindow.RuntimeBootstrap.restartGameRuntime === 'function') {
+        return globalWindow.RuntimeBootstrap.restartGameRuntime(options || {}) === true;
     }
+    return false;
+}
 
-    function GameAppInit() {
-            if (window.APP_BOOTSTRAP_ENABLED === true && window.APP_BOOTSTRAP_RUNTIME === 'game') {
-                if (restartRuntime({ stop: false }) === true) {
-                    return this;
-                }
-                if (window.GameRuntime && typeof window.GameRuntime.start === 'function') {
-                    window.GameRuntime.start();
-                    return this;
-                }
-                if (window.GameGlobals && typeof window.GameGlobals.sync === 'function') {
-                    window.GameGlobals.sync();
-                }
+function GameAppInit() {
+        if (globalWindow.APP_BOOTSTRAP_ENABLED === true && globalWindow.APP_BOOTSTRAP_RUNTIME === 'game') {
+            if (restartRuntime({ stop: false }) === true) {
                 return this;
             }
-
-            if (typeof EventBus === 'function' && typeof window.AppEvents === 'undefined') {
-                window.AppEvents = EventBus();
+            if (globalWindow.GameRuntime && typeof globalWindow.GameRuntime.start === 'function') {
+                globalWindow.GameRuntime.start();
+                return this;
             }
-            if (typeof PollManager === 'function') {
-                PollManager();
+            if (globalWindow.GameGlobals && typeof globalWindow.GameGlobals.sync === 'function') {
+                globalWindow.GameGlobals.sync();
             }
-
-            var tooltipService = null;
-            if (window.GameGlobals && typeof window.GameGlobals.resolveTooltipService === 'function') {
-                tooltipService = window.GameGlobals.resolveTooltipService();
-            } else if (typeof Tooltip === 'function') {
-                tooltipService = Tooltip();
-            }
-
-            if (tooltipService) {
-                if (typeof tooltipService.init === 'function') {
-                    tooltipService.init(document);
-                }
-                if (typeof tooltipService.bindGlobalGuards === 'function') {
-                    tooltipService.bindGlobalGuards();
-                }
-            } else {
-                if (window.GameGlobals && typeof window.GameGlobals.initTooltips === 'function') {
-                    window.GameGlobals.initTooltips(document);
-                } else if (typeof window.initTooltips === 'function') {
-                    window.initTooltips(document);
-                }
-                if (!window.__app_tooltip_guard_bound) {
-                    window.__app_tooltip_guard_bound = true;
-
-                    $(document).on('click.app_tooltip', function () {
-                        if (window.GameGlobals && typeof window.GameGlobals.hideOpenTooltips === 'function') {
-                            window.GameGlobals.hideOpenTooltips();
-                        } else if (typeof window.hideOpenTooltips === 'function') {
-                            window.hideOpenTooltips();
-                        }
-                    });
-
-                    $(document).on('shown.bs.modal.app_tooltip hidden.bs.modal.app_tooltip shown.bs.offcanvas.app_tooltip hidden.bs.offcanvas.app_tooltip', function () {
-                        if (window.GameGlobals && typeof window.GameGlobals.hideOpenTooltips === 'function') {
-                            window.GameGlobals.hideOpenTooltips();
-                        } else if (typeof window.hideOpenTooltips === 'function') {
-                            window.hideOpenTooltips();
-                        }
-                    });
-                }
-            }
-
-            Navbar('#appNavbar');       
-            if (window.GameGlobals && typeof window.GameGlobals.patchSummernoteAutoLink === 'function') {
-                window.GameGlobals.patchSummernoteAutoLink();
-            }
-            $('.summernote').summernote({
-                lang: 'it-IT',
-                height: 250,
-                icons: {
-                    bold: 'bi bi-type-bold',
-                    italic: 'bi bi-type-italic',
-                    underline: 'bi bi-type-underline',
-                    unorderedlist: 'bi bi-list-ul',
-                    orderedlist: 'bi bi-list-ol',
-                    paragraph: 'bi bi-text-paragraph',
-                    table: 'bi bi-table',
-                    link: 'bi bi-link-45deg',
-                    picture: 'bi bi-image',
-                    caret: 'bi bi-caret-down-fill'
-                },
-                toolbar: [
-                    ['font', ['bold', 'underline', 'italic']],
-                    ['para', ['ul', 'ol', 'paragraph']],
-                    ['table', ['table']],
-                    ['insert', ['link', 'picture']]
-                  ],
-                callbacks: {
-                    onInit: function () {
-                        $(this).next('.note-editor').addClass('ui-richtext');
-                    }
-                }
-            });
-
-            if ($('#inbox-modal').length) {
-                this.Messages({ key: 'modal', root: '#inbox-modal' }).loadUnread();
-            }
-            if ($('#location-invite-modal').length && typeof window.LocationInvites === 'undefined') {
-                window.LocationInvites = this.LocationInvites();
-            }
-            if (typeof window.AvailabilityObserver === 'undefined' && Storage().get('characterId')) {
-                window.AvailabilityObserver = this.AvailabilityObserver();
-            }
-
             return this;
         }
 
-    function GameAppSync() {
-            if (window.APP_BOOTSTRAP_ENABLED === true && window.APP_BOOTSTRAP_RUNTIME === 'game') {
-                var synced = restartRuntime({ stop: true }) === true;
-                if (!synced && window.GameRuntime && typeof window.GameRuntime.stop === 'function' && typeof window.GameRuntime.start === 'function') {
-                    window.GameRuntime.stop();
-                    window.GameRuntime.start();
-                    synced = true;
-                } else if (!synced && window.GameGlobals && typeof window.GameGlobals.sync === 'function') {
-                    window.GameGlobals.sync();
-                    synced = true;
-                }
+        if (typeof EventBus === 'function' && typeof globalWindow.AppEvents === 'undefined') {
+            globalWindow.AppEvents = EventBus();
+        }
+        if (typeof PollManager === 'function') {
+            PollManager();
+        }
 
-                if (synced && typeof window.AppEvents !== 'undefined' && typeof window.AppEvents.emit === 'function') {
-                    window.AppEvents.emit('app:sync');
-                }
-                return this;
+        var tooltipService = null;
+        if (globalWindow.GameGlobals && typeof globalWindow.GameGlobals.resolveTooltipService === 'function') {
+            tooltipService = globalWindow.GameGlobals.resolveTooltipService();
+        } else if (typeof Tooltip === 'function') {
+            tooltipService = Tooltip();
+        }
+
+        if (tooltipService) {
+            if (typeof tooltipService.init === 'function') {
+                tooltipService.init(document);
             }
+            if (typeof tooltipService.bindGlobalGuards === 'function') {
+                tooltipService.bindGlobalGuards();
+            }
+        } else {
+            if (globalWindow.GameGlobals && typeof globalWindow.GameGlobals.initTooltips === 'function') {
+                globalWindow.GameGlobals.initTooltips(document);
+            } else if (typeof globalWindow.initTooltips === 'function') {
+                globalWindow.initTooltips(document);
+            }
+            if (!globalWindow.__app_tooltip_guard_bound) {
+                globalWindow.__app_tooltip_guard_bound = true;
 
-            this.init();
-            if (typeof window.AppEvents !== 'undefined' && typeof window.AppEvents.emit === 'function') {
-                window.AppEvents.emit('app:sync');
+                $(document).on('click.app_tooltip', function () {
+                    if (globalWindow.GameGlobals && typeof globalWindow.GameGlobals.hideOpenTooltips === 'function') {
+                        globalWindow.GameGlobals.hideOpenTooltips();
+                    } else if (typeof globalWindow.hideOpenTooltips === 'function') {
+                        globalWindow.hideOpenTooltips();
+                    }
+                });
+
+                $(document).on('shown.bs.modal.app_tooltip hidden.bs.modal.app_tooltip shown.bs.offcanvas.app_tooltip hidden.bs.offcanvas.app_tooltip', function () {
+                    if (globalWindow.GameGlobals && typeof globalWindow.GameGlobals.hideOpenTooltips === 'function') {
+                        globalWindow.GameGlobals.hideOpenTooltips();
+                    } else if (typeof globalWindow.hideOpenTooltips === 'function') {
+                        globalWindow.hideOpenTooltips();
+                    }
+                });
             }
         }
 
-    function GameAppReload() {
-            Toast.show({
-                body: '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Aggiornamento in corso ...',
-            });
-
-            if (window.APP_BOOTSTRAP_ENABLED === true && window.APP_BOOTSTRAP_RUNTIME === 'game') {
-                var reloaded = restartRuntime({ stop: true }) === true;
-                if (!reloaded && window.GameRuntime && typeof window.GameRuntime.stop === 'function' && typeof window.GameRuntime.start === 'function') {
-                    window.GameRuntime.stop();
-                    window.GameRuntime.start();
-                    reloaded = true;
-                } else if (!reloaded && window.GameGlobals && typeof window.GameGlobals.sync === 'function') {
-                    window.GameGlobals.sync();
-                    reloaded = true;
-                }
-
-                if (reloaded && typeof window.AppEvents !== 'undefined' && typeof window.AppEvents.emit === 'function') {
-                    window.AppEvents.emit('app:reload');
-                }
-                return this;
-            }
-
-            this.init();
-            if (typeof window.AppEvents !== 'undefined' && typeof window.AppEvents.emit === 'function') {
-                window.AppEvents.emit('app:reload');
-            }
+        Navbar('#appNavbar');       
+        if (globalWindow.GameGlobals && typeof globalWindow.GameGlobals.initSummernote === 'function') {
+            globalWindow.GameGlobals.initSummernote(document);
+        } else if (globalWindow.TipTapEditor && typeof globalWindow.TipTapEditor.init === 'function') {
+            globalWindow.TipTapEditor.init(document);
         }
 
-    window.GameAppInit = GameAppInit;
-    window.GameAppSync = GameAppSync;
-    window.GameAppReload = GameAppReload;
-})(window);
+        if ($('#inbox-modal').length) {
+            this.Messages({ key: 'modal', root: '#inbox-modal' }).loadUnread();
+        }
+        if ($('#location-invite-modal').length && typeof globalWindow.LocationInvites === 'undefined') {
+            globalWindow.LocationInvites = this.LocationInvites();
+        }
+        if (typeof globalWindow.AvailabilityObserver === 'undefined' && Storage().get('characterId')) {
+            globalWindow.AvailabilityObserver = this.AvailabilityObserver();
+        }
+
+        return this;
+    }
+
+function GameAppSync() {
+        if (globalWindow.APP_BOOTSTRAP_ENABLED === true && globalWindow.APP_BOOTSTRAP_RUNTIME === 'game') {
+            var synced = restartRuntime({ stop: true }) === true;
+            if (!synced && globalWindow.GameRuntime && typeof globalWindow.GameRuntime.stop === 'function' && typeof globalWindow.GameRuntime.start === 'function') {
+                globalWindow.GameRuntime.stop();
+                globalWindow.GameRuntime.start();
+                synced = true;
+            } else if (!synced && globalWindow.GameGlobals && typeof globalWindow.GameGlobals.sync === 'function') {
+                globalWindow.GameGlobals.sync();
+                synced = true;
+            }
+
+            if (synced && typeof globalWindow.AppEvents !== 'undefined' && typeof globalWindow.AppEvents.emit === 'function') {
+                globalWindow.AppEvents.emit('app:sync');
+            }
+            return this;
+        }
+
+        this.init();
+        if (typeof globalWindow.AppEvents !== 'undefined' && typeof globalWindow.AppEvents.emit === 'function') {
+            globalWindow.AppEvents.emit('app:sync');
+        }
+    }
+
+function GameAppReload() {
+        Toast.show({
+            body: '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Aggiornamento in corso ...',
+        });
+
+        if (globalWindow.APP_BOOTSTRAP_ENABLED === true && globalWindow.APP_BOOTSTRAP_RUNTIME === 'game') {
+            var reloaded = restartRuntime({ stop: true }) === true;
+            if (!reloaded && globalWindow.GameRuntime && typeof globalWindow.GameRuntime.stop === 'function' && typeof globalWindow.GameRuntime.start === 'function') {
+                globalWindow.GameRuntime.stop();
+                globalWindow.GameRuntime.start();
+                reloaded = true;
+            } else if (!reloaded && globalWindow.GameGlobals && typeof globalWindow.GameGlobals.sync === 'function') {
+                globalWindow.GameGlobals.sync();
+                reloaded = true;
+            }
+
+            if (reloaded && typeof globalWindow.AppEvents !== 'undefined' && typeof globalWindow.AppEvents.emit === 'function') {
+                globalWindow.AppEvents.emit('app:reload');
+            }
+            return this;
+        }
+
+        this.init();
+        if (typeof globalWindow.AppEvents !== 'undefined' && typeof globalWindow.AppEvents.emit === 'function') {
+            globalWindow.AppEvents.emit('app:reload');
+        }
+    }
+
+globalWindow.GameAppInit = GameAppInit;
+globalWindow.GameAppSync = GameAppSync;
+globalWindow.GameAppReload = GameAppReload;
+export { GameAppInit as GameAppInit };
+export { GameAppSync as GameAppSync };
+export { GameAppReload as GameAppReload };
+const GameAppLifecycleApi = { GameAppInit, GameAppSync, GameAppReload };
+export default GameAppLifecycleApi;
+

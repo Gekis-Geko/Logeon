@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminStoryboardsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminStoryboards !== 'undefined'
-                    && window.AdminStoryboards
-                    && typeof window.AdminStoryboards.init === 'function') {
-                    window.AdminStoryboards.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminStoryboardsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminStoryboards !== 'undefined'
+                && globalWindow.AdminStoryboards
+                && typeof globalWindow.AdminStoryboards.init === 'function') {
+                globalWindow.AdminStoryboards.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminStoryboardsModuleFactory = createAdminStoryboardsModule;
-})(window);
+globalWindow.AdminStoryboardsModuleFactory = createAdminStoryboardsModule;
+export { createAdminStoryboardsModule as AdminStoryboardsModuleFactory };
+export default createAdminStoryboardsModule;
+

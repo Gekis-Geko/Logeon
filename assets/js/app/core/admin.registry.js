@@ -1,384 +1,281 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    var MODULE_FACTORY_MAP = {
-        'admin.dashboard': 'DashboardModuleFactory',
-        'admin.users': 'AdminUsersModuleFactory',
-        'admin.characters': 'AdminCharactersModuleFactory',
-        'admin.blacklist': 'AdminBlacklistModuleFactory',
-        'admin.themes': 'AdminThemesModuleFactory',
-        'admin.modules': 'AdminModulesModuleFactory',
-        'admin.character-attributes': 'AdminCharacterAttributesModuleFactory',
-        'admin.maps': 'AdminMapsModuleFactory',
-        'admin.currencies': 'AdminCurrenciesModuleFactory',
-        'admin.shops': 'AdminShopsModuleFactory',
-        'admin.conflicts': 'AdminConflictsModuleFactory',
-        'admin.narrative-events': 'AdminNarrativeEventsModuleFactory',
-        'admin.narrative-states': 'AdminNarrativeStatesModuleFactory',
-        'admin.quests': 'AdminQuestsModuleFactory',
-        'admin.system-events': 'AdminSystemEventsModuleFactory',
-        'admin.character-lifecycle': 'AdminCharacterLifecycleModuleFactory',
-        'admin.factions': 'AdminFactionsModuleFactory',
-        'admin.weather': 'AdminWeatherModuleFactory',
-        'admin.weather-overview': 'AdminWeatherModuleFactory',
-        'admin.weather-catalogs': 'AdminWeatherModuleFactory',
-        'admin.weather-profiles': 'AdminWeatherModuleFactory',
-        'admin.weather-overrides': 'AdminWeatherModuleFactory',
-        'admin.character-requests': 'AdminCharacterRequestsModuleFactory',
-        'admin.shop-inventory': 'AdminShopInventoryModuleFactory',
-        'admin.locations': 'AdminLocationsModuleFactory',
-        'admin.jobs': 'AdminJobsModuleFactory',
-        'admin.jobs-tasks': 'AdminJobsTasksModuleFactory',
-        'admin.jobs-levels': 'AdminJobsLevelsModuleFactory',
-        'admin.social-status': 'AdminSocialStatusModuleFactory',
-        'admin.guilds': 'AdminGuildsModuleFactory',
-        'admin.guild-alignments': 'AdminGuildAlignmentsModuleFactory',
-        'admin.guild-reqs': 'AdminGuildReqsModuleFactory',
-        'admin.guild-locations': 'AdminGuildLocationsModuleFactory',
-        'admin.guild-events': 'AdminGuildEventsModuleFactory',
-        'admin.forums': 'AdminForumsModuleFactory',
-        'admin.forum-types': 'AdminForumTypesModuleFactory',
-        'admin.storyboards': 'AdminStoryboardsModuleFactory',
-        'admin.rules': 'AdminRulesModuleFactory',
-        'admin.how-to-play': 'AdminHowToPlayModuleFactory',
-        'admin.items': 'AdminItemsModuleFactory',
-        'admin.items-categories': 'AdminItemsCategoriesModuleFactory',
-        'admin.settings': 'AdminSettingsModuleFactory',
-        'admin.items-rarities': 'AdminItemsRaritiesModuleFactory',
-        'admin.equipment-slots': 'AdminEquipmentSlotsModuleFactory',
-        'admin.item-equipment-rules': 'AdminItemEquipmentRulesModuleFactory',
-        'admin.logs-conflicts': 'AdminLogsConflictsModuleFactory',
-        'admin.logs-currency': 'AdminLogsCurrencyModuleFactory',
-        'admin.logs-experience': 'AdminLogsExperienceModuleFactory',
-        'admin.logs-fame': 'AdminLogsFameModuleFactory',
-        'admin.logs-guild': 'AdminLogsGuildModuleFactory',
-        'admin.logs-job': 'AdminLogsJobModuleFactory',
-        'admin.logs-location-access': 'AdminLogsLocationAccessModuleFactory',
-        'admin.logs-sys': 'AdminLogsSysModuleFactory',
-        'admin.logs-narrative': 'AdminLogsNarrativeModuleFactory',
-        'admin.archetypes': 'AdminArchetypesModuleFactory',
-        'admin.narrative-tags': 'AdminNarrativeTagsModuleFactory',
-        'admin.message-reports': 'AdminMessageReportsModuleFactory',
-        'admin.news': 'AdminNewsModuleFactory',
-        'admin.narrative-delegation-grants': 'AdminNarrativeDelegationGrantsModuleFactory',
-        'admin.narrative-npcs': 'AdminNarrativeNpcsModuleFactory'
+const MODULE_FACTORY_MAP = {
+    'admin.dashboard': 'DashboardModuleFactory',
+    'admin.users': 'AdminUsersModuleFactory',
+    'admin.characters': 'AdminCharactersModuleFactory',
+    'admin.blacklist': 'AdminBlacklistModuleFactory',
+    'admin.themes': 'AdminThemesModuleFactory',
+    'admin.modules': 'AdminModulesModuleFactory',
+    'admin.maps': 'AdminMapsModuleFactory',
+    'admin.currencies': 'AdminCurrenciesModuleFactory',
+    'admin.shops': 'AdminShopsModuleFactory',
+    'admin.conflicts': 'AdminConflictsModuleFactory',
+    'admin.narrative-events': 'AdminNarrativeEventsModuleFactory',
+    'admin.narrative-states': 'AdminNarrativeStatesModuleFactory',
+    'admin.system-events': 'AdminSystemEventsModuleFactory',
+    'admin.character-lifecycle': 'AdminCharacterLifecycleModuleFactory',
+    'admin.character-requests': 'AdminCharacterRequestsModuleFactory',
+    'admin.shop-inventory': 'AdminShopInventoryModuleFactory',
+    'admin.locations': 'AdminLocationsModuleFactory',
+    'admin.jobs': 'AdminJobsModuleFactory',
+    'admin.jobs-tasks': 'AdminJobsTasksModuleFactory',
+    'admin.jobs-levels': 'AdminJobsLevelsModuleFactory',
+    'admin.guilds': 'AdminGuildsModuleFactory',
+    'admin.guild-alignments': 'AdminGuildAlignmentsModuleFactory',
+    'admin.guild-reqs': 'AdminGuildReqsModuleFactory',
+    'admin.guild-locations': 'AdminGuildLocationsModuleFactory',
+    'admin.guild-events': 'AdminGuildEventsModuleFactory',
+    'admin.forums': 'AdminForumsModuleFactory',
+    'admin.forum-types': 'AdminForumTypesModuleFactory',
+    'admin.storyboards': 'AdminStoryboardsModuleFactory',
+    'admin.rules': 'AdminRulesModuleFactory',
+    'admin.how-to-play': 'AdminHowToPlayModuleFactory',
+    'admin.items': 'AdminItemsModuleFactory',
+    'admin.items-categories': 'AdminItemsCategoriesModuleFactory',
+    'admin.settings': 'AdminSettingsModuleFactory',
+    'admin.items-rarities': 'AdminItemsRaritiesModuleFactory',
+    'admin.equipment-slots': 'AdminEquipmentSlotsModuleFactory',
+    'admin.item-equipment-rules': 'AdminItemEquipmentRulesModuleFactory',
+    'admin.logs-conflicts': 'AdminLogsConflictsModuleFactory',
+    'admin.logs-currency': 'AdminLogsCurrencyModuleFactory',
+    'admin.logs-experience': 'AdminLogsExperienceModuleFactory',
+    'admin.logs-fame': 'AdminLogsFameModuleFactory',
+    'admin.logs-guild': 'AdminLogsGuildModuleFactory',
+    'admin.logs-job': 'AdminLogsJobModuleFactory',
+    'admin.logs-location-access': 'AdminLogsLocationAccessModuleFactory',
+    'admin.logs-sys': 'AdminLogsSysModuleFactory',
+    'admin.logs-narrative': 'AdminLogsNarrativeModuleFactory',
+    'admin.narrative-tags': 'AdminNarrativeTagsModuleFactory',
+    'admin.message-reports': 'AdminMessageReportsModuleFactory',
+    'admin.news': 'AdminNewsModuleFactory',
+    'admin.narrative-delegation-grants': 'AdminNarrativeDelegationGrantsModuleFactory',
+    'admin.narrative-npcs': 'AdminNarrativeNpcsModuleFactory',
+    'admin.location-position-tags': 'AdminLocationPositionTagsModuleFactory'
+};
+
+const PAGE_MODULES = {
+    dashboard: ['admin.dashboard'],
+    users: ['admin.users'],
+    characters: ['admin.characters'],
+    blacklist: ['admin.blacklist'],
+    themes: ['admin.themes'],
+    modules: ['admin.modules'],
+    maps: ['admin.maps'],
+    currencies: ['admin.currencies'],
+    shops: ['admin.shops'],
+    conflicts: ['admin.conflicts'],
+    'narrative-events': ['admin.narrative-events'],
+    'narrative-states': ['admin.narrative-states'],
+    'system-events': ['admin.system-events'],
+    'character-lifecycle': ['admin.character-lifecycle'],
+    'character-requests': ['admin.character-requests'],
+    'inventory-shop': ['admin.shop-inventory'],
+    locations: ['admin.locations'],
+    jobs: ['admin.jobs'],
+    'jobs-tasks': ['admin.jobs-tasks'],
+    'jobs-levels': ['admin.jobs-levels'],
+    guilds: ['admin.guilds'],
+    'guild-alignments': ['admin.guild-alignments'],
+    'guilds-reqs': ['admin.guild-reqs'],
+    'guilds-locations': ['admin.guild-locations'],
+    'guilds-events': ['admin.guild-events'],
+    forums: ['admin.forums'],
+    'forums-types': ['admin.forum-types'],
+    storyboards: ['admin.storyboards'],
+    rules: ['admin.rules'],
+    'how-to-play': ['admin.how-to-play'],
+    items: ['admin.items'],
+    'items-categories': ['admin.items-categories'],
+    'items-rarities': ['admin.items-rarities'],
+    'equipment-slots': ['admin.equipment-slots'],
+    'item-equipment-rules': ['admin.item-equipment-rules'],
+    'logs-conflicts': ['admin.logs-conflicts'],
+    'logs-currency': ['admin.logs-currency'],
+    'logs-experience': ['admin.logs-experience'],
+    'logs-fame': ['admin.logs-fame'],
+    'logs-guild': ['admin.logs-guild'],
+    'logs-job': ['admin.logs-job'],
+    'logs-location-access': ['admin.logs-location-access'],
+    'logs-sys': ['admin.logs-sys'],
+    'logs-narrative': ['admin.logs-narrative'],
+    settings: ['admin.settings'],
+    'narrative-tags': ['admin.narrative-tags'],
+    'message-reports': ['admin.message-reports'],
+    news: ['admin.news'],
+    'narrative-delegation-grants': ['admin.narrative-delegation-grants'],
+    'narrative-npcs': ['admin.narrative-npcs'],
+    'location-position-tags': ['admin.location-position-tags']
+};
+
+function createNoopFactory() {
+    return function () {
+        return {
+            mount: function () {},
+            unmount: function () {}
+        };
     };
+}
 
-    function createNoopFactory() {
-        return function () {
-            return {
-                mount: function () {},
-                unmount: function () {}
-            };
-        };
+function normalizeOrderOptions(opts) {
+    if (!opts || typeof opts !== 'object') {
+        return { after: '', before: '' };
+    }
+    return {
+        after: String(opts.after || '').trim(),
+        before: String(opts.before || '').trim()
+    };
+}
+
+function insertUniqueWithOrder(list, value, opts) {
+    if (list.indexOf(value) !== -1) {
+        return;
     }
 
-    function createDashboardFallbackFactory() {
-        return function () {
-            return {
-                mount: function (_ctx, options) {
-                    if (typeof window.Dashboard !== 'undefined' && window.Dashboard && typeof window.Dashboard.init === 'function') {
-                        var config = (options && options.config) || window.DASHBOARD_CONFIG || window.ADMIN_DASHBOARD_CONFIG || null;
-                        window.Dashboard.init(config);
-                    }
-                },
-                unmount: function () {}
-            };
-        };
+    let insertAt = list.length;
+    if (opts.before) {
+        const beforeIndex = list.indexOf(opts.before);
+        if (beforeIndex !== -1) {
+            insertAt = beforeIndex;
+        }
+    }
+    if (insertAt === list.length && opts.after) {
+        const afterIndex = list.indexOf(opts.after);
+        if (afterIndex !== -1) {
+            insertAt = afterIndex + 1;
+        }
     }
 
-    function createUsersFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminUsers !== 'undefined' && window.AdminUsers && typeof window.AdminUsers.init === 'function') {
-                        window.AdminUsers.init();
-                    }
-                },
-                unmount: function () {}
-            };
+    list.splice(insertAt, 0, value);
+}
+
+function createInitFallback(globalName, configResolver) {
+    return function () {
+        return {
+            mount: function (_ctx, options) {
+                if (typeof globalWindow[globalName] === 'undefined') {
+                    return;
+                }
+                if (!globalWindow[globalName] || typeof globalWindow[globalName].init !== 'function') {
+                    return;
+                }
+                if (typeof configResolver === 'function') {
+                    globalWindow[globalName].init(configResolver(options || {}));
+                    return;
+                }
+                globalWindow[globalName].init();
+            },
+            unmount: function () {}
         };
-    }
+    };
+}
 
-    function createCharactersFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminCharacters !== 'undefined' && window.AdminCharacters && typeof window.AdminCharacters.init === 'function') {
-                        window.AdminCharacters.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
+const FALLBACK_FACTORIES = {
+    'admin.dashboard': createInitFallback('Dashboard', function (options) {
+        return (options && options.config) || globalWindow.DASHBOARD_CONFIG || globalWindow.ADMIN_DASHBOARD_CONFIG || null;
+    }),
+    'admin.users': createInitFallback('AdminUsers'),
+    'admin.characters': createInitFallback('AdminCharacters'),
+    'admin.blacklist': createInitFallback('AdminBlacklist'),
+    'admin.themes': createInitFallback('AdminThemes'),
+    'admin.modules': createInitFallback('AdminModules'),
+    'admin.maps': createInitFallback('AdminMaps'),
+    'admin.currencies': createInitFallback('AdminCurrencies'),
+    'admin.shops': createInitFallback('AdminShops'),
+    'admin.conflicts': createInitFallback('AdminConflicts'),
+    'admin.system-events': createInitFallback('AdminSystemEvents'),
+    'admin.location-position-tags': createInitFallback('AdminLocationPositionTags')
+};
 
-    function createBlacklistFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminBlacklist !== 'undefined' && window.AdminBlacklist && typeof window.AdminBlacklist.init === 'function') {
-                        window.AdminBlacklist.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function createModulesFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminModules !== 'undefined' && window.AdminModules && typeof window.AdminModules.init === 'function') {
-                        window.AdminModules.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function createThemesFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminThemes !== 'undefined' && window.AdminThemes && typeof window.AdminThemes.init === 'function') {
-                        window.AdminThemes.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function createCharacterAttributesFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminCharacterAttributes !== 'undefined' && window.AdminCharacterAttributes && typeof window.AdminCharacterAttributes.init === 'function') {
-                        window.AdminCharacterAttributes.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function createMapsFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminMaps !== 'undefined' && window.AdminMaps && typeof window.AdminMaps.init === 'function') {
-                        window.AdminMaps.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function createCurrenciesFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminCurrencies !== 'undefined' && window.AdminCurrencies && typeof window.AdminCurrencies.init === 'function') {
-                        window.AdminCurrencies.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function createShopsFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminShops !== 'undefined' && window.AdminShops && typeof window.AdminShops.init === 'function') {
-                        window.AdminShops.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function createConflictsFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminConflicts !== 'undefined' && window.AdminConflicts && typeof window.AdminConflicts.init === 'function') {
-                        window.AdminConflicts.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function createSystemEventsFallbackFactory() {
-        return function () {
-            return {
-                mount: function () {
-                    if (typeof window.AdminSystemEvents !== 'undefined' && window.AdminSystemEvents && typeof window.AdminSystemEvents.init === 'function') {
-                        window.AdminSystemEvents.init();
-                    }
-                },
-                unmount: function () {}
-            };
-        };
-    }
-
-    function resolveFactory(moduleName) {
-        var key = String(moduleName || '').trim();
-        if (!key) {
-            return createNoopFactory();
-        }
-
-        var factoryGlobalName = MODULE_FACTORY_MAP[key];
-        if (factoryGlobalName && typeof window[factoryGlobalName] === 'function') {
-            return window[factoryGlobalName];
-        }
-
-        if (key === 'admin.dashboard') {
-            return createDashboardFallbackFactory();
-        }
-        if (key === 'admin.users') {
-            return createUsersFallbackFactory();
-        }
-        if (key === 'admin.characters') {
-            return createCharactersFallbackFactory();
-        }
-        if (key === 'admin.blacklist') {
-            return createBlacklistFallbackFactory();
-        }
-        if (key === 'admin.themes') {
-            return createThemesFallbackFactory();
-        }
-        if (key === 'admin.modules') {
-            return createModulesFallbackFactory();
-        }
-        if (key === 'admin.character-attributes') {
-            return createCharacterAttributesFallbackFactory();
-        }
-        if (key === 'admin.maps') {
-            return createMapsFallbackFactory();
-        }
-        if (key === 'admin.currencies') {
-            return createCurrenciesFallbackFactory();
-        }
-        if (key === 'admin.shops') {
-            return createShopsFallbackFactory();
-        }
-        if (key === 'admin.conflicts') {
-            return createConflictsFallbackFactory();
-        }
-        if (key === 'admin.quests') {
-            return function () {
-                return {
-                    mount: function () {
-                        if (typeof window.AdminQuests !== 'undefined' && window.AdminQuests && typeof window.AdminQuests.init === 'function') {
-                            window.AdminQuests.init();
-                        }
-                    },
-                    unmount: function () {}
-                };
-            };
-        }
-        if (key === 'admin.system-events') {
-            return createSystemEventsFallbackFactory();
-        }
-
+export function resolveFactory(moduleName) {
+    const key = String(moduleName || '').trim();
+    if (!key) {
         return createNoopFactory();
     }
 
-    function getPageModules() {
-        return {
-            dashboard: ['admin.dashboard'],
-            users: ['admin.users'],
-            characters: ['admin.characters'],
-            blacklist: ['admin.blacklist'],
-            themes: ['admin.themes'],
-            modules: ['admin.modules'],
-            'character-attributes': ['admin.character-attributes'],
-            maps: ['admin.maps'],
-            currencies: ['admin.currencies'],
-            shops: ['admin.shops'],
-            conflicts: ['admin.conflicts'],
-            'narrative-events': ['admin.narrative-events'],
-            'narrative-states': ['admin.narrative-states'],
-            quests: ['admin.quests'],
-            'system-events': ['admin.system-events'],
-            'character-lifecycle': ['admin.character-lifecycle'],
-            factions: ['admin.factions'],
-            weather: ['admin.weather'],
-            'weather-overview': ['admin.weather-overview'],
-            'weather-catalogs': ['admin.weather-catalogs'],
-            'weather-profiles': ['admin.weather-profiles'],
-            'weather-overrides': ['admin.weather-overrides'],
-            'character-requests': ['admin.character-requests'],
-            'inventory-shop': ['admin.shop-inventory'],
-            locations: ['admin.locations'],
-            jobs: ['admin.jobs'],
-            'jobs-tasks': ['admin.jobs-tasks'],
-            'jobs-levels': ['admin.jobs-levels'],
-            'social-status': ['admin.social-status'],
-            guilds: ['admin.guilds'],
-            'guild-alignments': ['admin.guild-alignments'],
-            'guilds-reqs': ['admin.guild-reqs'],
-            'guilds-locations': ['admin.guild-locations'],
-            'guilds-events': ['admin.guild-events'],
-            'forums': ['admin.forums'],
-            'forums-types': ['admin.forum-types'],
-            'storyboards': ['admin.storyboards'],
-            'rules': ['admin.rules'],
-            'how-to-play': ['admin.how-to-play'],
-            'items': ['admin.items'],
-            'items-categories': ['admin.items-categories'],
-            'items-rarities': ['admin.items-rarities'],
-            'equipment-slots': ['admin.equipment-slots'],
-            'item-equipment-rules': ['admin.item-equipment-rules'],
-            'logs-conflicts': ['admin.logs-conflicts'],
-            'logs-currency': ['admin.logs-currency'],
-            'logs-experience': ['admin.logs-experience'],
-            'logs-fame': ['admin.logs-fame'],
-            'logs-guild': ['admin.logs-guild'],
-            'logs-job': ['admin.logs-job'],
-            'logs-location-access': ['admin.logs-location-access'],
-            'logs-sys': ['admin.logs-sys'],
-            'logs-narrative': ['admin.logs-narrative'],
-            'settings': ['admin.settings'],
-            'archetypes': ['admin.archetypes'],
-            'narrative-tags': ['admin.narrative-tags'],
-            'message-reports': ['admin.message-reports'],
-            'news': ['admin.news'],
-            'narrative-delegation-grants': ['admin.narrative-delegation-grants'],
-            'narrative-npcs': ['admin.narrative-npcs']
-        };
+    const factoryGlobalName = MODULE_FACTORY_MAP[key];
+    if (factoryGlobalName && typeof globalWindow[factoryGlobalName] === 'function') {
+        return globalWindow[factoryGlobalName];
     }
 
-    function getPageConfig() {
-        return {
-            selector: '#admin-page [data-admin-page]',
-            attribute: 'data-admin-page',
-            modules: getPageModules()
-        };
+    if (Object.prototype.hasOwnProperty.call(FALLBACK_FACTORIES, key)) {
+        return FALLBACK_FACTORIES[key];
     }
 
-    function registerModules(app) {
-        if (!app || typeof app.register !== 'function') {
-            return;
+    return createNoopFactory();
+}
+
+export function registerModule(key, factoryName) {
+    const k = String(key || '').trim();
+    const f = String(factoryName || '').trim();
+    if (k && f) {
+        MODULE_FACTORY_MAP[k] = f;
+    }
+}
+
+export function extendPage(pageKey, moduleKeys, opts) {
+    const k = String(pageKey || '').trim();
+    if (!k || !Array.isArray(moduleKeys) || !moduleKeys.length) {
+        return;
+    }
+    if (!PAGE_MODULES[k]) {
+        PAGE_MODULES[k] = [];
+    }
+
+    const order = normalizeOrderOptions(opts);
+    const uniqueKeys = [];
+    for (let i = 0; i < moduleKeys.length; i += 1) {
+        const mk = String(moduleKeys[i] || '').trim();
+        if (mk && uniqueKeys.indexOf(mk) === -1) {
+            uniqueKeys.push(mk);
         }
-
-        Object.keys(MODULE_FACTORY_MAP).forEach(function (moduleName) {
-            app.register(moduleName, resolveFactory(moduleName));
-        });
     }
 
-    window.AdminRegistry = window.AdminRegistry || {};
-    window.AdminRegistry.resolveFactory = resolveFactory;
-    window.AdminRegistry.getPageModules = getPageModules;
-    window.AdminRegistry.getPageConfig = getPageConfig;
-    window.AdminRegistry.registerModules = registerModules;
-})(window);
+    const keysToInsert = (order.after && !order.before)
+        ? uniqueKeys.slice().reverse()
+        : uniqueKeys;
+    for (let i = 0; i < keysToInsert.length; i += 1) {
+        insertUniqueWithOrder(PAGE_MODULES[k], keysToInsert[i], order);
+    }
+}
+
+export function getPageModules() {
+    return PAGE_MODULES;
+}
+
+export function getPageConfig() {
+    return {
+        selector: '#admin-page [data-admin-page]',
+        attribute: 'data-admin-page',
+        modules: getPageModules()
+    };
+}
+
+export function registerModules(app) {
+    if (!app || typeof app.register !== 'function') {
+        return;
+    }
+
+    Object.keys(MODULE_FACTORY_MAP).forEach(function (moduleName) {
+        app.register(moduleName, resolveFactory(moduleName));
+    });
+}
+
+export const AdminRegistryApi = {
+    resolveFactory,
+    getPageModules,
+    getPageConfig,
+    registerModules,
+    registerModule,
+    extendPage
+};
+
+globalWindow.AdminRegistry = globalWindow.AdminRegistry || {};
+globalWindow.AdminRegistry.resolveFactory = resolveFactory;
+globalWindow.AdminRegistry.getPageModules = getPageModules;
+globalWindow.AdminRegistry.getPageConfig = getPageConfig;
+globalWindow.AdminRegistry.registerModules = registerModules;
+globalWindow.AdminRegistry.registerModule = registerModule;
+globalWindow.AdminRegistry.extendPage = extendPage;
+
+export default AdminRegistryApi;

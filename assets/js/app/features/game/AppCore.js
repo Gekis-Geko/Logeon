@@ -1,16 +1,18 @@
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
+
 function App(extension) {
     function emitAppEvent(eventName) {
-        if (typeof window.AppEvents !== 'undefined' && typeof window.AppEvents.emit === 'function') {
-            window.AppEvents.emit(eventName);
+        if (typeof globalWindow.AppEvents !== 'undefined' && typeof globalWindow.AppEvents.emit === 'function') {
+            globalWindow.AppEvents.emit(eventName);
         }
     }
 
     function safeShowReloadToast() {
-        if (typeof window.Toast === 'undefined' || typeof window.Toast.show !== 'function') {
+        if (typeof globalWindow.Toast === 'undefined' || typeof globalWindow.Toast.show !== 'function') {
             return;
         }
 
-        window.Toast.show({
+        globalWindow.Toast.show({
             body: '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Aggiornamento in corso ...',
         });
     }
@@ -25,8 +27,6 @@ function App(extension) {
     }
 
     let pageFactories = {
-        Weather: 'GameWeatherPage',
-        WeatherStaff: 'GameWeatherStaffPage',
         News: 'GameNewsPage',
         AvailabilityObserver: 'GameAvailabilityObserverPage',
         Settings: 'GameSettingsPage',
@@ -96,8 +96,8 @@ function App(extension) {
                 return null;
             }
 
-            if (typeof window[key] === 'function') {
-                return window[key];
+            if (typeof globalWindow[key] === 'function') {
+                return globalWindow[key];
             }
 
             return null;
@@ -110,7 +110,7 @@ function App(extension) {
             }
 
             try {
-                return factory.apply(scope || window, Array.isArray(args) ? args : []);
+                return factory.apply(scope || globalWindow, Array.isArray(args) ? args : []);
             } catch (error) {
                 return null;
             }
@@ -154,6 +154,9 @@ function App(extension) {
     return o.init();
 }
 
-if (typeof window !== 'undefined' && typeof window.App !== 'function') {
-    window.App = App;
+if (typeof window !== 'undefined' && typeof globalWindow.App !== 'function') {
+    globalWindow.App = App;
 }
+export { App as App };
+export default App;
+

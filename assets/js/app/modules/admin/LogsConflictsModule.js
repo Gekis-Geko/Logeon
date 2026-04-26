@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminLogsConflictsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminLogsConflicts !== 'undefined'
-                    && window.AdminLogsConflicts
-                    && typeof window.AdminLogsConflicts.init === 'function') {
-                    window.AdminLogsConflicts.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminLogsConflictsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminLogsConflicts !== 'undefined'
+                && globalWindow.AdminLogsConflicts
+                && typeof globalWindow.AdminLogsConflicts.init === 'function') {
+                globalWindow.AdminLogsConflicts.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminLogsConflictsModuleFactory = createAdminLogsConflictsModule;
-})(window);
+globalWindow.AdminLogsConflictsModuleFactory = createAdminLogsConflictsModule;
+export { createAdminLogsConflictsModule as AdminLogsConflictsModuleFactory };
+export default createAdminLogsConflictsModule;
+

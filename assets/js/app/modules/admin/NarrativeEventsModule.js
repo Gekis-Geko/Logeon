@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createNarrativeEventsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminNarrativeEvents !== 'undefined'
-                    && window.AdminNarrativeEvents
-                    && typeof window.AdminNarrativeEvents.init === 'function') {
-                    window.AdminNarrativeEvents.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createNarrativeEventsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminNarrativeEvents !== 'undefined'
+                && globalWindow.AdminNarrativeEvents
+                && typeof globalWindow.AdminNarrativeEvents.init === 'function') {
+                globalWindow.AdminNarrativeEvents.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminNarrativeEventsModuleFactory = createNarrativeEventsModule;
-})(window);
+globalWindow.AdminNarrativeEventsModuleFactory = createNarrativeEventsModule;
+export { createNarrativeEventsModule as AdminNarrativeEventsModuleFactory };
+export default createNarrativeEventsModule;
+

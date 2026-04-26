@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminJobsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminJobs !== 'undefined'
-                    && window.AdminJobs
-                    && typeof window.AdminJobs.init === 'function') {
-                    window.AdminJobs.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminJobsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminJobs !== 'undefined'
+                && globalWindow.AdminJobs
+                && typeof globalWindow.AdminJobs.init === 'function') {
+                globalWindow.AdminJobs.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminJobsModuleFactory = createAdminJobsModule;
-})(window);
+globalWindow.AdminJobsModuleFactory = createAdminJobsModule;
+export { createAdminJobsModule as AdminJobsModuleFactory };
+export default createAdminJobsModule;
+

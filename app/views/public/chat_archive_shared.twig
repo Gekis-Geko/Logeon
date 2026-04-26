@@ -1,0 +1,37 @@
+{% extends theme_shell('public', 'layouts/layout.twig') %}
+
+{% block content %}
+<main>
+    <div class="container my-5">
+        <div id="chat-archive-shared-page" data-archive-token="{{ archive_token|e }}">
+            <div id="ca-shared-loading" class="text-center py-5">
+                <div class="spinner-border text-secondary" role="status"></div>
+            </div>
+            <div id="ca-shared-not-found" class="d-none text-center py-5">
+                <i class="bi bi-archive fs-1 text-muted d-block mb-3"></i>
+                <h4 class="text-muted">Archivio non trovato</h4>
+                <p class="text-muted small">Il link potrebbe essere scaduto o l'archivio è stato rimosso.</p>
+            </div>
+            <div id="ca-shared-content" class="d-none">
+                <div class="mb-4">
+                    <h2 id="ca-shared-title" class="mb-1"></h2>
+                    <div class="text-muted small d-flex flex-wrap gap-3" id="ca-shared-meta"></div>
+                </div>
+                <div id="ca-shared-disclaimer" class="alert alert-warning small">
+                    Questa giocata e uno snapshot selezionato dall'autore e potrebbe non includere l'intera scena.
+                </div>
+                <div id="ca-shared-summary" class="d-flex flex-wrap gap-2 small text-muted mb-2"></div>
+                <div id="ca-shared-excluded-wrap" class="small text-muted mb-3 d-none">
+                    Partecipanti esclusi:
+                    <span id="ca-shared-excluded-participants"></span>
+                </div>
+                <div id="ca-shared-created-by" class="small text-muted mb-3 d-none"></div>
+                <div id="ca-shared-messages" class="chat-archive-messages border rounded bg-white"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% include 'sys/modals/license.twig' %}
+
+{% endblock %}

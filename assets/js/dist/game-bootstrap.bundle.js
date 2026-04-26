@@ -1,0 +1,2 @@
+import{b as n}from"./chunks/chunk-3GOHTLAK.js";var t=n(()=>{window.APP_BOOTSTRAP_ENABLED=!0;window.APP_BOOTSTRAP_RUNTIME="game";function e(){window.GameRuntime&&typeof window.GameRuntime.start=="function"&&window.GameRuntime.start()}window.GameFeatureLoader&&typeof window.GameFeatureLoader.loadForCurrentPage=="function"?window.GameFeatureLoader.loadForCurrentPage().catch(function(){}).finally(function(){e()}):e()});export default t();
+//# sourceMappingURL=game-bootstrap.bundle.js.map

@@ -1,153 +1,146 @@
 #admin-page .admin-aside {
-    border-right: 1px solid rgba(128, 128, 128, 0.2);
+  border-right: 1px solid rgba(128, 128, 128, 0.2);
 }
 
 #admin-page > .row {
-    min-height: 100vh;
+  min-height: 100vh;
 }
 
 @media (min-width: 992px) {
-    #admin-page .admin-aside {
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        min-height: 100vh;
-        max-height: 100vh;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-    }
-
-    #admin-page #admin-list-menu {
-        flex: 1 1 0;
-        min-height: 0;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding-right: 0.35rem;
-    }
+  #admin-page .admin-aside {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 0.35rem;
+  }
 }
-
 #admin-page .admin-menu-section {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    cursor: pointer;
-    user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  user-select: none;
 }
 
 #admin-page .admin-menu-section > .bi {
-    font-size: 0.78rem;
-    transition: transform var(--swd-transition-fast);
+  font-size: 0.78rem;
+  transition: transform var(--swd-transition-fast);
 }
 
 #admin-page .admin-menu-section.is-open > .bi {
-    transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 #admin-page .admin-menu .nav-link {
-    border-radius: .5rem;
-    padding: .4rem .6rem;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
 }
 
 #admin-page .admin-menu .nav-link.active {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 #admin-page .admin-page-head {
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    gap: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  gap: 0.75rem;
 }
 
 #admin-page .admin-page-title h4 {
-    margin-bottom: 0.2rem;
+  margin-bottom: 0.2rem;
 }
 
 #admin-page .admin-page-title h6 {
-    margin-bottom: 0;
-    color: var(--lf-text-secondary);
+  margin-bottom: 0;
+  color: var(--lf-text-secondary);
 }
 
 #admin-page .admin-page-actions {
-    display: inline-flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 #admin-page .admin-filters-form .form-label {
-    margin-bottom: 0.25rem;
+  margin-bottom: 0.25rem;
 }
 
 #admin-page .admin-filters-form .form-control:not(.form-control-lg):not(.form-control-sm),
 #admin-page .admin-filters-form .form-select:not(.form-select-lg):not(.form-select-sm) {
-    font-size: 0.875rem;
+  font-size: 0.875rem;
 }
 
-#admin-page [id^="grid-admin-"] .admin-grid-actions {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
+#admin-page [id^=grid-admin-] .admin-grid-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
-#admin-page [id^="grid-admin-"] .admin-grid-action {
-    width: 2rem;
-    min-width: 2rem;
-    height: 2rem;
-    padding: 0;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+#admin-page [id^=grid-admin-] .admin-grid-action {
+  width: 2rem;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#admin-page [id^="grid-admin-"] .admin-grid-action i {
-    line-height: 1;
-    pointer-events: none;
+#admin-page [id^=grid-admin-] .admin-grid-action i {
+  line-height: 1;
+  pointer-events: none;
 }
 
 .admin-chart-wrap {
-    min-height: 220px;
+  min-height: 220px;
 }
 
 .admin-chart-wrap svg {
-    width: 100%;
-    height: auto;
-    display: block;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 
 .admin-chart-legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem;
-    margin-top: .75rem;
-    font-size: .85rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
 }
 
 .admin-chart-legend span {
-    display: inline-flex;
-    align-items: center;
-    gap: .35rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .admin-chart-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 999px;
-    display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  display: inline-block;
 }
 
 .admin-compare {
-    line-height: 1.2;
+  line-height: 1.2;
 }
 
 .admin-compare-up {
-    color: #22C55E;
+  color: #22C55E;
 }
 
 .admin-compare-down {
-    color: #EF4444;
+  color: #EF4444;
 }
 
 .admin-compare-flat {
-    color: var(--lf-text-secondary);
+  color: var(--lf-text-secondary);
 }
+
+/*# sourceMappingURL=admin.css.map */

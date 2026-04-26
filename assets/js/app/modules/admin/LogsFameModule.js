@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminLogsFameModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminLogsFame !== 'undefined'
-                    && window.AdminLogsFame
-                    && typeof window.AdminLogsFame.init === 'function') {
-                    window.AdminLogsFame.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminLogsFameModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminLogsFame !== 'undefined'
+                && globalWindow.AdminLogsFame
+                && typeof globalWindow.AdminLogsFame.init === 'function') {
+                globalWindow.AdminLogsFame.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminLogsFameModuleFactory = createAdminLogsFameModule;
-})(window);
+globalWindow.AdminLogsFameModuleFactory = createAdminLogsFameModule;
+export { createAdminLogsFameModule as AdminLogsFameModuleFactory };
+export default createAdminLogsFameModule;
+

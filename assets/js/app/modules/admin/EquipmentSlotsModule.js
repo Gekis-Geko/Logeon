@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminEquipmentSlotsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminEquipmentSlots !== 'undefined'
-                    && window.AdminEquipmentSlots
-                    && typeof window.AdminEquipmentSlots.init === 'function') {
-                    window.AdminEquipmentSlots.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminEquipmentSlotsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminEquipmentSlots !== 'undefined'
+                && globalWindow.AdminEquipmentSlots
+                && typeof globalWindow.AdminEquipmentSlots.init === 'function') {
+                globalWindow.AdminEquipmentSlots.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminEquipmentSlotsModuleFactory = createAdminEquipmentSlotsModule;
-})(window);
+globalWindow.AdminEquipmentSlotsModuleFactory = createAdminEquipmentSlotsModule;
+export { createAdminEquipmentSlotsModule as AdminEquipmentSlotsModuleFactory };
+export default createAdminEquipmentSlotsModule;
+

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../app/core/bootstrap.admin.js"],
+  "sourcesContent": ["window.APP_BOOTSTRAP_ENABLED = true;\nwindow.APP_BOOTSTRAP_RUNTIME = 'admin';\n\nfunction startRuntime() {\n    if (window.AdminRuntime && typeof window.AdminRuntime.start === 'function') {\n        window.AdminRuntime.start();\n    }\n}\n\nif (window.AdminFeatureLoader && typeof window.AdminFeatureLoader.loadForCurrentPage === 'function') {\n    window.AdminFeatureLoader.loadForCurrentPage()\n        .catch(function () {})\n        .finally(function () {\n            startRuntime();\n        });\n} else {\n    startRuntime();\n}\n"],
+  "mappings": "+CAAA,IAAAA,EAAAC,EAAA,YAAO,sBAAwB,GAC/B,OAAO,sBAAwB,QAE/B,SAASC,GAAe,CAChB,OAAO,cAAgB,OAAO,OAAO,aAAa,OAAU,YAC5D,OAAO,aAAa,MAAM,CAElC,CAEI,OAAO,oBAAsB,OAAO,OAAO,mBAAmB,oBAAuB,WACrF,OAAO,mBAAmB,mBAAmB,EACxC,MAAM,UAAY,CAAC,CAAC,EACpB,QAAQ,UAAY,CACjBA,EAAa,CACjB,CAAC,EAELA,EAAa",
+  "names": ["require_bootstrap_admin", "__commonJSMin", "startRuntime"]
+}

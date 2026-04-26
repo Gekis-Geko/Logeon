@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminGuildsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminGuilds !== 'undefined'
-                    && window.AdminGuilds
-                    && typeof window.AdminGuilds.init === 'function') {
-                    window.AdminGuilds.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminGuildsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminGuilds !== 'undefined'
+                && globalWindow.AdminGuilds
+                && typeof globalWindow.AdminGuilds.init === 'function') {
+                globalWindow.AdminGuilds.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminGuildsModuleFactory = createAdminGuildsModule;
-})(window);
+globalWindow.AdminGuildsModuleFactory = createAdminGuildsModule;
+export { createAdminGuildsModule as AdminGuildsModuleFactory };
+export default createAdminGuildsModule;
+

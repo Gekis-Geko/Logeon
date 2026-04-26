@@ -375,13 +375,7 @@ if (typeof window !== 'undefined') {
     window.Request = Request;
 }
 
-(function (window) {
-    'use strict';
-
-    if (typeof window === 'undefined' || typeof window.Request !== 'function') {
-        return;
-    }
-
+if (typeof window !== 'undefined' && typeof window.Request === 'function') {
     function getCsrfToken() {
         if (typeof document === 'undefined') {
             return '';
@@ -906,5 +900,5 @@ if (typeof window !== 'undefined') {
         };
     };
     window.HttpService = http;
-})(window);
+}
 

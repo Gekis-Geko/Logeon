@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../app/core/bootstrap.game.js"],
+  "sourcesContent": ["window.APP_BOOTSTRAP_ENABLED = true;\nwindow.APP_BOOTSTRAP_RUNTIME = 'game';\n\nfunction startRuntime() {\n    if (window.GameRuntime && typeof window.GameRuntime.start === 'function') {\n        window.GameRuntime.start();\n    }\n}\n\nif (window.GameFeatureLoader && typeof window.GameFeatureLoader.loadForCurrentPage === 'function') {\n    window.GameFeatureLoader.loadForCurrentPage()\n        .catch(function () {})\n        .finally(function () {\n            startRuntime();\n        });\n} else {\n    startRuntime();\n}\n"],
+  "mappings": "+CAAA,IAAAA,EAAAC,EAAA,YAAO,sBAAwB,GAC/B,OAAO,sBAAwB,OAE/B,SAASC,GAAe,CAChB,OAAO,aAAe,OAAO,OAAO,YAAY,OAAU,YAC1D,OAAO,YAAY,MAAM,CAEjC,CAEI,OAAO,mBAAqB,OAAO,OAAO,kBAAkB,oBAAuB,WACnF,OAAO,kBAAkB,mBAAmB,EACvC,MAAM,UAAY,CAAC,CAAC,EACpB,QAAQ,UAAY,CACjBA,EAAa,CACjB,CAAC,EAELA,EAAa",
+  "names": ["require_bootstrap_game", "__commonJSMin", "startRuntime"]
+}

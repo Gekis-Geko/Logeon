@@ -59,12 +59,16 @@ function DocsRender(containerSelector, options) {
             loadingText: 'Caricamento contenuti...',
             errorText: 'Impossibile caricare il contenuto.',
             cacheResponse: true,
-            requestPayload: {}
+            requestPayload: {},
+            viewMode: 'navigation'
         };
         var merged = Object.assign({}, base, opts || {});
         merged.prefix = sanitizePrefix(merged.prefix, selector);
         if (!merged.requestPayload || typeof merged.requestPayload !== 'object') {
             merged.requestPayload = {};
+        }
+        if (merged.viewMode !== 'monolithic') {
+            merged.viewMode = 'navigation';
         }
         return merged;
     }
@@ -129,13 +133,21 @@ function DocsRender(containerSelector, options) {
                 this.$nav = this.$container.find('[data-role="docs-nav"]').first();
                 this.$content = this.$container.find('[data-role="docs-content"]').first();
                 this.$filter = this.$container.find('[data-role="docs-filter"]').first();
-                if (!this.$nav.length || !this.$content.length) {
+
+                var isMonolithic = this.settings.viewMode === 'monolithic';
+                if (!this.$content.length) {
+                    this.mounted = false;
+                    return this;
+                }
+                if (!isMonolithic && !this.$nav.length) {
                     this.mounted = false;
                     return this;
                 }
 
                 this._filterNs = '.docsrender_' + sanitizePrefix(this.selector, this.settings.prefix || 'docs');
-                this.bindFilter();
+                if (!isMonolithic) {
+                    this.bindFilter();
+                }
                 this.mounted = true;
                 return this;
             },
@@ -343,6 +355,60 @@ function DocsRender(containerSelector, options) {
                 return this;
             },
 
+            renderMonolithic: function (response) {
+                var chapters = (response && response.chapters) ? response.chapters : [];
+                this.responseCache = response || { chapters: [] };
+                this.loaded = true;
+
+                if (!this.$content || !this.$content.length) {
+                    return this;
+                }
+
+                this.$content.empty();
+
+                if (!chapters.length) {
+                    this.$content.html('<div class="text-muted py-3">' + this.settings.emptyText + '</div>');
+                    return this;
+                }
+
+                for (var i = 0; i < chapters.length; i++) {
+                    var chapter = chapters[i] || {};
+                    var chapterKey = (chapter.chapter != null) ? chapter.chapter : (i + 1);
+                    var label = chapter.label || (this.settings.label + ' ' + chapterKey);
+                    if (!chapter.label && chapter.title) {
+                        label += ' - ' + chapter.title;
+                    }
+
+                    var $section = $('<section class="docs-monolithic-chapter mb-5"></section>');
+                    $section.append($('<h2 class="h4 mb-3 border-bottom pb-2"></h2>').text(label));
+
+                    if (chapter.body) {
+                        $section.append($('<div class="p-2 mb-2"></div>').html(chapter.body));
+                    }
+
+                    if (Array.isArray(chapter.subchapters) && chapter.subchapters.length) {
+                        for (var s = 0; s < chapter.subchapters.length; s++) {
+                            var sub = chapter.subchapters[s] || {};
+                            var subKey = (sub.subchapter != null) ? sub.subchapter : (s + 1);
+                            var subLabel = this.settings.subLabel + ' ' + chapterKey + '.' + subKey;
+                            if (sub.title) {
+                                subLabel += ' - ' + sub.title;
+                            }
+                            var $block = $('<div class="mt-4"></div>');
+                            $block.append($('<h3 class="h5 fw-semibold"></h3>').text(subLabel));
+                            if (sub.body) {
+                                $block.append($('<div class="p-2"></div>').html(sub.body));
+                            }
+                            $section.append($block);
+                        }
+                    }
+
+                    this.$content.append($section);
+                }
+
+                return this;
+            },
+
             load: function (opts) {
                 var cfg = (opts && typeof opts === 'object') ? opts : {};
                 var force = cfg.force === true;
@@ -361,7 +427,8 @@ function DocsRender(containerSelector, options) {
                 }
 
                 if (!force && this.loaded && this.settings.cacheResponse !== false && this.responseCache) {
-                    this.renderTabs(this.responseCache);
+                    var cachedRender = (this.settings.viewMode === 'monolithic') ? 'renderMonolithic' : 'renderTabs';
+                    this[cachedRender](this.responseCache);
                     return Promise.resolve(this);
                 }
 
@@ -376,12 +443,13 @@ function DocsRender(containerSelector, options) {
                 var currentRequestId = this.requestId;
                 this.setLoading(true);
 
+                var renderMethod = (self.settings.viewMode === 'monolithic') ? 'renderMonolithic' : 'renderTabs';
                 return requestApi.http.post(this.settings.url, payload).then(function (response) {
                     if (self.destroyed === true || currentRequestId !== self.requestId) {
                         return self;
                     }
                     self.setLoading(false);
-                    self.renderTabs(response);
+                    self[renderMethod](response);
                     return self;
                 }).catch(function (error) {
                     if (self.destroyed === true || currentRequestId !== self.requestId) {

@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminNewsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminNews !== 'undefined'
-                    && window.AdminNews
-                    && typeof window.AdminNews.init === 'function') {
-                    window.AdminNews.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminNewsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminNews !== 'undefined'
+                && globalWindow.AdminNews
+                && typeof globalWindow.AdminNews.init === 'function') {
+                globalWindow.AdminNews.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminNewsModuleFactory = createAdminNewsModule;
-})(window);
+globalWindow.AdminNewsModuleFactory = createAdminNewsModule;
+export { createAdminNewsModule as AdminNewsModuleFactory };
+export default createAdminNewsModule;
+

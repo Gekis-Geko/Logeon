@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminHowToPlayModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminHowToPlay !== 'undefined'
-                    && window.AdminHowToPlay
-                    && typeof window.AdminHowToPlay.init === 'function') {
-                    window.AdminHowToPlay.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminHowToPlayModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminHowToPlay !== 'undefined'
+                && globalWindow.AdminHowToPlay
+                && typeof globalWindow.AdminHowToPlay.init === 'function') {
+                globalWindow.AdminHowToPlay.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminHowToPlayModuleFactory = createAdminHowToPlayModule;
-})(window);
+globalWindow.AdminHowToPlayModuleFactory = createAdminHowToPlayModule;
+export { createAdminHowToPlayModule as AdminHowToPlayModuleFactory };
+export default createAdminHowToPlayModule;
+

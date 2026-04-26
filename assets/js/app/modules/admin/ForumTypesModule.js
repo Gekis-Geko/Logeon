@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminForumTypesModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminForumTypes !== 'undefined'
-                    && window.AdminForumTypes
-                    && typeof window.AdminForumTypes.init === 'function') {
-                    window.AdminForumTypes.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminForumTypesModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminForumTypes !== 'undefined'
+                && globalWindow.AdminForumTypes
+                && typeof globalWindow.AdminForumTypes.init === 'function') {
+                globalWindow.AdminForumTypes.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminForumTypesModuleFactory = createAdminForumTypesModule;
-})(window);
+globalWindow.AdminForumTypesModuleFactory = createAdminForumTypesModule;
+export { createAdminForumTypesModule as AdminForumTypesModuleFactory };
+export default createAdminForumTypesModule;
+

@@ -1,16 +1,17 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function AdminSettingsModuleFactory() {
-        return {
-            mount: function () {
-                if (typeof window.AdminSettings !== 'undefined' && window.AdminSettings && typeof window.AdminSettings.init === 'function') {
-                    window.AdminSettings.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function AdminSettingsModuleFactory() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminSettings !== 'undefined' && globalWindow.AdminSettings && typeof globalWindow.AdminSettings.init === 'function') {
+                globalWindow.AdminSettings.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminSettingsModuleFactory = AdminSettingsModuleFactory;
-})(window);
+globalWindow.AdminSettingsModuleFactory = AdminSettingsModuleFactory;
+export { AdminSettingsModuleFactory as AdminSettingsModuleFactory };
+export default AdminSettingsModuleFactory;
+

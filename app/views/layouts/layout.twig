@@ -4,7 +4,7 @@
         {% include 'layouts/navbar.twig' %}
     {% endblock %}
     {% set pilot_bundle_version = APP.frontend.pilot_bundle_version|default('20260403') %}
-    <script type="text/javascript" src="/assets/js/dist/public-core.bundle.js?v={{ pilot_bundle_version }}"></script>
+    <script type="module" src="/assets/js/dist/public-core.bundle.js?v={{ pilot_bundle_version }}"></script>
     {% block public_page_content %}
         <section class="container-fluid">
             <section class="row">

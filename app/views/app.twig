@@ -44,14 +44,6 @@
                     </a>
                 </div>
                 <div class="col-6 col-md-4 col-xl-2">
-                    <a href="#" class="card h-100 text-decoration-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasQuests" aria-controls="offcanvasQuests">
-                        <div class="card-body text-center">
-                            <div class="mb-2"><span class="bi bi-journal-text h4"></span></div>
-                            <div class="small">Quest</div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-6 col-md-4 col-xl-2">
                     <a href="#" class="card h-100 text-decoration-none" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSystemEvents" aria-controls="offcanvasSystemEvents">
                         <div class="card-body text-center">
                             <div class="mb-2"><span class="bi bi-calendar-event h4"></span></div>
@@ -75,6 +67,7 @@
                         </div>
                     </a>
                 </div>
+                {{ slot('game.home.quick_actions') }}
             </div>
         </section>
 
@@ -90,7 +83,6 @@
                             'conflict': 'Conflitto',
                             'faction': 'Fazione',
                             'system_event': 'Evento',
-                            'quest': 'Quest',
                             'lifecycle': 'Ciclo vita',
                             'manual': 'Manuale',
                             'system': 'Sistema'
@@ -99,7 +91,6 @@
                             'conflict': '/assets/imgs/defaults-images/icons/last-activity-conflict.png',
                             'faction': '/assets/imgs/defaults-images/icons/last-activity-faction.png',
                             'system_event': '/assets/imgs/defaults-images/icons/last-activity-event.png',
-                            'quest': '/assets/imgs/defaults-images/icons/last-activity-quest.png',
                             'lifecycle': '/assets/imgs/defaults-images/icons/last-activity-lifecycle.png',
                             'manual': '/assets/imgs/defaults-images/icons/last-activity-manual.png',
                             'system': '/assets/imgs/defaults-images/icons/last-activity-event.png'
@@ -107,7 +98,8 @@
                         {% if recent_events|default([])|length > 0 %}
                             {% for event in recent_events|slice(0, 8) %}
                                 {% set event_source = event.source_system|default('manual') %}
-                                {% set event_label = source_labels[event_source]|default(event_source|default('Evento')) %}
+                                {% set event_label_default = event_source|replace({'_': ' '})|title %}
+                                {% set event_label = source_labels[event_source]|default(event_label_default|default('Evento')) %}
                                 {% set event_icon = source_icons[event_source]|default('/assets/imgs/defaults-images/icons/last-activity-event.png') %}
                                 {% set event_description = (event.description|default('')|striptags)|trim %}
                                 <div class="list-group-item">

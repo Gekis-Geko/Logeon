@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminShopInventoryModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminShopInventory !== 'undefined'
-                    && window.AdminShopInventory
-                    && typeof window.AdminShopInventory.init === 'function') {
-                    window.AdminShopInventory.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminShopInventoryModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminShopInventory !== 'undefined'
+                && globalWindow.AdminShopInventory
+                && typeof globalWindow.AdminShopInventory.init === 'function') {
+                globalWindow.AdminShopInventory.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminShopInventoryModuleFactory = createAdminShopInventoryModule;
-})(window);
+globalWindow.AdminShopInventoryModuleFactory = createAdminShopInventoryModule;
+export { createAdminShopInventoryModule as AdminShopInventoryModuleFactory };
+export default createAdminShopInventoryModule;
+

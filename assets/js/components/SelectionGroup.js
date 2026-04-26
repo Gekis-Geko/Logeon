@@ -338,12 +338,19 @@ function SelectionGroup(input, extension) {
                 style = 'primary';
             }
 
-            return $('<button type="button"></button>')
+            var button = $('<button type="button"></button>')
                 .addClass('btn btn-' + style)
                 .attr('data-value', value)
                 .attr('data-option-disabled', (elem && elem.disabled === true) ? '1' : '0')
-                .prop('disabled', elem && elem.disabled === true)
-                .text(String(label));
+                .prop('disabled', elem && elem.disabled === true);
+
+            if (elem.html === true) {
+                button.html(String(label));
+            } else {
+                button.text(String(label));
+            }
+
+            return button;
         },
 
         onChangeValue: function () {

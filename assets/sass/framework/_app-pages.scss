@@ -157,73 +157,34 @@
     line-height: 1.5 !important;
 }
 
-#settings-page .accordion-item,
 #profile-edit-page .accordion-item {
     overflow: hidden;
     background: var(--lf-surface);
     border: 1px solid var(--lf-border);
 }
 
-#settings-page .accordion-button,
 #profile-edit-page .accordion-button {
     font-weight: 700;
     color: var(--lf-text-primary);
     background: var(--lf-surface-alt);
 }
 
-#settings-page .accordion-button::after,
 #profile-edit-page .accordion-button::after {
     filter: invert(1) grayscale(1) brightness(1.35);
 }
 
-#settings-page .accordion-button:not(.collapsed),
 #profile-edit-page .accordion-button:not(.collapsed) {
     color: var(--lf-text-primary);
     background: rgba(139, 92, 246, 0.12);
 }
 
-#settings-page .accordion-button:focus,
 #profile-edit-page .accordion-button:focus {
     box-shadow: 0 0 0 0.15rem rgba(139, 92, 246, 0.28);
 }
 
-#settings-page .accordion-body,
 #profile-edit-page .accordion-body {
     background: var(--lf-surface);
     color: var(--lf-text-primary);
-}
-
-/* Settings accordion: single joined stack (rounded only first/last item) */
-#settings-page .accordion-item {
-    border-radius: 0;
-}
-
-#settings-page .accordion-item:not(:first-of-type) {
-    border-top: 0;
-}
-
-#settings-page .accordion-item:first-of-type {
-    border-top-left-radius: var(--swd-radius);
-    border-top-right-radius: var(--swd-radius);
-}
-
-#settings-page .accordion-item:last-of-type {
-    border-bottom-left-radius: var(--swd-radius);
-    border-bottom-right-radius: var(--swd-radius);
-}
-
-#settings-page .accordion-button {
-    border-radius: 0;
-}
-
-#settings-page .accordion-item:first-of-type .accordion-button {
-    border-top-left-radius: var(--swd-radius);
-    border-top-right-radius: var(--swd-radius);
-}
-
-#settings-page .accordion-item:last-of-type .accordion-button.collapsed {
-    border-bottom-left-radius: var(--swd-radius);
-    border-bottom-right-radius: var(--swd-radius);
 }
 
 #locations-page #map-visual {
@@ -231,7 +192,6 @@
 }
 
 #locations-page #map-visual .position-relative {
-    border-radius: 12px;
     overflow: hidden;
 }
 

@@ -414,7 +414,14 @@ legend {
   max-width: 100%;
   padding: 0;
   margin-bottom: 0.5rem;
-  font-size: 1.5rem;
+  font-size: calc(1.275rem + 0.3vw);
+}
+@media (min-width: 1200px) {
+  legend {
+    font-size: 1.5rem;
+  }
+}
+legend {
   line-height: inherit;
   color: inherit;
   white-space: normal;
@@ -468,19 +475,39 @@ h1, h2, h3, h4, h5, h6,
 }
 
 h1, .h1 {
-  font-size: 2.5rem;
+  font-size: calc(1.375rem + 1.5vw);
+}
+@media (min-width: 1200px) {
+  h1, .h1 {
+    font-size: 2.5rem;
+  }
 }
 
 h2, .h2 {
-  font-size: 2rem;
+  font-size: calc(1.325rem + 0.9vw);
+}
+@media (min-width: 1200px) {
+  h2, .h2 {
+    font-size: 2rem;
+  }
 }
 
 h3, .h3 {
-  font-size: 1.75rem;
+  font-size: calc(1.3rem + 0.6vw);
+}
+@media (min-width: 1200px) {
+  h3, .h3 {
+    font-size: 1.75rem;
+  }
 }
 
 h4, .h4 {
-  font-size: 1.5rem;
+  font-size: calc(1.275rem + 0.3vw);
+}
+@media (min-width: 1200px) {
+  h4, .h4 {
+    font-size: 1.5rem;
+  }
 }
 
 h5, .h5 {
@@ -497,25 +524,53 @@ h6, .h6 {
 }
 
 .display-1 {
-  font-size: 6rem;
+  font-size: calc(1.725rem + 5.7vw);
+}
+@media (min-width: 1200px) {
+  .display-1 {
+    font-size: 6rem;
+  }
+}
+.display-1 {
   font-weight: 300;
   line-height: 1.2;
 }
 
 .display-2 {
-  font-size: 5.5rem;
+  font-size: calc(1.675rem + 5.1vw);
+}
+@media (min-width: 1200px) {
+  .display-2 {
+    font-size: 5.5rem;
+  }
+}
+.display-2 {
   font-weight: 300;
   line-height: 1.2;
 }
 
 .display-3 {
-  font-size: 4.5rem;
+  font-size: calc(1.575rem + 3.9vw);
+}
+@media (min-width: 1200px) {
+  .display-3 {
+    font-size: 4.5rem;
+  }
+}
+.display-3 {
   font-weight: 300;
   line-height: 1.2;
 }
 
 .display-4 {
-  font-size: 3.5rem;
+  font-size: calc(1.475rem + 2.7vw);
+}
+@media (min-width: 1200px) {
+  .display-4 {
+    font-size: 3.5rem;
+  }
+}
+.display-4 {
   font-weight: 300;
   line-height: 1.2;
 }
@@ -1916,13 +1971,9 @@ pre code {
   color: #7E8AA6;
   opacity: 1;
 }
-.form-control:disabled, .form-control[readonly], .form-select:disabled, textarea.form-control:disabled, textarea.form-control[readonly] {
-  background-color: #121827;
-  color: var(--lf-text-primary);
-  -webkit-text-fill-color: var(--lf-text-primary);
-  border-color: var(--lf-border);
+.form-control:disabled, .form-control[readonly] {
+  background-color: rgb(14.2, 18.6, 29.2);
   opacity: 1;
-  cursor: not-allowed;
 }
 
 input[type=date].form-control,
@@ -5279,7 +5330,14 @@ a.badge-dark:focus, a.badge-dark.focus {
 
 .close {
   float: right;
-  font-size: 1.5rem;
+  font-size: calc(1.275rem + 0.3vw);
+}
+@media (min-width: 1200px) {
+  .close {
+    font-size: 1.5rem;
+  }
+}
+.close {
   font-weight: 700;
   line-height: 1;
   color: #EAF0FF;
@@ -9485,6 +9543,19 @@ small.text-muted {
   color: var(--lf-muted);
 }
 
+.form-control:disabled,
+.form-control[readonly],
+.form-select:disabled,
+textarea.form-control:disabled,
+textarea.form-control[readonly] {
+  opacity: 1;
+  color: var(--lf-text-primary);
+  -webkit-text-fill-color: var(--lf-text-primary);
+  background-color: var(--lf-surface);
+  border-color: var(--lf-border);
+  cursor: not-allowed;
+}
+
 .form-control:focus,
 .form-select:focus,
 .form-check-input:focus {
@@ -9653,7 +9724,7 @@ input[type=search]::-webkit-search-cancel-button {
 
 .btn-outline-warning {
   --bs-btn-color: #ffe2ad;
-  --bs-btn-border-color: rgba(245, 158, 11, 0.45);
+  --bs-btn-border-color: rgba(245, 158, 11, .45);
   --bs-btn-hover-color: var(--lf-bg);
   --bs-btn-hover-bg: #f59e0b;
   --bs-btn-hover-border-color: #f59e0b;
@@ -9661,7 +9732,7 @@ input[type=search]::-webkit-search-cancel-button {
   --bs-btn-active-bg: #f59e0b;
   --bs-btn-active-border-color: #f59e0b;
   --bs-btn-disabled-color: #ffe2ad;
-  --bs-btn-disabled-border-color: rgba(245, 158, 11, 0.45);
+  --bs-btn-disabled-border-color: rgba(245, 158, 11, .45);
 }
 
 .alert.alert-info,
@@ -9787,11 +9858,6 @@ input[type=search]::-webkit-search-cancel-button {
   opacity: 0.95;
 }
 
-/*.modal .modal-header .btn-close,
-.offcanvas .offcanvas-header .btn-close {
-  margin: 0;
-}*/
-
 /* Navbar toggler icon — almost white on dark surfaces (mirrors .btn-close approach) */
 .navbar-toggler-icon {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%23EAF0FF' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
@@ -9801,6 +9867,10 @@ input[type=search]::-webkit-search-cancel-button {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='%231F2937' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
+/*.modal .modal-header .btn-close,
+.offcanvas .offcanvas-header .btn-close {
+    margin: 0;
+}*/
 /* Dark-surface contrast fixes */
 hr {
   border-top-color: rgba(234, 240, 255, 0.26);
@@ -9934,3 +10004,5 @@ a.text-light {
 .ui-richtext .note-toolbar .dropdown-toggle::after {
   border-top-color: var(--lf-text-secondary);
 }
+
+/*# sourceMappingURL=style.css.map */

@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminItemsRaritiesModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminItemsRarities !== 'undefined'
-                    && window.AdminItemsRarities
-                    && typeof window.AdminItemsRarities.init === 'function') {
-                    window.AdminItemsRarities.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminItemsRaritiesModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminItemsRarities !== 'undefined'
+                && globalWindow.AdminItemsRarities
+                && typeof globalWindow.AdminItemsRarities.init === 'function') {
+                globalWindow.AdminItemsRarities.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminItemsRaritiesModuleFactory = createAdminItemsRaritiesModule;
-})(window);
+globalWindow.AdminItemsRaritiesModuleFactory = createAdminItemsRaritiesModule;
+export { createAdminItemsRaritiesModule as AdminItemsRaritiesModuleFactory };
+export default createAdminItemsRaritiesModule;
+

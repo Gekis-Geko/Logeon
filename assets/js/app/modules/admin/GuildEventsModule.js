@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminGuildEventsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminGuildEvents !== 'undefined'
-                    && window.AdminGuildEvents
-                    && typeof window.AdminGuildEvents.init === 'function') {
-                    window.AdminGuildEvents.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminGuildEventsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminGuildEvents !== 'undefined'
+                && globalWindow.AdminGuildEvents
+                && typeof globalWindow.AdminGuildEvents.init === 'function') {
+                globalWindow.AdminGuildEvents.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminGuildEventsModuleFactory = createAdminGuildEventsModule;
-})(window);
+globalWindow.AdminGuildEventsModuleFactory = createAdminGuildEventsModule;
+export { createAdminGuildEventsModule as AdminGuildEventsModuleFactory };
+export default createAdminGuildEventsModule;
+

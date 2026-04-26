@@ -1,0 +1,171 @@
+.tiptap-editor {
+    border: 1px solid var(--swd-border-strong, var(--bs-border-color, #495057));
+    border-radius: 10px;
+    background: var(--lf-surface-alt, var(--bs-body-bg, #fff));
+    overflow: hidden;
+    transition:
+        border-color var(--swd-transition-fast, 0.16s ease-in-out),
+        box-shadow var(--swd-transition-fast, 0.16s ease-in-out),
+        background-color var(--swd-transition-fast, 0.16s ease-in-out);
+
+    &.is-disabled {
+        opacity: 0.7;
+    }
+
+    &:focus-within {
+        border-color: var(--lf-primary, #8b5cf6);
+        box-shadow: 0 0 0 0.15rem rgba(139, 92, 246, 0.28);
+    }
+}
+
+.tiptap-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.375rem;
+    padding: 0.6rem;
+    border-bottom: 1px solid var(--swd-border, var(--bs-border-color, #495057));
+    background: var(--lf-surface-alt, #0f1420);
+
+    &.is-busy {
+        cursor: progress;
+    }
+}
+
+.tiptap-toolbar-btn {
+    min-width: 2.25rem;
+    height: 2.25rem;
+    padding: 0.35rem 0.55rem;
+    color: var(--lf-text-secondary, var(--bs-secondary-color, #a9b4cc));
+    background: var(--lf-surface, #121827);
+    border-color: var(--swd-border-strong, var(--bs-border-color, #495057));
+    border-radius: 10px;
+    box-shadow: none;
+
+    &:hover,
+    &:focus,
+    &:active {
+        color: var(--lf-text-primary, var(--bs-body-color, #eaf0ff));
+        background: var(--lf-surface-alt, #0f1420);
+        border-color: var(--lf-primary, #8b5cf6);
+        box-shadow: none;
+    }
+
+    &.active,
+    &.active:hover,
+    &.active:focus {
+        color: var(--lf-text-primary, #eaf0ff);
+        background: rgba(139, 92, 246, 0.18);
+        border-color: rgba(139, 92, 246, 0.45);
+    }
+
+    &.is-loading {
+        position: relative;
+
+        &::after {
+            content: "";
+            position: absolute;
+            inset: 0.45rem;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: tiptap-spin 0.9s linear infinite;
+        }
+    }
+}
+
+.tiptap-separator {
+    width: 1px;
+    height: 1.75rem;
+    background: var(--swd-border, var(--bs-border-color, #495057));
+    opacity: 0.9;
+}
+
+.tiptap-heading-select {
+    width: auto;
+    min-width: 7rem;
+    height: 2.25rem;
+    color: var(--lf-text-primary, var(--bs-body-color, #eaf0ff));
+    background-color: var(--lf-surface, var(--bs-form-control-bg, #121827));
+    border-color: var(--swd-border-strong, var(--bs-border-color, #495057));
+    border-radius: 10px;
+    box-shadow: none;
+
+    &:focus {
+        border-color: var(--lf-primary, #8b5cf6);
+        box-shadow: 0 0 0 0.15rem rgba(139, 92, 246, 0.28);
+    }
+}
+
+.tiptap-editor__content {
+    padding: 0.9rem 1rem;
+    background: var(--lf-surface, var(--bs-form-control-bg, #121827));
+}
+
+.tiptap-editor__prose {
+    min-height: inherit;
+    outline: none;
+    white-space: pre-wrap;
+    color: var(--lf-text-primary, var(--bs-body-color, #eaf0ff));
+    line-height: 1.55;
+
+    > *:first-child {
+        margin-top: 0;
+    }
+
+    > *:last-child {
+        margin-bottom: 0;
+    }
+
+    p,
+    li,
+    h3,
+    h4,
+    h5,
+    h6,
+    blockquote {
+        color: inherit;
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0.75rem auto;
+        border-radius: 0.375rem;
+    }
+
+    hr {
+        margin: 1rem 0;
+        border: 0;
+        border-top: 1px solid rgba(234, 240, 255, 0.2);
+        opacity: 1;
+    }
+
+    blockquote {
+        margin: 1rem 0;
+        padding: 0.65rem 0.85rem 0.65rem 1rem;
+        border-left: 3px solid var(--lf-primary, #8b5cf6);
+        color: var(--lf-text-secondary, var(--bs-secondary-color, #a9b4cc));
+        background: rgba(139, 92, 246, 0.06);
+        border-radius: 0 10px 10px 0;
+    }
+
+    a {
+        color: var(--lf-primary, var(--bs-link-color, #8b5cf6));
+
+        &:hover {
+            color: var(--lf-primary-hover, var(--bs-link-hover-color, #7c3aed));
+        }
+    }
+}
+
+@keyframes tiptap-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

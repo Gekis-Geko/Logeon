@@ -1,6 +1,6 @@
 /**
  * Utility per la gestione di form jQuery: lettura, scrittura, reset e validazione.
- * Gestisce input standard, select (singolo e multiplo), checkbox, radio, file e Summernote.
+ * Gestisce input standard, select (singolo e multiplo), checkbox, radio, file e campi rich text.
  * Dipende da jQuery (`$`).
  *
  * Uso tipico:
@@ -16,6 +16,10 @@
 function Form() {
     var base = {
         form: null,
+        richTextSelector: '.summernote, .richtext-editor',
+        isRichTextInput: function (input) {
+            return !!(input && input.length && (input.hasClass('summernote') || input.hasClass('richtext-editor')));
+        },
 
         /**
          * Legge tutti i valori degli input del form come oggetto chiave-valore.
@@ -39,6 +43,7 @@ function Form() {
             if (!this.checkForm(form)) {
                 return this;
             }
+            var self = this;
 
             if (dataset == null || typeof dataset !== 'object') {
                 dataset = {};
@@ -84,7 +89,7 @@ function Form() {
                     return;
                 }
 
-                if (input.hasClass('summernote')) {
+                if (self.isRichTextInput(input)) {
                     if (typeof input.summernote === 'function') {
                         input.summernote('code', value != null ? String(value) : '');
                     } else {
@@ -154,7 +159,7 @@ function Form() {
                 }
             });
 
-            this.form.find('.summernote').each(function () {
+            this.form.find(this.richTextSelector).each(function () {
                 var editor = $(this);
                 if (typeof editor.summernote === 'function') {
                     editor.summernote('code', '');
@@ -169,6 +174,7 @@ function Form() {
 
         getFormInputs: function () {
             var fields = {};
+            var self = this;
 
             this.form.find(':input').not(':button,:submit,:reset').each(function () {
                 var input = $(this);
@@ -216,7 +222,7 @@ function Form() {
                     return;
                 }
 
-                if (input.hasClass('summernote') && typeof input.summernote === 'function') {
+                if (self.isRichTextInput(input) && typeof input.summernote === 'function') {
                     var html = input.summernote('code');
                     fields[name] = (html === '<p><br></p>') ? '' : html;
                     return;

@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminLogsSysModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminLogsSys !== 'undefined'
-                    && window.AdminLogsSys
-                    && typeof window.AdminLogsSys.init === 'function') {
-                    window.AdminLogsSys.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminLogsSysModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminLogsSys !== 'undefined'
+                && globalWindow.AdminLogsSys
+                && typeof globalWindow.AdminLogsSys.init === 'function') {
+                globalWindow.AdminLogsSys.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminLogsSysModuleFactory = createAdminLogsSysModule;
-})(window);
+globalWindow.AdminLogsSysModuleFactory = createAdminLogsSysModule;
+export { createAdminLogsSysModule as AdminLogsSysModuleFactory };
+export default createAdminLogsSysModule;
+

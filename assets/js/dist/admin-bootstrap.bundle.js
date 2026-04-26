@@ -1,0 +1,2 @@
+import{b as i}from"./chunks/chunk-3GOHTLAK.js";var t=i(()=>{window.APP_BOOTSTRAP_ENABLED=!0;window.APP_BOOTSTRAP_RUNTIME="admin";function n(){window.AdminRuntime&&typeof window.AdminRuntime.start=="function"&&window.AdminRuntime.start()}window.AdminFeatureLoader&&typeof window.AdminFeatureLoader.loadForCurrentPage=="function"?window.AdminFeatureLoader.loadForCurrentPage().catch(function(){}).finally(function(){n()}):n()});export default t();
+//# sourceMappingURL=admin-bootstrap.bundle.js.map

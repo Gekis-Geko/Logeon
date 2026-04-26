@@ -1,0 +1,115 @@
+.chat-archive-picker-list {
+    max-height: 320px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: linear-gradient(180deg, rgba(18, 24, 39, 0.9), rgba(15, 20, 32, 0.96));
+    border-color: rgba(126, 138, 166, 0.22) !important;
+    border-radius: 14px !important;
+
+    > label {
+        display: flex;
+        width: 100%;
+        min-width: 0;
+        margin: 0;
+        color: var(--lf-text-primary);
+        background: transparent;
+
+        &:last-child {
+            border-bottom: 0 !important;
+        }
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+    }
+
+    input.form-check-input,
+    .form-check-input {
+        position: static !important;
+        float: none !important;
+        display: block !important;
+        flex: 0 0 auto;
+        margin: 0.2rem 0 0 !important;
+    }
+
+    .overflow-hidden,
+    .flex-grow-1 {
+        min-width: 0;
+    }
+
+    .text-muted {
+        color: var(--lf-text-secondary) !important;
+    }
+
+    .small {
+        word-break: break-word;
+    }
+
+    code,
+    .fw-semibold {
+        color: var(--lf-text-primary);
+    }
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.chat-archive-messages {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.chat-archive-public-url {
+    min-width: 260px;
+}
+
+.chat-archive-diary-suggestions {
+    max-height: 240px;
+    overflow-y: auto;
+    border: 1px solid rgba(126, 138, 166, 0.22);
+    border-radius: 12px;
+    background:
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.06), transparent 38%),
+        linear-gradient(180deg, rgba(18, 24, 39, 0.96), rgba(15, 20, 32, 0.98));
+
+    .list-group-item {
+        background: transparent;
+        color: var(--lf-text-primary);
+        border-color: rgba(126, 138, 166, 0.18);
+
+        &:hover,
+        &:focus {
+            background: rgba(139, 92, 246, 0.12);
+            color: var(--lf-text-primary);
+        }
+    }
+
+    .text-muted {
+        color: var(--lf-text-secondary) !important;
+    }
+}
+
+#ca-loc-summary.alert {
+    border: 1px solid rgba(126, 138, 166, 0.22);
+    border-radius: 14px;
+    background:
+        radial-gradient(circle at top right, rgba(139, 92, 246, 0.08), transparent 38%),
+        linear-gradient(180deg, rgba(18, 24, 39, 0.96), rgba(15, 20, 32, 0.98));
+    color: var(--lf-text-primary);
+
+    .text-muted,
+    #ca-loc-summary-excluded {
+        color: var(--lf-text-secondary) !important;
+    }
+
+    .small {
+        color: var(--lf-text-primary);
+    }
+}
+
+@media (max-width: 767.98px) {
+    .chat-archive-public-url {
+        min-width: 0;
+    }
+}

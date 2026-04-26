@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminLogsLocationAccessModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminLogsLocationAccess !== 'undefined'
-                    && window.AdminLogsLocationAccess
-                    && typeof window.AdminLogsLocationAccess.init === 'function') {
-                    window.AdminLogsLocationAccess.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminLogsLocationAccessModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminLogsLocationAccess !== 'undefined'
+                && globalWindow.AdminLogsLocationAccess
+                && typeof globalWindow.AdminLogsLocationAccess.init === 'function') {
+                globalWindow.AdminLogsLocationAccess.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminLogsLocationAccessModuleFactory = createAdminLogsLocationAccessModule;
-})(window);
+globalWindow.AdminLogsLocationAccessModuleFactory = createAdminLogsLocationAccessModule;
+export { createAdminLogsLocationAccessModule as AdminLogsLocationAccessModuleFactory };
+export default createAdminLogsLocationAccessModule;
+

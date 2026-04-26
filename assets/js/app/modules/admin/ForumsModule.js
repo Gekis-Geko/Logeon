@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminForumsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminForums !== 'undefined'
-                    && window.AdminForums
-                    && typeof window.AdminForums.init === 'function') {
-                    window.AdminForums.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminForumsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminForums !== 'undefined'
+                && globalWindow.AdminForums
+                && typeof globalWindow.AdminForums.init === 'function') {
+                globalWindow.AdminForums.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminForumsModuleFactory = createAdminForumsModule;
-})(window);
+globalWindow.AdminForumsModuleFactory = createAdminForumsModule;
+export { createAdminForumsModule as AdminForumsModuleFactory };
+export default createAdminForumsModule;
+

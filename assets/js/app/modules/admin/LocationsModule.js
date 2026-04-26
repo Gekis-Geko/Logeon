@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminLocationsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminLocations !== 'undefined'
-                    && window.AdminLocations
-                    && typeof window.AdminLocations.init === 'function') {
-                    window.AdminLocations.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminLocationsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminLocations !== 'undefined'
+                && globalWindow.AdminLocations
+                && typeof globalWindow.AdminLocations.init === 'function') {
+                globalWindow.AdminLocations.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminLocationsModuleFactory = createAdminLocationsModule;
-})(window);
+globalWindow.AdminLocationsModuleFactory = createAdminLocationsModule;
+export { createAdminLocationsModule as AdminLocationsModuleFactory };
+export default createAdminLocationsModule;
+

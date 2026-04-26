@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminItemEquipmentRulesModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminItemEquipmentRules !== 'undefined'
-                    && window.AdminItemEquipmentRules
-                    && typeof window.AdminItemEquipmentRules.init === 'function') {
-                    window.AdminItemEquipmentRules.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminItemEquipmentRulesModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminItemEquipmentRules !== 'undefined'
+                && globalWindow.AdminItemEquipmentRules
+                && typeof globalWindow.AdminItemEquipmentRules.init === 'function') {
+                globalWindow.AdminItemEquipmentRules.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminItemEquipmentRulesModuleFactory = createAdminItemEquipmentRulesModule;
-})(window);
+globalWindow.AdminItemEquipmentRulesModuleFactory = createAdminItemEquipmentRulesModule;
+export { createAdminItemEquipmentRulesModule as AdminItemEquipmentRulesModuleFactory };
+export default createAdminItemEquipmentRulesModule;
+

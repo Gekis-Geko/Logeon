@@ -1,16 +1,17 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function AdminNarrativeTagsModuleFactory() {
-        return {
-            mount: function () {
-                if (typeof window.AdminNarrativeTags !== 'undefined' && window.AdminNarrativeTags && typeof window.AdminNarrativeTags.init === 'function') {
-                    window.AdminNarrativeTags.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function AdminNarrativeTagsModuleFactory() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminNarrativeTags !== 'undefined' && globalWindow.AdminNarrativeTags && typeof globalWindow.AdminNarrativeTags.init === 'function') {
+                globalWindow.AdminNarrativeTags.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminNarrativeTagsModuleFactory = AdminNarrativeTagsModuleFactory;
-})(window);
+globalWindow.AdminNarrativeTagsModuleFactory = AdminNarrativeTagsModuleFactory;
+export { AdminNarrativeTagsModuleFactory as AdminNarrativeTagsModuleFactory };
+export default AdminNarrativeTagsModuleFactory;
+

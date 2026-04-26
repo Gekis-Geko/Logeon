@@ -1,18 +1,19 @@
-(function (window) {
-    'use strict';
+const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
-    function createAdminShopsModule() {
-        return {
-            mount: function () {
-                if (typeof window.AdminShops !== 'undefined'
-                    && window.AdminShops
-                    && typeof window.AdminShops.init === 'function') {
-                    window.AdminShops.init();
-                }
-            },
-            unmount: function () {}
-        };
-    }
+function createAdminShopsModule() {
+    return {
+        mount: function () {
+            if (typeof globalWindow.AdminShops !== 'undefined'
+                && globalWindow.AdminShops
+                && typeof globalWindow.AdminShops.init === 'function') {
+                globalWindow.AdminShops.init();
+            }
+        },
+        unmount: function () {}
+    };
+}
 
-    window.AdminShopsModuleFactory = createAdminShopsModule;
-})(window);
+globalWindow.AdminShopsModuleFactory = createAdminShopsModule;
+export { createAdminShopsModule as AdminShopsModuleFactory };
+export default createAdminShopsModule;
+
