@@ -543,10 +543,10 @@ class SettingsService
     {
         $allowed = ['navigation', 'monolithic'];
         $defaults = [
-            'storyboard_view_mode'  => 'navigation',
-            'rules_view_mode'       => 'navigation',
+            'storyboard_view_mode' => 'navigation',
+            'rules_view_mode' => 'navigation',
             'how_to_play_view_mode' => 'navigation',
-            'archetypes_view_mode'  => 'navigation',
+            'archetypes_view_mode' => 'navigation',
         ];
 
         $rows = $this->fetchPrepared(
@@ -596,12 +596,127 @@ class SettingsService
         return $fallback;
     }
 
+    private function getConfigString(string $key, string $fallback): string
+    {
+        try {
+            $row = $this->firstPrepared(
+                'SELECT value FROM sys_configs WHERE `key` = ? LIMIT 1',
+                [$key],
+            );
+            if (!empty($row) && isset($row->value)) {
+                return trim((string) $row->value);
+            }
+        } catch (\Throwable $e) {
+            // fall through
+        }
+
+        return $fallback;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getAppPwaConfig(): array
+    {
+        $appConfig = $this->appConfig();
+        $raw = $appConfig['pwa'] ?? [];
+
+        return is_array($raw) ? $raw : [];
+    }
+
+    private function normalizeFlag($value): int
+    {
+        if ($value === true) {
+            return 1;
+        }
+
+        if (is_int($value) || is_float($value)) {
+            return ((int) $value === 1) ? 1 : 0;
+        }
+
+        $normalized = strtolower(trim((string) $value));
+
+        return in_array($normalized, ['1', 'true', 'yes', 'on'], true) ? 1 : 0;
+    }
+
+    private function normalizePwaText($value, int $maxLength): string
+    {
+        $text = trim((string) $value);
+        if ($text === '') {
+            return '';
+        }
+
+        $text = preg_replace('/\s+/', ' ', $text) ?: '';
+        if ($text === '') {
+            return '';
+        }
+
+        if (strlen($text) > $maxLength) {
+            $text = substr($text, 0, $maxLength);
+        }
+
+        return $text;
+    }
+
+    private function normalizePwaDescription($value, int $maxLength): string
+    {
+        return $this->normalizePwaText(strip_tags((string) $value), $maxLength);
+    }
+
+    private function normalizePwaPath($value, string $default = '/'): string
+    {
+        $path = trim((string) $value);
+        if ($path === '') {
+            return $default;
+        }
+
+        return '/' . ltrim($path, '/');
+    }
+
+    private function normalizeOptionalPwaAssetPath($value): string
+    {
+        $path = trim((string) $value);
+        if ($path === '') {
+            return '';
+        }
+
+        if (preg_match('#^(?:https?:)?//#i', $path) === 1) {
+            return $path;
+        }
+
+        return '/' . ltrim($path, '/');
+    }
+
+    private function isValidPwaColor(string $value): bool
+    {
+        return preg_match('/^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/', $value) === 1;
+    }
+
+    private function isValidPwaPath(string $value): bool
+    {
+        return preg_match('/^\/[^\s]*$/', $value) === 1;
+    }
+
+    private function isValidPwaAssetPath(string $value, bool $allowEmpty = true): bool
+    {
+        if ($value === '') {
+            return $allowEmpty;
+        }
+
+        return preg_match('#^(?:https?:)?//#i', $value) === 1
+            || preg_match('/^\/[^\s]*$/', $value) === 1;
+    }
+
     public function getAdminSettingsDataset(): array
     {
         $base = $this->getUploadDataset();
+        $appConfig = $this->appConfig();
+        $pwaConfig = $this->getAppPwaConfig();
         $runtimeConfig = $this->runtimeConfig();
         $inventoryConfigRaw = $runtimeConfig['inventory'] ?? [];
         $inventoryConfig = is_array($inventoryConfigRaw) ? $inventoryConfigRaw : [];
+        $frontendConfigRaw = $appConfig['frontend'] ?? [];
+        $frontendConfig = is_array($frontendConfigRaw) ? $frontendConfigRaw : [];
 
         // Legge da sys_settings con fallback a config
         $inventoryCapacityFallback = isset($inventoryConfig['capacity_max'])
@@ -625,6 +740,67 @@ class SettingsService
 
         $base['narrative_delegation_enabled'] = $this->getConfigInt('narrative_delegation_enabled', 0);
         $base['narrative_delegation_level'] = $this->getConfigInt('narrative_delegation_level', 0);
+        $base['pwa_enabled'] = $this->getConfigInt('pwa_enabled', $this->normalizeFlag($pwaConfig['enabled'] ?? false));
+        $base['pwa_name'] = $this->getConfigString(
+            'pwa_name',
+            $this->normalizePwaText($pwaConfig['name'] ?? ($appConfig['name'] ?? 'Logeon'), 120),
+        );
+        $base['pwa_short_name'] = $this->getConfigString(
+            'pwa_short_name',
+            $this->normalizePwaText($pwaConfig['short_name'] ?? $base['pwa_name'], 60),
+        );
+        $base['pwa_description'] = $this->getConfigString(
+            'pwa_description',
+            $this->normalizePwaDescription($pwaConfig['description'] ?? ($appConfig['description'] ?? ''), 255),
+        );
+        $base['pwa_start_path'] = $this->getConfigString(
+            'pwa_start_path',
+            $this->normalizePwaPath($pwaConfig['start_path'] ?? '/', '/'),
+        );
+        $base['pwa_scope'] = $this->getConfigString(
+            'pwa_scope',
+            $this->normalizePwaPath($pwaConfig['scope'] ?? '/', '/'),
+        );
+        $base['pwa_display'] = $this->getConfigString(
+            'pwa_display',
+            $this->normalizePwaText($pwaConfig['display'] ?? 'standalone', 32),
+        );
+        $base['pwa_orientation'] = $this->getConfigString(
+            'pwa_orientation',
+            $this->normalizePwaText($pwaConfig['orientation'] ?? 'portrait', 32),
+        );
+        $base['pwa_theme_color'] = strtolower($this->getConfigString(
+            'pwa_theme_color',
+            $this->normalizePwaText($pwaConfig['theme_color'] ?? '#0d6efd', 7),
+        ));
+        $base['pwa_background_color'] = strtolower($this->getConfigString(
+            'pwa_background_color',
+            $this->normalizePwaText($pwaConfig['background_color'] ?? '#ffffff', 7),
+        ));
+        $base['pwa_icon_path'] = $this->getConfigString(
+            'pwa_icon_path',
+            $this->normalizeOptionalPwaAssetPath($pwaConfig['icon_path'] ?? ($appConfig['brand_logo_icon'] ?? '/favicon.ico')),
+        );
+        $base['pwa_icon_192_path'] = $this->getConfigString(
+            'pwa_icon_192_path',
+            $this->normalizeOptionalPwaAssetPath($pwaConfig['icon_192_path'] ?? ''),
+        );
+        $base['pwa_icon_512_path'] = $this->getConfigString(
+            'pwa_icon_512_path',
+            $this->normalizeOptionalPwaAssetPath($pwaConfig['icon_512_path'] ?? ''),
+        );
+        $base['pwa_icon_maskable_path'] = $this->getConfigString(
+            'pwa_icon_maskable_path',
+            $this->normalizeOptionalPwaAssetPath($pwaConfig['icon_maskable_path'] ?? ''),
+        );
+        $base['pwa_cache_enabled'] = $this->getConfigInt('pwa_cache_enabled', $this->normalizeFlag($pwaConfig['cache_enabled'] ?? true));
+        $base['pwa_cache_version'] = $this->getConfigString(
+            'pwa_cache_version',
+            $this->normalizePwaText(
+                $pwaConfig['cache_version'] ?? ($frontendConfig['pilot_bundle_version'] ?? date('Ymd')),
+                64,
+            ),
+        );
 
         return $base;
     }
@@ -724,6 +900,93 @@ class SettingsService
         $dataset['auth_google_redirect_uri'] = $googleRedirectUri;
         $dataset['multi_character_enabled'] = $multiCharacterEnabled;
         $dataset['multi_character_max_per_user'] = $multiCharacterMaxPerUser;
+
+        $pwaEnabled = isset($payload['pwa_enabled']) ? (int) $payload['pwa_enabled'] : 0;
+        $pwaEnabled = ($pwaEnabled === 1) ? 1 : 0;
+        $pwaName = $this->normalizePwaText($payload['pwa_name'] ?? '', 120);
+        $pwaShortName = $this->normalizePwaText($payload['pwa_short_name'] ?? '', 60);
+        $pwaDescription = $this->normalizePwaDescription($payload['pwa_description'] ?? '', 255);
+        $pwaStartPath = $this->normalizePwaPath($payload['pwa_start_path'] ?? '/', '/');
+        $pwaScope = $this->normalizePwaPath($payload['pwa_scope'] ?? '/', '/');
+        $pwaDisplay = strtolower($this->normalizePwaText($payload['pwa_display'] ?? 'standalone', 32));
+        $pwaOrientation = strtolower($this->normalizePwaText($payload['pwa_orientation'] ?? 'portrait', 32));
+        $pwaThemeColor = strtolower($this->normalizePwaText($payload['pwa_theme_color'] ?? '#0d6efd', 7));
+        $pwaBackgroundColor = strtolower($this->normalizePwaText($payload['pwa_background_color'] ?? '#ffffff', 7));
+        $pwaIconPath = $this->normalizeOptionalPwaAssetPath($payload['pwa_icon_path'] ?? '');
+        $pwaIcon192Path = $this->normalizeOptionalPwaAssetPath($payload['pwa_icon_192_path'] ?? '');
+        $pwaIcon512Path = $this->normalizeOptionalPwaAssetPath($payload['pwa_icon_512_path'] ?? '');
+        $pwaIconMaskablePath = $this->normalizeOptionalPwaAssetPath($payload['pwa_icon_maskable_path'] ?? '');
+        $pwaCacheEnabled = isset($payload['pwa_cache_enabled']) ? (int) $payload['pwa_cache_enabled'] : 0;
+        $pwaCacheEnabled = ($pwaCacheEnabled === 1) ? 1 : 0;
+        $pwaCacheVersion = $this->normalizePwaText($payload['pwa_cache_version'] ?? '', 64);
+
+        if (!$this->isValidPwaPath($pwaStartPath)) {
+            $this->failValidation('Start path PWA non valido', 'pwa_start_path_invalid');
+        }
+        if (!$this->isValidPwaPath($pwaScope)) {
+            $this->failValidation('Scope PWA non valido', 'pwa_scope_invalid');
+        }
+        if (!in_array($pwaDisplay, ['fullscreen', 'standalone', 'minimal-ui', 'browser'], true)) {
+            $this->failValidation('Display PWA non valido', 'pwa_display_invalid');
+        }
+        if (!in_array($pwaOrientation, ['any', 'natural', 'landscape', 'landscape-primary', 'landscape-secondary', 'portrait', 'portrait-primary', 'portrait-secondary'], true)) {
+            $this->failValidation('Orientamento PWA non valido', 'pwa_orientation_invalid');
+        }
+        if (!$this->isValidPwaColor($pwaThemeColor)) {
+            $this->failValidation('Theme color PWA non valido', 'pwa_theme_color_invalid');
+        }
+        if (!$this->isValidPwaColor($pwaBackgroundColor)) {
+            $this->failValidation('Background color PWA non valido', 'pwa_background_color_invalid');
+        }
+        if (!$this->isValidPwaAssetPath($pwaIconPath)) {
+            $this->failValidation('Icona PWA principale non valida', 'pwa_icon_path_invalid');
+        }
+        if (!$this->isValidPwaAssetPath($pwaIcon192Path)) {
+            $this->failValidation('Icona PWA 192 non valida', 'pwa_icon_192_path_invalid');
+        }
+        if (!$this->isValidPwaAssetPath($pwaIcon512Path)) {
+            $this->failValidation('Icona PWA 512 non valida', 'pwa_icon_512_path_invalid');
+        }
+        if (!$this->isValidPwaAssetPath($pwaIconMaskablePath)) {
+            $this->failValidation('Icona PWA maskable non valida', 'pwa_icon_maskable_path_invalid');
+        }
+        if ($pwaCacheVersion === '' || preg_match('/^[A-Za-z0-9._-]{1,64}$/', $pwaCacheVersion) !== 1) {
+            $this->failValidation('Versione cache PWA non valida', 'pwa_cache_version_invalid');
+        }
+
+        $this->upsertSysConfig('pwa_enabled', (string) $pwaEnabled, 'number');
+        $this->upsertSysConfig('pwa_name', $pwaName, 'string');
+        $this->upsertSysConfig('pwa_short_name', $pwaShortName, 'string');
+        $this->upsertSysConfig('pwa_description', $pwaDescription, 'string');
+        $this->upsertSysConfig('pwa_start_path', $pwaStartPath, 'string');
+        $this->upsertSysConfig('pwa_scope', $pwaScope, 'string');
+        $this->upsertSysConfig('pwa_display', $pwaDisplay, 'string');
+        $this->upsertSysConfig('pwa_orientation', $pwaOrientation, 'string');
+        $this->upsertSysConfig('pwa_theme_color', $pwaThemeColor, 'string');
+        $this->upsertSysConfig('pwa_background_color', $pwaBackgroundColor, 'string');
+        $this->upsertSysConfig('pwa_icon_path', $pwaIconPath, 'string');
+        $this->upsertSysConfig('pwa_icon_192_path', $pwaIcon192Path, 'string');
+        $this->upsertSysConfig('pwa_icon_512_path', $pwaIcon512Path, 'string');
+        $this->upsertSysConfig('pwa_icon_maskable_path', $pwaIconMaskablePath, 'string');
+        $this->upsertSysConfig('pwa_cache_enabled', (string) $pwaCacheEnabled, 'number');
+        $this->upsertSysConfig('pwa_cache_version', $pwaCacheVersion, 'string');
+
+        $dataset['pwa_enabled'] = $pwaEnabled;
+        $dataset['pwa_name'] = $pwaName;
+        $dataset['pwa_short_name'] = $pwaShortName;
+        $dataset['pwa_description'] = $pwaDescription;
+        $dataset['pwa_start_path'] = $pwaStartPath;
+        $dataset['pwa_scope'] = $pwaScope;
+        $dataset['pwa_display'] = $pwaDisplay;
+        $dataset['pwa_orientation'] = $pwaOrientation;
+        $dataset['pwa_theme_color'] = $pwaThemeColor;
+        $dataset['pwa_background_color'] = $pwaBackgroundColor;
+        $dataset['pwa_icon_path'] = $pwaIconPath;
+        $dataset['pwa_icon_192_path'] = $pwaIcon192Path;
+        $dataset['pwa_icon_512_path'] = $pwaIcon512Path;
+        $dataset['pwa_icon_maskable_path'] = $pwaIconMaskablePath;
+        $dataset['pwa_cache_enabled'] = $pwaCacheEnabled;
+        $dataset['pwa_cache_version'] = $pwaCacheVersion;
 
         $allowedViewModes = ['navigation', 'monolithic'];
         $storyboardViewMode = in_array($payload['storyboard_view_mode'] ?? '', $allowedViewModes, true)

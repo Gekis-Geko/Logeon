@@ -30,14 +30,19 @@ Usa come indice principale `docs/SUMMARY.md` e trascrivi solo le pagine elencate
 7. `docs/guida-backup-ripristino.md`
 8. `docs/guida-troubleshooting.md`
 9. `docs/guida-build-release.md`
-10. `docs/guida-architettura-frontend.md`
-11. `docs/guida-permessi-ui-attributi.md`
-12. `docs/guida-autenticazione-sessioni.md`
-13. `docs/matrice-ruoli-permessi.md`
-14. `docs/guida-sistema-moduli.md`
-15. `docs/guida-creazione-moduli.md`
-16. `docs/guida-intensita-quest.md`
-17. `docs/changelog.md`
+10. `docs/guida-pwa-installabile.md`
+11. `docs/guida-architettura-frontend.md`
+12. `docs/guida-permessi-ui-attributi.md`
+13. `docs/guida-autenticazione-sessioni.md`
+14. `docs/matrice-ruoli-permessi.md`
+15. `docs/guida-sistema-moduli.md`
+16. `docs/guida-creazione-moduli.md`
+17. `docs/guida-intensita-quest.md`
+18. `docs/changelog.md`
+
+## Aggiornamenti recenti (2026-04-26 - PWA)
+1. supporto PWA installabile introdotto nel core con `manifest.webmanifest`, `service-worker.js` e configurazione opzionale in `configs/app.php`.
+2. nuova guida `docs/guida-pwa-installabile.md` per attivazione, branding e gestione cache asset.
 
 ## Aggiornamenti recenti (2026-04-26)
 1. `README.md`, `CONTRIBUTING.md` e `docs/guida-build-release.md`: allineati al pacchetto `source-dev`, che ora include `scripts/`, sorgenti Sass e le guide operative utili a sviluppatori e contributori.

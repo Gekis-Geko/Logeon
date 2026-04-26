@@ -6,6 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    {% if PWA.enabled %}
+    <link rel="manifest" href="{{ PWA.manifest_url }}">
+    <meta name="theme-color" content="{{ PWA.theme_color }}">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="{{ PWA.short_name }}">
+    {% if PWA.apple_touch_icon_path is not empty %}
+    <link rel="apple-touch-icon" href="{{ PWA.apple_touch_icon_path }}">
+    {% endif %}
+    {% endif %}
     <meta name="title" content="{{ APP.name }}">
     <meta name="description" content="{{ APP.description }}">
     <meta name="csrf-token" content="{{ csrf_token }}">
@@ -34,6 +44,32 @@
     <script type="text/javascript" src="/assets/vendor/bootstrap-5.3.8/dist/js/bootstrap.min.js"></script>
 
     <script type="module" src="/assets/js/dist/runtime-core.bundle.js?v={{ pilot_bundle_version }}"></script>
+    {% if PWA.enabled %}
+    <script type="text/javascript">
+        (function () {
+            var pwa = {{ PWA|json_encode|raw }};
+            if (!pwa || pwa.enabled !== true || !('serviceWorker' in navigator)) {
+                return;
+            }
+
+            var isSecure =
+                window.location.protocol === 'https:'
+                || window.location.hostname === 'localhost'
+                || window.location.hostname === '127.0.0.1';
+            if (!isSecure) {
+                return;
+            }
+
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register(pwa.service_worker_url, {
+                    scope: pwa.scope
+                }).catch(function (error) {
+                    console.warn('[Logeon][PWA] Service worker registration failed.', error);
+                });
+            });
+        })();
+    </script>
+    {% endif %}
 </head>
 
 <body>

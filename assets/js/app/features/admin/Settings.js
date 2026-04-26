@@ -38,6 +38,8 @@ var AdminSettings = {
         this.refreshGoogleOauthConfigVisibility();
         this.refreshMultiCharacterConfigVisibility();
         this.refreshNarrativeDelegationLevelVisibility();
+        this.refreshPwaConfigVisibility();
+        this.refreshPwaCacheVisibility();
         this.bind();
         this.load();
         this.buildSounds();
@@ -122,6 +124,20 @@ var AdminSettings = {
             defaultValue: '0'
         });
 
+        this.switches.pwa_enabled = sw(jq('#s-pwa-enabled'), {
+            preset: 'enableddisabled',
+            trueValue: '1',
+            falseValue: '0',
+            defaultValue: '0'
+        });
+
+        this.switches.pwa_cache_enabled = sw(jq('#s-pwa-cache-enabled'), {
+            preset: 'enableddisabled',
+            trueValue: '1',
+            falseValue: '0',
+            defaultValue: '0'
+        });
+
         var ndEnabledInput = this.form ? this.form.elements['narrative_delegation_enabled'] : null;
         if (ndEnabledInput) {
             var self3 = this;
@@ -129,6 +145,26 @@ var AdminSettings = {
                 .off('change.adminSettingsNarrativeDelegation')
                 .on('change.adminSettingsNarrativeDelegation', function () {
                     self3.refreshNarrativeDelegationLevelVisibility();
+                });
+        }
+
+        var pwaEnabledInput = this.form ? this.form.elements['pwa_enabled'] : null;
+        if (pwaEnabledInput) {
+            var self4 = this;
+            globalWindow.$(pwaEnabledInput)
+                .off('change.adminSettingsPwa')
+                .on('change.adminSettingsPwa', function () {
+                    self4.refreshPwaConfigVisibility();
+                });
+        }
+
+        var pwaCacheEnabledInput = this.form ? this.form.elements['pwa_cache_enabled'] : null;
+        if (pwaCacheEnabledInput) {
+            var self5 = this;
+            globalWindow.$(pwaCacheEnabledInput)
+                .off('change.adminSettingsPwaCache')
+                .on('change.adminSettingsPwaCache', function () {
+                    self5.refreshPwaCacheVisibility();
                 });
         }
 
@@ -150,6 +186,34 @@ var AdminSettings = {
             var input = this.form.elements['auth_google_enabled'];
             enabled = input ? (String(input.value || '0') === '1') : false;
         }
+        wrapper.classList.toggle('d-none', !enabled);
+        return this;
+    },
+
+    refreshPwaConfigVisibility: function () {
+        if (!this.form) {
+            return this;
+        }
+        var wrapper = document.getElementById('admin-settings-pwa-config');
+        if (!wrapper) {
+            return this;
+        }
+        var input = this.form.elements['pwa_enabled'];
+        var enabled = input ? (String(input.value || '0') === '1') : false;
+        wrapper.classList.toggle('d-none', !enabled);
+        return this;
+    },
+
+    refreshPwaCacheVisibility: function () {
+        if (!this.form) {
+            return this;
+        }
+        var wrapper = document.getElementById('admin-settings-pwa-cache-version-wrap');
+        if (!wrapper) {
+            return this;
+        }
+        var input = this.form.elements['pwa_cache_enabled'];
+        var enabled = input ? (String(input.value || '0') === '1') : false;
         wrapper.classList.toggle('d-none', !enabled);
         return this;
     },
@@ -327,6 +391,20 @@ var AdminSettings = {
             'auth_google_client_id',
             'auth_google_client_secret',
             'auth_google_redirect_uri',
+            'pwa_name',
+            'pwa_short_name',
+            'pwa_description',
+            'pwa_start_path',
+            'pwa_scope',
+            'pwa_display',
+            'pwa_orientation',
+            'pwa_theme_color',
+            'pwa_background_color',
+            'pwa_icon_path',
+            'pwa_icon_192_path',
+            'pwa_icon_512_path',
+            'pwa_icon_maskable_path',
+            'pwa_cache_version',
             'narrative_delegation_level',
             'storyboard_view_mode',
             'rules_view_mode',
@@ -342,7 +420,7 @@ var AdminSettings = {
         }
 
         // Campi gestiti da SwitchGroup
-        var switchKeys = ['onlines_auto_toast', 'presence_resume_last_position_on_signin', 'auth_google_enabled', 'multi_character_enabled', 'narrative_delegation_enabled'];
+        var switchKeys = ['onlines_auto_toast', 'presence_resume_last_position_on_signin', 'auth_google_enabled', 'multi_character_enabled', 'narrative_delegation_enabled', 'pwa_enabled', 'pwa_cache_enabled'];
         for (var j = 0; j < switchKeys.length; j++) {
             var sKey = switchKeys[j];
             if (d[sKey] === undefined) { continue; }
@@ -357,6 +435,8 @@ var AdminSettings = {
         this.refreshGoogleOauthConfigVisibility();
         this.refreshMultiCharacterConfigVisibility();
         this.refreshNarrativeDelegationLevelVisibility();
+        this.refreshPwaConfigVisibility();
+        this.refreshPwaCacheVisibility();
     },
 
     collectPayload: function () {
@@ -391,6 +471,8 @@ var AdminSettings = {
             'multi_character_max_per_user',
             'multi_character_enabled',
             'auth_google_enabled',
+            'pwa_enabled',
+            'pwa_cache_enabled',
             'narrative_delegation_enabled',
             'narrative_delegation_level'
         ];
@@ -406,6 +488,20 @@ var AdminSettings = {
             'auth_google_client_id',
             'auth_google_client_secret',
             'auth_google_redirect_uri',
+            'pwa_name',
+            'pwa_short_name',
+            'pwa_description',
+            'pwa_start_path',
+            'pwa_scope',
+            'pwa_display',
+            'pwa_orientation',
+            'pwa_theme_color',
+            'pwa_background_color',
+            'pwa_icon_path',
+            'pwa_icon_192_path',
+            'pwa_icon_512_path',
+            'pwa_icon_maskable_path',
+            'pwa_cache_version',
             'storyboard_view_mode',
             'rules_view_mode',
             'how_to_play_view_mode',
@@ -707,4 +803,3 @@ var AdminSettings = {
 globalWindow.AdminSettings = AdminSettings;
 export { AdminSettings as AdminSettings };
 export default AdminSettings;
-

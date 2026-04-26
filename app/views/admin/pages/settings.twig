@@ -109,6 +109,123 @@
             </div>
 
             <div class="accordion-item">
+                <h2 class="accordion-header" id="admin-settings-heading-pwa">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-pwa" aria-expanded="false" aria-controls="admin-settings-collapse-pwa">
+                        <i class="bi bi-phone me-2"></i>PWA installabile
+                    </button>
+                </h2>
+                <div id="admin-settings-collapse-pwa" class="accordion-collapse collapse" aria-labelledby="admin-settings-heading-pwa">
+                    <div class="accordion-body">
+                        <div class="row g-4">
+                            <div class="col-12">
+                                <div class="border rounded-3 p-3">
+                                    <div class="row g-3 align-items-start">
+                                        <div class="col-12 col-lg-4">
+                                            <h6 class="mb-1"><i class="bi bi-download me-2"></i>Attivazione</h6>
+                                            <p class="text-muted small mb-2">Permetti ai creatori di gioco di rendere il progetto installabile come app desktop o mobile.</p>
+                                            <label class="form-label mb-1">PWA installabile</label>
+                                            <input type="hidden" id="s-pwa-enabled" name="pwa_enabled" value="0">
+                                            <div class="form-text mt-1">Richiede HTTPS attivo e icone adeguate per una buona esperienza di installazione.</div>
+                                        </div>
+                                        <div class="col-12 col-lg-8 d-none" id="admin-settings-pwa-config">
+                                            <div class="row g-3">
+                                                <div class="col-12 col-xl-6">
+                                                    <label for="s-pwa-name" class="form-label mb-1">Nome completo app</label>
+                                                    <input id="s-pwa-name" name="pwa_name" type="text" class="form-control" maxlength="120" placeholder="Nome del gioco">
+                                                    <div class="form-text">Nome mostrato dal sistema operativo durante installazione e avvio.</div>
+                                                </div>
+                                                <div class="col-12 col-xl-6">
+                                                    <label for="s-pwa-short-name" class="form-label mb-1">Nome breve</label>
+                                                    <input id="s-pwa-short-name" name="pwa_short_name" type="text" class="form-control" maxlength="60" placeholder="Nome breve">
+                                                    <div class="form-text">Usato da launcher, home screen o dock quando c'e poco spazio.</div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label for="s-pwa-description" class="form-label mb-1">Descrizione</label>
+                                                    <textarea id="s-pwa-description" name="pwa_description" class="form-control" rows="2" maxlength="255" placeholder="Descrizione breve della tua app installabile"></textarea>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-xl-3">
+                                                    <label for="s-pwa-start-path" class="form-label mb-1">Start path</label>
+                                                    <input id="s-pwa-start-path" name="pwa_start_path" type="text" class="form-control" maxlength="255" placeholder="/">
+                                                    <div class="form-text">Pagina iniziale dell'app installata.</div>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-xl-3">
+                                                    <label for="s-pwa-scope" class="form-label mb-1">Scope</label>
+                                                    <input id="s-pwa-scope" name="pwa_scope" type="text" class="form-control" maxlength="255" placeholder="/">
+                                                    <div class="form-text">Per installazioni standard lascia <code>/</code>.</div>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-xl-3">
+                                                    <label for="s-pwa-display" class="form-label mb-1">Display</label>
+                                                    <select id="s-pwa-display" name="pwa_display" class="form-select">
+                                                        <option value="standalone">Standalone</option>
+                                                        <option value="minimal-ui">Minimal UI</option>
+                                                        <option value="browser">Browser</option>
+                                                        <option value="fullscreen">Fullscreen</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-6 col-xl-3">
+                                                    <label for="s-pwa-orientation" class="form-label mb-1">Orientamento</label>
+                                                    <select id="s-pwa-orientation" name="pwa_orientation" class="form-select">
+                                                        <option value="portrait">Portrait</option>
+                                                        <option value="portrait-primary">Portrait primary</option>
+                                                        <option value="portrait-secondary">Portrait secondary</option>
+                                                        <option value="landscape">Landscape</option>
+                                                        <option value="landscape-primary">Landscape primary</option>
+                                                        <option value="landscape-secondary">Landscape secondary</option>
+                                                        <option value="natural">Natural</option>
+                                                        <option value="any">Any</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label for="s-pwa-theme-color" class="form-label mb-1">Theme color</label>
+                                                    <input id="s-pwa-theme-color" name="pwa_theme_color" type="text" class="form-control" maxlength="7" placeholder="#0d6efd">
+                                                </div>
+                                                <div class="col-12 col-md-6">
+                                                    <label for="s-pwa-background-color" class="form-label mb-1">Background color</label>
+                                                    <input id="s-pwa-background-color" name="pwa_background_color" type="text" class="form-control" maxlength="7" placeholder="#ffffff">
+                                                </div>
+                                                <div class="col-12 col-xl-6">
+                                                    <label for="s-pwa-icon-path" class="form-label mb-1">Icona principale</label>
+                                                    <input id="s-pwa-icon-path" name="pwa_icon_path" type="text" class="form-control" maxlength="2048" placeholder="/assets/imgs/logo/logo.png">
+                                                    <div class="form-text">Fallback principale per la PWA. Usa un path locale o un URL assoluto.</div>
+                                                </div>
+                                                <div class="col-12 col-xl-6">
+                                                    <label for="s-pwa-icon-192-path" class="form-label mb-1">Icona 192x192</label>
+                                                    <input id="s-pwa-icon-192-path" name="pwa_icon_192_path" type="text" class="form-control" maxlength="2048" placeholder="/assets/imgs/logo/pwa-192.png">
+                                                </div>
+                                                <div class="col-12 col-xl-6">
+                                                    <label for="s-pwa-icon-512-path" class="form-label mb-1">Icona 512x512</label>
+                                                    <input id="s-pwa-icon-512-path" name="pwa_icon_512_path" type="text" class="form-control" maxlength="2048" placeholder="/assets/imgs/logo/pwa-512.png">
+                                                </div>
+                                                <div class="col-12 col-xl-6">
+                                                    <label for="s-pwa-icon-maskable-path" class="form-label mb-1">Icona maskable <span class="text-muted small">(opzionale)</span></label>
+                                                    <input id="s-pwa-icon-maskable-path" name="pwa_icon_maskable_path" type="text" class="form-control" maxlength="2048" placeholder="/assets/imgs/logo/pwa-maskable.png">
+                                                </div>
+                                                <div class="col-12 col-xl-4">
+                                                    <label class="form-label mb-1">Cache asset</label>
+                                                    <input type="hidden" id="s-pwa-cache-enabled" name="pwa_cache_enabled" value="0">
+                                                    <div class="form-text mt-1">Mantieni attiva la cache solo per asset statici e bundle.</div>
+                                                </div>
+                                                <div class="col-12 col-xl-8 d-none" id="admin-settings-pwa-cache-version-wrap">
+                                                    <label for="s-pwa-cache-version" class="form-label mb-1">Versione cache</label>
+                                                    <input id="s-pwa-cache-version" name="pwa_cache_version" type="text" class="form-control" maxlength="64" placeholder="20260426">
+                                                    <div class="form-text">Incrementala quando cambi asset critici per forzare il refresh del service worker.</div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="alert alert-light border mb-0">
+                                                        <strong>Nota pratica:</strong> la prima installazione passa comunque dal browser, ma dopo l'installazione il gioco si apre come app separata dal sito.
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
                 <h2 class="accordion-header" id="admin-settings-heading-gameplay">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#admin-settings-collapse-gameplay" aria-expanded="false" aria-controls="admin-settings-collapse-gameplay">
                         <i class="bi bi-controller me-2"></i>Gioco, presenza e inventario

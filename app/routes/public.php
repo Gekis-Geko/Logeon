@@ -13,6 +13,9 @@ $googleAuthBaseContext = function (): array {
     ];
 };
 
+$route->get('/manifest.webmanifest', 'Pwa@manifest');
+$route->get('/service-worker.js', 'Pwa@serviceWorker');
+
 /** @var \Core\Router $route */
 $route->get('/', function () use ($googleAuthBaseContext) {
     $installedAt = null;
@@ -116,7 +119,7 @@ $route->get('/rules', function () use ($googleAuthBaseContext) {
     $viewModes = (new \App\Services\SettingsService())->getDocsViewModes();
     return AppContext::templateRenderer()->render('rules.twig', [
         'google_auth' => $googleAuthBaseContext(),
-        'view_mode'   => $viewModes['rules_view_mode'],
+        'view_mode' => $viewModes['rules_view_mode'],
     ]);
 });
 $route->apiPost('/rules/list', 'Rules@publicList');
@@ -124,7 +127,7 @@ $route->get('/storyboard', function () use ($googleAuthBaseContext) {
     $viewModes = (new \App\Services\SettingsService())->getDocsViewModes();
     return AppContext::templateRenderer()->render('storyboard.twig', [
         'google_auth' => $googleAuthBaseContext(),
-        'view_mode'   => $viewModes['storyboard_view_mode'],
+        'view_mode' => $viewModes['storyboard_view_mode'],
     ]);
 });
 $route->apiPost('/storyboards/list', 'Storyboards@publicList');
@@ -132,7 +135,7 @@ $route->get('/how-to-play', function () use ($googleAuthBaseContext) {
     $viewModes = (new \App\Services\SettingsService())->getDocsViewModes();
     return AppContext::templateRenderer()->render('how_to_play.twig', [
         'google_auth' => $googleAuthBaseContext(),
-        'view_mode'   => $viewModes['how_to_play_view_mode'],
+        'view_mode' => $viewModes['how_to_play_view_mode'],
     ]);
 });
 $route->apiPost('/how-to-play/list', 'HowToPlays@publicList');
@@ -140,12 +143,12 @@ $route->get('/archetypes', function () use ($googleAuthBaseContext) {
     $viewModes = (new \App\Services\SettingsService())->getDocsViewModes();
     return AppContext::templateRenderer()->render('public/archetypes.twig', [
         'google_auth' => $googleAuthBaseContext(),
-        'view_mode'   => $viewModes['archetypes_view_mode'],
+        'view_mode' => $viewModes['archetypes_view_mode'],
     ]);
 });
 $route->get('/shared/chat-archive/{token}', function ($token) use ($googleAuthBaseContext) {
     return AppContext::templateRenderer()->render('public/chat_archive_shared.twig', [
-        'google_auth'   => $googleAuthBaseContext(),
+        'google_auth' => $googleAuthBaseContext(),
         'archive_token' => $token,
     ]);
 });

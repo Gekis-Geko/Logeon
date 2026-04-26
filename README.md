@@ -66,6 +66,7 @@ Dettagli aggiornati: `docs/README.md`.
 2. MySQL/MariaDB
 3. Composer
 4. ambiente web locale (XAMPP o equivalente)
+5. HTTPS se vuoi abilitare la PWA installabile
 
 ## Pacchetti release
 1. `logeon-core-ready.zip`: pacchetto pronto per il deploy, adatto a un server dove vuoi pubblicare subito l'applicazione.
@@ -96,6 +97,23 @@ Dettagli aggiornati: `docs/README.md`.
 11. Apri `/` per area pubblica e `/game` per il gioco.
 
 Nota: il bootstrap richiede `vendor/autoload.php`; senza `composer install` l'app non parte.
+
+## PWA installabile
+Logeon supporta una PWA opzionale per permettere ai creatori di gioco di far installare il proprio progetto come app su desktop e mobile.
+
+Caratteristiche del supporto core:
+1. `manifest.webmanifest` e `service-worker.js` serviti direttamente dal core
+2. registrazione automatica del service worker quando `APP['pwa']['enabled']` e `true`
+3. branding per nome, icone, colori e pagina iniziale dell'app
+4. cache asset statica per avvio piu rapido
+
+Configurazione:
+1. abilita e personalizza `APP['pwa']` in `configs/app.php`
+2. per un risultato migliore fornisci icone dedicate `192x192` e `512x512`
+3. pubblica il gioco in HTTPS
+4. aggiorna `cache_version` quando cambi asset critici
+
+Guida completa: `docs/guida-pwa-installabile.md`.
 
 ## Struttura progetto
 1. `app/controllers` endpoint e orchestrazione HTTP
@@ -156,6 +174,7 @@ File ad alto rischio (toccarli solo con refactor mirato):
 7. guida runtime DB e schema: `docs/guida-runtime-db-schema.md`
 8. contratti API backend: `docs/contratti-api-backend.md`
 9. guida build release: `docs/guida-build-release.md`
+10. guida PWA installabile: `docs/guida-pwa-installabile.md`
 
 ## Sviluppo CSS/Sass
 1. CSS compilati: `assets/css/style.css`, `assets/css/framework.css`, `assets/css/admin.css`

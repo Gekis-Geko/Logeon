@@ -5,6 +5,7 @@
 
 * **Installazione e avvio**
   * [Guida personalizzazione gioco](guida-personalizzazione-gioco.md)
+  * [Guida PWA installabile](guida-pwa-installabile.md)
   * [Guida temi e layout](guida-temi-layout.md)
   * [Guida installazione produzione](guida-installazione-produzione.md)
   * [Guida runtime DB e schema](guida-runtime-db-schema.md)
@@ -27,7 +28,6 @@
 * **Sistema moduli**
   * [Guida sistema moduli](guida-sistema-moduli.md)
   * [Guida creazione moduli](guida-creazione-moduli.md)
-  * [Governance moduli Logeon](logeon-module-governance-system.md)
 
 * **Riferimenti tecnici frontend**
   * [Riferimento componenti frontend](riferimento-componenti-frontend.md)

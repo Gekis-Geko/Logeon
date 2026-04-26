@@ -119,6 +119,7 @@ class Template
         $twig = $factory->create($viewsPaths, $cache_dir, $debugEnabled, function ($twig) use ($themeRuntime, $context, $viewsPaths, $appConfig, $runtimeConfig) {
             $twig->addGlobal('APP', $appConfig);
             $twig->addGlobal('CONFIG', $runtimeConfig);
+            $twig->addGlobal('PWA', \Core\PwaRuntime::build());
             $twig->addGlobal('csrf_token', \Core\Csrf::token());
             $twig->addGlobal('THEME', $themeRuntime);
             $twig->addGlobal('THEME_CONTEXT', $context);
