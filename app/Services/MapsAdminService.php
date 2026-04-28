@@ -34,14 +34,75 @@ class MapsAdminService
         $this->db->executePrepared($sql, $params);
     }
 
-    // -------------------------------------------------------------------------
-    // Helpers
-    // -------------------------------------------------------------------------
+    private function getMapRow(int $mapId)
+    {
+        if ($mapId <= 0) {
+            return null;
+        }
 
-    /**
-     * Returns the next available position (MAX + 1), or 1 if the table is empty.
-     * If a positive $requested value is provided it is returned as-is.
-     */
+        return $this->firstPrepared(
+            'SELECT id, name, parent_map_id FROM maps WHERE id = ? LIMIT 1',
+            [$mapId],
+        );
+    }
+
+    private function assertNoCircularParenting(int $currentId, ?int $parentMapId): void
+    {
+        if ($currentId <= 0 || $parentMapId === null || $parentMapId <= 0) {
+            return;
+        }
+
+        $visited = [$currentId => true];
+        $cursorId = $parentMapId;
+
+        while ($cursorId > 0) {
+            if (isset($visited[$cursorId])) {
+                throw AppError::validation(
+                    'Gerarchia mappe ciclica non consentita',
+                    [],
+                    'map_cycle_invalid',
+                );
+            }
+
+            $visited[$cursorId] = true;
+            $cursor = $this->getMapRow($cursorId);
+            if (empty($cursor)) {
+                break;
+            }
+
+            $cursorId = isset($cursor->parent_map_id) ? (int) $cursor->parent_map_id : 0;
+        }
+    }
+
+    private function normalizeParentMapId($value, int $currentId = 0): ?int
+    {
+        $parentMapId = (int) $value;
+        if ($parentMapId <= 0) {
+            return null;
+        }
+
+        if ($currentId > 0 && $parentMapId === $currentId) {
+            throw AppError::validation(
+                'Una mappa non puo contenere se stessa',
+                [],
+                'map_parent_self_invalid',
+            );
+        }
+
+        $parent = $this->getMapRow($parentMapId);
+        if (empty($parent)) {
+            throw AppError::validation(
+                'Mappa padre non valida',
+                [],
+                'map_parent_invalid',
+            );
+        }
+
+        $this->assertNoCircularParenting($currentId, $parentMapId);
+
+        return $parentMapId;
+    }
+
     public function resolveNextPosition($requested): int
     {
         $position = (int) $requested;
@@ -57,24 +118,11 @@ class MapsAdminService
         return $max + 1;
     }
 
-    /**
-     * Resets the `initial` flag on all maps. Called before marking one as initial.
-     */
     private function clearInitialFlag(): void
     {
         $this->execPrepared('UPDATE maps SET initial = 0', []);
     }
 
-    // -------------------------------------------------------------------------
-    // CRUD
-    // -------------------------------------------------------------------------
-
-    /**
-     * Returns the paginated admin list with optional filters.
-     * $sort: e.g. "position|ASC"
-     *
-     * @return array{dataset:array, properties:array}
-     */
     public function adminList(
         string $nameLike = '',
         string $renderMode = '',
@@ -82,49 +130,51 @@ class MapsAdminService
         string $mobile = '',
         int $results = 20,
         int $page = 1,
-        string $sort = 'position|ASC',
+        string $sort = 'position|ASC'
     ): array {
         $where = [];
         $params = [];
 
         if ($nameLike !== '') {
-            $where[] = '`name` LIKE ?';
+            $where[] = 'm.`name` LIKE ?';
             $params[] = '%' . $nameLike . '%';
         }
         if ($renderMode !== '') {
-            $where[] = '`render_mode` = ?';
+            $where[] = 'm.`render_mode` = ?';
             $params[] = $renderMode;
         }
         if ($initial !== '') {
-            $where[] = '`initial` = ?';
+            $where[] = 'm.`initial` = ?';
             $params[] = ((int) $initial === 1) ? 1 : 0;
         }
         if ($mobile !== '') {
-            $where[] = '`mobile` = ?';
+            $where[] = 'm.`mobile` = ?';
             $params[] = ((int) $mobile === 1) ? 1 : 0;
         }
 
         $whereClause = ($where !== []) ? ('WHERE ' . implode(' AND ', $where)) : '';
 
         $parts = explode('|', $sort);
-        $allowedFields = ['id', 'name', 'position', 'render_mode', 'initial', 'mobile'];
+        $allowedFields = ['id', 'name', 'position', 'render_mode', 'initial', 'mobile', 'parent_map_id'];
         $sortField = in_array($parts[0], $allowedFields, true) ? $parts[0] : 'position';
         $sortDir = strtoupper($parts[1] ?? 'ASC') === 'DESC' ? 'DESC' : 'ASC';
 
-        $results = max(1, min(200, $results));
+        $results = max(1, min(500, $results));
         $page = max(1, $page);
         $offset = ($page - 1) * $results;
 
         $countRow = $this->firstPrepared(
-            'SELECT COUNT(*) AS n FROM `maps` ' . $whereClause,
+            'SELECT COUNT(*) AS n FROM `maps` m ' . $whereClause,
             $params,
         );
         $total = (int) ($countRow->n ?? 0);
 
         $rows = $this->fetchPrepared(
-            'SELECT * FROM `maps` '
+            'SELECT m.*, p.name AS parent_map_name
+             FROM `maps` m
+             LEFT JOIN `maps` p ON p.id = m.parent_map_id '
             . $whereClause
-            . ' ORDER BY `' . $sortField . '` ' . $sortDir
+            . ' ORDER BY m.`' . $sortField . '` ' . $sortDir
             . ' LIMIT ? OFFSET ?',
             array_merge($params, [$results, $offset]),
         );
@@ -132,7 +182,12 @@ class MapsAdminService
         return [
             'dataset' => $rows,
             'properties' => [
-                'query' => ['name' => $nameLike],
+                'query' => [
+                    'name' => $nameLike,
+                    'render_mode' => $renderMode,
+                    'initial' => $initial,
+                    'mobile' => $mobile,
+                ],
                 'page' => $page,
                 'results_page' => $results,
                 'orderBy' => $sortField . '|' . $sortDir,
@@ -141,9 +196,6 @@ class MapsAdminService
         ];
     }
 
-    /**
-     * Creates a new map. Returns the new map ID.
-     */
     public function create(array $data): int
     {
         $name = trim((string) ($data['name'] ?? ''));
@@ -153,6 +205,7 @@ class MapsAdminService
 
         $renderMode = $this->normalizeRenderMode($data['render_mode'] ?? 'grid');
         $position = $this->resolveNextPosition($data['position'] ?? null);
+        $parentMapId = $this->normalizeParentMapId($data['parent_map_id'] ?? null);
         $initial = $this->toFlag($data['initial'] ?? 0);
         $mobile = $this->toFlag($data['mobile'] ?? 0);
 
@@ -162,14 +215,15 @@ class MapsAdminService
 
         $this->execPrepared(
             'INSERT INTO maps
-             (name, description, status, initial, position, mobile, icon, image, render_mode, meteo)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+             (name, description, status, initial, position, parent_map_id, mobile, icon, image, render_mode, meteo)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [
                 $name,
                 $this->toNullableText($data['description'] ?? null),
                 $this->toNullableText($data['status'] ?? null),
                 $initial,
                 $position,
+                $parentMapId,
                 $mobile,
                 $this->toNullableText($data['icon'] ?? null),
                 $this->toNullableText($data['image'] ?? null),
@@ -183,9 +237,6 @@ class MapsAdminService
         return $newId;
     }
 
-    /**
-     * Updates an existing map.
-     */
     public function update(int $id, array $data): void
     {
         if ($id <= 0) {
@@ -199,6 +250,7 @@ class MapsAdminService
 
         $renderMode = $this->normalizeRenderMode($data['render_mode'] ?? 'grid');
         $position = $this->resolveNextPosition($data['position'] ?? null);
+        $parentMapId = $this->normalizeParentMapId($data['parent_map_id'] ?? null, $id);
         $initial = $this->toFlag($data['initial'] ?? 0);
         $mobile = $this->toFlag($data['mobile'] ?? 0);
 
@@ -209,7 +261,7 @@ class MapsAdminService
         $this->execPrepared(
             'UPDATE maps
              SET name = ?, description = ?, status = ?, initial = ?, position = ?,
-                 mobile = ?, icon = ?, image = ?, render_mode = ?, meteo = ?
+                 parent_map_id = ?, mobile = ?, icon = ?, image = ?, render_mode = ?, meteo = ?
              WHERE id = ?',
             [
                 $name,
@@ -217,6 +269,7 @@ class MapsAdminService
                 $this->toNullableText($data['status'] ?? null),
                 $initial,
                 $position,
+                $parentMapId,
                 $mobile,
                 $this->toNullableText($data['icon'] ?? null),
                 $this->toNullableText($data['image'] ?? null),
@@ -228,10 +281,6 @@ class MapsAdminService
         AuditLogService::writeEvent('maps.update', ['id' => $id], 'admin');
     }
 
-    /**
-     * Validates that a map can be deleted (no linked locations).
-     * Throws AppError::validation if it cannot.
-     */
     public function assertCanDelete(int $id): void
     {
         $row = $this->firstPrepared(
@@ -246,11 +295,20 @@ class MapsAdminService
                 'map_has_locations',
             );
         }
-    }
 
-    // -------------------------------------------------------------------------
-    // Value normalizers (no DB access)
-    // -------------------------------------------------------------------------
+        $children = $this->firstPrepared(
+            'SELECT COUNT(*) AS total FROM maps WHERE parent_map_id = ?',
+            [$id],
+        );
+        $childCount = (!empty($children) && isset($children->total)) ? (int) $children->total : 0;
+        if ($childCount > 0) {
+            throw AppError::validation(
+                'Impossibile eliminare la mappa: contiene sottomappe collegate',
+                [],
+                'map_has_child_maps',
+            );
+        }
+    }
 
     private function normalizeRenderMode($value): string
     {

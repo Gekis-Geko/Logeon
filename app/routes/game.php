@@ -220,7 +220,34 @@ $route->group('/game/equips', function ($route) use ($presence) {
     });
 });
 
-$route->group('/game/maps', function ($route) use ($db, $presence) {
+$mapHierarchyResolver = function (int $mapId) use ($db): array {
+    $breadcrumbs = [];
+    $visited = [];
+    $cursorId = $mapId;
+
+    while ($cursorId > 0 && !isset($visited[$cursorId])) {
+        $visited[$cursorId] = true;
+
+        $row = $db->fetchOnePrepared(
+            'SELECT id, name, parent_map_id FROM maps WHERE id = ? LIMIT 1',
+            [$cursorId],
+        );
+        if (empty($row)) {
+            break;
+        }
+
+        array_unshift($breadcrumbs, [
+            'id' => (int) $row->id,
+            'name' => (string) $row->name,
+        ]);
+
+        $cursorId = isset($row->parent_map_id) ? (int) $row->parent_map_id : 0;
+    }
+
+    return $breadcrumbs;
+};
+
+$route->group('/game/maps', function ($route) use ($db, $presence, $mapHierarchyResolver) {
     $route->get('/', function () use ($db, $presence) {
         $characterId = AuthGuard::html()->requireCharacter();
 
@@ -230,6 +257,7 @@ $route->group('/game/maps', function ($route) use ($db, $presence) {
         $maps = $db->fetchAllPrepared(
             'SELECT id
              FROM maps
+             WHERE parent_map_id IS NULL
              ORDER BY position ASC, id ASC
              LIMIT 2',
             [],
@@ -243,13 +271,26 @@ $route->group('/game/maps', function ($route) use ($db, $presence) {
         return AppContext::templateRenderer()->render('app/maps.twig');
     });
 
-    $route->get('/{id}', function ($id) use ($presence) {
+    $route->get('/{id}', function ($id) use ($db, $presence, $mapHierarchyResolver) {
         $characterId = AuthGuard::html()->requireCharacter();
+        $mapId = (int) $id;
+
+        $map = $db->fetchOnePrepared(
+            'SELECT id, name, parent_map_id FROM maps WHERE id = ? LIMIT 1',
+            [$mapId],
+        );
+        if (empty($map)) {
+            throw AppError::notFound('Mappa non trovata');
+        }
 
         // Stato intermedio: in mappa, ma fuori da una location/chat specifica.
-        $presence->setCharacterPositionAndTouch((int) $characterId, (int) $id, null);
+        $presence->setCharacterPositionAndTouch((int) $characterId, $mapId, null);
 
-        return AppContext::templateRenderer()->render('app/locations.twig', ['map_id' => $id]);
+        return AppContext::templateRenderer()->render('app/locations.twig', [
+            'map_id' => $mapId,
+            'map_parent_id' => ((int) ($map->parent_map_id ?? 0)) > 0 ? (int) $map->parent_map_id : null,
+            'map_breadcrumb' => $mapHierarchyResolver($mapId),
+        ]);
     });
 
     $route->get('/{mapId}/location/{locationId}', function ($map_id, $location_id) use ($db, $presence) {
@@ -278,7 +319,8 @@ $route->group('/game/maps', function ($route) use ($db, $presence) {
             'SELECT maps.name AS map_name,
                     locations.name AS location_name,
                     locations.description AS location_description,
-                    locations.status AS location_status
+                    locations.status AS location_status,
+                    locations.ambient_music_url AS ambient_music_url
              FROM locations
              LEFT JOIN maps ON locations.map_id = maps.id
              WHERE locations.id = ?
@@ -292,14 +334,34 @@ $route->group('/game/maps', function ($route) use ($db, $presence) {
         $location_description = (!empty($location_meta) && isset($location_meta->location_description)) ? (string) $location_meta->location_description : '';
         $location_status = (!empty($location_meta) && isset($location_meta->location_status)) ? (string) $location_meta->location_status : '';
 
+        $musicState = null;
+        try {
+            $musicState = (new App\Services\LocationAmbientService($db))->getState((int) $location_id);
+        } catch (\Exception $e) {
+            $musicState = null;
+        }
+        $musicStateDefault = [
+            'is_active'        => false,
+            'source_type'      => null,
+            'source_url'       => null,
+            'youtube_video_id' => null,
+            'title'            => null,
+            'force_muted'      => false,
+        ];
+        $music_state_json = json_encode(
+            $musicState ?: $musicStateDefault,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES,
+        );
+
         return AppContext::templateRenderer()->render('app/location.twig', [
-            'map_id' => (int) $map_id,
-            'location_id' => (int) $location_id,
-            'show_jobs_board' => !empty($has_location_job),
-            'map_name' => $map_name,
-            'location_name' => $location_name,
+            'map_id'               => (int) $map_id,
+            'location_id'          => (int) $location_id,
+            'show_jobs_board'      => !empty($has_location_job),
+            'map_name'             => $map_name,
+            'location_name'        => $location_name,
             'location_description' => $location_description,
-            'location_status' => $location_status,
+            'location_status'      => $location_status,
+            'music_state_json'     => $music_state_json,
         ]);
     });
 });

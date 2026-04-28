@@ -82,30 +82,25 @@ class Maps extends Map
         $query = (isset($data->query) && is_object($data->query)) ? $data->query : (object) [];
 
         $nameLike = InputValidator::string($query, 'name', '');
+        $renderMode = InputValidator::string($query, 'render_mode', '');
+        $initial = InputValidator::string($query, 'initial', '');
+        $mobile = InputValidator::string($query, 'mobile', '');
+        $results = max(1, min(500, InputValidator::integer($data, 'results', 20)));
+        $page = max(1, InputValidator::integer($data, 'page', 1));
+        $sort = InputValidator::string($data, 'orderBy', 'position|ASC');
 
-        if ($nameLike !== '') {
-            $renderMode = InputValidator::string($query, 'render_mode', '');
-            $initial = InputValidator::string($query, 'initial', '');
-            $mobile = InputValidator::string($query, 'mobile', '');
-            $results = max(1, min(200, InputValidator::integer($data, 'results', 20)));
-            $page = max(1, InputValidator::integer($data, 'page', 1));
-            $sort = InputValidator::string($data, 'orderBy', 'position|ASC');
+        $response = $this->mapsAdminService()->adminList(
+            $nameLike,
+            $renderMode,
+            $initial,
+            $mobile,
+            $results,
+            $page,
+            $sort,
+        );
 
-            $response = $this->mapsAdminService()->adminList(
-                $nameLike,
-                $renderMode,
-                $initial,
-                $mobile,
-                $results,
-                $page,
-                $sort,
-            );
-
-            ResponseEmitter::emit(ApiResponse::json($response));
-            return $this;
-        }
-
-        return parent::list($echo);
+        ResponseEmitter::emit(ApiResponse::json($response));
+        return $this;
     }
 
     public function create()
@@ -119,12 +114,15 @@ class Maps extends Map
             $this->failValidation('Nome mappa obbligatorio', 'map_name_required');
         }
 
+        $parentMapId = InputValidator::integer($data, 'parent_map_id', 0);
+
         $this->mapsAdminService()->create([
             'name' => $name,
             'description' => $data->description ?? null,
             'status' => $data->status ?? null,
             'initial' => $data->initial ?? 0,
             'position' => $data->position ?? null,
+            'parent_map_id' => $parentMapId > 0 ? $parentMapId : null,
             'mobile' => $data->mobile ?? 0,
             'icon' => $data->icon ?? null,
             'image' => $data->image ?? null,
@@ -151,12 +149,15 @@ class Maps extends Map
             $this->failValidation('Nome mappa obbligatorio', 'map_name_required');
         }
 
+        $parentMapId = InputValidator::integer($data, 'parent_map_id', 0);
+
         $this->mapsAdminService()->update($id, [
             'name' => $name,
             'description' => $data->description ?? null,
             'status' => $data->status ?? null,
             'initial' => $data->initial ?? 0,
             'position' => $data->position ?? null,
+            'parent_map_id' => $parentMapId > 0 ? $parentMapId : null,
             'mobile' => $data->mobile ?? 0,
             'icon' => $data->icon ?? null,
             'image' => $data->image ?? null,
@@ -182,5 +183,3 @@ class Maps extends Map
         return parent::delete($operator);
     }
 }
-
-

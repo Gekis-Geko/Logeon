@@ -59,8 +59,10 @@ function callMapsModule(method, payload, onSuccess, onError) {
 
 function GameLocationsPage(id, extension) {
     let page = {
-        dataset: null,
         map_id: null,
+        mapData: null,
+        locations: [],
+        childMaps: [],
         init: function () {
             if (null == id) {
                 Dialog('warning', { title: 'Selezione mappa', body: '<p>Nessuna mappa selezionata.</p>' }).show();
@@ -72,62 +74,50 @@ function GameLocationsPage(id, extension) {
 
             return this;
         },
-            get: function () {
-                var self = this;
-                var payload = {
-                    query: {
-                        map_id: self.map_id
-                    },
+        requestModule: function (method, payload) {
+            return new Promise(function (resolve, reject) {
+                if (!callMapsModule(method, payload, resolve, reject)) {
+                    reject(new Error('Maps module method not available: ' + method));
+                }
+            });
+        },
+        get: function () {
+            var self = this;
+            Promise.all([
+                this.requestModule('listMaps', {
+                    query: { id: self.map_id },
+                    results: 1,
+                    page: 1,
+                    orderBy: 'position|ASC',
+                    cache: false,
+                    cache_ttl: 0
+                }),
+                this.requestModule('listMaps', {
+                    query: { parent_map_id: self.map_id },
+                    orderBy: 'position|ASC',
+                    cache: false,
+                    cache_ttl: 0
+                }),
+                this.requestModule('listLocations', {
+                    query: { map_id: self.map_id },
                     orderBy: 'name|ASC',
                     cache: false,
                     cache_ttl: 0
-                };
-            callMapsModule('listLocations', payload, function (response) {
-                if (null == response) {
-                    return;
-                }
+                })
+            ]).then(function (responses) {
+                var mapResponse = responses[0] || {};
+                var childMapsResponse = responses[1] || {};
+                var locationsResponse = responses[2] || {};
 
-                self.dataset = response.dataset;
+                self.mapData = (mapResponse.dataset && mapResponse.dataset[0]) ? mapResponse.dataset[0] : null;
+                self.childMaps = Array.isArray(childMapsResponse.dataset) ? childMapsResponse.dataset : [];
+                self.locations = Array.isArray(locationsResponse.dataset) ? locationsResponse.dataset : [];
                 self.build();
-            }, function (error) {
+            }).catch(function (error) {
                 Toast.show({
-                    body: normalizeLocationsError(error, 'Errore durante caricamento location'),
+                    body: normalizeLocationsError(error, 'Errore durante caricamento mappa'),
                     type: 'error'
                 });
-            });
-        },
-        loadNeighbors: function (position) {
-            let container = $('#map-neighbors');
-            container.empty();
-            if (position === undefined || position === null || position === '') {
-                return;
-            }
-
-            var self = this;
-            var payload = {
-                query: {
-                    position: position
-                },
-                orderBy: 'name|ASC',
-                cache: true,
-                cache_ttl: 300
-            };
-            callMapsModule('mapNeighbors', payload, function (response) {
-                if (!response || !response.dataset) {
-                    return;
-                }
-
-                let links = response.dataset.filter(function (m) {
-                    return String(m.id) !== String(self.map_id);
-                }).map(function (m) {
-                    return '<a href="/game/maps/' + m.id + '">' + m.name + '</a>';
-                });
-
-                if (links.length > 0) {
-                    container.html('Vicino a: ' + links.join(', '));
-                }
-            }, function (error) {
-                console.warn('[LocationsPage] mapNeighbors failed', error);
             });
         },
         normalizePercent: function (value) {
@@ -164,6 +154,70 @@ function GameLocationsPage(id, extension) {
                 return text;
             }
             return text.substring(0, Math.max(0, limit - 3)).trim() + '...';
+        },
+        resolveMapPreviewImage: function (row) {
+            if (row && typeof row.image === 'string' && row.image.trim() !== '') {
+                return row.image.trim();
+            }
+            if (row && typeof row.icon === 'string' && row.icon.trim() !== '') {
+                return row.icon.trim();
+            }
+            return '/assets/imgs/defaults-images/default-map.png';
+        },
+        resolveMapStatusText: function (value) {
+            var statusLabels = {
+                active: 'Attiva',
+                inactive: 'Inattiva',
+                maintenance: 'In manutenzione',
+                offline: 'Offline',
+                hidden: 'Nascosta'
+            };
+            var statusVal = String(value || '').toLowerCase().trim();
+            if (!statusVal || statusVal === 'active') {
+                return '';
+            }
+            return statusLabels[statusVal] || statusVal;
+        },
+        buildChildMaps: function () {
+            var section = $('#map-child-maps-section');
+            var block = $('#map-child-maps').empty();
+            var rows = Array.isArray(this.childMaps) ? this.childMaps : [];
+
+            if (rows.length === 0) {
+                section.addClass('d-none');
+                return this;
+            }
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = rows[i];
+                var template = $($('template[name="template_child_map_card"]').html());
+                var image = this.resolveMapPreviewImage(row);
+                var statusText = this.resolveMapStatusText(row.status);
+
+                template.find('.map-child-image').attr('src', image).attr('alt', row.name || 'Mappa');
+                if (row.icon) {
+                    template.find('.map-child-icon').attr('src', row.icon).removeClass('d-none');
+                } else {
+                    template.find('.map-child-icon').remove();
+                }
+                template.find('.map-child-title').text(row.name || 'Mappa');
+                template.find('.map-child-description').html(row.description || '');
+                if (statusText !== '') {
+                    template.find('.map-child-status').text(statusText);
+                } else {
+                    template.find('.map-child-status').remove();
+                }
+                if (parseInt(row.mobile, 10) === 1) {
+                    template.find('.map-child-mobile-badge').removeClass('d-none');
+                } else {
+                    template.find('.map-child-mobile-badge').remove();
+                }
+                template.find('.map-child-link').attr('href', '/game/maps/' + row.id);
+                template.appendTo(block);
+            }
+
+            section.removeClass('d-none');
+            return this;
         },
         isLocationAccessible: function (row) {
             if (!row) {
@@ -368,7 +422,6 @@ function GameLocationsPage(id, extension) {
                 return 'grid';
             }
 
-            // Legacy fallback: if no explicit mode is set, keep old behavior.
             return this.mapHasVisualImage(mapImage) ? 'visual' : 'grid';
         },
         buildVisualMap: function (mapName, mapImage) {
@@ -380,9 +433,9 @@ function GameLocationsPage(id, extension) {
             visualBlock.removeClass('d-none');
             visualImage.attr('src', mapImage).attr('alt', mapName || 'Mappa');
 
-            for (var i = 0; i < this.dataset.length; i++) {
-                let row = this.dataset[i];
-                let position = this.resolveVisualPinPosition(row, i, this.dataset.length);
+            for (var i = 0; i < this.locations.length; i++) {
+                let row = this.locations[i];
+                let position = this.resolveVisualPinPosition(row, i, this.locations.length);
                 if (!position) {
                     continue;
                 }
@@ -428,11 +481,11 @@ function GameLocationsPage(id, extension) {
             this.initVisualMapPopovers();
         },
         buildBlockMap: function () {
-            let block = $('#locations-page-body');
+            let block = $('#locations-page-body').empty();
             let appended = 0;
 
-            for (var i in this.dataset) {
-                let row = this.dataset[i];
+            for (var i in this.locations) {
+                let row = this.locations[i];
                 let template = $($('template[name="template_locations_list"]').html());
 
                 let image = row.image || '/assets/imgs/defaults-images/default-location.png';
@@ -491,34 +544,46 @@ function GameLocationsPage(id, extension) {
         },
         build: function () {
             let block = $('#locations-page-body').empty();
+            let childSection = $('#map-child-maps-section').addClass('d-none');
+            let locationsSection = $('#locations-page-section').addClass('d-none');
+            let emptyState = $('#locations-page-empty').addClass('d-none').text('Questa mappa non contiene ancora luoghi o sottomappe.');
             let visualBlock = $('#map-visual');
             let visualPins = $('#map-visual-pins');
             this.disposeVisualMapPopovers();
             visualPins.empty();
             visualBlock.addClass('d-none');
 
-            if (!this.dataset || this.dataset.length === 0) {
-                block.append('<div class="col-12"><div class="alert alert-info">Nessuna location disponibile.</div></div>');
+            if (!this.mapData) {
+                $('[name="map_name"]').html('Mappa');
+                emptyState.removeClass('d-none').text('Mappa non trovata.');
                 return this;
             }
 
-            let mapName = this.dataset[0].map_name || '';
-            let mapImage = (this.dataset[0].map_image || '').toString().trim();
-            let mapRenderMode = this.resolveMapRenderMode(this.dataset[0].map_render_mode || '', mapImage);
-            let mapPosition = this.dataset[0].map_position;
-            let useVisual = (mapRenderMode === 'visual' && this.mapHasVisualImage(mapImage));
+            $('[name="map_name"]').html(this.mapData.name || 'Mappa');
+            this.buildChildMaps();
+            childSection = $('#map-child-maps-section');
 
-            $('[name="map_name"]').html(mapName);
-            this.loadNeighbors(mapPosition);
+            let mapName = this.mapData.name || '';
+            let mapImage = (this.mapData.image || '').toString().trim();
+            let mapRenderMode = this.resolveMapRenderMode(this.mapData.render_mode || '', mapImage);
+            let useVisual = (mapRenderMode === 'visual' && this.mapHasVisualImage(mapImage) && this.locations.length > 0);
 
-            if (useVisual) {
-                this.buildVisualMap(mapName, mapImage);
-            } else {
-                this.buildBlockMap();
+            if (this.locations.length > 0) {
+                if (useVisual) {
+                    this.buildVisualMap(mapName, mapImage);
+                } else {
+                    locationsSection.removeClass('d-none');
+                    this.buildBlockMap();
+                }
+            }
+
+            if (this.locations.length === 0 && childSection.hasClass('d-none')) {
+                emptyState.removeClass('d-none');
             }
 
             initTooltips(document.getElementById('map-visual') || document);
             initTooltips(document.getElementById('locations-page-body') || document);
+            initTooltips(document.getElementById('map-child-maps') || document);
 
             return this;
         },
@@ -539,4 +604,3 @@ function GameLocationsPage(id, extension) {
 globalWindow.GameLocationsPage = GameLocationsPage;
 export { GameLocationsPage as GameLocationsPage };
 export default GameLocationsPage;
-

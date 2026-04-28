@@ -1858,7 +1858,7 @@ CREATE TABLE IF NOT EXISTS `locations` (
 -- Dump dei dati della tabella logeon_db.locations: ~1 rows (circa)
 DELETE FROM `locations`;
 INSERT INTO `locations` (`id`, `climate_area_id`, `map_id`, `owner_id`, `name`, `short_description`, `description`, `status`, `page`, `map_link`, `map_x`, `map_y`, `icon`, `image`, `guests`, `booking`, `deadline`, `cost`, `min_fame`, `min_socialstatus_id`, `is_chat`, `is_private`, `is_house`, `chat_type`, `access_policy`, `max_guests`, `date_created`, `date_updated`, `date_deleted`) VALUES
-	(1, NULL, 1, NULL, 'Piazza', 'La piazza della città', NULL, 'open', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 1, 0, 0, 'standard', 'open', NULL, '2026-04-15 11:00:48', '2026-04-17 19:25:25', NULL);
+	(1, NULL, 1, NULL, 'Piazza', 'La piazza della cittÃ ', NULL, 'open', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, 0, NULL, 1, 0, 0, 'standard', 'open', NULL, '2026-04-15 11:00:48', '2026-04-17 19:25:25', NULL);
 
 -- Dump della struttura di tabella logeon_db.locations_messages
 DROP TABLE IF EXISTS `locations_messages`;
@@ -1896,6 +1896,7 @@ CREATE TABLE IF NOT EXISTS `maps` (
   `status` text DEFAULT NULL,
   `initial` tinyint(1) NOT NULL,
   `position` int(11) NOT NULL,
+  `parent_map_id` int(11) DEFAULT NULL,
   `mobile` tinyint(1) DEFAULT NULL,
   `width` smallint(6) DEFAULT NULL,
   `height` smallint(6) DEFAULT NULL,
@@ -1904,14 +1905,14 @@ CREATE TABLE IF NOT EXISTS `maps` (
   `render_mode` varchar(16) DEFAULT NULL,
   `meteo` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `idx_maps_parent_map_id` (`parent_map_id`),
   UNIQUE KEY `MAP_NAME_UNIQUE` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Dump dei dati della tabella logeon_db.maps: ~0 rows (circa)
 DELETE FROM `maps`;
-INSERT INTO `maps` (`id`, `name`, `description`, `status`, `initial`, `position`, `mobile`, `width`, `height`, `icon`, `image`, `render_mode`, `meteo`) VALUES
-	(1, 'Città', NULL, 'active', 1, 1, 0, NULL, NULL, NULL, NULL, 'grid', NULL);
-
+INSERT INTO `maps` (`id`, `name`, `description`, `status`, `initial`, `position`, `parent_map_id`, `mobile`, `width`, `height`, `icon`, `image`, `render_mode`, `meteo`) VALUES
+	(1, 'CittÃ ', NULL, 'active', 1, 1, NULL, 0, NULL, NULL, NULL, NULL, 'grid', NULL);
 -- Dump della struttura di tabella logeon_db.message_reports
 DROP TABLE IF EXISTS `message_reports`;
 CREATE TABLE IF NOT EXISTS `message_reports` (
@@ -2063,7 +2064,7 @@ CREATE TABLE IF NOT EXISTS `narrative_capabilities` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(120) NOT NULL COMMENT 'capability identifier, e.g. narrative.event.create',
   `label` varchar(255) NOT NULL DEFAULT '',
-  `max_impact_allowed` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0=zero, 1=limited, 2=high — ceiling for what this capability can ever be granted at',
+  `max_impact_allowed` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0=zero, 1=limited, 2=high â€” ceiling for what this capability can ever be granted at',
   `staff_only` tinyint(1) NOT NULL DEFAULT 0,
   `date_created` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
@@ -2087,8 +2088,8 @@ CREATE TABLE IF NOT EXISTS `narrative_capability_grants` (
   `grantee_type` enum('guild_role','faction_role','user_role') NOT NULL,
   `grantee_ref` varchar(120) NOT NULL COMMENT 'symbolic role name',
   `capability` varchar(120) NOT NULL COMMENT 'references narrative_capabilities.name',
-  `max_impact_level` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0=zero, 1=limited, 2=high — ceiling for this specific grant',
-  `scope_restriction` varchar(60) DEFAULT NULL COMMENT 'optional: restrict to scope (guild, faction, local…). NULL = no restriction',
+  `max_impact_level` tinyint(4) NOT NULL DEFAULT 0 COMMENT '0=zero, 1=limited, 2=high â€” ceiling for this specific grant',
+  `scope_restriction` varchar(60) DEFAULT NULL COMMENT 'optional: restrict to scope (guild, faction, localâ€¦). NULL = no restriction',
   `date_created` datetime NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_grant` (`grantee_type`,`grantee_ref`,`capability`),
@@ -2774,11 +2775,11 @@ CREATE TABLE IF NOT EXISTS `social_status` (
 -- Dump dei dati della tabella logeon_db.social_status: ~5 rows (circa)
 DELETE FROM `social_status`;
 INSERT INTO `social_status` (`id`, `name`, `description`, `icon`, `shop_discount`, `unlock_home`, `quest_tier`, `min`, `max`) VALUES
-	(1, 'Sconosciuto', 'Il personaggio Ã¨ pelopiÃ¹ ignoto alla comunitÃ  e non ha alcuna rilevanza a livello sociale. Non sarÃ  ricordato o riconosciuto dalla popolazione.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 0, 19),
-	(2, 'Riconosciuto', 'Il nome del personaggio Ã¨ diventato familiare nel settore in cui opera, riuscendo a vantare una piccola notorietÃ  a livello locale per le sue qualitÃ . Comincia ad avere una certa rilevanza sociale.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 20, 49),
-	(3, 'Famoso', 'Una figura che Ã¨ si Ã¨ posta in prima linea. Il personaggio vanta notorietÃ  per le sue imprese e le sue qualitÃ , divenendo una figura di rilievo in una cittÃ , Ã¨ difficile che passi inosservato.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 50, 69),
-	(4, 'Celebrità', 'Un personaggio il cui nome Ã¨ risaputo nei confini della propria nazione. SarÃ  difficile restare in incognito.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 70, 99),
-	(5, 'Leggenda Vivente', 'Personaggio che ha importanza internazionale. Questa figura Ã¨ nota a livello mondiale per le sue qualitÃ  e le sue imprese, sia in positivo che in negativo. In tutte le terre si potrÃ  sentire parlare di lui.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 100, 9000);
+	(1, 'Sconosciuto', 'Il personaggio ÃƒÂ¨ pelopiÃƒÂ¹ ignoto alla comunitÃƒÂ  e non ha alcuna rilevanza a livello sociale. Non sarÃƒÂ  ricordato o riconosciuto dalla popolazione.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 0, 19),
+	(2, 'Riconosciuto', 'Il nome del personaggio ÃƒÂ¨ diventato familiare nel settore in cui opera, riuscendo a vantare una piccola notorietÃƒÂ  a livello locale per le sue qualitÃƒÂ . Comincia ad avere una certa rilevanza sociale.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 20, 49),
+	(3, 'Famoso', 'Una figura che ÃƒÂ¨ si ÃƒÂ¨ posta in prima linea. Il personaggio vanta notorietÃƒÂ  per le sue imprese e le sue qualitÃƒÂ , divenendo una figura di rilievo in una cittÃƒÂ , ÃƒÂ¨ difficile che passi inosservato.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 50, 69),
+	(4, 'CelebritÃ ', 'Un personaggio il cui nome ÃƒÂ¨ risaputo nei confini della propria nazione. SarÃƒÂ  difficile restare in incognito.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 70, 99),
+	(5, 'Leggenda Vivente', 'Personaggio che ha importanza internazionale. Questa figura ÃƒÂ¨ nota a livello mondiale per le sue qualitÃƒÂ  e le sue imprese, sia in positivo che in negativo. In tutte le terre si potrÃƒÂ  sentire parlare di lui.', '/assets/imgs/defaults-images/default-icon.png', 0, 0, 0, 100, 9000);
 
 -- Dump della struttura di tabella logeon_db.storyboards
 DROP TABLE IF EXISTS `storyboards`;

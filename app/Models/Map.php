@@ -15,6 +15,7 @@ class Map extends Models
         'status',
         'initial',
         'position',
+        'parent_map_id',
         'mobile',
         'image',
         'render_mode',

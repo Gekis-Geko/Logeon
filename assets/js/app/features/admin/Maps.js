@@ -11,6 +11,7 @@ var AdminMaps = {
     grid: null,
     rows: [],
     rowsById: {},
+    mapOptions: [],
     modalNode: null,
     modal: null,
     form: null,
@@ -31,6 +32,7 @@ var AdminMaps = {
         this.bind();
         this.bindFilters();
         this.initGrid();
+        this.loadMapOptions();
         this.reload();
 
         this.initialized = true;
@@ -117,6 +119,18 @@ var AdminMaps = {
                             + '</div>';
                     }
                 },
+                {
+                    label: 'Gerarchia',
+                    sortable: false,
+                    format: function (row) {
+                        var parentId = parseInt(row.parent_map_id || 0, 10) || 0;
+                        if (parentId <= 0) {
+                            return '<span class="badge text-bg-light text-dark">Radice</span>';
+                        }
+                        var parentName = self.e(row.parent_map_name || ('#' + parentId));
+                        return '<div class="small"><span class="text-muted">Dentro:</span> ' + parentName + '</div>';
+                    }
+                },
                 { label: 'Posizione', field: 'position', sortable: true },
                 {
                     label: 'Modalita',
@@ -199,8 +213,45 @@ var AdminMaps = {
         return this.rowsById[id] || null;
     },
 
+    loadMapOptions: function (callback) {
+        var self = this;
+        this.post('/admin/maps/list', { results: 500, page: 1, orderBy: 'name|ASC' }, function (response) {
+            self.mapOptions = response && Array.isArray(response.dataset) ? response.dataset.slice() : [];
+            if (typeof callback === 'function') {
+                callback(self.mapOptions);
+            }
+        });
+        return this;
+    },
+
+    populateParentOptions: function (selectedId, currentId) {
+        var select = this.form ? this.form.querySelector('[name="parent_map_id"]') : null;
+        if (!select) { return this; }
+
+        var selected = parseInt(selectedId || 0, 10) || 0;
+        var current = parseInt(currentId || 0, 10) || 0;
+        var options = ['<option value="">Mappa radice</option>'];
+
+        for (var i = 0; i < this.mapOptions.length; i++) {
+            var row = this.mapOptions[i] || {};
+            var id = parseInt(row.id || 0, 10) || 0;
+            if (id <= 0 || id === current) {
+                continue;
+            }
+            options.push(
+                '<option value="' + id + '"' + (id === selected ? ' selected' : '') + '>'
+                + this.e(row.name || ('Mappa #' + id))
+                + '</option>'
+            );
+        }
+
+        select.innerHTML = options.join('');
+        return this;
+    },
+
     openCreate: function () {
         this.fillForm({});
+        this.populateParentOptions(0, 0);
         this.toggleDelete(false);
         this.modal.show();
         return this;
@@ -210,6 +261,7 @@ var AdminMaps = {
         var row = this.rowFromTrigger(trigger);
         if (!row) return this;
         this.fillForm(row);
+        this.populateParentOptions(row.parent_map_id || 0, row.id || 0);
         this.toggleDelete(true);
         this.modal.show();
         return this;
@@ -221,6 +273,7 @@ var AdminMaps = {
         this.setField('name', data.name || '');
         this.setField('description', data.description || '');
         this.setField('position', data.position || '');
+        this.setField('parent_map_id', data.parent_map_id || '');
         this.setField('mobile', (parseInt(data.mobile || 0, 10) === 1) ? '1' : '0');
         this.setField('initial', (parseInt(data.initial || 0, 10) === 1) ? '1' : '0');
         this.setField('icon', data.icon || '');
@@ -271,12 +324,14 @@ var AdminMaps = {
     },
 
     collectPayload: function () {
+        var parentMapId = parseInt(this.getField('parent_map_id') || '0', 10) || 0;
         return {
             id: parseInt(this.getField('id') || '0', 10) || 0,
             name: this.getField('name'),
             description: this.getField('description'),
             status: this.getField('status'),
             position: parseInt(this.getField('position') || '0', 10) || 0,
+            parent_map_id: parentMapId > 0 ? parentMapId : null,
             mobile: (this.getField('mobile') === '1') ? 1 : 0,
             initial: (this.getField('initial') === '1') ? 1 : 0,
             icon: this.getField('icon'),
@@ -298,7 +353,9 @@ var AdminMaps = {
         this.post(url, payload, function () {
             Toast.show({ body: 'Mappa salvata.', type: 'success' });
             self.modal.hide();
-            self.reload();
+            self.loadMapOptions(function () {
+                self.reload();
+            });
         });
         return this;
     },
@@ -324,7 +381,9 @@ var AdminMaps = {
                         self.post('/admin/maps/delete', { id: id }, function () {
                             Toast.show({ body: 'Mappa eliminata.', type: 'success' });
                             self.modal.hide();
-                            self.reload();
+                            self.loadMapOptions(function () {
+                                self.reload();
+                            });
                         });
                     }
                 }
@@ -383,4 +442,3 @@ if (typeof window !== 'undefined') {
 }
 export { AdminMaps as AdminMaps };
 export default AdminMaps;
-

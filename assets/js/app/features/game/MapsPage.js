@@ -69,6 +69,9 @@ function GameMapsPage(extension) {
             getMaps: function() {
                 var self = this;
                 var payload = {
+                    query: {
+                        parent_map_id: null
+                    },
                     orderBy: 'position|ASC',
                     cache: false,
                     cache_ttl: 0
@@ -166,4 +169,3 @@ function GameMapsPage(extension) {
 globalWindow.GameMapsPage = GameMapsPage;
 export { GameMapsPage as GameMapsPage };
 export default GameMapsPage;
-

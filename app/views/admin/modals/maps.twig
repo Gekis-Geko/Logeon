@@ -6,7 +6,7 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Chiudi"></button>
                 </div>
                 <h4 class="display-6 text-center mt-3 mb-2">Mappa</h4>
-                <h6 class="text-center text-muted">Configura anteprima e modalita visualizzazione dei luoghi.</h6>
+                <h6 class="text-center text-muted">Configura anteprima, gerarchia e modalita visualizzazione dei luoghi.</h6>
                 <hr class="my-4" />
 
                 <form id="admin-maps-form" class="row g-3">
@@ -25,6 +25,13 @@
                             <option value="grid">Griglia</option>
                             <option value="visual">Visuale</option>
                         </select>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <label class="form-label">Contenuta in</label>
+                        <select class="form-select" name="parent_map_id">
+                            <option value="">Mappa radice</option>
+                        </select>
+                        <div class="form-text">Lascia vuoto per una mappa di primo livello.</div>
                     </div>
                     <div class="col-6 col-md-3">
                         <label class="form-label">Mappa iniziale</label>
