@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Core\AuthGuard;
 use Core\UploadManager;
@@ -267,6 +267,14 @@ $route->group('/admin', function ($route) {
     $route->apiPost('/settings/upload', 'Settings@updateUpload');
     $route->apiPost('/settings/get', 'Settings@adminGet');
     $route->apiPost('/settings/update', 'Settings@adminUpdate');
+    $route->apiPost('/system/update/status', 'SystemUpdate@status');
+    $route->apiPost('/system/update/check', 'SystemUpdate@check');
+    $route->apiPost('/system/update/preflight', 'SystemUpdate@preflight');
+    $route->apiPost('/system/update/backup', 'SystemUpdate@backup');
+    $route->apiPost('/system/update/download', 'SystemUpdate@download');
+    $route->apiPost('/system/update/apply', 'SystemUpdate@apply');
+    $route->apiPost('/system/update/rollback', 'SystemUpdate@rollback');
+    $route->apiPost('/system/update/logs', 'SystemUpdate@logs');
 
     $route->apiPost('/narrative-delegation/capabilities/list', 'NarrativeDelegationAdmin@listCapabilities');
     $route->apiPost('/narrative-delegation/grants/list', 'NarrativeDelegationAdmin@listGrants');
@@ -537,3 +545,4 @@ $route->group('/notifications', function ($route) {
     $route->apiPost('/respond', 'Notifications@respond');
     $route->apiPost('/unread-count', 'Notifications@unreadCount');
 });
+

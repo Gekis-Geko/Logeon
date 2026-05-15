@@ -1,0 +1,13 @@
+{
+  "schema": 1,
+  "project": "logeon",
+  "version": "1.0.0",
+  "distribution": "source-dev",
+  "commit": "dev-local",
+  "build_date": null,
+  "vendor_included": false,
+  "assets_compiled": false,
+  "sass_included": true,
+  "dev_dependencies_included": true,
+  "minimum_php": "8.1"
+}

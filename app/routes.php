@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 use Core\Router;
 use Core\Redirect;
@@ -14,6 +14,7 @@ $installerService = new InstallerService();
 $isLocked   = $installerService->isLocked();
 $currentUri = Router::currentUri();
 $isInstallUri = preg_match('#^/install(?:/.*)?$#', $currentUri) === 1;
+$maintenancePath = __DIR__ . '/../storage/maintenance.lock';
 
 // Su URI di install: blocca solo se il lock file esiste (installazione già completata).
 // Non chiamare isInstalled() qui — ha il side-effect di scrivere il lock file se
@@ -30,6 +31,21 @@ if ($isInstallUri) {
     if (!$isInstalled) {
         Redirect::url('/install');
         return;
+    }
+}
+
+if (is_file($maintenancePath)) {
+    $allowedDuringMaintenance = (
+        preg_match('#^/admin(?:/.*)?$#', $currentUri) === 1
+        || preg_match('#^/install(?:/.*)?$#', $currentUri) === 1
+    );
+
+    if (!$allowedDuringMaintenance) {
+        throw AppError::validation(
+            'Piattaforma temporaneamente in manutenzione per aggiornamento core',
+            [],
+            'update_maintenance_active',
+        );
     }
 }
 
@@ -58,7 +74,3 @@ if (class_exists('\\Core\\ModuleRuntime')) {
 }
 
 $route->run();
-
-
-
-

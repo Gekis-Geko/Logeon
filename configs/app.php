@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 const APP = [
   'baseurl' => 'https://logeon.site',
@@ -57,4 +57,8 @@ const APP = [
     'strict_mode' => true,
     'allow_custom_js' => true,
   ],
-];
+  'updates' =>
+   [
+    'manifest_url' => __DIR__ . '/../update-manifest.dev.json',
+    'manifest_timeout_seconds' => 8,
+  ],];
