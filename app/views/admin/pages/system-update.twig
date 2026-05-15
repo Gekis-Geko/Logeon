@@ -1,0 +1,171 @@
+<div data-admin-page="system-update">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3 mt-3">
+        <header>
+            <h4 class="display-6 mb-1">Aggiornamenti Core</h4>
+            <h6 class="mb-0">Verifica versione, preflight, backup, download e apply guidato.</h6>
+        </header>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-system-update-check">
+                <i class="bi bi-arrow-clockwise me-1"></i>Controlla aggiornamenti
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-system-update-preflight">
+                <i class="bi bi-shield-check me-1"></i>Preflight
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-system-update-backup">
+                <i class="bi bi-archive me-1"></i>Crea backup
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" data-action="admin-system-update-download">
+                <i class="bi bi-cloud-download me-1"></i>Scarica pacchetto
+            </button>
+            <button type="button" class="btn btn-sm btn-primary" data-action="admin-system-update-apply">
+                <i class="bi bi-rocket-takeoff me-1"></i>Applica update
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-dark" data-action="admin-system-update-logs">
+                <i class="bi bi-journal-text me-1"></i>Log
+            </button>
+        </div>
+    </div>
+
+    <hr class="w-75 ms-2" />
+
+    <div id="admin-system-update-alert" class="alert d-none mb-3" role="alert"></div>
+
+    <div class="row g-3 mb-3">
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="small text-muted">Versione installata</div>
+                    <div class="h5 mb-0" data-role="update-current-version">-</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="small text-muted">Distribuzione</div>
+                    <div class="h5 mb-0 text-lowercase" data-role="update-distribution">-</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="small text-muted">Canale</div>
+                    <div class="h5 mb-0 text-lowercase" data-role="update-channel">-</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <div class="small text-muted">Ultima versione disponibile</div>
+                    <div class="h5 mb-0" data-role="update-latest-version">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h6 class="mb-0">Stato updater web</h6>
+        </div>
+        <div class="card-body">
+            <div class="small mb-2">
+                <strong>Manifest remoto:</strong>
+                <span data-role="update-manifest-url">non configurato</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Modalita installazione:</strong>
+                <span data-role="update-mode-note">-</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Esito check:</strong>
+                <span data-role="update-check-result">in attesa</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Lock update:</strong>
+                <span data-role="update-lock-state">-</span>
+            </div>
+            <div class="small mb-0">
+                <strong>Maintenance mode:</strong>
+                <span data-role="update-maintenance-state">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h6 class="mb-0">Dettaglio release</h6>
+        </div>
+        <div class="card-body">
+            <div class="small mb-2">
+                <strong>Versione release:</strong>
+                <span data-role="update-release-version">-</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Data:</strong>
+                <span data-role="update-release-date">-</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Migrazione DB richiesta:</strong>
+                <span data-role="update-release-migration">-</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Changelog:</strong>
+                <a data-role="update-release-changelog" href="#" target="_blank" rel="noopener noreferrer">-</a>
+            </div>
+            <div class="small mb-0">
+                <strong>Pacchetto:</strong>
+                <span data-role="update-release-package">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h6 class="mb-0">Pipeline update</h6>
+        </div>
+        <div class="card-body">
+            <div class="small mb-2">
+                <strong>Versione target:</strong>
+                <span data-role="update-target-version">-</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Preflight:</strong>
+                <span data-role="update-preflight-result">in attesa</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Backup:</strong>
+                <span data-role="update-backup-result">in attesa</span>
+            </div>
+            <div class="small mb-2">
+                <strong>Download:</strong>
+                <span data-role="update-download-result">in attesa</span>
+            </div>
+            <div class="small mb-0">
+                <strong>Apply:</strong>
+                <span data-role="update-apply-result">in attesa</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-header">
+            <h6 class="mb-0">Dettaglio preflight</h6>
+        </div>
+        <div class="card-body">
+            <div class="small text-muted mb-2">Controlli bloccanti e informativi prima dell'update.</div>
+            <div class="small" data-role="update-preflight-checks">Nessun controllo eseguito.</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h6 class="mb-0">Storico aggiornamenti</h6>
+        </div>
+        <div class="card-body">
+            <div class="small" data-role="update-logs-list">Nessun log caricato.</div>
+        </div>
+    </div>
+</div>
+

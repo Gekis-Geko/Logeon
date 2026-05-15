@@ -1,4 +1,4 @@
-const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
+﻿const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
 const MODULE_FACTORY_MAP = {
     'admin.dashboard': 'DashboardModuleFactory',
@@ -34,6 +34,7 @@ const MODULE_FACTORY_MAP = {
     'admin.items': 'AdminItemsModuleFactory',
     'admin.items-categories': 'AdminItemsCategoriesModuleFactory',
     'admin.settings': 'AdminSettingsModuleFactory',
+    'admin.system-update': 'AdminSystemUpdateModuleFactory',
     'admin.items-rarities': 'AdminItemsRaritiesModuleFactory',
     'admin.equipment-slots': 'AdminEquipmentSlotsModuleFactory',
     'admin.item-equipment-rules': 'AdminItemEquipmentRulesModuleFactory',
@@ -100,6 +101,7 @@ const PAGE_MODULES = {
     'logs-sys': ['admin.logs-sys'],
     'logs-narrative': ['admin.logs-narrative'],
     settings: ['admin.settings'],
+    'system-update': ['admin.system-update'],
     'narrative-tags': ['admin.narrative-tags'],
     'message-reports': ['admin.message-reports'],
     news: ['admin.news'],
@@ -279,3 +281,4 @@ globalWindow.AdminRegistry.registerModule = registerModule;
 globalWindow.AdminRegistry.extendPage = extendPage;
 
 export default AdminRegistryApi;
+

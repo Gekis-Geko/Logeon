@@ -1,4 +1,4 @@
-import '../features/admin/AdminImageUploader.js';
+﻿import '../features/admin/AdminImageUploader.js';
 import '../features/admin/AdminFilterLive.js';
 
 import '../core/Context.js';
@@ -43,6 +43,7 @@ import '../modules/admin/ItemsRaritiesModule.js';
 import '../modules/admin/EquipmentSlotsModule.js';
 import '../modules/admin/ItemEquipmentRulesModule.js';
 import '../modules/admin/SettingsModule.js';
+import '../modules/admin/SystemUpdateModule.js';
 import '../modules/admin/NarrativeTagsModule.js';
 import '../modules/admin/MessageReportsModule.js';
 import '../modules/admin/NarrativeDelegationGrantsModule.js';
@@ -61,6 +62,7 @@ import '../core/admin.feature-loader.js';
 import '../core/admin.registry.js';
 import '../core/admin.page.js';
 import '../core/admin.runtime.js';
+
 
 
 

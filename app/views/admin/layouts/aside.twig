@@ -1,4 +1,4 @@
-{% set admin_page = admin_page|default('dashboard')|lower %}
+﻿{% set admin_page = admin_page|default('dashboard')|lower %}
 {% set module_admin_sections = module_menu_sections('admin', 'aside') %}
 
 {% set is_superuser  = session('user_is_superuser') == 1 %}
@@ -8,7 +8,7 @@
 {% set narrative_delegation_enabled = (narrative_delegation_enabled|default(0)) == 1 %}
 
 {#
-  Build a section-key → items map for module entries whose section name matches a
+  Build a section-key â†’ items map for module entries whose section name matches a
   hardcoded section already in this template.  Entries for unrecognised section names
   are rendered as standalone blocks at the bottom of the sidebar.
 #}
@@ -39,6 +39,9 @@
         </a>
         <a class="nav-link {{ admin_page in ['settings'] ? 'active' : '' }}" href="/admin/settings" data-bs-toggle="tooltip" data-bs-title="Impostazioni">
             <i class="bi bi-gear-fill"></i>
+        </a>
+        <a class="nav-link {{ admin_page in ['system-update'] ? 'active' : '' }}" href="/admin/system-update" data-bs-toggle="tooltip" data-bs-title="Aggiornamenti">
+            <i class="bi bi-cloud-arrow-up-fill"></i>
         </a>
         {% endif %}
         <a class="nav-link text-danger" href="/game/" data-bs-toggle="tooltip" data-bs-title="Torna al Gioco">
@@ -254,3 +257,4 @@
         {% endfor %}
     </section>
 </aside>
+

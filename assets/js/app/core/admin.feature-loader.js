@@ -1,4 +1,4 @@
-const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
+﻿const globalWindow = (typeof window !== 'undefined') ? window : globalThis;
 
 const SHARED_FEATURES = [
     '/assets/js/app/features/admin/AdminImageUploader.js'
@@ -49,6 +49,7 @@ const PAGE_FEATURE_SCRIPTS = {
     'logs-location-access': ['/assets/js/app/features/admin/LogsLocationAccess.js'],
     'logs-sys': ['/assets/js/app/features/admin/LogsSys.js'],
     settings: ['/assets/js/app/features/admin/Settings.js'],
+    'system-update': ['/assets/js/app/features/admin/SystemUpdate.js'],
     'narrative-tags': ['/assets/js/app/features/admin/NarrativeTags.js'],
     'message-reports': ['/assets/js/app/features/admin/MessageReports.js'],
     news: ['/assets/js/app/features/admin/News.js'],
@@ -78,6 +79,7 @@ const PAGE_BUNDLE_SCRIPTS = {
     'guilds-locations': '/assets/js/dist/admin-governance.bundle.js',
     'guilds-events': '/assets/js/dist/admin-governance.bundle.js',
     settings: '/assets/js/dist/admin-governance.bundle.js',
+    'system-update': '/assets/js/dist/admin-core.bundle.js',
     currencies: '/assets/js/dist/admin-economy-content.bundle.js',
     shops: '/assets/js/dist/admin-economy-content.bundle.js',
     'inventory-shop': '/assets/js/dist/admin-economy-content.bundle.js',
@@ -285,3 +287,5 @@ globalWindow.AdminFeatureLoader.loadForCurrentPage = loadForCurrentPage;
 globalWindow.AdminFeatureLoader.registerPageScripts = registerPageScripts;
 
 export default AdminFeatureLoaderApi;
+
+

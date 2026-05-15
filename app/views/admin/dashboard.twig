@@ -1,4 +1,4 @@
-{% extends 'admin/layouts/layout.twig' %}
+﻿{% extends 'admin/layouts/layout.twig' %}
 
 {% block content %}
 {% set current_page = admin_page|default('dashboard')|lower %}
@@ -199,6 +199,8 @@
             {% include 'admin/pages/item-equipment-rules.twig' %}
         {% elseif current_page == 'settings' %}
             {% include 'admin/pages/settings.twig' %}
+        {% elseif current_page == 'system-update' %}
+            {% include 'admin/pages/system-update.twig' %}
         {% elseif current_page == 'narrative-tags' %}
             {% include 'admin/pages/narrative-tags.twig' %}
         {% elseif current_page == 'narrative-delegation' %}
@@ -233,7 +235,7 @@
             <div class="d-flex justify-content-between align-items-center mb-3 mt-3">
                 <header>
                     <h4 class="display-6 mb-1">Moduli</h4>
-                    <h6 class="mb-0">Gestione moduli first-party con stato runtime, dipendenze e compatibilità core.</h6>
+                    <h6 class="mb-0">Gestione moduli first-party con stato runtime, dipendenze e compatibilitÃ  core.</h6>
                 </header>
                 <div class="d-flex flex-wrap align-items-center gap-2">
                     <button type="button" class="btn btn-sm btn-outline-primary" data-action="admin-modules-reload">
@@ -263,7 +265,7 @@
                             <option value="active">Attivi</option>
                             <option value="inactive">Inattivi</option>
                             <option value="detected">Rilevati</option>
-                            <option value="issues">Con criticità</option>
+                            <option value="issues">Con criticitÃ </option>
                         </select>
                     </div>
                     <div class="col-auto">
@@ -339,4 +341,5 @@
 
 {{ module_slot('admin.modals') }}
 {% endblock %}
+
 
